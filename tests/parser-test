@@ -1,0 +1,9 @@
+#!/bin/bash
+
+BIN=../tools
+
+##ipfile=fuselage.agg
+ipfile=aircraft.agg
+##ipfile=wing.agg
+
+${BIN}/agg-test -T parser < ${ipfile}

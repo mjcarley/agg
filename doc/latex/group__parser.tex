@@ -1,0 +1,64 @@
+\section{Parser}
+\label{group__parser}\index{Parser@{Parser}}
+
+
+Parser for parametric geometry definitions.  
+
+
+\begin{DoxyCompactItemize}
+\item 
+gint {\bf agg\+\_\+local\+\_\+transform\+\_\+eval\+\_\+parameters} (agg\+\_\+local\+\_\+transform\+\_\+t $\ast$t)
+\item 
+gint {\bf agg\+\_\+local\+\_\+transform\+\_\+set\+\_\+expression} (agg\+\_\+local\+\_\+transform\+\_\+t $\ast$t, gint i, gchar $\ast$def, agg\+\_\+parser\+\_\+t $\ast$p)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Parser for parametric geometry definitions. 
+
+
+
+\subsection{Function Documentation}
+\index{Parser@{Parser}!agg\+\_\+local\+\_\+transform\+\_\+eval\+\_\+parameters@{agg\+\_\+local\+\_\+transform\+\_\+eval\+\_\+parameters}}
+\index{agg\+\_\+local\+\_\+transform\+\_\+eval\+\_\+parameters@{agg\+\_\+local\+\_\+transform\+\_\+eval\+\_\+parameters}!Parser@{Parser}}
+\subsubsection[{agg\+\_\+local\+\_\+transform\+\_\+eval\+\_\+parameters}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+local\+\_\+transform\+\_\+eval\+\_\+parameters (
+\begin{DoxyParamCaption}
+\item[{agg\+\_\+local\+\_\+transform\+\_\+t $\ast$}]{t}
+\end{DoxyParamCaption}
+)}\label{group__parser_ga961081181702834b91ddee2e5aae105f}
+Set the numerical value of parameters defined symbolically in a transform
+
+
+\begin{DoxyParams}{Parameters}
+{\em t} & transform whose parameters are to be evaluted.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success 
+\end{DoxyReturn}
+\index{Parser@{Parser}!agg\+\_\+local\+\_\+transform\+\_\+set\+\_\+expression@{agg\+\_\+local\+\_\+transform\+\_\+set\+\_\+expression}}
+\index{agg\+\_\+local\+\_\+transform\+\_\+set\+\_\+expression@{agg\+\_\+local\+\_\+transform\+\_\+set\+\_\+expression}!Parser@{Parser}}
+\subsubsection[{agg\+\_\+local\+\_\+transform\+\_\+set\+\_\+expression}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+local\+\_\+transform\+\_\+set\+\_\+expression (
+\begin{DoxyParamCaption}
+\item[{agg\+\_\+local\+\_\+transform\+\_\+t $\ast$}]{t, }
+\item[{gint}]{i, }
+\item[{gchar $\ast$}]{def, }
+\item[{agg\+\_\+parser\+\_\+t $\ast$}]{p}
+\end{DoxyParamCaption}
+)}\label{group__parser_ga6bfd48243d1aa797bd7be585544352ec}
+Insert a symbolic expression for the evaluation of transform parameters
+
+
+\begin{DoxyParams}{Parameters}
+{\em t} & \+::agg\+\_\+local\+\_\+transform\+\_\+t whose parameter is to be set; \\
+\hline
+{\em i} & index of parameter in {\itshape t}; \\
+\hline
+{\em def} & symbolic expression to add; \\
+\hline
+{\em p} & \+::agg\+\_\+parser\+\_\+t containing symbol definitions.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}

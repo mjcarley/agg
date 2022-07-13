@@ -1,0 +1,44 @@
+\section{Functions}
+\label{group__functions}\index{Functions@{Functions}}
+
+
+Built-\/in functions which can be used in generating geometries.  
+
+
+\begin{DoxyCompactItemize}
+\item 
+gdouble {\bf agg\+\_\+function\+\_\+roundtip} (gdouble eta, gdouble t0, gdouble t)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Built-\/in functions which can be used in generating geometries. 
+
+
+
+\subsection{Function Documentation}
+\index{Functions@{Functions}!agg\+\_\+function\+\_\+roundtip@{agg\+\_\+function\+\_\+roundtip}}
+\index{agg\+\_\+function\+\_\+roundtip@{agg\+\_\+function\+\_\+roundtip}!Functions@{Functions}}
+\subsubsection[{agg\+\_\+function\+\_\+roundtip}]{\setlength{\rightskip}{0pt plus 5cm}gdouble agg\+\_\+function\+\_\+roundtip (
+\begin{DoxyParamCaption}
+\item[{gdouble}]{eta, }
+\item[{gdouble}]{t0, }
+\item[{gdouble}]{t}
+\end{DoxyParamCaption}
+)}\label{group__functions_ga6aeb55211edb942b07a1f0c8c7872289}
+Smoothing function intended to generate rounded wingtips
+
+Evaluate the function $f(t)=1$, $t<t_{0}$, $f(t)=p(t-t_{0})(1-t)^{\eta}/(1-t_{0})^{\eta}$, $t\geq t_{0}$, where $p(t-t_{0})$ is a polynomial selected to make $f(t)$ $C^{2}$ continuous.
+
+
+\begin{DoxyParams}{Parameters}
+{\em eta} & $\eta$ tip radius exponent; \\
+\hline
+{\em t0} & $t_{0}$ limit of constant region; \\
+\hline
+{\em t} & $t$ input variable.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+$f(t)$ on success. 
+\end{DoxyReturn}

@@ -1,0 +1,9 @@
+AGG is a library for generating geometries of the type found in
+aeronautical applications. It was written by Michael Carley, except
+where noted
+
+AGG contains the tinyexpr parser and evaluation library written by
+Lewis Van Winkle and released under the zlib licence. It is maintained
+here:
+
+https://github.com/codeplea/tinyexpr

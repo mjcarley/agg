@@ -1,0 +1,140 @@
+\section{transform.\+c File Reference}
+\label{transform_8c}\index{transform.\+c@{transform.\+c}}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+gint {\bf agg\+\_\+local\+\_\+transform\+\_\+init} ({\bf agg\+\_\+local\+\_\+transform\+\_\+t} $\ast$t)
+\item 
+{\bf agg\+\_\+local\+\_\+transform\+\_\+t} $\ast$ {\bf agg\+\_\+local\+\_\+transform\+\_\+alloc} (void)
+\item 
+gint {\bf agg\+\_\+local\+\_\+transform\+\_\+rotate} (gdouble $\ast$x, gdouble $\ast$p, gdouble $\ast$y)
+\item 
+gint {\bf agg\+\_\+local\+\_\+transform\+\_\+shift} (gdouble $\ast$x, gdouble $\ast$p, gdouble $\ast$y)
+\item 
+gint {\bf agg\+\_\+local\+\_\+transform\+\_\+scale} (gdouble $\ast$x, gdouble $\ast$p, gdouble $\ast$y)
+\item 
+gint {\bf agg\+\_\+local\+\_\+transform\+\_\+shrink} (gdouble $\ast$x, gdouble $\ast$p, gdouble $\ast$y)
+\item 
+gint {\bf agg\+\_\+local\+\_\+transform\+\_\+parse} ({\bf agg\+\_\+local\+\_\+transform\+\_\+t} $\ast$T, gchar $\ast$type, gdouble $\ast$p, gint {\bf np})
+\item 
+gint {\bf agg\+\_\+local\+\_\+transform\+\_\+apply} ({\bf agg\+\_\+local\+\_\+transform\+\_\+t} $\ast$T, gdouble $\ast$y)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{transform.\+c@{transform.\+c}!agg\+\_\+local\+\_\+transform\+\_\+alloc@{agg\+\_\+local\+\_\+transform\+\_\+alloc}}
+\index{agg\+\_\+local\+\_\+transform\+\_\+alloc@{agg\+\_\+local\+\_\+transform\+\_\+alloc}!transform.\+c@{transform.\+c}}
+\subsubsection[{agg\+\_\+local\+\_\+transform\+\_\+alloc}]{\setlength{\rightskip}{0pt plus 5cm}{\bf agg\+\_\+local\+\_\+transform\+\_\+t}$\ast$ agg\+\_\+local\+\_\+transform\+\_\+alloc (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}\label{transform_8c_acec1ef05dd74ae945a73e33dd46ce903}
+
+
+References agg\+\_\+local\+\_\+transform\+\_\+init().
+
+\index{transform.\+c@{transform.\+c}!agg\+\_\+local\+\_\+transform\+\_\+apply@{agg\+\_\+local\+\_\+transform\+\_\+apply}}
+\index{agg\+\_\+local\+\_\+transform\+\_\+apply@{agg\+\_\+local\+\_\+transform\+\_\+apply}!transform.\+c@{transform.\+c}}
+\subsubsection[{agg\+\_\+local\+\_\+transform\+\_\+apply}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+local\+\_\+transform\+\_\+apply (
+\begin{DoxyParamCaption}
+\item[{{\bf agg\+\_\+local\+\_\+transform\+\_\+t} $\ast$}]{T, }
+\item[{gdouble $\ast$}]{y}
+\end{DoxyParamCaption}
+)}\label{transform_8c_a2e097f8a55f0b9f924d15a33cb3b36fd}
+
+
+References \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t\+::func, \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t\+::nt, \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t\+::p, \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t\+::p1, and s.
+
+
+
+Referenced by agg\+\_\+distribution\+\_\+write\+\_\+mesh().
+
+\index{transform.\+c@{transform.\+c}!agg\+\_\+local\+\_\+transform\+\_\+init@{agg\+\_\+local\+\_\+transform\+\_\+init}}
+\index{agg\+\_\+local\+\_\+transform\+\_\+init@{agg\+\_\+local\+\_\+transform\+\_\+init}!transform.\+c@{transform.\+c}}
+\subsubsection[{agg\+\_\+local\+\_\+transform\+\_\+init}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+local\+\_\+transform\+\_\+init (
+\begin{DoxyParamCaption}
+\item[{{\bf agg\+\_\+local\+\_\+transform\+\_\+t} $\ast$}]{t}
+\end{DoxyParamCaption}
+)}\label{transform_8c_a1119480dfd29acceeecd5874a7d5ea05}
+
+
+References A\+G\+G\+\_\+\+T\+R\+A\+N\+S\+F\+O\+R\+M\+\_\+\+P\+A\+R\+A\+M\+E\+T\+E\+R\+\_\+\+N\+U\+M\+B\+E\+R, \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t\+::isexpr, \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t\+::nt, and \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t\+::p1.
+
+
+
+Referenced by agg\+\_\+local\+\_\+transform\+\_\+alloc().
+
+\index{transform.\+c@{transform.\+c}!agg\+\_\+local\+\_\+transform\+\_\+parse@{agg\+\_\+local\+\_\+transform\+\_\+parse}}
+\index{agg\+\_\+local\+\_\+transform\+\_\+parse@{agg\+\_\+local\+\_\+transform\+\_\+parse}!transform.\+c@{transform.\+c}}
+\subsubsection[{agg\+\_\+local\+\_\+transform\+\_\+parse}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+local\+\_\+transform\+\_\+parse (
+\begin{DoxyParamCaption}
+\item[{{\bf agg\+\_\+local\+\_\+transform\+\_\+t} $\ast$}]{T, }
+\item[{gchar $\ast$}]{type, }
+\item[{gdouble $\ast$}]{p, }
+\item[{gint}]{np}
+\end{DoxyParamCaption}
+)}\label{transform_8c_a63fa6c87eeef0599baa96faaaa737df7}
+
+
+References \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t\+::func, np, \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t\+::nt, \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t\+::p, \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t\+::p1, and transform.
+
+\index{transform.\+c@{transform.\+c}!agg\+\_\+local\+\_\+transform\+\_\+rotate@{agg\+\_\+local\+\_\+transform\+\_\+rotate}}
+\index{agg\+\_\+local\+\_\+transform\+\_\+rotate@{agg\+\_\+local\+\_\+transform\+\_\+rotate}!transform.\+c@{transform.\+c}}
+\subsubsection[{agg\+\_\+local\+\_\+transform\+\_\+rotate}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+local\+\_\+transform\+\_\+rotate (
+\begin{DoxyParamCaption}
+\item[{gdouble $\ast$}]{x, }
+\item[{gdouble $\ast$}]{p, }
+\item[{gdouble $\ast$}]{y}
+\end{DoxyParamCaption}
+)}\label{transform_8c_a1f2aa9a8f559428cd0c3ab22c199adfb}
+\index{transform.\+c@{transform.\+c}!agg\+\_\+local\+\_\+transform\+\_\+scale@{agg\+\_\+local\+\_\+transform\+\_\+scale}}
+\index{agg\+\_\+local\+\_\+transform\+\_\+scale@{agg\+\_\+local\+\_\+transform\+\_\+scale}!transform.\+c@{transform.\+c}}
+\subsubsection[{agg\+\_\+local\+\_\+transform\+\_\+scale}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+local\+\_\+transform\+\_\+scale (
+\begin{DoxyParamCaption}
+\item[{gdouble $\ast$}]{x, }
+\item[{gdouble $\ast$}]{p, }
+\item[{gdouble $\ast$}]{y}
+\end{DoxyParamCaption}
+)}\label{transform_8c_af05f8f2ddac3c78508990a17e50d288d}
+\index{transform.\+c@{transform.\+c}!agg\+\_\+local\+\_\+transform\+\_\+shift@{agg\+\_\+local\+\_\+transform\+\_\+shift}}
+\index{agg\+\_\+local\+\_\+transform\+\_\+shift@{agg\+\_\+local\+\_\+transform\+\_\+shift}!transform.\+c@{transform.\+c}}
+\subsubsection[{agg\+\_\+local\+\_\+transform\+\_\+shift}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+local\+\_\+transform\+\_\+shift (
+\begin{DoxyParamCaption}
+\item[{gdouble $\ast$}]{x, }
+\item[{gdouble $\ast$}]{p, }
+\item[{gdouble $\ast$}]{y}
+\end{DoxyParamCaption}
+)}\label{transform_8c_a3c584ee125a4c8295cc33a8c70374d32}
+\index{transform.\+c@{transform.\+c}!agg\+\_\+local\+\_\+transform\+\_\+shrink@{agg\+\_\+local\+\_\+transform\+\_\+shrink}}
+\index{agg\+\_\+local\+\_\+transform\+\_\+shrink@{agg\+\_\+local\+\_\+transform\+\_\+shrink}!transform.\+c@{transform.\+c}}
+\subsubsection[{agg\+\_\+local\+\_\+transform\+\_\+shrink}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+local\+\_\+transform\+\_\+shrink (
+\begin{DoxyParamCaption}
+\item[{gdouble $\ast$}]{x, }
+\item[{gdouble $\ast$}]{p, }
+\item[{gdouble $\ast$}]{y}
+\end{DoxyParamCaption}
+)}\label{transform_8c_a63218cdc8842785be4cb8a5e3d22d0bc}
+
+
+\subsection{Variable Documentation}
+\index{transform.\+c@{transform.\+c}!func@{func}}
+\index{func@{func}!transform.\+c@{transform.\+c}}
+\subsubsection[{func}]{\setlength{\rightskip}{0pt plus 5cm}{\bf agg\+\_\+local\+\_\+transform\+\_\+func\+\_\+t} func}\label{transform_8c_aff7c1eae5750eecdd39d132f24f15135}
+
+
+Referenced by agg\+\_\+parser\+\_\+function\+\_\+add().
+
+\index{transform.\+c@{transform.\+c}!np@{np}}
+\index{np@{np}!transform.\+c@{transform.\+c}}
+\subsubsection[{np}]{\setlength{\rightskip}{0pt plus 5cm}gint np}\label{transform_8c_a96ca1086cda152ba0935e179cda8d77a}
+
+
+Referenced by agg\+\_\+local\+\_\+transform\+\_\+parse().
+
+\index{transform.\+c@{transform.\+c}!transform@{transform}}
+\index{transform@{transform}!transform.\+c@{transform.\+c}}
+\subsubsection[{transform}]{\setlength{\rightskip}{0pt plus 5cm}gchar$\ast$ transform}\label{transform_8c_af2af92fbcf6e919143b320c5258aed0c}
+
+
+Referenced by agg\+\_\+local\+\_\+transform\+\_\+parse().
+

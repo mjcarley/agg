@@ -1,0 +1,96 @@
+\section{distribution.\+c File Reference}
+\label{distribution_8c}\index{distribution.\+c@{distribution.\+c}}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\bf agg\+\_\+distribution\+\_\+t} $\ast$ {\bf agg\+\_\+distribution\+\_\+alloc} (gint nsmax)
+\item 
+gint {\bf agg\+\_\+distribution\+\_\+add\+\_\+shape} ({\bf agg\+\_\+distribution\+\_\+t} $\ast$d, gdouble t, {\bf agg\+\_\+shape\+\_\+t} $\ast${\bf s})
+\item 
+gint {\bf agg\+\_\+distribution\+\_\+interpolation\+\_\+weights} ({\bf agg\+\_\+distribution\+\_\+t} $\ast$d)
+\item 
+gint {\bf agg\+\_\+distribution\+\_\+interpolate} ({\bf agg\+\_\+distribution\+\_\+t} $\ast$d, gdouble t, {\bf agg\+\_\+shape\+\_\+t} $\ast${\bf s}, {\bf agg\+\_\+local\+\_\+transform\+\_\+t} $\ast$T)
+\item 
+gint {\bf agg\+\_\+distribution\+\_\+axes\+\_\+parse} (gchar $\ast$str, gint $\ast${\bf a})
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{distribution.\+c@{distribution.\+c}!agg\+\_\+distribution\+\_\+add\+\_\+shape@{agg\+\_\+distribution\+\_\+add\+\_\+shape}}
+\index{agg\+\_\+distribution\+\_\+add\+\_\+shape@{agg\+\_\+distribution\+\_\+add\+\_\+shape}!distribution.\+c@{distribution.\+c}}
+\subsubsection[{agg\+\_\+distribution\+\_\+add\+\_\+shape}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+distribution\+\_\+add\+\_\+shape (
+\begin{DoxyParamCaption}
+\item[{{\bf agg\+\_\+distribution\+\_\+t} $\ast$}]{d, }
+\item[{gdouble}]{t, }
+\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{s}
+\end{DoxyParamCaption}
+)}\label{distribution_8c_ac1f4598613aff8f2be71b82d2a682920}
+
+
+References \+\_\+agg\+\_\+distribution\+\_\+t\+::ns, \+\_\+agg\+\_\+distribution\+\_\+t\+::nsmax, s, \+\_\+agg\+\_\+distribution\+\_\+t\+::sh, and \+\_\+agg\+\_\+distribution\+\_\+t\+::ts.
+
+\index{distribution.\+c@{distribution.\+c}!agg\+\_\+distribution\+\_\+alloc@{agg\+\_\+distribution\+\_\+alloc}}
+\index{agg\+\_\+distribution\+\_\+alloc@{agg\+\_\+distribution\+\_\+alloc}!distribution.\+c@{distribution.\+c}}
+\subsubsection[{agg\+\_\+distribution\+\_\+alloc}]{\setlength{\rightskip}{0pt plus 5cm}{\bf agg\+\_\+distribution\+\_\+t}$\ast$ agg\+\_\+distribution\+\_\+alloc (
+\begin{DoxyParamCaption}
+\item[{gint}]{nsmax}
+\end{DoxyParamCaption}
+)}\label{distribution_8c_a093e05d6f655dd6931b5726057f3b5b3}
+
+
+References \+\_\+agg\+\_\+distribution\+\_\+t\+::axes, \+\_\+agg\+\_\+distribution\+\_\+t\+::ns, \+\_\+agg\+\_\+distribution\+\_\+t\+::nsmax, \+\_\+agg\+\_\+distribution\+\_\+t\+::sh, \+\_\+agg\+\_\+distribution\+\_\+t\+::t, \+\_\+agg\+\_\+distribution\+\_\+t\+::ts, and \+\_\+agg\+\_\+distribution\+\_\+t\+::w.
+
+\index{distribution.\+c@{distribution.\+c}!agg\+\_\+distribution\+\_\+axes\+\_\+parse@{agg\+\_\+distribution\+\_\+axes\+\_\+parse}}
+\index{agg\+\_\+distribution\+\_\+axes\+\_\+parse@{agg\+\_\+distribution\+\_\+axes\+\_\+parse}!distribution.\+c@{distribution.\+c}}
+\subsubsection[{agg\+\_\+distribution\+\_\+axes\+\_\+parse}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+distribution\+\_\+axes\+\_\+parse (
+\begin{DoxyParamCaption}
+\item[{gchar $\ast$}]{str, }
+\item[{gint $\ast$}]{a}
+\end{DoxyParamCaption}
+)}\label{distribution_8c_a29016ee87be3f669110150a648037eff}
+\index{distribution.\+c@{distribution.\+c}!agg\+\_\+distribution\+\_\+interpolate@{agg\+\_\+distribution\+\_\+interpolate}}
+\index{agg\+\_\+distribution\+\_\+interpolate@{agg\+\_\+distribution\+\_\+interpolate}!distribution.\+c@{distribution.\+c}}
+\subsubsection[{agg\+\_\+distribution\+\_\+interpolate}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+distribution\+\_\+interpolate (
+\begin{DoxyParamCaption}
+\item[{{\bf agg\+\_\+distribution\+\_\+t} $\ast$}]{d, }
+\item[{gdouble}]{t, }
+\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{s, }
+\item[{{\bf agg\+\_\+local\+\_\+transform\+\_\+t} $\ast$}]{T}
+\end{DoxyParamCaption}
+)}\label{distribution_8c_a859853b4397de06c8445a3535ec62fa8}
+
+
+References A\+G\+G\+\_\+\+S\+H\+A\+P\+E\+\_\+\+A\+E\+R\+O\+F\+O\+I\+L, A\+G\+G\+\_\+\+S\+H\+A\+P\+E\+\_\+\+E\+L\+L\+I\+P\+S\+E, \+\_\+agg\+\_\+distribution\+\_\+t\+::sh, and \+\_\+agg\+\_\+shape\+\_\+t\+::type.
+
+
+
+Referenced by agg\+\_\+distribution\+\_\+write\+\_\+mesh().
+
+\index{distribution.\+c@{distribution.\+c}!agg\+\_\+distribution\+\_\+interpolation\+\_\+weights@{agg\+\_\+distribution\+\_\+interpolation\+\_\+weights}}
+\index{agg\+\_\+distribution\+\_\+interpolation\+\_\+weights@{agg\+\_\+distribution\+\_\+interpolation\+\_\+weights}!distribution.\+c@{distribution.\+c}}
+\subsubsection[{agg\+\_\+distribution\+\_\+interpolation\+\_\+weights}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+distribution\+\_\+interpolation\+\_\+weights (
+\begin{DoxyParamCaption}
+\item[{{\bf agg\+\_\+distribution\+\_\+t} $\ast$}]{d}
+\end{DoxyParamCaption}
+)}\label{distribution_8c_a403c400a028399da09ba94e8c89030c3}
+
+
+References \+\_\+agg\+\_\+distribution\+\_\+t\+::ns, \+\_\+agg\+\_\+distribution\+\_\+t\+::ts, and \+\_\+agg\+\_\+distribution\+\_\+t\+::w.
+
+
+
+\subsection{Variable Documentation}
+\index{distribution.\+c@{distribution.\+c}!a@{a}}
+\index{a@{a}!distribution.\+c@{distribution.\+c}}
+\subsubsection[{a}]{\setlength{\rightskip}{0pt plus 5cm}gint a[3]}\label{distribution_8c_adf5f7ebbd555bff55d15911169d78fa3}
+
+
+Referenced by agg\+\_\+function\+\_\+roundtip(), agg\+\_\+naca\+\_\+four(), and agg\+\_\+shape\+\_\+interpolant\+\_\+alloc().
+
+\index{distribution.\+c@{distribution.\+c}!s@{s}}
+\index{s@{s}!distribution.\+c@{distribution.\+c}}
+\subsubsection[{s}]{\setlength{\rightskip}{0pt plus 5cm}gchar$\ast$ s}\label{distribution_8c_ae9fc68f659b20abf6455ad7212577311}
+
+
+Referenced by agg\+\_\+distribution\+\_\+add\+\_\+shape(), agg\+\_\+distribution\+\_\+write\+\_\+mesh(), agg\+\_\+local\+\_\+transform\+\_\+apply(), agg\+\_\+parser\+\_\+read\+\_\+header(), agg\+\_\+scanner\+\_\+alloc(), agg\+\_\+shape\+\_\+alloc(), agg\+\_\+shape\+\_\+interpolant\+\_\+make(), and te\+\_\+compile().
+

@@ -1,0 +1,28 @@
+/**
+ * @mainpage AGG: a library for Aerodynamic Geometry Generation
+ *
+ * AGG is a library for generating "aerodynamic" geometries, based on
+ * the CST method of Brenda Kulfan.
+ *
+ */
+
+/**
+ * @defgroup functions Functions
+ *
+ * @brief Built-in functions which can be used in generating geometries
+ *
+ */
+
+/**
+ * @defgroup parser Parser
+ *
+ * @brief Parser for parametric geometry definitions
+ *
+ */
+
+/**
+ * @defgroup types Data types and constants
+ *
+ * @brief Data types and constants for AGG calculations
+ *
+ */

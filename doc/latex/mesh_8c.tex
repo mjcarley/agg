@@ -1,0 +1,82 @@
+\section{mesh.\+c File Reference}
+\label{mesh_8c}\index{mesh.\+c@{mesh.\+c}}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+gint {\bf agg\+\_\+distribution\+\_\+write\+\_\+mesh} (F\+I\+L\+E $\ast$f, {\bf agg\+\_\+distribution\+\_\+t} $\ast$d, gdouble smin, gdouble smax, gint ns, {\bf agg\+\_\+spacing\+\_\+t} ss, gdouble tmin, gdouble tmax, gint nt, {\bf agg\+\_\+spacing\+\_\+t} st, {\bf agg\+\_\+shape\+\_\+t} $\ast$sh, {\bf agg\+\_\+local\+\_\+transform\+\_\+t} $\ast$T, {\bf agg\+\_\+parser\+\_\+t} $\ast$p)
+\item 
+gint {\bf agg\+\_\+distribution\+\_\+mesh} ({\bf agg\+\_\+distribution\+\_\+t} $\ast$d, gdouble smin, gdouble smax, gint ns, {\bf agg\+\_\+spacing\+\_\+t} ss, gdouble tmin, gdouble tmax, gint nt, {\bf agg\+\_\+spacing\+\_\+t} st, {\bf agg\+\_\+shape\+\_\+t} $\ast$sh, {\bf agg\+\_\+local\+\_\+transform\+\_\+t} $\ast$T, {\bf agg\+\_\+parser\+\_\+t} $\ast$p, gdouble $\ast$x, gint xstr, gint $\ast$tr, gint tstr, gint $\ast$idx0)
+\item 
+gint {\bf agg\+\_\+mesh\+\_\+points\+\_\+write} (F\+I\+L\+E $\ast$f, gdouble $\ast$x, gint str, gint n)
+\item 
+gint {\bf agg\+\_\+mesh\+\_\+tri\+\_\+write} (F\+I\+L\+E $\ast$f, gint $\ast$tr, gint str, gint n)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{mesh.\+c@{mesh.\+c}!agg\+\_\+distribution\+\_\+mesh@{agg\+\_\+distribution\+\_\+mesh}}
+\index{agg\+\_\+distribution\+\_\+mesh@{agg\+\_\+distribution\+\_\+mesh}!mesh.\+c@{mesh.\+c}}
+\subsubsection[{agg\+\_\+distribution\+\_\+mesh}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+distribution\+\_\+mesh (
+\begin{DoxyParamCaption}
+\item[{{\bf agg\+\_\+distribution\+\_\+t} $\ast$}]{d, }
+\item[{gdouble}]{smin, }
+\item[{gdouble}]{smax, }
+\item[{gint}]{ns, }
+\item[{{\bf agg\+\_\+spacing\+\_\+t}}]{ss, }
+\item[{gdouble}]{tmin, }
+\item[{gdouble}]{tmax, }
+\item[{gint}]{nt, }
+\item[{{\bf agg\+\_\+spacing\+\_\+t}}]{st, }
+\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{sh, }
+\item[{{\bf agg\+\_\+local\+\_\+transform\+\_\+t} $\ast$}]{T, }
+\item[{{\bf agg\+\_\+parser\+\_\+t} $\ast$}]{p, }
+\item[{gdouble $\ast$}]{x, }
+\item[{gint}]{xstr, }
+\item[{gint $\ast$}]{tr, }
+\item[{gint}]{tstr, }
+\item[{gint $\ast$}]{idx0}
+\end{DoxyParamCaption}
+)}\label{mesh_8c_a2b97cc991d7fa8c9ab3a8bb63befb9bf}
+\index{mesh.\+c@{mesh.\+c}!agg\+\_\+distribution\+\_\+write\+\_\+mesh@{agg\+\_\+distribution\+\_\+write\+\_\+mesh}}
+\index{agg\+\_\+distribution\+\_\+write\+\_\+mesh@{agg\+\_\+distribution\+\_\+write\+\_\+mesh}!mesh.\+c@{mesh.\+c}}
+\subsubsection[{agg\+\_\+distribution\+\_\+write\+\_\+mesh}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+distribution\+\_\+write\+\_\+mesh (
+\begin{DoxyParamCaption}
+\item[{F\+I\+L\+E $\ast$}]{f, }
+\item[{{\bf agg\+\_\+distribution\+\_\+t} $\ast$}]{d, }
+\item[{gdouble}]{smin, }
+\item[{gdouble}]{smax, }
+\item[{gint}]{ns, }
+\item[{{\bf agg\+\_\+spacing\+\_\+t}}]{ss, }
+\item[{gdouble}]{tmin, }
+\item[{gdouble}]{tmax, }
+\item[{gint}]{nt, }
+\item[{{\bf agg\+\_\+spacing\+\_\+t}}]{st, }
+\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{sh, }
+\item[{{\bf agg\+\_\+local\+\_\+transform\+\_\+t} $\ast$}]{T, }
+\item[{{\bf agg\+\_\+parser\+\_\+t} $\ast$}]{p}
+\end{DoxyParamCaption}
+)}\label{mesh_8c_a88702a2fc1a2f626a7e394ad7a0bc469}
+
+
+References agg\+\_\+distribution\+\_\+interpolate(), agg\+\_\+local\+\_\+transform\+\_\+apply(), agg\+\_\+local\+\_\+transform\+\_\+eval\+\_\+parameters(), A\+G\+G\+\_\+\+P\+A\+R\+S\+E\+R\+\_\+\+P\+A\+R\+A\+M\+E\+T\+E\+R\+\_\+\+R\+E\+S\+E\+R\+V\+E\+D\+\_\+\+T, agg\+\_\+shape\+\_\+eval(), agg\+\_\+spacing\+\_\+eval(), \+\_\+agg\+\_\+shape\+\_\+t\+::closed, s, \+\_\+agg\+\_\+distribution\+\_\+t\+::t, and \+\_\+agg\+\_\+parser\+\_\+t\+::values.
+
+\index{mesh.\+c@{mesh.\+c}!agg\+\_\+mesh\+\_\+points\+\_\+write@{agg\+\_\+mesh\+\_\+points\+\_\+write}}
+\index{agg\+\_\+mesh\+\_\+points\+\_\+write@{agg\+\_\+mesh\+\_\+points\+\_\+write}!mesh.\+c@{mesh.\+c}}
+\subsubsection[{agg\+\_\+mesh\+\_\+points\+\_\+write}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+mesh\+\_\+points\+\_\+write (
+\begin{DoxyParamCaption}
+\item[{F\+I\+L\+E $\ast$}]{f, }
+\item[{gdouble $\ast$}]{x, }
+\item[{gint}]{str, }
+\item[{gint}]{n}
+\end{DoxyParamCaption}
+)}\label{mesh_8c_ac61866378b19df876ee933bfa46117fc}
+\index{mesh.\+c@{mesh.\+c}!agg\+\_\+mesh\+\_\+tri\+\_\+write@{agg\+\_\+mesh\+\_\+tri\+\_\+write}}
+\index{agg\+\_\+mesh\+\_\+tri\+\_\+write@{agg\+\_\+mesh\+\_\+tri\+\_\+write}!mesh.\+c@{mesh.\+c}}
+\subsubsection[{agg\+\_\+mesh\+\_\+tri\+\_\+write}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+mesh\+\_\+tri\+\_\+write (
+\begin{DoxyParamCaption}
+\item[{F\+I\+L\+E $\ast$}]{f, }
+\item[{gint $\ast$}]{tr, }
+\item[{gint}]{str, }
+\item[{gint}]{n}
+\end{DoxyParamCaption}
+)}\label{mesh_8c_a6f7ea7b05b4a2a928727aecf53d36fa7}

@@ -1,0 +1,54 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage{times}
+\usepackage{amsmath}
+\usepackage{graphicx}
+
+\begin{document}
+
+Closed curves (``shapes'') used to define cross-sections are
+parameterized using $x$, $-1\leq x \leq 1$ with $x<0$ defining the
+lower portion of the curve and $x>0$ the upper. The variable runs
+continuously from the trailing edge along the lower surface to the
+leading edge and back to the trailing edge. Coordinates are calculated
+as
+\begin{align}
+  \label{equ:curves}
+  y_{U} &= x^{n_{1}}(1-x)^{n_{2}}\sum_{i=0}^{n} s_{i}^{(U)}S_{n,i}(x),\\
+  y_{L} &= -|x|^{n_{1}}(1-|x|)^{n_{2}}\sum_{i=0}^{n} s_{i}^{(L)}S_{n,i}(|x|).
+\end{align}
+
+``Aerofoils'' are defined similarly but in terms of the thickness
+distribution, the trailing edge thickness, and the camber line. 
+
+\begin{table}
+  \centering
+  \begin{tabular}{lll}
+    \verb+AGG_TRANSFORM_NULL+  & $\mathbf{x}$& \\
+    \verb+AGG_TRANSFORM_REVERSE+  & $[-x,\, y]$ & reverse direction of curve\\
+    \verb+AGG_TRANSFORM_PLANE_ROTATE+  &
+    $
+    \displaystyle
+    \mathbf{x}_{0} +
+    (\mathbf{x}-\mathbf{x}_{0})\mathbf{R}^{T}
+    $
+    &
+    rotate about $\mathbf{x}_{0}$\\
+    \verb+AGG_TRANSFORM_SHRINK+  &
+    $\displaystyle\mathbf{x}_{0} + s(\mathbf{x}-\mathbf{x}_{0})$
+    & scale about $\mathbf{x}_{0}$\\
+    \verb+AGG_TRANSFORM_SHIFT+  & $\mathbf{x} + \Delta\mathbf{x}$&
+    3D translation by $\Delta \mathbf{x}$\\
+    \verb+AGG_TRANSFORM_SCALE+  & $s\textbf{x}$& global scale in plane
+    \\
+  \end{tabular}
+  \caption{Transforms in order of application to a shape}
+  \label{tab:transforms}
+\end{table}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

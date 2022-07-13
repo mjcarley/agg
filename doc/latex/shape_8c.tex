@@ -1,0 +1,333 @@
+\section{shape.\+c File Reference}
+\label{shape_8c}\index{shape.\+c@{shape.\+c}}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define {\bf M411}~0
+\item 
+\#define {\bf M412}~1
+\item 
+\#define {\bf M413}~2
+\item 
+\#define {\bf M414}~3
+\item 
+\#define {\bf M421}~4
+\item 
+\#define {\bf M422}~5
+\item 
+\#define {\bf M423}~6
+\item 
+\#define {\bf M424}~7
+\item 
+\#define {\bf M431}~8
+\item 
+\#define {\bf M432}~9
+\item 
+\#define {\bf M433}~10
+\item 
+\#define {\bf M434}~11
+\item 
+\#define {\bf M441}~12
+\item 
+\#define {\bf M442}~13
+\item 
+\#define {\bf M443}~14
+\item 
+\#define {\bf M444}~15
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+gdouble {\bf agg\+\_\+shape\+\_\+eval} ({\bf agg\+\_\+shape\+\_\+t} $\ast${\bf s}, gdouble x, gint lim)
+\item 
+gdouble {\bf agg\+\_\+shape\+\_\+aerofoil\+\_\+eval} ({\bf agg\+\_\+shape\+\_\+t} $\ast${\bf s}, gdouble x)
+\item 
+gdouble {\bf agg\+\_\+shape\+\_\+ellipse\+\_\+eval} ({\bf agg\+\_\+shape\+\_\+t} $\ast${\bf s}, gdouble x, gint b)
+\item 
+{\bf agg\+\_\+shape\+\_\+t} $\ast$ {\bf agg\+\_\+shape\+\_\+alloc} (gint nsmax)
+\item 
+gint {\bf agg\+\_\+shape\+\_\+naca} ({\bf agg\+\_\+shape\+\_\+t} $\ast${\bf s}, gdouble t)
+\item 
+gint {\bf agg\+\_\+shape\+\_\+ellipse} ({\bf agg\+\_\+shape\+\_\+t} $\ast${\bf s})
+\item 
+gint {\bf agg\+\_\+shape\+\_\+fit} ({\bf agg\+\_\+shape\+\_\+t} $\ast${\bf s}, gdouble $\ast$xu, gdouble $\ast$yu, gint nu, gdouble $\ast$xl, gdouble $\ast$yl, gint nl, gdouble n1, gdouble n2, gdouble d, gint n, gboolean closed, gdouble $\ast$work)
+\item 
+gint {\bf agg\+\_\+shape\+\_\+root\+\_\+fit} ({\bf agg\+\_\+shape\+\_\+t} $\ast${\bf s}, gdouble n1, gdouble n2, gdouble hu, gdouble su, gdouble du, gdouble bu, gdouble hl, gdouble sl, gdouble dl, gdouble bl, gint n, gdouble $\ast$work)
+\item 
+gint {\bf agg\+\_\+shape\+\_\+interval\+\_\+add} ({\bf agg\+\_\+shape\+\_\+t} $\ast${\bf s}, gdouble x1, gdouble x2, gdouble $\ast$x, gdouble $\ast$y, gint {\bf np}, gboolean upper, gdouble n1, gdouble n2, gint n, gdouble $\ast$work)
+\item 
+gint {\bf agg\+\_\+shape\+\_\+parse} ({\bf agg\+\_\+shape\+\_\+t} $\ast${\bf s}, gchar $\ast$type, gdouble $\ast$p, gint {\bf np})
+\item 
+gint {\bf agg\+\_\+shape\+\_\+copy} ({\bf agg\+\_\+shape\+\_\+t} $\ast$dest, {\bf agg\+\_\+shape\+\_\+t} $\ast$src)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{shape.\+c@{shape.\+c}!M411@{M411}}
+\index{M411@{M411}!shape.\+c@{shape.\+c}}
+\subsubsection[{M411}]{\setlength{\rightskip}{0pt plus 5cm}\#define M411~0}\label{shape_8c_a43a9da089ef1efc57d9309f741cb234b}
+\index{shape.\+c@{shape.\+c}!M412@{M412}}
+\index{M412@{M412}!shape.\+c@{shape.\+c}}
+\subsubsection[{M412}]{\setlength{\rightskip}{0pt plus 5cm}\#define M412~1}\label{shape_8c_a0ff049e1f5055be93878ccd2e3c77629}
+\index{shape.\+c@{shape.\+c}!M413@{M413}}
+\index{M413@{M413}!shape.\+c@{shape.\+c}}
+\subsubsection[{M413}]{\setlength{\rightskip}{0pt plus 5cm}\#define M413~2}\label{shape_8c_a33d725fa933e186bb5d4e89c72b0adcc}
+\index{shape.\+c@{shape.\+c}!M414@{M414}}
+\index{M414@{M414}!shape.\+c@{shape.\+c}}
+\subsubsection[{M414}]{\setlength{\rightskip}{0pt plus 5cm}\#define M414~3}\label{shape_8c_afae48d77efadabe64984e3b5cea573fb}
+\index{shape.\+c@{shape.\+c}!M421@{M421}}
+\index{M421@{M421}!shape.\+c@{shape.\+c}}
+\subsubsection[{M421}]{\setlength{\rightskip}{0pt plus 5cm}\#define M421~4}\label{shape_8c_a0557f1899493bdf64cf967ff4da8592c}
+\index{shape.\+c@{shape.\+c}!M422@{M422}}
+\index{M422@{M422}!shape.\+c@{shape.\+c}}
+\subsubsection[{M422}]{\setlength{\rightskip}{0pt plus 5cm}\#define M422~5}\label{shape_8c_a2977a4a1b60e9841cb732954be468ed2}
+\index{shape.\+c@{shape.\+c}!M423@{M423}}
+\index{M423@{M423}!shape.\+c@{shape.\+c}}
+\subsubsection[{M423}]{\setlength{\rightskip}{0pt plus 5cm}\#define M423~6}\label{shape_8c_a0be4ec65dd8a4925b9604a95fbfda292}
+\index{shape.\+c@{shape.\+c}!M424@{M424}}
+\index{M424@{M424}!shape.\+c@{shape.\+c}}
+\subsubsection[{M424}]{\setlength{\rightskip}{0pt plus 5cm}\#define M424~7}\label{shape_8c_a488818a4cf9ec393b922fd74f69ec90c}
+\index{shape.\+c@{shape.\+c}!M431@{M431}}
+\index{M431@{M431}!shape.\+c@{shape.\+c}}
+\subsubsection[{M431}]{\setlength{\rightskip}{0pt plus 5cm}\#define M431~8}\label{shape_8c_a06124e905c7d9c563eb4cb8f0afc0ea6}
+\index{shape.\+c@{shape.\+c}!M432@{M432}}
+\index{M432@{M432}!shape.\+c@{shape.\+c}}
+\subsubsection[{M432}]{\setlength{\rightskip}{0pt plus 5cm}\#define M432~9}\label{shape_8c_afea84b0145de459162c59ba763a847c6}
+\index{shape.\+c@{shape.\+c}!M433@{M433}}
+\index{M433@{M433}!shape.\+c@{shape.\+c}}
+\subsubsection[{M433}]{\setlength{\rightskip}{0pt plus 5cm}\#define M433~10}\label{shape_8c_ae8c1fb12dd190d3d5449a19c4129901f}
+\index{shape.\+c@{shape.\+c}!M434@{M434}}
+\index{M434@{M434}!shape.\+c@{shape.\+c}}
+\subsubsection[{M434}]{\setlength{\rightskip}{0pt plus 5cm}\#define M434~11}\label{shape_8c_ac26d3573c1acd8262599528fc63ae36b}
+\index{shape.\+c@{shape.\+c}!M441@{M441}}
+\index{M441@{M441}!shape.\+c@{shape.\+c}}
+\subsubsection[{M441}]{\setlength{\rightskip}{0pt plus 5cm}\#define M441~12}\label{shape_8c_a02d66d3b6852ebf51f14fdcba2ca8913}
+\index{shape.\+c@{shape.\+c}!M442@{M442}}
+\index{M442@{M442}!shape.\+c@{shape.\+c}}
+\subsubsection[{M442}]{\setlength{\rightskip}{0pt plus 5cm}\#define M442~13}\label{shape_8c_a49255ede255b7a8af481976c57c80495}
+\index{shape.\+c@{shape.\+c}!M443@{M443}}
+\index{M443@{M443}!shape.\+c@{shape.\+c}}
+\subsubsection[{M443}]{\setlength{\rightskip}{0pt plus 5cm}\#define M443~14}\label{shape_8c_ac706546c3ace0d3cc08c8594937915fa}
+\index{shape.\+c@{shape.\+c}!M444@{M444}}
+\index{M444@{M444}!shape.\+c@{shape.\+c}}
+\subsubsection[{M444}]{\setlength{\rightskip}{0pt plus 5cm}\#define M444~15}\label{shape_8c_a431cb18c3bf1865e9c14ecc862849834}
+
+
+\subsection{Function Documentation}
+\index{shape.\+c@{shape.\+c}!agg\+\_\+shape\+\_\+aerofoil\+\_\+eval@{agg\+\_\+shape\+\_\+aerofoil\+\_\+eval}}
+\index{agg\+\_\+shape\+\_\+aerofoil\+\_\+eval@{agg\+\_\+shape\+\_\+aerofoil\+\_\+eval}!shape.\+c@{shape.\+c}}
+\subsubsection[{agg\+\_\+shape\+\_\+aerofoil\+\_\+eval}]{\setlength{\rightskip}{0pt plus 5cm}gdouble agg\+\_\+shape\+\_\+aerofoil\+\_\+eval (
+\begin{DoxyParamCaption}
+\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{s, }
+\item[{gdouble}]{x}
+\end{DoxyParamCaption}
+)}\label{shape_8c_a00f8a869bb22345871c95dbdd23a7985}
+
+
+References agg\+\_\+bernstein\+\_\+basis(), \+\_\+agg\+\_\+shape\+\_\+t\+::i, \+\_\+agg\+\_\+shape\+\_\+t\+::n1, \+\_\+agg\+\_\+shape\+\_\+t\+::n2, \+\_\+agg\+\_\+shape\+\_\+t\+::nb, and \+\_\+agg\+\_\+shape\+\_\+t\+::s.
+
+
+
+Referenced by agg\+\_\+shape\+\_\+eval().
+
+\index{shape.\+c@{shape.\+c}!agg\+\_\+shape\+\_\+alloc@{agg\+\_\+shape\+\_\+alloc}}
+\index{agg\+\_\+shape\+\_\+alloc@{agg\+\_\+shape\+\_\+alloc}!shape.\+c@{shape.\+c}}
+\subsubsection[{agg\+\_\+shape\+\_\+alloc}]{\setlength{\rightskip}{0pt plus 5cm}{\bf agg\+\_\+shape\+\_\+t}$\ast$ agg\+\_\+shape\+\_\+alloc (
+\begin{DoxyParamCaption}
+\item[{gint}]{nsmax}
+\end{DoxyParamCaption}
+)}\label{shape_8c_a88eca975534de23d191efe7306adf540}
+
+
+References \+\_\+agg\+\_\+shape\+\_\+t\+::b, \+\_\+agg\+\_\+shape\+\_\+t\+::nsmax, s, and \+\_\+agg\+\_\+shape\+\_\+t\+::s.
+
+\index{shape.\+c@{shape.\+c}!agg\+\_\+shape\+\_\+copy@{agg\+\_\+shape\+\_\+copy}}
+\index{agg\+\_\+shape\+\_\+copy@{agg\+\_\+shape\+\_\+copy}!shape.\+c@{shape.\+c}}
+\subsubsection[{agg\+\_\+shape\+\_\+copy}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+shape\+\_\+copy (
+\begin{DoxyParamCaption}
+\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{dest, }
+\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{src}
+\end{DoxyParamCaption}
+)}\label{shape_8c_af3e3da3fe2d1da2e37b3aff4ccf950aa}
+
+
+References \+\_\+agg\+\_\+shape\+\_\+t\+::b, \+\_\+agg\+\_\+shape\+\_\+t\+::closed, \+\_\+agg\+\_\+shape\+\_\+t\+::i, \+\_\+agg\+\_\+shape\+\_\+t\+::n1, \+\_\+agg\+\_\+shape\+\_\+t\+::n2, \+\_\+agg\+\_\+shape\+\_\+t\+::nb, \+\_\+agg\+\_\+shape\+\_\+t\+::nsmax, \+\_\+agg\+\_\+shape\+\_\+t\+::s, and \+\_\+agg\+\_\+shape\+\_\+t\+::type.
+
+\index{shape.\+c@{shape.\+c}!agg\+\_\+shape\+\_\+ellipse@{agg\+\_\+shape\+\_\+ellipse}}
+\index{agg\+\_\+shape\+\_\+ellipse@{agg\+\_\+shape\+\_\+ellipse}!shape.\+c@{shape.\+c}}
+\subsubsection[{agg\+\_\+shape\+\_\+ellipse}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+shape\+\_\+ellipse (
+\begin{DoxyParamCaption}
+\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{s}
+\end{DoxyParamCaption}
+)}\label{shape_8c_ab7bb01be79b88693aef8a2eb468175e1}
+
+
+References A\+G\+G\+\_\+\+S\+H\+A\+P\+E\+\_\+\+E\+L\+L\+I\+P\+S\+E, \+\_\+agg\+\_\+shape\+\_\+t\+::b, \+\_\+agg\+\_\+shape\+\_\+t\+::closed, \+\_\+agg\+\_\+shape\+\_\+t\+::i, \+\_\+agg\+\_\+shape\+\_\+t\+::n1, \+\_\+agg\+\_\+shape\+\_\+t\+::n2, \+\_\+agg\+\_\+shape\+\_\+t\+::nb, \+\_\+agg\+\_\+shape\+\_\+t\+::s, and \+\_\+agg\+\_\+shape\+\_\+t\+::type.
+
+
+
+Referenced by agg\+\_\+shape\+\_\+parse().
+
+\index{shape.\+c@{shape.\+c}!agg\+\_\+shape\+\_\+ellipse\+\_\+eval@{agg\+\_\+shape\+\_\+ellipse\+\_\+eval}}
+\index{agg\+\_\+shape\+\_\+ellipse\+\_\+eval@{agg\+\_\+shape\+\_\+ellipse\+\_\+eval}!shape.\+c@{shape.\+c}}
+\subsubsection[{agg\+\_\+shape\+\_\+ellipse\+\_\+eval}]{\setlength{\rightskip}{0pt plus 5cm}gdouble agg\+\_\+shape\+\_\+ellipse\+\_\+eval (
+\begin{DoxyParamCaption}
+\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{s, }
+\item[{gdouble}]{x, }
+\item[{gint}]{b}
+\end{DoxyParamCaption}
+)}\label{shape_8c_aaa6e342d7d45bd2bb5904fb68da48299}
+
+
+References agg\+\_\+bernstein\+\_\+basis(), agg\+\_\+shape\+\_\+break\+\_\+lower, agg\+\_\+shape\+\_\+break\+\_\+number, agg\+\_\+shape\+\_\+break\+\_\+upper, \+\_\+agg\+\_\+shape\+\_\+t\+::i, \+\_\+agg\+\_\+shape\+\_\+t\+::n1, \+\_\+agg\+\_\+shape\+\_\+t\+::n2, and \+\_\+agg\+\_\+shape\+\_\+t\+::s.
+
+
+
+Referenced by agg\+\_\+shape\+\_\+eval().
+
+\index{shape.\+c@{shape.\+c}!agg\+\_\+shape\+\_\+eval@{agg\+\_\+shape\+\_\+eval}}
+\index{agg\+\_\+shape\+\_\+eval@{agg\+\_\+shape\+\_\+eval}!shape.\+c@{shape.\+c}}
+\subsubsection[{agg\+\_\+shape\+\_\+eval}]{\setlength{\rightskip}{0pt plus 5cm}gdouble agg\+\_\+shape\+\_\+eval (
+\begin{DoxyParamCaption}
+\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{s, }
+\item[{gdouble}]{x, }
+\item[{gint}]{lim}
+\end{DoxyParamCaption}
+)}\label{shape_8c_a179d688c562ad6af2ba598941ee3dfa9}
+
+
+References A\+G\+G\+\_\+\+S\+H\+A\+P\+E\+\_\+\+A\+E\+R\+O\+F\+O\+I\+L, agg\+\_\+shape\+\_\+aerofoil\+\_\+eval(), A\+G\+G\+\_\+\+S\+H\+A\+P\+E\+\_\+\+E\+L\+L\+I\+P\+S\+E, agg\+\_\+shape\+\_\+ellipse\+\_\+eval(), and \+\_\+agg\+\_\+shape\+\_\+t\+::type.
+
+
+
+Referenced by agg\+\_\+distribution\+\_\+write\+\_\+mesh(), and agg\+\_\+shape\+\_\+interpolant\+\_\+make().
+
+\index{shape.\+c@{shape.\+c}!agg\+\_\+shape\+\_\+fit@{agg\+\_\+shape\+\_\+fit}}
+\index{agg\+\_\+shape\+\_\+fit@{agg\+\_\+shape\+\_\+fit}!shape.\+c@{shape.\+c}}
+\subsubsection[{agg\+\_\+shape\+\_\+fit}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+shape\+\_\+fit (
+\begin{DoxyParamCaption}
+\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{s, }
+\item[{gdouble $\ast$}]{xu, }
+\item[{gdouble $\ast$}]{yu, }
+\item[{gint}]{nu, }
+\item[{gdouble $\ast$}]{xl, }
+\item[{gdouble $\ast$}]{yl, }
+\item[{gint}]{nl, }
+\item[{gdouble}]{n1, }
+\item[{gdouble}]{n2, }
+\item[{gdouble}]{d, }
+\item[{gint}]{n, }
+\item[{gboolean}]{closed, }
+\item[{gdouble $\ast$}]{work}
+\end{DoxyParamCaption}
+)}\label{shape_8c_a574cccfae3f3d7842cb536a5eed59392}
+
+
+References agg\+\_\+bernstein\+\_\+basis(), \+\_\+agg\+\_\+shape\+\_\+t\+::closed, \+\_\+agg\+\_\+shape\+\_\+t\+::i, \+\_\+agg\+\_\+shape\+\_\+t\+::n1, \+\_\+agg\+\_\+shape\+\_\+t\+::n2, \+\_\+agg\+\_\+shape\+\_\+t\+::nsmax, and \+\_\+agg\+\_\+shape\+\_\+t\+::s.
+
+
+
+Referenced by agg\+\_\+shape\+\_\+fit\+\_\+naca\+\_\+four().
+
+\index{shape.\+c@{shape.\+c}!agg\+\_\+shape\+\_\+interval\+\_\+add@{agg\+\_\+shape\+\_\+interval\+\_\+add}}
+\index{agg\+\_\+shape\+\_\+interval\+\_\+add@{agg\+\_\+shape\+\_\+interval\+\_\+add}!shape.\+c@{shape.\+c}}
+\subsubsection[{agg\+\_\+shape\+\_\+interval\+\_\+add}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+shape\+\_\+interval\+\_\+add (
+\begin{DoxyParamCaption}
+\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{s, }
+\item[{gdouble}]{x1, }
+\item[{gdouble}]{x2, }
+\item[{gdouble $\ast$}]{x, }
+\item[{gdouble $\ast$}]{y, }
+\item[{gint}]{np, }
+\item[{gboolean}]{upper, }
+\item[{gdouble}]{n1, }
+\item[{gdouble}]{n2, }
+\item[{gint}]{n, }
+\item[{gdouble $\ast$}]{work}
+\end{DoxyParamCaption}
+)}\label{shape_8c_aff88a12ff9f749b4b8978b3580918e0d}
+
+
+References agg\+\_\+bernstein\+\_\+basis(), \+\_\+agg\+\_\+shape\+\_\+t\+::b, \+\_\+agg\+\_\+shape\+\_\+t\+::i, \+\_\+agg\+\_\+shape\+\_\+t\+::n1, \+\_\+agg\+\_\+shape\+\_\+t\+::n2, \+\_\+agg\+\_\+shape\+\_\+t\+::nb, np, and \+\_\+agg\+\_\+shape\+\_\+t\+::s.
+
+
+
+Referenced by agg\+\_\+shape\+\_\+root\+\_\+fit().
+
+\index{shape.\+c@{shape.\+c}!agg\+\_\+shape\+\_\+naca@{agg\+\_\+shape\+\_\+naca}}
+\index{agg\+\_\+shape\+\_\+naca@{agg\+\_\+shape\+\_\+naca}!shape.\+c@{shape.\+c}}
+\subsubsection[{agg\+\_\+shape\+\_\+naca}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+shape\+\_\+naca (
+\begin{DoxyParamCaption}
+\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{s, }
+\item[{gdouble}]{t}
+\end{DoxyParamCaption}
+)}\label{shape_8c_a46c5464aac5ed20c20e99179fe8d6bfa}
+
+
+References A\+G\+G\+\_\+\+S\+H\+A\+P\+E\+\_\+\+A\+E\+R\+O\+F\+O\+I\+L, \+\_\+agg\+\_\+shape\+\_\+t\+::b, \+\_\+agg\+\_\+shape\+\_\+t\+::closed, \+\_\+agg\+\_\+shape\+\_\+t\+::i, \+\_\+agg\+\_\+shape\+\_\+t\+::n1, \+\_\+agg\+\_\+shape\+\_\+t\+::n2, \+\_\+agg\+\_\+shape\+\_\+t\+::nb, \+\_\+agg\+\_\+shape\+\_\+t\+::s, and \+\_\+agg\+\_\+shape\+\_\+t\+::type.
+
+\index{shape.\+c@{shape.\+c}!agg\+\_\+shape\+\_\+parse@{agg\+\_\+shape\+\_\+parse}}
+\index{agg\+\_\+shape\+\_\+parse@{agg\+\_\+shape\+\_\+parse}!shape.\+c@{shape.\+c}}
+\subsubsection[{agg\+\_\+shape\+\_\+parse}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+shape\+\_\+parse (
+\begin{DoxyParamCaption}
+\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{s, }
+\item[{gchar $\ast$}]{type, }
+\item[{gdouble $\ast$}]{p, }
+\item[{gint}]{np}
+\end{DoxyParamCaption}
+)}\label{shape_8c_aeb109eb2fb21c3dc442d822beab7bbc0}
+
+
+References agg\+\_\+shape\+\_\+ellipse(), agg\+\_\+shape\+\_\+root\+\_\+fit(), defaults, \+\_\+agg\+\_\+shape\+\_\+t\+::n1, \+\_\+agg\+\_\+shape\+\_\+t\+::n2, \+\_\+agg\+\_\+shape\+\_\+t\+::s, and shape.
+
+\index{shape.\+c@{shape.\+c}!agg\+\_\+shape\+\_\+root\+\_\+fit@{agg\+\_\+shape\+\_\+root\+\_\+fit}}
+\index{agg\+\_\+shape\+\_\+root\+\_\+fit@{agg\+\_\+shape\+\_\+root\+\_\+fit}!shape.\+c@{shape.\+c}}
+\subsubsection[{agg\+\_\+shape\+\_\+root\+\_\+fit}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+shape\+\_\+root\+\_\+fit (
+\begin{DoxyParamCaption}
+\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{s, }
+\item[{gdouble}]{n1, }
+\item[{gdouble}]{n2, }
+\item[{gdouble}]{hu, }
+\item[{gdouble}]{su, }
+\item[{gdouble}]{du, }
+\item[{gdouble}]{bu, }
+\item[{gdouble}]{hl, }
+\item[{gdouble}]{sl, }
+\item[{gdouble}]{dl, }
+\item[{gdouble}]{bl, }
+\item[{gint}]{n, }
+\item[{gdouble $\ast$}]{work}
+\end{DoxyParamCaption}
+)}\label{shape_8c_adcabb63b632d7866ac0fb092b0b111e7}
+
+
+References A\+G\+G\+\_\+\+S\+H\+A\+P\+E\+\_\+\+E\+L\+L\+I\+P\+S\+E, agg\+\_\+shape\+\_\+interval\+\_\+add(), \+\_\+agg\+\_\+shape\+\_\+t\+::b, \+\_\+agg\+\_\+shape\+\_\+t\+::closed, \+\_\+agg\+\_\+shape\+\_\+t\+::i, \+\_\+agg\+\_\+shape\+\_\+t\+::nb, np, and \+\_\+agg\+\_\+shape\+\_\+t\+::type.
+
+
+
+Referenced by agg\+\_\+shape\+\_\+parse().
+
+
+
+\subsection{Variable Documentation}
+\index{shape.\+c@{shape.\+c}!defaults@{defaults}}
+\index{defaults@{defaults}!shape.\+c@{shape.\+c}}
+\subsubsection[{defaults}]{\setlength{\rightskip}{0pt plus 5cm}gboolean defaults}\label{shape_8c_ac27827e475de3a05366670bec9746498}
+
+
+Referenced by agg\+\_\+shape\+\_\+parse().
+
+\index{shape.\+c@{shape.\+c}!np@{np}}
+\index{np@{np}!shape.\+c@{shape.\+c}}
+\subsubsection[{np}]{\setlength{\rightskip}{0pt plus 5cm}gint np}\label{shape_8c_a96ca1086cda152ba0935e179cda8d77a}
+
+
+Referenced by agg\+\_\+shape\+\_\+interval\+\_\+add(), and agg\+\_\+shape\+\_\+root\+\_\+fit().
+
+\index{shape.\+c@{shape.\+c}!shape@{shape}}
+\index{shape@{shape}!shape.\+c@{shape.\+c}}
+\subsubsection[{shape}]{\setlength{\rightskip}{0pt plus 5cm}gchar$\ast$ shape}\label{shape_8c_a72f6aee7a64c9c9c03ddc5751f21d6e2}
+
+
+Referenced by agg\+\_\+shape\+\_\+parse().
+

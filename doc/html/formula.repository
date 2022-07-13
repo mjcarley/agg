@@ -1,0 +1,28 @@
+\form#0:$f(t)=1$
+\form#1:$t<t_{0}$
+\form#2:$f(t)=p(t-t_{0})(1-t)^{\eta}/(1-t_{0})^{\eta}$
+\form#3:$t\geq t_{0}$
+\form#4:$p(t-t_{0})$
+\form#5:$f(t)$
+\form#6:$C^{2}$
+\form#7:$\eta$
+\form#8:$t_{0}$
+\form#9:$t$
+\form#10:$\mathrm{sgn}(t)*(1-\cos(\pi t))/2$
+\form#11:$\mathrm{sgn}(t)*(1-\cos(\pi/2 t))$
+\form#12:$\sin \pi/2 t$
+\form#13:$\mathrm{sgn}(t)(1-\cos(\pi t))/2$
+\form#14:$\mathrm{sgn}(t)(1-\cos(\pi/2 t))$
+\form#15:$i$
+\form#16:$t_{\min}$
+\form#17:$\_{\max}$
+\form#18:$t_{\max}$
+\form#19:$t_{i}$
+\form#20:$(t_{\min},t_{\max})$
+\form#21:$\mathrm{sgn}(t)(1-\cos(t\pi))/2$
+\form#22:$\mathrm{sgn}(t)(1-\cos(t\pi/2))$
+\form#23:$\sin t\pi/2$
+\form#24:$\mathrm{sgn}(t)(1-\cos(\pi t/2))$
+\form#25:$\sin \pi t/2$
+\form#26:$\mathrm{sgn}(t)(1-\cos \pi t)/2$
+\form#27:$\mathrm{sgn}(t)(1-\cos \pi t/2)$

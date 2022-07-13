@@ -1,0 +1,309 @@
+\section{tinyexpr.\+c File Reference}
+\label{tinyexpr_8c}\index{tinyexpr.\+c@{tinyexpr.\+c}}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct {\bf state}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define {\bf T\+E\+\_\+\+N\+A\+T\+\_\+\+L\+O\+G}
+\item 
+\#define {\bf N\+A\+N}~(0.\+0/0.\+0)
+\item 
+\#define {\bf I\+N\+F\+I\+N\+I\+T\+Y}~(1.\+0/0.\+0)
+\item 
+\#define {\bf T\+Y\+P\+E\+\_\+\+M\+A\+S\+K}(T\+Y\+P\+E)~((T\+Y\+P\+E)\&0x0000001\+F)
+\item 
+\#define {\bf I\+S\+\_\+\+P\+U\+R\+E}(T\+Y\+P\+E)~(((T\+Y\+P\+E) \& T\+E\+\_\+\+F\+L\+A\+G\+\_\+\+P\+U\+R\+E) != 0)
+\item 
+\#define {\bf I\+S\+\_\+\+F\+U\+N\+C\+T\+I\+O\+N}(T\+Y\+P\+E)~(((T\+Y\+P\+E) \& T\+E\+\_\+\+F\+U\+N\+C\+T\+I\+O\+N0) != 0)
+\item 
+\#define {\bf I\+S\+\_\+\+C\+L\+O\+S\+U\+R\+E}(T\+Y\+P\+E)~(((T\+Y\+P\+E) \& T\+E\+\_\+\+C\+L\+O\+S\+U\+R\+E0) != 0)
+\item 
+\#define {\bf A\+R\+I\+T\+Y}(T\+Y\+P\+E)~( ((T\+Y\+P\+E) \& (T\+E\+\_\+\+F\+U\+N\+C\+T\+I\+O\+N0 $\vert$ T\+E\+\_\+\+C\+L\+O\+S\+U\+R\+E0)) ? ((T\+Y\+P\+E) \& 0x00000007) \+: 0 )
+\item 
+\#define {\bf N\+E\+W\+\_\+\+E\+X\+P\+R}(type, ...)~new\+\_\+expr((type), (const te\+\_\+expr$\ast$[$\,$])\{\+\_\+\+\_\+\+V\+A\+\_\+\+A\+R\+G\+S\+\_\+\+\_\+\})
+\item 
+\#define {\bf T\+E\+\_\+\+F\+U\+N}(...)~((double($\ast$)(\+\_\+\+\_\+\+V\+A\+\_\+\+A\+R\+G\+S\+\_\+\+\_\+))n-\/$>$function)
+\item 
+\#define {\bf M}(e)~{\bf te\+\_\+eval}(n-\/$>$parameters[e])
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef double($\ast$ {\bf te\+\_\+fun2}) (double, double)
+\item 
+typedef struct {\bf state} {\bf state}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \{ \\*
+{\bf T\+O\+K\+\_\+\+N\+U\+L\+L} = T\+E\+\_\+\+C\+L\+O\+S\+U\+R\+E7+1, 
+{\bf T\+O\+K\+\_\+\+E\+R\+R\+O\+R}, 
+{\bf T\+O\+K\+\_\+\+E\+N\+D}, 
+{\bf T\+O\+K\+\_\+\+S\+E\+P}, 
+\\*
+{\bf T\+O\+K\+\_\+\+O\+P\+E\+N}, 
+{\bf T\+O\+K\+\_\+\+C\+L\+O\+S\+E}, 
+{\bf T\+O\+K\+\_\+\+N\+U\+M\+B\+E\+R}, 
+{\bf T\+O\+K\+\_\+\+V\+A\+R\+I\+A\+B\+L\+E}, 
+\\*
+{\bf T\+O\+K\+\_\+\+I\+N\+F\+I\+X}
+ \}
+\item 
+enum \{ {\bf T\+E\+\_\+\+C\+O\+N\+S\+T\+A\+N\+T} = 1
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void {\bf te\+\_\+free\+\_\+parameters} (te\+\_\+expr $\ast$n)
+\item 
+void {\bf te\+\_\+free} (te\+\_\+expr $\ast$n)
+\item 
+void {\bf next\+\_\+token} ({\bf state} $\ast${\bf s})
+\item 
+double {\bf te\+\_\+eval} (const te\+\_\+expr $\ast$n)
+\item 
+te\+\_\+expr $\ast$ {\bf te\+\_\+compile} (const char $\ast$expression, const te\+\_\+variable $\ast$variables, int var\+\_\+count, int $\ast$error)
+\item 
+double {\bf te\+\_\+interp} (const char $\ast$expression, int $\ast$error)
+\item 
+void {\bf te\+\_\+print} (const te\+\_\+expr $\ast$n)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{tinyexpr.\+c@{tinyexpr.\+c}!A\+R\+I\+T\+Y@{A\+R\+I\+T\+Y}}
+\index{A\+R\+I\+T\+Y@{A\+R\+I\+T\+Y}!tinyexpr.\+c@{tinyexpr.\+c}}
+\subsubsection[{A\+R\+I\+T\+Y}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+R\+I\+T\+Y(
+\begin{DoxyParamCaption}
+\item[{}]{T\+Y\+P\+E}
+\end{DoxyParamCaption}
+)~( ((T\+Y\+P\+E) \& (T\+E\+\_\+\+F\+U\+N\+C\+T\+I\+O\+N0 $\vert$ T\+E\+\_\+\+C\+L\+O\+S\+U\+R\+E0)) ? ((T\+Y\+P\+E) \& 0x00000007) \+: 0 )}\label{tinyexpr_8c_abea985adccca8897cb44ec06294a9195}
+
+
+Referenced by te\+\_\+eval().
+
+\index{tinyexpr.\+c@{tinyexpr.\+c}!I\+N\+F\+I\+N\+I\+T\+Y@{I\+N\+F\+I\+N\+I\+T\+Y}}
+\index{I\+N\+F\+I\+N\+I\+T\+Y@{I\+N\+F\+I\+N\+I\+T\+Y}!tinyexpr.\+c@{tinyexpr.\+c}}
+\subsubsection[{I\+N\+F\+I\+N\+I\+T\+Y}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\+N\+F\+I\+N\+I\+T\+Y~(1.\+0/0.\+0)}\label{tinyexpr_8c_a956e2723d559858d08644ac99146e910}
+\index{tinyexpr.\+c@{tinyexpr.\+c}!I\+S\+\_\+\+C\+L\+O\+S\+U\+R\+E@{I\+S\+\_\+\+C\+L\+O\+S\+U\+R\+E}}
+\index{I\+S\+\_\+\+C\+L\+O\+S\+U\+R\+E@{I\+S\+\_\+\+C\+L\+O\+S\+U\+R\+E}!tinyexpr.\+c@{tinyexpr.\+c}}
+\subsubsection[{I\+S\+\_\+\+C\+L\+O\+S\+U\+R\+E}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\+S\+\_\+\+C\+L\+O\+S\+U\+R\+E(
+\begin{DoxyParamCaption}
+\item[{}]{T\+Y\+P\+E}
+\end{DoxyParamCaption}
+)~(((T\+Y\+P\+E) \& T\+E\+\_\+\+C\+L\+O\+S\+U\+R\+E0) != 0)}\label{tinyexpr_8c_a7a661cdde5f28aee01c23dd044b7ac26}
+\index{tinyexpr.\+c@{tinyexpr.\+c}!I\+S\+\_\+\+F\+U\+N\+C\+T\+I\+O\+N@{I\+S\+\_\+\+F\+U\+N\+C\+T\+I\+O\+N}}
+\index{I\+S\+\_\+\+F\+U\+N\+C\+T\+I\+O\+N@{I\+S\+\_\+\+F\+U\+N\+C\+T\+I\+O\+N}!tinyexpr.\+c@{tinyexpr.\+c}}
+\subsubsection[{I\+S\+\_\+\+F\+U\+N\+C\+T\+I\+O\+N}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\+S\+\_\+\+F\+U\+N\+C\+T\+I\+O\+N(
+\begin{DoxyParamCaption}
+\item[{}]{T\+Y\+P\+E}
+\end{DoxyParamCaption}
+)~(((T\+Y\+P\+E) \& T\+E\+\_\+\+F\+U\+N\+C\+T\+I\+O\+N0) != 0)}\label{tinyexpr_8c_a6f7bb167e7951fa362d31f1e2f5787c0}
+\index{tinyexpr.\+c@{tinyexpr.\+c}!I\+S\+\_\+\+P\+U\+R\+E@{I\+S\+\_\+\+P\+U\+R\+E}}
+\index{I\+S\+\_\+\+P\+U\+R\+E@{I\+S\+\_\+\+P\+U\+R\+E}!tinyexpr.\+c@{tinyexpr.\+c}}
+\subsubsection[{I\+S\+\_\+\+P\+U\+R\+E}]{\setlength{\rightskip}{0pt plus 5cm}\#define I\+S\+\_\+\+P\+U\+R\+E(
+\begin{DoxyParamCaption}
+\item[{}]{T\+Y\+P\+E}
+\end{DoxyParamCaption}
+)~(((T\+Y\+P\+E) \& T\+E\+\_\+\+F\+L\+A\+G\+\_\+\+P\+U\+R\+E) != 0)}\label{tinyexpr_8c_a970221bb2a37eb202b772abbdb5603ac}
+\index{tinyexpr.\+c@{tinyexpr.\+c}!M@{M}}
+\index{M@{M}!tinyexpr.\+c@{tinyexpr.\+c}}
+\subsubsection[{M}]{\setlength{\rightskip}{0pt plus 5cm}\#define M(
+\begin{DoxyParamCaption}
+\item[{}]{e}
+\end{DoxyParamCaption}
+)~{\bf te\+\_\+eval}(n-\/$>$parameters[e])}\label{tinyexpr_8c_ada11a5557ba0b5b6a779a9b102beaecb}
+
+
+Referenced by te\+\_\+eval().
+
+\index{tinyexpr.\+c@{tinyexpr.\+c}!N\+A\+N@{N\+A\+N}}
+\index{N\+A\+N@{N\+A\+N}!tinyexpr.\+c@{tinyexpr.\+c}}
+\subsubsection[{N\+A\+N}]{\setlength{\rightskip}{0pt plus 5cm}\#define N\+A\+N~(0.\+0/0.\+0)}\label{tinyexpr_8c_a8abfcc76130f3f991d124dd22d7e69bc}
+
+
+Referenced by te\+\_\+eval(), and te\+\_\+interp().
+
+\index{tinyexpr.\+c@{tinyexpr.\+c}!N\+E\+W\+\_\+\+E\+X\+P\+R@{N\+E\+W\+\_\+\+E\+X\+P\+R}}
+\index{N\+E\+W\+\_\+\+E\+X\+P\+R@{N\+E\+W\+\_\+\+E\+X\+P\+R}!tinyexpr.\+c@{tinyexpr.\+c}}
+\subsubsection[{N\+E\+W\+\_\+\+E\+X\+P\+R}]{\setlength{\rightskip}{0pt plus 5cm}\#define N\+E\+W\+\_\+\+E\+X\+P\+R(
+\begin{DoxyParamCaption}
+\item[{}]{type, }
+\item[{}]{...}
+\end{DoxyParamCaption}
+)~new\+\_\+expr((type), (const te\+\_\+expr$\ast$[$\,$])\{\+\_\+\+\_\+\+V\+A\+\_\+\+A\+R\+G\+S\+\_\+\+\_\+\})}\label{tinyexpr_8c_aa47b4f7495eb58f5cf1479b952dfb0af}
+\index{tinyexpr.\+c@{tinyexpr.\+c}!T\+E\+\_\+\+F\+U\+N@{T\+E\+\_\+\+F\+U\+N}}
+\index{T\+E\+\_\+\+F\+U\+N@{T\+E\+\_\+\+F\+U\+N}!tinyexpr.\+c@{tinyexpr.\+c}}
+\subsubsection[{T\+E\+\_\+\+F\+U\+N}]{\setlength{\rightskip}{0pt plus 5cm}\#define T\+E\+\_\+\+F\+U\+N(
+\begin{DoxyParamCaption}
+\item[{}]{...}
+\end{DoxyParamCaption}
+)~((double($\ast$)(\+\_\+\+\_\+\+V\+A\+\_\+\+A\+R\+G\+S\+\_\+\+\_\+))n-\/$>$function)}\label{tinyexpr_8c_a48f38c2e0f46c5c58660f65efc14916c}
+
+
+Referenced by te\+\_\+eval().
+
+\index{tinyexpr.\+c@{tinyexpr.\+c}!T\+E\+\_\+\+N\+A\+T\+\_\+\+L\+O\+G@{T\+E\+\_\+\+N\+A\+T\+\_\+\+L\+O\+G}}
+\index{T\+E\+\_\+\+N\+A\+T\+\_\+\+L\+O\+G@{T\+E\+\_\+\+N\+A\+T\+\_\+\+L\+O\+G}!tinyexpr.\+c@{tinyexpr.\+c}}
+\subsubsection[{T\+E\+\_\+\+N\+A\+T\+\_\+\+L\+O\+G}]{\setlength{\rightskip}{0pt plus 5cm}\#define T\+E\+\_\+\+N\+A\+T\+\_\+\+L\+O\+G}\label{tinyexpr_8c_a1029318e96302cb78fc4c291a3b1eb98}
+\index{tinyexpr.\+c@{tinyexpr.\+c}!T\+Y\+P\+E\+\_\+\+M\+A\+S\+K@{T\+Y\+P\+E\+\_\+\+M\+A\+S\+K}}
+\index{T\+Y\+P\+E\+\_\+\+M\+A\+S\+K@{T\+Y\+P\+E\+\_\+\+M\+A\+S\+K}!tinyexpr.\+c@{tinyexpr.\+c}}
+\subsubsection[{T\+Y\+P\+E\+\_\+\+M\+A\+S\+K}]{\setlength{\rightskip}{0pt plus 5cm}\#define T\+Y\+P\+E\+\_\+\+M\+A\+S\+K(
+\begin{DoxyParamCaption}
+\item[{}]{T\+Y\+P\+E}
+\end{DoxyParamCaption}
+)~((T\+Y\+P\+E)\&0x0000001\+F)}\label{tinyexpr_8c_a6bccb8f9ab88245dff99aa3bf6ca6cae}
+
+
+Referenced by next\+\_\+token(), te\+\_\+eval(), and te\+\_\+free\+\_\+parameters().
+
+
+
+\subsection{Typedef Documentation}
+\index{tinyexpr.\+c@{tinyexpr.\+c}!state@{state}}
+\index{state@{state}!tinyexpr.\+c@{tinyexpr.\+c}}
+\subsubsection[{state}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf state}  {\bf state}}\label{tinyexpr_8c_a44dfee4ac05138e73cebd8d6470de8a0}
+\index{tinyexpr.\+c@{tinyexpr.\+c}!te\+\_\+fun2@{te\+\_\+fun2}}
+\index{te\+\_\+fun2@{te\+\_\+fun2}!tinyexpr.\+c@{tinyexpr.\+c}}
+\subsubsection[{te\+\_\+fun2}]{\setlength{\rightskip}{0pt plus 5cm}typedef double($\ast$ te\+\_\+fun2) (double, double)}\label{tinyexpr_8c_a87218ffe62aa6d51e679402112e9a3ac}
+
+
+\subsection{Enumeration Type Documentation}
+\subsubsection[{anonymous enum}]{\setlength{\rightskip}{0pt plus 5cm}anonymous enum}\label{tinyexpr_8c_adc29c2ff13d900c2f185ee95427fb06c}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{T\+O\+K\+\_\+\+N\+U\+L\+L@{T\+O\+K\+\_\+\+N\+U\+L\+L}!tinyexpr.\+c@{tinyexpr.\+c}}\index{tinyexpr.\+c@{tinyexpr.\+c}!T\+O\+K\+\_\+\+N\+U\+L\+L@{T\+O\+K\+\_\+\+N\+U\+L\+L}}\item[{\em 
+T\+O\+K\+\_\+\+N\+U\+L\+L\label{tinyexpr_8c_adc29c2ff13d900c2f185ee95427fb06ca1459629684e1c888334bb08a01c50851}
+}]\index{T\+O\+K\+\_\+\+E\+R\+R\+O\+R@{T\+O\+K\+\_\+\+E\+R\+R\+O\+R}!tinyexpr.\+c@{tinyexpr.\+c}}\index{tinyexpr.\+c@{tinyexpr.\+c}!T\+O\+K\+\_\+\+E\+R\+R\+O\+R@{T\+O\+K\+\_\+\+E\+R\+R\+O\+R}}\item[{\em 
+T\+O\+K\+\_\+\+E\+R\+R\+O\+R\label{tinyexpr_8c_adc29c2ff13d900c2f185ee95427fb06ca1e45d4c51261381ea32625e93e1c6ea0}
+}]\index{T\+O\+K\+\_\+\+E\+N\+D@{T\+O\+K\+\_\+\+E\+N\+D}!tinyexpr.\+c@{tinyexpr.\+c}}\index{tinyexpr.\+c@{tinyexpr.\+c}!T\+O\+K\+\_\+\+E\+N\+D@{T\+O\+K\+\_\+\+E\+N\+D}}\item[{\em 
+T\+O\+K\+\_\+\+E\+N\+D\label{tinyexpr_8c_adc29c2ff13d900c2f185ee95427fb06caff129834bc4016845b837946c1e955fc}
+}]\index{T\+O\+K\+\_\+\+S\+E\+P@{T\+O\+K\+\_\+\+S\+E\+P}!tinyexpr.\+c@{tinyexpr.\+c}}\index{tinyexpr.\+c@{tinyexpr.\+c}!T\+O\+K\+\_\+\+S\+E\+P@{T\+O\+K\+\_\+\+S\+E\+P}}\item[{\em 
+T\+O\+K\+\_\+\+S\+E\+P\label{tinyexpr_8c_adc29c2ff13d900c2f185ee95427fb06ca82e35ca048a08d831680abcae14cfbb1}
+}]\index{T\+O\+K\+\_\+\+O\+P\+E\+N@{T\+O\+K\+\_\+\+O\+P\+E\+N}!tinyexpr.\+c@{tinyexpr.\+c}}\index{tinyexpr.\+c@{tinyexpr.\+c}!T\+O\+K\+\_\+\+O\+P\+E\+N@{T\+O\+K\+\_\+\+O\+P\+E\+N}}\item[{\em 
+T\+O\+K\+\_\+\+O\+P\+E\+N\label{tinyexpr_8c_adc29c2ff13d900c2f185ee95427fb06ca88c3dd19577ac758bbc9bddb7b665846}
+}]\index{T\+O\+K\+\_\+\+C\+L\+O\+S\+E@{T\+O\+K\+\_\+\+C\+L\+O\+S\+E}!tinyexpr.\+c@{tinyexpr.\+c}}\index{tinyexpr.\+c@{tinyexpr.\+c}!T\+O\+K\+\_\+\+C\+L\+O\+S\+E@{T\+O\+K\+\_\+\+C\+L\+O\+S\+E}}\item[{\em 
+T\+O\+K\+\_\+\+C\+L\+O\+S\+E\label{tinyexpr_8c_adc29c2ff13d900c2f185ee95427fb06cae295e61a1757837259c3bb84c68cdb91}
+}]\index{T\+O\+K\+\_\+\+N\+U\+M\+B\+E\+R@{T\+O\+K\+\_\+\+N\+U\+M\+B\+E\+R}!tinyexpr.\+c@{tinyexpr.\+c}}\index{tinyexpr.\+c@{tinyexpr.\+c}!T\+O\+K\+\_\+\+N\+U\+M\+B\+E\+R@{T\+O\+K\+\_\+\+N\+U\+M\+B\+E\+R}}\item[{\em 
+T\+O\+K\+\_\+\+N\+U\+M\+B\+E\+R\label{tinyexpr_8c_adc29c2ff13d900c2f185ee95427fb06cacdae166ca0040147b5e2225cb23184d5}
+}]\index{T\+O\+K\+\_\+\+V\+A\+R\+I\+A\+B\+L\+E@{T\+O\+K\+\_\+\+V\+A\+R\+I\+A\+B\+L\+E}!tinyexpr.\+c@{tinyexpr.\+c}}\index{tinyexpr.\+c@{tinyexpr.\+c}!T\+O\+K\+\_\+\+V\+A\+R\+I\+A\+B\+L\+E@{T\+O\+K\+\_\+\+V\+A\+R\+I\+A\+B\+L\+E}}\item[{\em 
+T\+O\+K\+\_\+\+V\+A\+R\+I\+A\+B\+L\+E\label{tinyexpr_8c_adc29c2ff13d900c2f185ee95427fb06ca0fbbaf89c4ebfca0adaa5f309c32d489}
+}]\index{T\+O\+K\+\_\+\+I\+N\+F\+I\+X@{T\+O\+K\+\_\+\+I\+N\+F\+I\+X}!tinyexpr.\+c@{tinyexpr.\+c}}\index{tinyexpr.\+c@{tinyexpr.\+c}!T\+O\+K\+\_\+\+I\+N\+F\+I\+X@{T\+O\+K\+\_\+\+I\+N\+F\+I\+X}}\item[{\em 
+T\+O\+K\+\_\+\+I\+N\+F\+I\+X\label{tinyexpr_8c_adc29c2ff13d900c2f185ee95427fb06caa51c4c5c36d7679dd5a8e24eccac1a30}
+}]\end{description}
+\end{Desc}
+\subsubsection[{anonymous enum}]{\setlength{\rightskip}{0pt plus 5cm}anonymous enum}\label{tinyexpr_8c_a61dadd085c1777f559549e05962b2c9e}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{T\+E\+\_\+\+C\+O\+N\+S\+T\+A\+N\+T@{T\+E\+\_\+\+C\+O\+N\+S\+T\+A\+N\+T}!tinyexpr.\+c@{tinyexpr.\+c}}\index{tinyexpr.\+c@{tinyexpr.\+c}!T\+E\+\_\+\+C\+O\+N\+S\+T\+A\+N\+T@{T\+E\+\_\+\+C\+O\+N\+S\+T\+A\+N\+T}}\item[{\em 
+T\+E\+\_\+\+C\+O\+N\+S\+T\+A\+N\+T\label{tinyexpr_8c_a61dadd085c1777f559549e05962b2c9ea361fd007ac9faa6dd2ecee239aa9262c}
+}]\end{description}
+\end{Desc}
+
+
+\subsection{Function Documentation}
+\index{tinyexpr.\+c@{tinyexpr.\+c}!next\+\_\+token@{next\+\_\+token}}
+\index{next\+\_\+token@{next\+\_\+token}!tinyexpr.\+c@{tinyexpr.\+c}}
+\subsubsection[{next\+\_\+token}]{\setlength{\rightskip}{0pt plus 5cm}void next\+\_\+token (
+\begin{DoxyParamCaption}
+\item[{{\bf state} $\ast$}]{s}
+\end{DoxyParamCaption}
+)}\label{tinyexpr_8c_a8519f55fa3a3272a43a5eee3102b2722}
+
+
+References state\+::bound, state\+::context, state\+::function, state\+::next, T\+O\+K\+\_\+\+C\+L\+O\+S\+E, T\+O\+K\+\_\+\+E\+N\+D, T\+O\+K\+\_\+\+E\+R\+R\+O\+R, T\+O\+K\+\_\+\+I\+N\+F\+I\+X, T\+O\+K\+\_\+\+N\+U\+L\+L, T\+O\+K\+\_\+\+N\+U\+M\+B\+E\+R, T\+O\+K\+\_\+\+O\+P\+E\+N, T\+O\+K\+\_\+\+S\+E\+P, T\+O\+K\+\_\+\+V\+A\+R\+I\+A\+B\+L\+E, state\+::type, T\+Y\+P\+E\+\_\+\+M\+A\+S\+K, and state\+::value.
+
+
+
+Referenced by te\+\_\+compile().
+
+\index{tinyexpr.\+c@{tinyexpr.\+c}!te\+\_\+compile@{te\+\_\+compile}}
+\index{te\+\_\+compile@{te\+\_\+compile}!tinyexpr.\+c@{tinyexpr.\+c}}
+\subsubsection[{te\+\_\+compile}]{\setlength{\rightskip}{0pt plus 5cm}te\+\_\+expr$\ast$ te\+\_\+compile (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{expression, }
+\item[{const te\+\_\+variable $\ast$}]{variables, }
+\item[{int}]{var\+\_\+count, }
+\item[{int $\ast$}]{error}
+\end{DoxyParamCaption}
+)}\label{tinyexpr_8c_a13e654be1f419bda6858b4bf396a9d12}
+
+
+References state\+::lookup, state\+::lookup\+\_\+len, state\+::next, next\+\_\+token(), s, state\+::start, te\+\_\+free(), T\+O\+K\+\_\+\+E\+N\+D, and state\+::type.
+
+
+
+Referenced by agg\+\_\+local\+\_\+transform\+\_\+set\+\_\+expression(), agg\+\_\+parser\+\_\+declaration(), agg\+\_\+parser\+\_\+expression\+\_\+add(), and te\+\_\+interp().
+
+\index{tinyexpr.\+c@{tinyexpr.\+c}!te\+\_\+eval@{te\+\_\+eval}}
+\index{te\+\_\+eval@{te\+\_\+eval}!tinyexpr.\+c@{tinyexpr.\+c}}
+\subsubsection[{te\+\_\+eval}]{\setlength{\rightskip}{0pt plus 5cm}double te\+\_\+eval (
+\begin{DoxyParamCaption}
+\item[{const te\+\_\+expr $\ast$}]{n}
+\end{DoxyParamCaption}
+)}\label{tinyexpr_8c_a598ef628827369f2bb2cb202b64ae87c}
+
+
+References A\+R\+I\+T\+Y, M, N\+A\+N, T\+E\+\_\+\+C\+O\+N\+S\+T\+A\+N\+T, T\+E\+\_\+\+F\+U\+N, and T\+Y\+P\+E\+\_\+\+M\+A\+S\+K.
+
+
+
+Referenced by agg\+\_\+functions\+\_\+eval(), agg\+\_\+local\+\_\+transform\+\_\+eval\+\_\+parameters(), agg\+\_\+parser\+\_\+expressions\+\_\+evaluate(), and te\+\_\+interp().
+
+\index{tinyexpr.\+c@{tinyexpr.\+c}!te\+\_\+free@{te\+\_\+free}}
+\index{te\+\_\+free@{te\+\_\+free}!tinyexpr.\+c@{tinyexpr.\+c}}
+\subsubsection[{te\+\_\+free}]{\setlength{\rightskip}{0pt plus 5cm}void te\+\_\+free (
+\begin{DoxyParamCaption}
+\item[{te\+\_\+expr $\ast$}]{n}
+\end{DoxyParamCaption}
+)}\label{tinyexpr_8c_a3cb88a7549ca780bef926f626fb6539d}
+
+
+References te\+\_\+free\+\_\+parameters().
+
+
+
+Referenced by te\+\_\+compile(), te\+\_\+free\+\_\+parameters(), and te\+\_\+interp().
+
+\index{tinyexpr.\+c@{tinyexpr.\+c}!te\+\_\+free\+\_\+parameters@{te\+\_\+free\+\_\+parameters}}
+\index{te\+\_\+free\+\_\+parameters@{te\+\_\+free\+\_\+parameters}!tinyexpr.\+c@{tinyexpr.\+c}}
+\subsubsection[{te\+\_\+free\+\_\+parameters}]{\setlength{\rightskip}{0pt plus 5cm}void te\+\_\+free\+\_\+parameters (
+\begin{DoxyParamCaption}
+\item[{te\+\_\+expr $\ast$}]{n}
+\end{DoxyParamCaption}
+)}\label{tinyexpr_8c_aa469d7e687aa8733871d71d65df8c512}
+
+
+References te\+\_\+free(), and T\+Y\+P\+E\+\_\+\+M\+A\+S\+K.
+
+
+
+Referenced by te\+\_\+free().
+
+\index{tinyexpr.\+c@{tinyexpr.\+c}!te\+\_\+interp@{te\+\_\+interp}}
+\index{te\+\_\+interp@{te\+\_\+interp}!tinyexpr.\+c@{tinyexpr.\+c}}
+\subsubsection[{te\+\_\+interp}]{\setlength{\rightskip}{0pt plus 5cm}double te\+\_\+interp (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{expression, }
+\item[{int $\ast$}]{error}
+\end{DoxyParamCaption}
+)}\label{tinyexpr_8c_a0efab36d0741747d26b3538ed704325e}
+
+
+References N\+A\+N, te\+\_\+compile(), te\+\_\+eval(), and te\+\_\+free().
+
+\index{tinyexpr.\+c@{tinyexpr.\+c}!te\+\_\+print@{te\+\_\+print}}
+\index{te\+\_\+print@{te\+\_\+print}!tinyexpr.\+c@{tinyexpr.\+c}}
+\subsubsection[{te\+\_\+print}]{\setlength{\rightskip}{0pt plus 5cm}void te\+\_\+print (
+\begin{DoxyParamCaption}
+\item[{const te\+\_\+expr $\ast$}]{n}
+\end{DoxyParamCaption}
+)}\label{tinyexpr_8c_af9e091b8cdc5ad07d4288909c4679240}
