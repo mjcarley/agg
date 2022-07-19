@@ -10,8 +10,11 @@
     "times"
     "amsmath"
     "graphicx")
+   (TeX-add-symbols
+    "sgn")
    (LaTeX-add-labels
     "equ:curves"
-    "tab:transforms"))
+    "tab:transforms"
+    "equ:sphere"))
  :latex)
 

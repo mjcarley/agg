@@ -268,13 +268,14 @@ static void parser_test(void)
 
 {
   gint fid = 0, ns, nt, i ;
-  gdouble x[3] ;
+  gdouble x[3], n[3], J ;
   agg_parser_t *p ;
   agg_body_t *b ;
   agg_distribution_t *d ;
   agg_shape_t *sh ;
   agg_local_transform_t *T ;
   agg_mesh_t *m ;
+  agg_grid_t *g ;
   GScanner *scanner ;
   
   fprintf(stderr, "geometry parser test\n") ;
@@ -299,28 +300,52 @@ static void parser_test(void)
   m = agg_mesh_alloc(agg_body_distribution_number(b)*8*ns*nt,
 		     agg_body_distribution_number(b)*16*ns*nt,
 		     0, 0, 0) ;
+  /* for ( i = 0 ; i < agg_body_distribution_number(b) ; i ++ ) { */
+  /*   fprintf(stderr, "distribution %d\n", i) ; */
+  /*   d = agg_body_distribution(b,i) ; */
+  /*   agg_distribution_interpolation_weights(d) ; */
+
+  /*   agg_distribution_mesh(d, */
+  /* 			  agg_distribution_parameter_min(d), */
+  /* 			  agg_distribution_parameter_max(d), */
+  /* 			  agg_distribution_section_number(d), */
+  /* 			  agg_body_distribution(b,i)->sm, */
+  /* 			  -1, 1, */
+  /* 			  agg_distribution_section_node_number(d), */
+  /* 			  agg_body_distribution(b,i)->ss, */
+  /* 			  sh, T, p, m) ; */
+  /* } */
+
   for ( i = 0 ; i < agg_body_distribution_number(b) ; i ++ ) {
-    fprintf(stderr, "distribution %d\n", i) ;
     d = agg_body_distribution(b,i) ;
     agg_distribution_interpolation_weights(d) ;
-
-    agg_distribution_mesh(d,
-			  agg_distribution_parameter_min(d),
-			  agg_distribution_parameter_max(d),
-			  agg_distribution_section_number(d),
-			  agg_body_distribution(b,i)->sm,
-			  -1, 1,
-			  agg_distribution_section_node_number(d),
-			  agg_body_distribution(b,i)->ss,
-			  sh, T, p, m) ;
   }
+
+  g = agg_grid_alloc(1024, 2048) ;
+  /* agg_grid_square(g, */
+  /* 		  0, 1,  8, AGG_SPACING_LINEAR, */
+  /* 		  -1, 1, 15, AGG_SPACING_LINEAR) ; */
+  agg_grid_spherical(g, 3) ;
+
+  agg_body_mesh_grid(b, g, sh, T, p, m) ;
+  
+  /* i = 0 ; */
+  /* agg_body_mesh_spherical(b, */
+  /* 			  agg_distribution_parameter_min(d), */
+  /* 			  agg_distribution_parameter_max(d), */
+  /* 			  agg_distribution_section_number(d), */
+  /* 			  agg_body_distribution(b,i)->sm, */
+  /* 			  -1, 1, */
+  /* 			  agg_distribution_section_node_number(d), */
+  /* 			  agg_body_distribution(b,i)->ss, */
+  /* 			  sh, T, p, m) ; */
   
   agg_mesh_points_write(stdout, m) ;
   agg_mesh_tri_write(stdout, m) ;
 
-  agg_mesh_element_interp(m, 3, 0.25, 0.25, p, sh, x) ;
+  /* agg_mesh_element_interp_normal(m, 3, 0.25, 0.25, p, sh, x, n, &J) ; */
 
-  fprintf(stderr, "%lg %lg %lg\n", x[0], x[1], x[2]) ;
+  /* fprintf(stderr, "%lg %lg %lg\n", x[0], x[1], x[2]) ; */
   
   return ; 
 }

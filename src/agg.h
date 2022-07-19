@@ -209,7 +209,20 @@ struct _agg_mesh_t {
 #define agg_mesh_triangle_tag_number(_m)  ((_m)->nttags)
 #define agg_mesh_triangle_tag(_m,_i,_j)		\
   ((_m)->tri[(3+1+(_m)->nttags)*(_i)+3+1+(_j)])
-/* ((_m)->ttags[(_i)*((_m)->nptags+1)+(_j)+1]) */
+
+typedef struct _agg_grid_t agg_grid_t ;
+struct _agg_grid_t {
+  gint np, npmax, nt, ntmax, *tri ;
+  gdouble *uv ;
+} ;
+
+#define agg_grid_point_number(_g)      ((_g)->np)
+#define agg_grid_point_number_max(_g)      ((_g)->npmax)
+#define agg_grid_triangle_number(_g)   ((_g)->nt)
+#define agg_grid_triangle_number_max(_g)   ((_g)->ntmax)
+#define agg_grid_triangle(_g,_i)       (&((_g)->tri[3*(_i)]))
+#define agg_grid_point_u(_g,_i)        ((_g)->uv[2*(_i)+0])
+#define agg_grid_point_v(_g,_i)        ((_g)->uv[2*(_i)+1])
 
 gdouble agg_bernstein_basis_eval(gint n, gint r, gdouble x) ;
 gint agg_bernstein_basis(gint n, gdouble x, gdouble *S, gdouble *dS) ;
@@ -257,6 +270,11 @@ gint agg_distribution_point_eval(agg_distribution_t *d,
 				 agg_parser_t *p,
 				 agg_shape_t *s,
 				 gdouble *x) ;
+gint agg_distribution_point_normal_eval(agg_distribution_t *d,
+					gdouble u, gdouble v,
+					agg_parser_t *p,
+					agg_shape_t *sh,
+					gdouble *x, gdouble *n, gdouble *J) ;
 
 gint agg_distribution_axes_parse(gchar *s, gint *a) ;
 
@@ -268,6 +286,18 @@ gint agg_distribution_mesh(agg_distribution_t *d,
 			   agg_shape_t *sh, agg_local_transform_t *T,
 			   agg_parser_t *p,			   
 			   agg_mesh_t *m) ;
+gint agg_body_mesh_spherical(agg_body_t *b,
+			     gdouble smin, gdouble smax, gint ns,
+			     agg_spacing_t ss,
+			     gdouble tmin, gdouble tmax, gint nt,
+			     agg_spacing_t st,
+			     agg_shape_t *sh, agg_local_transform_t *T,
+			     agg_parser_t *p,
+			     agg_mesh_t *m) ;
+gint agg_body_mesh_grid(agg_body_t *b, agg_grid_t *g,
+			agg_shape_t *sh, agg_local_transform_t *T,
+			agg_parser_t *p,
+			agg_mesh_t *m) ;
 
 gint agg_mesh_tri_write(FILE *f, agg_mesh_t *m) ;
 gint agg_mesh_points_write(FILE *f, agg_mesh_t *m) ;
@@ -278,6 +308,10 @@ gint agg_mesh_element_interp(agg_mesh_t *m, gint i,
 			     gdouble s, gdouble t,
 			     agg_parser_t *p, agg_shape_t *sh,
 			     gdouble *x) ;
+gint agg_mesh_element_interp_normal(agg_mesh_t *m, gint i,
+				    gdouble s, gdouble t,
+				    agg_parser_t *p, agg_shape_t *sh,
+				    gdouble *x, gdouble *n, gdouble *J) ;
 
 gdouble agg_spacing_eval(gdouble tmin, gdouble tmax, gint nt,
 			 agg_spacing_t s, gint i) ;
@@ -297,6 +331,7 @@ gint agg_parser_body_read(gint fid, GScanner *scanner,
 gint agg_parser_constant_parse(gchar *s, guint *v) ;
 
 agg_body_t *agg_body_alloc(void) ;
+gint agg_body_distribution_locate_u(agg_body_t *b, gdouble u) ;
 gint agg_body_distributions_list(FILE *f, agg_body_t *b) ;
 gint agg_body_distribution_add(agg_body_t *b, agg_distribution_t *d,
 			       gchar *name) ;
@@ -324,6 +359,12 @@ gint agg_local_transform_set_expression(agg_local_transform_t *t,
 
 gdouble agg_function_tipright(gdouble eta, gdouble t0, gdouble t) ;
 gdouble agg_function_tipleft(gdouble eta, gdouble t0, gdouble t) ;
+
+agg_grid_t *agg_grid_alloc(gint np, gint nt) ;
+gint agg_grid_square(agg_grid_t *g,
+		     gdouble umin, gdouble umax, gint nu, agg_spacing_t su,
+		     gdouble vmin, gdouble vmax, gint nv, agg_spacing_t sv) ;
+gint agg_grid_spherical(agg_grid_t *g, gint refine) ;
 
 #endif /*__AGG_H_INCLUDED__*/
 

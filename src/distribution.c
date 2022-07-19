@@ -285,3 +285,32 @@ gint agg_distribution_point_eval(agg_distribution_t *d,
   
   return 0 ;
 }
+
+gint agg_distribution_point_normal_eval(agg_distribution_t *d,
+					gdouble u, gdouble v,
+					agg_parser_t *p,
+					agg_shape_t *sh,
+					gdouble *x, gdouble *n, gdouble *J)
+
+{
+  gdouble y[3] ;
+  gint *axes ;
+  
+  agg_distribution_interpolate_shape(d, u, sh) ;
+
+  p->values[AGG_PARSER_PARAMETER_RESERVED_S] = u ;
+  agg_parser_expressions_evaluate(p) ;
+  agg_local_transform_eval_parameters(d->t) ;
+
+  y[0] = fabs(v) ;
+  y[1] = agg_shape_eval(sh, v, -1) ;
+  y[2] = 0.0 ;
+  agg_local_transform_apply(d->t, y) ;
+  axes = d->axes ;
+
+  x[0] = y[SIGN(axes[0])*axes[0]-1]*SIGN(axes[0]) ;
+  x[1] = y[SIGN(axes[1])*axes[1]-1]*SIGN(axes[1]) ;
+  x[2] = y[SIGN(axes[2])*axes[2]-1]*SIGN(axes[2]) ;  
+  
+  return 0 ;
+}

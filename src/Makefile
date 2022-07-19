@@ -139,7 +139,7 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 libagg_la_LIBADD =
 am_libagg_la_OBJECTS = agg.lo binomials.lo naca.lo transform.lo \
 	distribution.lo mesh.lo spacing.lo tinyexpr.lo parser.lo \
-	body.lo shape.lo interp.lo functions.lo
+	body.lo shape.lo interp.lo functions.lo grid.lo
 libagg_la_OBJECTS = $(am_libagg_la_OBJECTS)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
@@ -381,7 +381,8 @@ libagg_la_SOURCES = \
 	body.c \
 	shape.c \
 	interp.c \
-	functions.c
+	functions.c \
+	grid.c
 
 include_HEADERS = \
 	agg.h
@@ -508,6 +509,7 @@ include ./$(DEPDIR)/binomials.Plo
 include ./$(DEPDIR)/body.Plo
 include ./$(DEPDIR)/distribution.Plo
 include ./$(DEPDIR)/functions.Plo
+include ./$(DEPDIR)/grid.Plo
 include ./$(DEPDIR)/interp.Plo
 include ./$(DEPDIR)/mesh.Plo
 include ./$(DEPDIR)/naca.Plo

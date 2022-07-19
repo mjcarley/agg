@@ -28,7 +28,8 @@ libagg_la_SOURCES = \
 	body.c \
 	shape.c \
 	interp.c \
-	functions.c
+	functions.c \
+	grid.c
 
 include_HEADERS = \
 	agg.h

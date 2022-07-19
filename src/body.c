@@ -63,3 +63,18 @@ gint agg_body_distributions_list(FILE *f, agg_body_t *b)
   
   return 0 ;
 }
+
+gint agg_body_distribution_locate_u(agg_body_t *b, gdouble u)
+
+{
+  gint i ;
+  agg_distribution_t *d ;
+  
+  for ( i = 0 ; i < agg_body_distribution_number(b) ; i ++ ) {
+    d = agg_body_distribution(b, i) ;
+    if ( agg_distribution_parameter_min(d) <= u &&
+	 u <= agg_distribution_parameter_max(d) ) return i ;
+  }    
+  
+  return -1 ;
+}

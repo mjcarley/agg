@@ -4,6 +4,8 @@
 \usepackage{amsmath}
 \usepackage{graphicx}
 
+\newcommand{\sgn}{\mathrm{sgn}}
+
 \begin{document}
 
 Closed curves (``shapes'') used to define cross-sections are
@@ -45,6 +47,36 @@ distribution, the trailing edge thickness, and the camber line.
   \caption{Transforms in order of application to a shape}
   \label{tab:transforms}
 \end{table}
+
+Definition of a sphere of unit diameter centred at $[0,0,1/2]$:
+\begin{subequations}
+  \label{equ:sphere}
+  \begin{align}
+    x &= 2u^{1/2}(1-u)^{1/2}(|v|-1/2);\\
+    y &= \sgn(v)2u^{1/2}(1-u)^{1/2}|v|^{1/2}(1-|v|)^{1/2};\\
+    z &= u,\\
+    0\leq u\leq 1,\,-1\leq v\leq 1.\nonumber
+  \end{align}
+\end{subequations}
+
+To generate using AGG:
+\begin{verbatim}
+global {
+# syntax: <identifier> = "<expression>" (quotes required)
+# diameter of sphere
+  D = 1.0
+  n1 = 0.5
+  n2 = 0.5
+}
+
+distribution("sphere", 0, 1, 24, 9, 17, "cosine", "cosine", "cosine")
+{
+  shape("ellipse", -1, 1, n1, n2) 
+  transform("shrink", 0.5, 0.0, "sqrt(t*(1-t))")
+  transform("scale", "2*D")
+  transform("shift", "-D", 0.0, "D*t")
+}
+\end{verbatim}
 
 \end{document}
 
