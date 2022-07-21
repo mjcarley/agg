@@ -38,6 +38,7 @@ static const struct {
    {"transform",    AGG_SYMBOL_TRANSFORM   ,},
    {"shape",        AGG_SYMBOL_SHAPE       ,},
    {"axes",         AGG_SYMBOL_AXES        ,},
+   {"grid",         AGG_SYMBOL_GRID        ,},
    {NULL, 0}
   } ;
 
@@ -60,6 +61,20 @@ static const struct {
  *
  */
 
+static gboolean expression_null(gchar *expr, gchar *format, gint i)
+
+{
+  if ( expr == NULL ) return TRUE ;
+  fprintf(stderr, format, i) ;
+  return FALSE ;
+}
+
+static gboolean double_is_int(gdouble x)
+
+{
+  return ( x == round(x) ) ;
+}
+
 static gboolean string_is_numeric(gchar *s)
 
 {
@@ -71,6 +86,15 @@ static gboolean string_is_numeric(gchar *s)
   
   return TRUE ;
 }
+
+/** 
+ *
+ * Allocate an ::agg_parser_t used for evaluation of parametric expressions
+ *
+ * 
+ * 
+ * @return a newly allocated ::agg_parser_t
+ */
 
 agg_parser_t *agg_parser_alloc(void)
 
@@ -84,12 +108,25 @@ agg_parser_t *agg_parser_alloc(void)
   p->nvars = 0 ;
   p->global_set = FALSE ;
 
-  agg_parser_variable_add(p, "t", 0.0) ;
+  agg_parser_variable_add(p, "s", 0.0) ;
   agg_parser_function_add(p, "tipleft", agg_function_tipleft, 3) ;
   agg_parser_function_add(p, "tipright", agg_function_tipright, 3) ;
   
   return p ;
 }
+
+/** 
+ * Add a variable declaration to an ::agg_parser_t
+ *
+ * The expression \a s is a variable assignment which can set the
+ * variable to a numeric constant or to an expression which is
+ * evaluated as required.
+ * 
+ * @param p an ::agg_parser_t;
+ * @param s an expression of the form "var = ..."
+ * 
+ * @return 0 on success
+ */
 
 gint agg_parser_declaration(agg_parser_t *p, gchar *s)
 
@@ -284,26 +321,6 @@ gint agg_parser_declarations_write(FILE *f, agg_parser_t *p)
   return 0 ;
 }
 
-gint agg_parser_read_header(FILE *f, agg_parser_t *p)
-
-{
-  gchar line[1024], *s ;
-  gint i ;
-  
-  while ( (i = fscanf(f, "%[^\n]s", line)) != EOF ) {
-    s = g_strstrip(line) ;
-    fprintf(stderr, "%s\n", s) ;
-    if ( s[0] != '#' ) {
-      agg_parser_declaration(p, s) ;
-    }
-    fscanf(f, "%*c") ;
-  }
-
-  fprintf(stderr, "header ends\n") ;
-  
-  return 0 ;
-}
-
 GScanner *agg_scanner_alloc(void)
 
 {
@@ -331,7 +348,6 @@ GScanner *agg_scanner_alloc(void)
   return s ;
 }
 
-
 static guint next_block(GScanner *scanner, agg_parser_t *p)
 
 {
@@ -352,6 +368,55 @@ static guint scanner_read(GScanner *s)
 {
   g_scanner_get_next_token(s) ;
   return s->token ;  
+}
+
+static guint scan_arguments(GScanner *scanner, agg_parser_t *p,
+			    gchar *expr[], gdouble param[],
+			    gint *nparam)
+
+/*
+ * read an argument list delimited by parentheses and return as
+ * strings (for expressions or keywords) or doubles (ints are encoded
+ * as doubles)
+ */
+  
+{
+  guint symbol ;
+  gboolean negate ;
+  
+  /*look for opening bracket*/
+  if ( scanner_read(scanner) != G_TOKEN_LEFT_PAREN ) return G_TOKEN_ERROR ;
+  symbol = scanner_read(scanner) ;
+
+  *nparam = 0 ;
+  while ( symbol != G_TOKEN_RIGHT_PAREN ) {
+    negate = FALSE ;
+
+    if ( scanner->token == '-' ) {
+      negate = !negate ;
+      symbol = scanner_read(scanner) ;
+    }
+
+    if ( symbol == G_TOKEN_FLOAT ) {
+      if ( negate )
+  	param[(*nparam)] = -scanner->value.v_float ;
+      else
+  	param[(*nparam)] = scanner->value.v_float ;
+      expr[(*nparam)] = NULL ;
+      (*nparam) ++ ;
+    }
+
+    if ( symbol == G_TOKEN_STRING ) {
+      expr[(*nparam)] = g_strdup(scanner->value.v_string) ;
+      (*nparam) ++ ;
+    }
+    
+    symbol = scanner_read(scanner) ;
+    if ( symbol == G_TOKEN_COMMA ) 
+      symbol = scanner_read(scanner) ;
+  }
+
+  return G_TOKEN_NONE ;
 }
 
 static guint scan_global(GScanner *scanner, agg_parser_t *p)
@@ -435,59 +500,30 @@ static guint parse_transform(GScanner *scanner,
 
 {
   guint symbol ;
-  gboolean negate ;
   gchar tname[32], *expr[32] ;
   gdouble param[32] = {0} ;
   gint nparam, i, j ;
   
-  /*look for opening bracket*/
-  if ( scanner_read(scanner) != G_TOKEN_LEFT_PAREN ) return G_TOKEN_ERROR ;
-  if ( scanner_read(scanner) != G_TOKEN_STRING ) return G_TOKEN_ERROR ;
-  /*name of the transform*/
-  sprintf(tname, "%s", scanner->value.v_identifier) ;
-
-  symbol = scanner_read(scanner) ;
-
-  nparam = 0 ;
-  while ( symbol != G_TOKEN_RIGHT_PAREN ) {
-    if ( symbol != G_TOKEN_COMMA ) return G_TOKEN_ERROR ;
-    negate = FALSE ;
-    
-    /*check for negation here*/
-    g_scanner_peek_next_token(scanner) ;
-    if (scanner->next_token == '-') {
-      g_scanner_get_next_token(scanner) ;
-      negate = !negate;
-    }
-
-    symbol = scanner_read(scanner) ;
-    if ( symbol == G_TOKEN_FLOAT ) {
-      if ( negate ) 
-	param[nparam] = -scanner->value.v_float ;
-      else
-	param[nparam] = scanner->value.v_float ;
-      expr[nparam] = NULL ;
-      nparam ++ ;
-    }
-
-    if ( symbol == G_TOKEN_STRING ) {
-      expr[nparam] = g_strdup(scanner->value.v_string) ;
-      nparam ++ ;
-    }
-    
-    symbol = scanner_read(scanner) ;    
+  symbol = scan_arguments(scanner, p, expr, param, &nparam) ;
+  if ( symbol != G_TOKEN_NONE ) return G_TOKEN_ERROR ;
+  
+  if ( expr[0] == NULL ) {
+    fprintf(stderr,
+	    "first argument to transform must be transform name\n") ;
+    return G_TOKEN_ERROR ;
   }
+  sprintf(tname, "%s", expr[0]) ;
 
   /*add transform to t*/
   i = t->nt ;
-  if ( agg_local_transform_parse(t, tname, param, nparam) != 0 ) {
+  if ( agg_local_transform_parse(t, tname, &(param[1]), nparam-1) != 0 ) {
     g_error("%s: unrecognized transform %s", __FUNCTION__, tname) ;
   }
-  for ( j = 0 ; j < nparam ; j ++ ) {
-    if ( expr[j] != NULL ) {
+  for ( j = 0 ; j < nparam-1 ; j ++ ) {
+    if ( expr[j+1] != NULL ) {
       gint idx ;
-      idx = agg_local_transform_parameter_index(t, i,j) ;
-      agg_local_transform_set_expression(t, idx, expr[j], p) ;
+      idx = agg_local_transform_parameter_index(t, i, j) ;
+      agg_local_transform_set_expression(t, idx, expr[j+1], p) ;
     }
   }
   
@@ -500,51 +536,34 @@ static guint parse_shape(GScanner *scanner,
 
 {
   guint symbol ;
-  gboolean negate ;
+  gchar *expr[32] ;
+  gdouble param[32] = {0} ;
+  gint i, nparam, err ;
   
   f->na = 0 ;
   /*look for opening bracket*/
-  if ( scanner_read(scanner) != G_TOKEN_LEFT_PAREN ) return G_TOKEN_ERROR ;
-  if ( scanner_read(scanner) != G_TOKEN_STRING ) return G_TOKEN_ERROR ;
-  sprintf(f->func, "%s", scanner->value.v_identifier) ;
+  symbol = scan_arguments(scanner, p, expr, param, &nparam) ;
+  if ( symbol != G_TOKEN_NONE ) return G_TOKEN_ERROR ;
+  if ( expr[0] == NULL ) {
+    fprintf(stderr,
+	    "first argument to shape must be shape name\n") ;
+    return G_TOKEN_ERROR ;
+  }
 
+  sprintf(f->func, "%s", expr[0]) ;
   fprintf(stderr, "  %s\n", f->func) ;
   
-  symbol = scanner_read(scanner) ;
-
-  while ( symbol != G_TOKEN_RIGHT_PAREN ) {
-    if ( symbol != G_TOKEN_COMMA ) return G_TOKEN_ERROR ;
-    negate = FALSE ;
-    
-    /*check for negation here*/
-    g_scanner_peek_next_token(scanner) ;
-    if (scanner->next_token == '-') {
-      g_scanner_get_next_token(scanner) ;
-      negate = !negate;
-    }
-
-    symbol = scanner_read(scanner) ;
-    if ( symbol == G_TOKEN_FLOAT ) {
-      if ( negate ) 
-	f->   x[f->na] = -scanner->value.v_float ;
-      else
-	f->   x[f->na] =  scanner->value.v_float ;
+  for ( i = 1 ; i < nparam ; i ++ ) {
+    if ( expr[i] == NULL ) {
+      f->x[f->na] = param[i] ;
       f->expr[f->na] = NULL ;
       f->na ++ ;      
-    }
-    
-    if ( symbol == G_TOKEN_STRING ||
-	 symbol == G_TOKEN_IDENTIFIER ||
-	 symbol == G_TOKEN_CHAR ) {
-      gint err ;
-      f->expr[f->na] = te_compile(scanner->value.v_string,
-				  p->vars, p->nvars, &err) ; ;
+    } else {
+      f->expr[f->na] = te_compile(expr[i], p->vars, p->nvars, &err) ; ;
       f->na ++ ;      
     }
-    
-    symbol = scanner_read(scanner) ;    
   }
-  
+
   return G_TOKEN_NONE ;
 }
 
@@ -557,8 +576,6 @@ static guint parse_axes(GScanner *scanner,
   if ( scanner_read(scanner) != G_TOKEN_LEFT_PAREN ) return G_TOKEN_ERROR ;
   if ( scanner_read(scanner) != G_TOKEN_STRING ) return G_TOKEN_ERROR ;
 
-  /* fprintf(stderr, "  %s\n", scanner->value.v_identifier) ; */
-
   if ( agg_distribution_axes_parse(scanner->value.v_identifier,
 				   d->axes) != 0 )
     return G_TOKEN_ERROR ;
@@ -569,14 +586,12 @@ static guint parse_axes(GScanner *scanner,
   return G_TOKEN_NONE ;
 }
 
-static guint parse_string(GScanner *scanner,
-			agg_parser_t *p,
-			agg_distribution_t *d)
+static guint parse_distribution_string(GScanner *scanner,
+				       agg_parser_t *p,
+				       agg_distribution_t *d)
 
 {
   /*read string*/
-  /* if ( scanner_read(scanner) != G_TOKEN_STRING ) return G_TOKEN_ERROR ; */
-
   if ( strcmp("invert", scanner->value.v_identifier) == 0 ) {
     agg_distribution_invert(d) = TRUE ;
     return G_TOKEN_NONE ;
@@ -591,9 +606,9 @@ static guint scan_distribution(GScanner *scanner, agg_parser_t *p,
 {
   guint symbol;
   agg_distribution_t *d ;
-  gchar v[128] ;
-  gdouble smin, smax, s ;
-  gint ns, ntr, i ;
+  gchar v[128], *expr[32] ;
+  gdouble smin, smax, s, param[32] = {0} ;
+  gint ns, ntr, i, nparam ;
   agg_function_call_t shape ;
   
   fprintf(stderr, "scanning distribution: ") ;
@@ -605,71 +620,38 @@ static guint scan_distribution(GScanner *scanner, agg_parser_t *p,
   /*need the global data set first*/
   if ( !agg_parser_global_set(p) ) return G_TOKEN_ERROR ;
   
-  /*open brackets*/
-  if ( scanner_read(scanner) != G_TOKEN_LEFT_PAREN ) return G_TOKEN_ERROR ;
+  symbol = scan_arguments(scanner, p, expr, param, &nparam) ;
+  if ( symbol != G_TOKEN_NONE ) return G_TOKEN_ERROR ;
   
   /*distribution name*/
-  if ( scanner_read(scanner) != G_TOKEN_STRING ) return G_TOKEN_ERROR ;
-  sprintf(v, "%s", scanner->value.v_identifier) ;
+  if ( expr[0] == NULL ) return G_TOKEN_ERROR ;
+  sprintf(v, "%s", expr[0]) ;
   fprintf(stderr, "%s\n", v) ;
 
-  /*parameter limits*/
-  if ( scanner_read(scanner) != G_TOKEN_COMMA ) return G_TOKEN_ERROR ;
-  if ( scanner_read(scanner) != G_TOKEN_FLOAT ) return G_TOKEN_ERROR ;
-  smin = scanner->value.v_float ;
-  
-  if ( scanner_read(scanner) != G_TOKEN_COMMA ) return G_TOKEN_ERROR ;
-  if ( scanner_read(scanner) != G_TOKEN_FLOAT ) return G_TOKEN_ERROR ;
-  smax = scanner->value.v_float ;
-  
-  /*number of steps in parameter; need to check for ints at this point*/
-  scanner->config->int_2_float = FALSE ;
-  if ( scanner_read(scanner) != G_TOKEN_COMMA ) return G_TOKEN_ERROR ;
-  if ( scanner_read(scanner) != G_TOKEN_INT   ) return G_TOKEN_ERROR ;
-  ns = scanner->value.v_int ;
+  if ( !expression_null(expr[1], "parameter %d must be constant", 1) ) {
+    return G_TOKEN_ERROR ;
+  }
+  smin = param[1] ;
+
+  if ( !expression_null(expr[2], "parameter %d must be constant", 2) ) {
+    return G_TOKEN_ERROR ;
+  }
+  smax = param[2] ;
+
+  /*number of steps in parameter*/  
+  if ( !expression_null(expr[3], "parameter %d must be constant", 3) ) {
+    return G_TOKEN_ERROR ;
+  }
+  ns = (gint)param[3] ;
   
   d = agg_distribution_alloc(ns) ;
   agg_body_distribution_add(b, d, v) ;
-
-  /*number of sections in mesh*/
-  if ( scanner_read(scanner) != G_TOKEN_COMMA ) return G_TOKEN_ERROR ;
-  if ( scanner_read(scanner) != G_TOKEN_INT   ) return G_TOKEN_ERROR ;
-  i = scanner->value.v_int ;
-  agg_distribution_section_number(d) = i ;
-
-  /*number of nodes per section in mesh*/
-  if ( scanner_read(scanner) != G_TOKEN_COMMA ) return G_TOKEN_ERROR ;
-  if ( scanner_read(scanner) != G_TOKEN_INT   ) return G_TOKEN_ERROR ;
-  i = scanner->value.v_int ;
-  agg_distribution_section_node_number(d) = i ;
-  
-  /*back to default behaviour*/
-  scanner->config->int_2_float = TRUE ;
-
+ 
   /*step spacing in generating shapes*/
-  if ( scanner_read(scanner) != G_TOKEN_COMMA ) return G_TOKEN_ERROR ;
-  if ( scanner_read(scanner) != G_TOKEN_STRING ) return G_TOKEN_ERROR ;
-  i = agg_parser_constant_parse(scanner->value.v_identifier, &(d->sg)) ;
+  i = agg_parser_constant_parse(expr[4], &(d->sg)) ;
   if ( i != 0 )
     g_error("%s: unrecognized constant \"%s\"",
 	    __FUNCTION__, scanner->value.v_identifier) ;
-
-  if ( scanner_read(scanner) != G_TOKEN_COMMA ) return G_TOKEN_ERROR ;
-  if ( scanner_read(scanner) != G_TOKEN_STRING ) return G_TOKEN_ERROR ;
-  i = agg_parser_constant_parse(scanner->value.v_identifier, &(d->sm)) ;
-  if ( i != 0 )
-    g_error("%s: unrecognized constant \"%s\"",
-	    __FUNCTION__, scanner->value.v_identifier) ;
-
-  if ( scanner_read(scanner) != G_TOKEN_COMMA ) return G_TOKEN_ERROR ;
-  if ( scanner_read(scanner) != G_TOKEN_STRING ) return G_TOKEN_ERROR ;
-  i = agg_parser_constant_parse(scanner->value.v_identifier, &(d->ss)) ;
-  if ( i != 0 )
-    g_error("%s: unrecognized constant \"%s\"",
-	    __FUNCTION__, scanner->value.v_identifier) ;
-  
-  /*close brackets*/
-  if ( scanner_read(scanner) != G_TOKEN_RIGHT_PAREN ) return G_TOKEN_ERROR ;
 
   /*curly brackets for the block information*/
   if ( scanner_read(scanner) != G_TOKEN_LEFT_CURLY ) return G_TOKEN_ERROR ;
@@ -699,7 +681,7 @@ static guint scan_distribution(GScanner *scanner, agg_parser_t *p,
     /*check for miscellaneous single keywords*/
     if ( symbol == G_TOKEN_STRING || symbol == G_TOKEN_IDENTIFIER ||
 	 symbol == G_TOKEN_SYMBOL ) {
-      if ( parse_string(scanner, p, d) != G_TOKEN_NONE )
+      if ( parse_distribution_string(scanner, p, d) != G_TOKEN_NONE )
 	return G_TOKEN_ERROR ;
     }
   } while ( symbol != G_TOKEN_ERROR &&
@@ -731,17 +713,127 @@ static guint scan_distribution(GScanner *scanner, agg_parser_t *p,
   return G_TOKEN_NONE ;
 }
 
+static guint parse_grid(GScanner *scanner,
+			agg_parser_t *p,
+			agg_grid_t *g)
+{
+  guint symbol ;
+  gchar gname[32], *expr[32] ;
+  gdouble param[32] = {0} ;
+  gint nparam ;
+  
+  sprintf(gname, "%s", scanner->value.v_identifier) ;
+  fprintf(stderr, "grid: %s\n", gname) ;
+
+  symbol = scan_arguments(scanner, p, expr, param, &nparam) ;
+  if ( symbol != G_TOKEN_NONE ) return G_TOKEN_ERROR ;
+
+  if ( agg_grid_parse(g, gname, param, nparam) != 0 )
+    return G_TOKEN_ERROR ;
+  
+  /* fprintf(stderr, "parameters:") ; */
+  /* for ( i = 0 ; i < nparam ; i ++ ) { */
+  /*   if ( expr[i] == NULL )  */
+  /*     fprintf(stderr, " %lg", param[i]) ; */
+  /*   else */
+  /*     fprintf(stderr, " %s", expr[i]) ; */
+  /* } */
+  /* fprintf(stderr, "\n") ; */
+  
+  return G_TOKEN_NONE ;
+}
+
+static gint scan_grid(GScanner *scanner,
+		      agg_parser_t *p, agg_body_t *b)
+
+{
+  guint symbol;
+  agg_grid_t *g ;
+  gint np, nt, nparam ;
+  gchar *expr[32] ;
+  gdouble param[32] ;
+
+  fprintf(stderr, "scanning grid\n") ;
+
+  symbol = scan_arguments(scanner, p, expr, param, &nparam) ;
+  if ( symbol != G_TOKEN_NONE ) return G_TOKEN_ERROR ;
+
+  if ( nparam != 2 ) {
+    fprintf(stderr, "grid takes exactly two arguments\n") ;
+    return G_TOKEN_ERROR ;
+  }
+  if ( expr[0] != NULL || expr[1] != NULL ) {
+    fprintf(stderr, "grid arguments must be constants\n") ;
+
+    return G_TOKEN_ERROR ;    
+  }
+
+  if ( !double_is_int(param[0]) || !double_is_int(param[1]) ) {
+    fprintf(stderr, "grid arguments must be integers\n") ;
+
+    return G_TOKEN_ERROR ;    
+  }
+  
+  np = (gint)param[0] ; nt = (gint)param[1] ; 
+  fprintf(stderr, "%d points, %d triangles\n", np, nt) ;
+
+  /*set up the body grid*/
+  if ( agg_body_grid(b) == NULL ) {
+    agg_body_grid(b) = agg_grid_alloc(np, nt) ;
+  }
+  g = agg_body_grid(b) ;
+  if ( np > agg_grid_point_number_max(g) ) {
+    g_error("%s: not enough points in grid (%d available, %d requested)",
+	    __FUNCTION__, agg_grid_point_number_max(g), np) ;
+  }
+  if ( nt > agg_grid_triangle_number_max(g) ) {
+    g_error("%s: not enough triangles in grid (%d available, %d requested)",
+	    __FUNCTION__, agg_grid_triangle_number_max(g), np) ;
+  }
+  agg_grid_init(g) ;
+  
+  /*back to default behaviour*/
+  scanner->config->int_2_float = TRUE ;
+
+  /*curly brackets for the block information*/
+  if ( scanner_read(scanner) != G_TOKEN_LEFT_CURLY ) return G_TOKEN_ERROR ;
+
+  symbol = G_TOKEN_NONE ;
+  do {
+    g_scanner_peek_next_token(scanner) ;
+    if ( scanner->next_token == G_TOKEN_RIGHT_CURLY ) break ;
+
+    symbol = scanner_read(scanner) ;
+
+    if ( symbol == G_TOKEN_STRING ||
+	 symbol == G_TOKEN_IDENTIFIER )
+      symbol = parse_grid(scanner, p, g) ;
+  } while ( symbol != G_TOKEN_ERROR &&
+	    symbol != G_TOKEN_EOF &&
+	    scanner->next_token != G_TOKEN_RIGHT_CURLY ) ;
+
+  if ( symbol == G_TOKEN_ERROR || symbol == G_TOKEN_EOF ) return symbol ;
+    
+  if ( scanner->next_token == G_TOKEN_RIGHT_CURLY ) 
+    g_scanner_get_next_token(scanner) ;
+  
+  return G_TOKEN_NONE ;
+}
+		      
+/** 
+ * Read a body (a collection of distributions) from file
+ * 
+ * @param fid file identifier for input;
+ * @param scanner lexical scanner;
+ * @param p an ::agg_parser_t for evaluation of parametric variables;
+ * @param b on exit contains the body information.
+ * 
+ * @return 0 on success.
+ */
+
 gint agg_parser_body_read(gint fid, GScanner *scanner,
 			  agg_parser_t *p, agg_body_t *b)
 
-/*
- * on output:
- * 
- * p contains global variables used in body definition
- *
- * b contains list of distributions, each with transform and shape
- */
-  
 {
   guint token ;
   
@@ -754,21 +846,28 @@ gint agg_parser_body_read(gint fid, GScanner *scanner,
     case AGG_SYMBOL_DISTRIBUTION:
       token = scan_distribution(scanner, p, b) ;
       break ;
+    case AGG_SYMBOL_GRID:
+      token = scan_grid(scanner, p, b) ;
+      break ;
     default:
       token = G_TOKEN_ERROR ;
       break ;
     }
   
     g_scanner_peek_next_token (scanner);
-  } while (token == G_TOKEN_NONE &&
-	   scanner->next_token != G_TOKEN_EOF &&
-	   scanner->next_token != G_TOKEN_ERROR);
+  } while ( token == G_TOKEN_NONE &&
+	    scanner->next_token != G_TOKEN_EOF &&
+	    scanner->next_token != G_TOKEN_ERROR ) ;
   
-  if ( token == G_TOKEN_ERROR )
+  if ( token == G_TOKEN_ERROR ) {
     fprintf(stderr, "parse error at line %d, character %d\n",
 	    g_scanner_cur_line(scanner),
 	    g_scanner_cur_position(scanner)) ;
-
+    return 1 ;
+  }
+  
+  agg_body_parser(b) = p ;
+  
   return 0 ;
 }
 
@@ -803,7 +902,7 @@ gint agg_parser_constant_parse(gchar *s, guint *v)
 /** 
  * Set the numerical value of parameters defined symbolically in a transform
  * 
- * @param t transform whose parameters are to be evaluted.
+ * @param t transform whose parameters are to be evaluated.
  * 
  * @return 0 on success
  */
@@ -821,6 +920,43 @@ gint agg_local_transform_eval_parameters(agg_local_transform_t *t)
     }
   }
   
+  return 0 ;
+}
+
+/** 
+ * Set the numerical value of parameters in a transform
+ * 
+ * This function copies \a t into \a T, evaluating expressions as it
+ * goes, allowing \a t to be accessed simultaneously in a thread-safe
+ * manner.
+ *
+ * @param T transform whose parameters are to be set;
+ * @param t transform containing expressions for parameters.
+ * 
+ * @return 0 on success
+ */
+
+gint agg_local_transform_set_parameters(agg_local_transform_t *T,
+					agg_local_transform_t *t)
+
+{
+  gint i ;
+  te_expr *expr ;
+
+  for ( i = 0 ; i < t->p1[t->nt] ; i ++ ) {
+    if ( t->isexpr[i] ) {
+      expr = t->expr[i].expr ;
+      T->p[i] = te_eval(expr) ;
+    } else {
+      T->p[i] = t->p[i] ;
+    }
+  }
+
+  T->nt = t->nt ;
+  memcpy(T->p1, t->p1, (AGG_TRANSFORM_FUNCTION_NUMBER+1)*sizeof(gint)) ;
+  memcpy(T->func, t->func,
+	 AGG_TRANSFORM_FUNCTION_NUMBER*sizeof(agg_local_transform_func_t)) ;
+
   return 0 ;
 }
 

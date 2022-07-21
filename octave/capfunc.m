@@ -27,8 +27,8 @@ p1 = [c b a] ;
 t = 0.02243806429580494 ;
 t = 0.044864830350514931 ;
 
-f = ones(size(t)) ;
+f1 = ones(size(t)) ;
 ii = find(t <= t1) ;
 
-f(ii) = (t(ii)/t1).^n.*polyval(p1, t1-t(ii)) ;
+f1(ii) = (t(ii)/t1).^n.*polyval(p1, t1-t(ii)) ;
 

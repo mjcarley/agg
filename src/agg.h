@@ -22,15 +22,31 @@
 #define AGG_SYMBOL_TRANSFORM    G_TOKEN_LAST + 3
 #define AGG_SYMBOL_SHAPE        G_TOKEN_LAST + 4
 #define AGG_SYMBOL_AXES         G_TOKEN_LAST + 5
-/* #define AGG_SYMBOL_CUT          G_TOKEN_LAST + 6 */
-/* #define AGG_SYMBOL_ */
-#define AGG_SYMBOL_MAX          G_TOKEN_LAST + 5
+#define AGG_SYMBOL_GRID         G_TOKEN_LAST + 6
+#define AGG_SYMBOL_MAX          G_TOKEN_LAST + 6
 
 typedef enum
   {
    AGG_SHAPE_AEROFOIL = 0, /**< thickness distribution plus camber */
    AGG_SHAPE_ELLIPSE = 1   /**< generic closed curve */
   } agg_shape_type_t ;
+
+
+#define AGG_PARSER_PARAMETER_NUMBER_MAX 128
+#define AGG_PARSER_PARAMETER_RESERVED_S   0
+
+typedef struct _agg_parser_t agg_parser_t ;
+
+struct _agg_parser_t {
+  gpointer vars ; /*variables for tinyexpr*/
+  gpointer expr ; /*compiled expressions for tinyexpr*/
+  gdouble values[AGG_PARSER_PARAMETER_NUMBER_MAX] ; /*variable values*/
+  gboolean isexpr[AGG_PARSER_PARAMETER_NUMBER_MAX] ; /*expression or const*/
+  gboolean global_set ; 
+  gint nvars ; 
+} ;
+
+#define agg_parser_global_set(_p) ((_p)->global_set)
 
 /** 
  * @ingroup types
@@ -96,8 +112,6 @@ typedef struct _agg_distribution_t agg_distribution_t ;
 
 struct _agg_distribution_t {
   gint
-  nu, /**< number of sections in meshing */
-    nv, /**< number of nodes per section in meshing */
     ns, /**< number of shapes/sections in distribution */
     nsmax, /**< maximum number of shapes/sections in distribution */
     axes[3] ; /**< permutation of axes (coordinate indices) */
@@ -114,9 +128,31 @@ struct _agg_distribution_t {
 #define agg_distribution_station_number(_d) ((_d)->ns)
 #define agg_distribution_parameter_min(_d) ((_d)->smin)
 #define agg_distribution_parameter_max(_d) ((_d)->smax)
-#define agg_distribution_section_number(_d) ((_d)->nu)
-#define agg_distribution_section_node_number(_d) ((_d)->nv)
 #define agg_distribution_invert(_d) ((_d)->invert)
+
+typedef enum
+  {
+   AGG_GRID_LINEAR    = 0,
+   AGG_GRID_SPHERICAL = 1
+  } agg_grid_topology_t ;
+
+typedef struct _agg_grid_t agg_grid_t ;
+struct _agg_grid_t {
+  agg_grid_topology_t t ;
+  gint np, npmax, nt, ntmax, *tri ;
+  gdouble *uv ;
+  gboolean invert ;
+} ;
+
+#define agg_grid_topology(_g)            ((_g)->t)
+#define agg_grid_point_number(_g)        ((_g)->np)
+#define agg_grid_point_number_max(_g)    ((_g)->npmax)
+#define agg_grid_triangle_number(_g)     ((_g)->nt)
+#define agg_grid_triangle_number_max(_g) ((_g)->ntmax)
+#define agg_grid_triangle(_g,_i)         (&((_g)->tri[3*(_i)]))
+#define agg_grid_point_u(_g,_i)          ((_g)->uv[2*(_i)+0])
+#define agg_grid_point_v(_g,_i)          ((_g)->uv[2*(_i)+1])
+#define agg_grid_invert(_g)              ((_g)->invert)
 
 #define AGG_BODY_DISTRIBUTION_NUMBER_MAX 64
 
@@ -126,26 +162,14 @@ struct _agg_body_t {
   gint nd ;
   gchar *names[AGG_BODY_DISTRIBUTION_NUMBER_MAX] ;
   agg_distribution_t *d[AGG_BODY_DISTRIBUTION_NUMBER_MAX] ;
+  agg_parser_t *p ;
+  agg_grid_t *g ;
 } ;
 
 #define agg_body_distribution_number(_b) ((_b)->nd)
-#define agg_body_distribution(_b,_i) (((_b)->d[(_i)]))
-
-#define AGG_PARSER_PARAMETER_NUMBER_MAX 128
-#define AGG_PARSER_PARAMETER_RESERVED_S   0
-
-typedef struct _agg_parser_t agg_parser_t ;
-
-struct _agg_parser_t {
-  gpointer vars ; /*variables for tinyexpr*/
-  gpointer expr ; /*compiled expressions for tinyexpr*/
-  gdouble values[AGG_PARSER_PARAMETER_NUMBER_MAX] ; /*variable values*/
-  gboolean isexpr[AGG_PARSER_PARAMETER_NUMBER_MAX] ; /*expression or const*/
-  gboolean global_set ; 
-  gint nvars ; 
-} ;
-
-#define agg_parser_global_set(_p) ((_p)->global_set)
+#define agg_body_distribution(_b,_i)     (((_b)->d[(_i)]))
+#define agg_body_parser(_b)              ((_b)->p)
+#define agg_body_grid(_b)              ((_b)->g)
 
 typedef struct _agg_function_call_t agg_function_call_t ;
 
@@ -157,28 +181,13 @@ struct _agg_function_call_t {
   guint c ;
 } ;
 
-typedef struct _agg_mapping_t agg_mapping_t ;
-
-struct _agg_mapping_t {
-  gdouble sbar, ds, tbar, dt ;
-} ;
-
-#define agg_mapping_map(_m,_s,_t)		  \
-  do {						  \
-  (_t) = (_m).tbar + ((_s)-(_m).sbar)/((_m).ds) ; \
-  } while (0)
-
-typedef struct _agg_shape_interpolant_t agg_shape_interpolant_t ;
-struct _agg_shape_interpolant_t {
-  gint n, nmax ;
-  gdouble *i ;
-} ;
 
 #define AGG_MESH_DISTRIBUTION_NUMBER_MAX 32
 
 typedef struct _agg_mesh_t agg_mesh_t ;
 
 struct _agg_mesh_t {
+  agg_grid_t *g ;
   agg_distribution_t *dist[AGG_MESH_DISTRIBUTION_NUMBER_MAX] ;
   gint np, npmax, nt, ntmax, nptags, nttags, ndat, *tri, *ptags, ndist ;
   gdouble *x ;
@@ -209,20 +218,17 @@ struct _agg_mesh_t {
 #define agg_mesh_triangle_tag_number(_m)  ((_m)->nttags)
 #define agg_mesh_triangle_tag(_m,_i,_j)		\
   ((_m)->tri[(3+1+(_m)->nttags)*(_i)+3+1+(_j)])
+#define agg_mesh_grid(_m) ((_m)->g)
 
-typedef struct _agg_grid_t agg_grid_t ;
-struct _agg_grid_t {
-  gint np, npmax, nt, ntmax, *tri ;
-  gdouble *uv ;
+typedef struct _agg_workspace_t agg_workspace_t ;
+
+struct _agg_workspace_t {
+  agg_shape_t *s ;
+  agg_local_transform_t *t ;
 } ;
 
-#define agg_grid_point_number(_g)      ((_g)->np)
-#define agg_grid_point_number_max(_g)      ((_g)->npmax)
-#define agg_grid_triangle_number(_g)   ((_g)->nt)
-#define agg_grid_triangle_number_max(_g)   ((_g)->ntmax)
-#define agg_grid_triangle(_g,_i)       (&((_g)->tri[3*(_i)]))
-#define agg_grid_point_u(_g,_i)        ((_g)->uv[2*(_i)+0])
-#define agg_grid_point_v(_g,_i)        ((_g)->uv[2*(_i)+1])
+#define agg_workspace_shape(_w) ((_w)->s)
+#define agg_workspace_local_transform(_w) ((_w)->t)
 
 gdouble agg_bernstein_basis_eval(gint n, gint r, gdouble x) ;
 gint agg_bernstein_basis(gint n, gdouble x, gdouble *S, gdouble *dS) ;
@@ -283,21 +289,11 @@ gint agg_distribution_mesh(agg_distribution_t *d,
 			   agg_spacing_t ss,
 			   gdouble tmin, gdouble tmax, gint nt,
 			   agg_spacing_t st,
-			   agg_shape_t *sh, agg_local_transform_t *T,
+			   /* agg_shape_t *sh, agg_local_transform_t *T, */
 			   agg_parser_t *p,			   
-			   agg_mesh_t *m) ;
-gint agg_body_mesh_spherical(agg_body_t *b,
-			     gdouble smin, gdouble smax, gint ns,
-			     agg_spacing_t ss,
-			     gdouble tmin, gdouble tmax, gint nt,
-			     agg_spacing_t st,
-			     agg_shape_t *sh, agg_local_transform_t *T,
-			     agg_parser_t *p,
-			     agg_mesh_t *m) ;
+			   agg_mesh_t *m, agg_workspace_t *w) ;
 gint agg_body_mesh_grid(agg_body_t *b, agg_grid_t *g,
-			agg_shape_t *sh, agg_local_transform_t *T,
-			agg_parser_t *p,
-			agg_mesh_t *m) ;
+			agg_mesh_t *m, agg_workspace_t *w) ;
 
 gint agg_mesh_tri_write(FILE *f, agg_mesh_t *m) ;
 gint agg_mesh_points_write(FILE *f, agg_mesh_t *m) ;
@@ -324,7 +320,7 @@ gint agg_parser_variable_add(agg_parser_t *p, gchar *s, gdouble x) ;
 gint agg_parser_expression_add(agg_parser_t *p, gchar *v, gchar *w) ;
 gint agg_parser_function_add(agg_parser_t *p, gchar *v, gpointer func,
 			     gint na) ;
-gint agg_parser_read_header(FILE *f, agg_parser_t *p) ;
+
 GScanner *agg_scanner_alloc(void) ;
 gint agg_parser_body_read(gint fid, GScanner *scanner,
 			  agg_parser_t *p, agg_body_t *b) ;
@@ -332,15 +328,11 @@ gint agg_parser_constant_parse(gchar *s, guint *v) ;
 
 agg_body_t *agg_body_alloc(void) ;
 gint agg_body_distribution_locate_u(agg_body_t *b, gdouble u) ;
+gint agg_body_point_eval(agg_body_t *b, gdouble u, gdouble v, gdouble *x,
+			 agg_workspace_t *w) ;
 gint agg_body_distributions_list(FILE *f, agg_body_t *b) ;
 gint agg_body_distribution_add(agg_body_t *b, agg_distribution_t *d,
 			       gchar *name) ;
-
-agg_shape_interpolant_t *agg_shape_interpolant_alloc(gint nmax) ;
-gint agg_shape_interpolant_make(agg_shape_interpolant_t *a,
-				agg_shape_t *sh, gint n) ;
-gint agg_shape_interpolant_step(agg_shape_interpolant_t *a,
-				gdouble *s, gdouble dl) ;
 
 gint agg_local_transform_init(agg_local_transform_t *t) ;
 agg_local_transform_t *agg_local_transform_alloc(void) ;
@@ -353,6 +345,8 @@ gint agg_local_transform_parse(agg_local_transform_t *T, gchar *type,
 			       gdouble *p, gint np) ;
 gint agg_local_transform_apply(agg_local_transform_t *T, gdouble *y) ;
 gint agg_local_transform_eval_parameters(agg_local_transform_t *t) ;
+gint agg_local_transform_set_parameters(agg_local_transform_t *T,
+					agg_local_transform_t *t) ;
 gint agg_local_transform_set_expression(agg_local_transform_t *t,
 					gint i, gchar *expr,
 					agg_parser_t *p) ;
@@ -361,10 +355,17 @@ gdouble agg_function_tipright(gdouble eta, gdouble t0, gdouble t) ;
 gdouble agg_function_tipleft(gdouble eta, gdouble t0, gdouble t) ;
 
 agg_grid_t *agg_grid_alloc(gint np, gint nt) ;
+gint agg_grid_init(agg_grid_t *g) ;
 gint agg_grid_square(agg_grid_t *g,
 		     gdouble umin, gdouble umax, gint nu, agg_spacing_t su,
 		     gdouble vmin, gdouble vmax, gint nv, agg_spacing_t sv) ;
 gint agg_grid_spherical(agg_grid_t *g, gint refine) ;
+gint agg_grid_element_interpolate(agg_grid_t *g, gint i,
+				  gdouble s, gdouble t,
+				  gdouble *u, gdouble *v) ;
+gint agg_grid_parse(agg_grid_t *g, gchar *name, gdouble *p, gint np) ;
+
+agg_workspace_t *agg_workspace_alloc(gint ns) ;
 
 #endif /*__AGG_H_INCLUDED__*/
 

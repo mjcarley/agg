@@ -59,3 +59,15 @@ gint agg_bernstein_basis(gint n, gdouble x, gdouble *S, gdouble *dS)
   return 0 ;
 }
 
+agg_workspace_t *agg_workspace_alloc(gint ns)
+
+{
+  agg_workspace_t *w ;
+
+  w = (agg_workspace_t *)g_malloc0(sizeof(agg_workspace_t)) ;
+
+  agg_workspace_shape(w) = agg_shape_alloc(ns) ;
+  agg_workspace_local_transform(w) = agg_local_transform_alloc() ;
+  
+  return w ;
+}

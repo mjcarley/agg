@@ -114,7 +114,8 @@ static void interpolate_aerofoil(agg_distribution_t *d, gdouble t,
   s->i[1] = d->sh[0]->i[1] ; 
   s->i[2] = d->sh[0]->i[2] ; 
   s->i[3] = d->sh[0]->i[3] ;
-
+  s->nb = d->sh[0]->nb ;
+  
   memset(s->n1, 0, 8*sizeof(gdouble)) ;
   memset(s->n2, 0, 8*sizeof(gdouble)) ;
 

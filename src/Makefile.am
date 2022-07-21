@@ -27,7 +27,6 @@ libagg_la_SOURCES = \
 	parser.c \
 	body.c \
 	shape.c \
-	interp.c \
 	functions.c \
 	grid.c
 

@@ -34,7 +34,8 @@ static const struct {
 } shape_parse_list[] =
   {
    {"ellipse",    4, TRUE},
-   {"root",       11, FALSE},
+   {"naca",       4, FALSE },
+   /* {"root",       11, FALSE}, */
    {NULL, 0, FALSE}
   } ;
 
@@ -570,18 +571,14 @@ gint agg_shape_parse(agg_shape_t *s, gchar *type, gdouble *p, gint np)
   }
 
   if ( i == 1 ) {
-    /*root*/
-    agg_shape_root_fit(s, p[0], p[1],
-    		       p[2], p[3], p[4],
-    		       p[5], p[6], p[7],
-    		       p[8], p[9],
-    		       (gint)p[10], work) ;
+    /*naca four*/
+    agg_shape_fit_naca_four(s, (gint)p[0], p[1], p[2], p[3], 64, 64, work) ;
+
     return 0 ;
   }
   
   return 0 ;
 }
-
 
 gint agg_shape_copy(agg_shape_t *dest, agg_shape_t *src)
 

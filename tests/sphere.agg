@@ -9,21 +9,25 @@
 #
 
 global {
-# syntax: <identifier> = "<expression>" (quotes required)
+# syntax: <identifier> = "<expression>" (quotes required for non-numeric values)
   D = 1.0
   n1 = 0.5
   n2 = 0.5
 }
 
-distribution("sphere", 0, 1, 24, 9, 17, "cosine", "cosine", "cosine")
+grid(4096, 8192)
+
+{
+  spherical(3)
+}
+
+distribution("sphere", 0, 1, 24, "cosine")
 
 ## argument list:
 ##   distribution label (for readability)
-##   tmin, tmax: parameter range
+##   smin, smax: parameter range
 ##   number of sections to be generated for interpolation of shape
-##   number of sections on distribution when meshing
-##   number of nodes per section when meshing
-##   point spacing for geometry and mesh generation
+##   section spacing for shape generation
 
 {
   transform("shrink", 0.5, 0.0, "sqrt(t*(1-t))")

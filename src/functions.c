@@ -90,7 +90,7 @@ gdouble agg_function_tipleft(gdouble eta, gdouble t0, gdouble t)
 
   b = eta/t0 ;
   a = 1.0 ;
-  c = -0.5*eta*(eta+1)/t0/t0 ;
+  c = 0.5*eta*(eta+1)/t0/t0 ;
 
   dt = t0 - t ;
   f = pow(t/t0, eta)*(a + dt*(b+c*dt)) ;

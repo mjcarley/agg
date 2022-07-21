@@ -25,6 +25,8 @@
 
 #include <agg.h>
 
+#include "agg-private.h"
+
 agg_body_t *agg_body_alloc(void)
 
 {
@@ -33,6 +35,9 @@ agg_body_t *agg_body_alloc(void)
   b = (agg_body_t *)g_malloc0(sizeof(agg_body_t)) ;
 
   agg_body_distribution_number(b) = 0 ;
+
+  agg_body_parser(b) = NULL ;
+  agg_body_grid(b) = NULL ;
   
   return b ;
 }
@@ -72,9 +77,44 @@ gint agg_body_distribution_locate_u(agg_body_t *b, gdouble u)
   
   for ( i = 0 ; i < agg_body_distribution_number(b) ; i ++ ) {
     d = agg_body_distribution(b, i) ;
-    if ( agg_distribution_parameter_min(d) <= u &&
-	 u <= agg_distribution_parameter_max(d) ) return i ;
+    if ( (agg_distribution_parameter_min(d) <= u &&
+	  u <= agg_distribution_parameter_max(d)) ||
+	 (agg_distribution_parameter_min(d) >= u &&
+	  u >= agg_distribution_parameter_max(d))
+	 ) return i ;
   }    
   
   return -1 ;
+}
+
+gint agg_body_point_eval(agg_body_t *b, gdouble u, gdouble v, gdouble *x,
+			 agg_workspace_t *w)
+
+{
+  gint i, *axes ;
+  agg_distribution_t *d ;
+  gdouble y[3] ;
+  agg_parser_t *p ;
+  agg_shape_t *sh = agg_workspace_shape(w) ;
+  agg_local_transform_t *T = agg_workspace_local_transform(w) ;
+  
+  g_assert( (p = agg_body_parser(b)) != NULL) ;
+  i = agg_body_distribution_locate_u(b, u) ;
+  d = agg_body_distribution(b, i) ;
+  axes = d->axes ;
+  agg_distribution_interpolate_shape(d, u, sh) ;
+
+  p->values[AGG_PARSER_PARAMETER_RESERVED_S] = u ;
+  agg_parser_expressions_evaluate(p) ;
+  agg_local_transform_set_parameters(T, d->t) ;
+  
+  y[0] = fabs(v) ;
+  y[1] = agg_shape_eval(sh, v, -1) ;
+  y[2] = 0.0 ;
+  agg_local_transform_apply(T, y) ;
+  x[0] = y[SIGN(axes[0])*axes[0]-1]*SIGN(axes[0]) ;
+  x[1] = y[SIGN(axes[1])*axes[1]-1]*SIGN(axes[1]) ;
+  x[2] = y[SIGN(axes[2])*axes[2]-1]*SIGN(axes[2]) ;
+
+  return 0 ;
 }

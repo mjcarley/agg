@@ -64,113 +64,6 @@ static void add_elements(gint *tr, gint tstr, gint *ttags, gint ttstr, gint id,
   return ;
 }
 
-static gint distribution_mesh(agg_distribution_t *d, gint id,
-			      gdouble smin, gdouble smax, gint ns,
-			      agg_spacing_t ss,
-			      gdouble tmin, gdouble tmax, gint nt,
-			      agg_spacing_t st,
-			      agg_shape_t *sh, agg_local_transform_t *T,
-			      agg_parser_t *p,
-			      gdouble *x, gint xstr, gint *ptags, gint ptstr,
-			      gint *tr, gint tstr, gint *ttags, gint ttstr,
-			      gint *idx0)
-  
-{
-  gint idx, i, j, k, ntr, *axes, i0, i1 ;
-  gdouble s, t, y[3] ;
-  gint nb, breaks[16] ;
-  
-  idx = 0 ; axes = d->axes ;
-  for ( i = 0 ; i < ns ; i ++ ) {
-    s = agg_spacing_eval(smin, smax, ns, ss, i) ;
-    agg_distribution_interpolate_shape(d, s, sh) ;
-    
-    p->values[AGG_PARSER_PARAMETER_RESERVED_S] = s ;
-    agg_parser_expressions_evaluate(p) ;
-    agg_local_transform_eval_parameters(d->t) ;
-
-    nb = agg_shape_break_number(sh) ;
-    /*initialize list of break points on cross-section/shape*/
-    breaks[0] = 0 ;
-    for ( j = 0 ; j < nb ; j ++ ) {
-      tmin = agg_shape_break_lower(sh, j) ;
-      tmax = agg_shape_break_upper(sh, j) ;
-      for ( k = 0 ; k < nt ; k ++ ) {
-	t = agg_spacing_eval(tmin, tmax, nt, st, k) ;
-	y[0] = fabs(t) ;
-	y[1] = agg_shape_eval(sh, t, j) ;
-	y[2] = 0.0 ;
-	agg_local_transform_apply(d->t, y) ;
-	x[idx*xstr+0] = y[SIGN(axes[0])*axes[0]-1]*SIGN(axes[0]) ;
-	x[idx*xstr+1] = y[SIGN(axes[1])*axes[1]-1]*SIGN(axes[1]) ;
-	x[idx*xstr+2] = y[SIGN(axes[2])*axes[2]-1]*SIGN(axes[2]) ;
-	x[idx*xstr+3] = s ;
-	x[idx*xstr+4] = t ;
-	ptags[idx*ptstr] = id ;
-	idx ++ ;
-      }
-      breaks[j+1] = breaks[j]+nt ;
-    }
-  }
-
-  ntr = 0 ;
-
-  if ( agg_distribution_invert(d) ) {
-    i0 = 2 ; i1 = 1 ;
-  } else {
-    i0 = 1 ; i1 = 2 ;
-  }
-  for ( i = 0 ; i < ns-1 ; i ++ ) {
-    gint off = i*breaks[nb] + *idx0 ;
-    for ( j = 0 ; j < nb ; j ++ ) {
-      for ( k = breaks[j] ; k < breaks[j+1]-1 ; k ++ ) {
-	add_elements(tr, tstr, ttags, ttstr, id, x, xstr,
-		     i0, i1, off+k, breaks[nb], &ntr) ;
-      }
-    }
-  }
-
-  *idx0 += idx ;
-  
-  return ntr ;
-}
-
-gint agg_distribution_mesh(agg_distribution_t *d,
-			   gdouble smin, gdouble smax, gint ns,
-			   agg_spacing_t ss,
-			   gdouble tmin, gdouble tmax, gint nt,
-			   agg_spacing_t st,
-			   agg_shape_t *sh, agg_local_transform_t *T,
-			   agg_parser_t *p,
-			   agg_mesh_t *m)
-
-{
-  gint xstr, tstr, np, ntri ;
-
-  xstr = 3 + 2 + m->ndat ;
-  tstr = 3 + 1 + m->nttags ;
-  np = agg_mesh_point_number(m) ;
-  ntri = agg_mesh_triangle_number(m) ;
-
-  agg_mesh_distribution(m, agg_mesh_distribution_number(m)) = d ;
-  ntri = distribution_mesh(d, agg_mesh_distribution_number(m),
-			   smin, smax, ns, ss,
-			   tmin, tmax, nt, st,
-			   sh, T, p,
-			   &(agg_mesh_point_x(m,np)), xstr,
-			   &(agg_mesh_point_distribution(m,np)),
-			   agg_mesh_point_tag_number(m)+1,
-			   agg_mesh_triangle(m,ntri), tstr,
-			   &(agg_mesh_triangle_distribution(m,ntri)),
-			   agg_mesh_triangle_tag_number(m)+3+1,
-			   &np) ;
-  m->np = np ;
-  m->nt += ntri ;
-  agg_mesh_distribution_number(m) ++ ;
-  
-  return 0 ;
-}
-
 /** 
  * Write the points of an ::agg_mesh_t to file
  * 
@@ -346,122 +239,17 @@ gint agg_mesh_element_interp_normal(agg_mesh_t *m, gint i,
   return 0 ;
 }
 
-gint agg_body_mesh_spherical(agg_body_t *b,
-			     gdouble smin, gdouble smax, gint ns,
-			     agg_spacing_t ss,
-			     gdouble tmin, gdouble tmax, gint nt,
-			     agg_spacing_t st,
-			     agg_shape_t *sh, agg_local_transform_t *T,
-			     agg_parser_t *p,
-			     agg_mesh_t *m)
-
-{
-  agg_distribution_t *d ;
-  gint i, j, idx, *axes, np, ntri, xstr, tstr, *ptags, ptstr ;
-  gint *tr, *ttags, ttstr ;
-  gdouble *x, y[3] ;
-  gint faces[] = {0,  11,  5,
-		  0 ,  5,  1,
-		  0 ,  1,  7,
-		  0 ,  7, 10,
-		  0 , 10, 11,
-		  1 ,  5,  9,
-		  5 , 11,  4,
-		  11, 10,  2,
-		  10,  7,  6,
-		  7 ,  1,  8,
-		  3 ,  9,  4,
-		  3 ,  4,  2,
-		  3 ,  2,  6,
-		  3 ,  6,  8,
-		  3 ,  8,  9,
-		  4 ,  9,  5,
-		  2 ,  4, 11,
-		  6 ,  2, 10,
-		  8 ,  6,  7,
-		  9 ,  8,  1} ;
-  gdouble uv[] = {5.0000000000000000e-01,  2.3713444394043320e-01,
-		  5.0000000000000000e-01,  7.6286555605956674e-01,
-		  5.0000000000000000e-01, -2.3713444394043320e-01,
-		  5.0000000000000000e-01, -7.6286555605956674e-01,
-		  9.2532540417601994e-01, -5.0000000000000000e-01,
-		  9.2532540417601994e-01,  5.0000000000000000e-01,
-		  7.4674595823980006e-02, -5.0000000000000000e-01,
-		  7.4674595823980006e-02,  5.0000000000000000e-01,
-		  2.3713444394043320e-01,  1.0000000000000000e+00,
-		  7.6286555605956674e-01,  1.0000000000000000e+00,
-		  2.3713444394043320e-01, -1.1102230246251565e-16,
-		  7.6286555605956674e-01,  0.0000000000000000e+00} ;
-
-  np = agg_mesh_point_number(m) ;
-  ntri = agg_mesh_triangle_number(m) ;
-  xstr = 3 + 2 + m->ndat ;
-  tstr = 3 + 1 + m->nttags ;
-  ptags = &(agg_mesh_point_distribution(m,np)) ;
-  ptstr = agg_mesh_point_tag_number(m)+1 ;
-
-  for ( i = 0 ; i < agg_body_distribution_number(b) ; i ++ ) 
-    agg_mesh_distribution(m, i) = agg_body_distribution(b, i) ;
-			/* agg_mesh_distribution_number(m)) = d ; */
-  agg_mesh_distribution_number(m) = agg_body_distribution_number(b) ;
-
-  idx = 0 ;
-  x = &(agg_mesh_point_x(m,np)) ;
-  for ( i = 0 ; i < 12 ; i ++ ) {
-    j = agg_body_distribution_locate_u(b, uv[2*i+0]) ;
-    d = agg_body_distribution(b, j) ;
-    axes = d->axes ;
-    agg_distribution_interpolate_shape(d, uv[2*i+0], sh) ;
-
-    p->values[AGG_PARSER_PARAMETER_RESERVED_S] = uv[2*i+0] ;
-    agg_parser_expressions_evaluate(p) ;
-    agg_local_transform_eval_parameters(d->t) ;
-    
-    y[0] = fabs(uv[2*i+1]) ;
-    y[1] = agg_shape_eval(sh, uv[2*i+1], -1) ;
-    y[2] = 0.0 ;
-    agg_local_transform_apply(d->t, y) ;
-    x[idx*xstr+0] = y[SIGN(axes[0])*axes[0]-1]*SIGN(axes[0]) ;
-    x[idx*xstr+1] = y[SIGN(axes[1])*axes[1]-1]*SIGN(axes[1]) ;
-    x[idx*xstr+2] = y[SIGN(axes[2])*axes[2]-1]*SIGN(axes[2]) ;
-    x[idx*xstr+3] = uv[2*i+0] ;
-    x[idx*xstr+4] = uv[2*i+1] ;
-    ptags[idx*ptstr] = j ;
-    /* agg_mesh_distribution_number(m) ; */
-    idx ++ ;    
-  }
-  
-  m->np += idx ;
-  tr = agg_mesh_triangle(m,ntri) ;
-  ttags = &(agg_mesh_triangle_distribution(m,ntri)) ;
-  ttstr = agg_mesh_triangle_tag_number(m)+3+1 ;
-
-  ntri = 0 ;
-  for ( i = 0 ; i < 20 ; i ++ ) {
-    tr[i*(tstr)+0] = faces[3*i+0] + np ;
-    tr[i*(tstr)+1] = faces[3*i+1] + np ;
-    tr[i*(tstr)+2] = faces[3*i+2] + np ;
-    ttags[i*ttstr] = agg_mesh_distribution_number(m) ;
-    ntri ++ ;
-  }
-  
-  m->nt += ntri ;
-  agg_mesh_distribution_number(m) ++ ;
-  
-  return 0 ;
-}
-
 gint agg_body_mesh_grid(agg_body_t *b, agg_grid_t *g,
-			agg_shape_t *sh, agg_local_transform_t *T,
-			agg_parser_t *p,
-			agg_mesh_t *m)
+			agg_mesh_t *m, agg_workspace_t *w)
 
 {
-  agg_distribution_t *d ;
-  gint i, j, idx, *axes, np, ntri, xstr, tstr, *ptags, ptstr ;
+  gint i, idx, np, ntri, xstr, tstr, *ptags, ptstr ;
   gint *tr, *ttags, ttstr, *tg ;
-  gdouble *x, y[3], u, v ;
+  gdouble *x, u, v ;
+  agg_parser_t *p ;
 
+  g_assert(g != NULL) ;
+  g_assert((p = agg_body_parser(b)) != NULL) ;
   np = agg_mesh_point_number(m) ;
   ntri = agg_mesh_triangle_number(m) ;
   xstr = 3 + 2 + m->ndat ;
@@ -478,25 +266,12 @@ gint agg_body_mesh_grid(agg_body_t *b, agg_grid_t *g,
   for ( i = 0 ; i < agg_grid_point_number(g) ; i ++ ) {
     u = agg_grid_point_u(g,i) ;
     v = agg_grid_point_v(g,i) ;
-    j = agg_body_distribution_locate_u(b, u) ;
-    d = agg_body_distribution(b, j) ;
-    axes = d->axes ;
-    agg_distribution_interpolate_shape(d, u, sh) ;
 
-    p->values[AGG_PARSER_PARAMETER_RESERVED_S] = u ;
-    agg_parser_expressions_evaluate(p) ;
-    agg_local_transform_eval_parameters(d->t) ;
-    
-    y[0] = fabs(v) ;
-    y[1] = agg_shape_eval(sh, v, -1) ;
-    y[2] = 0.0 ;
-    agg_local_transform_apply(d->t, y) ;
-    x[idx*xstr+0] = y[SIGN(axes[0])*axes[0]-1]*SIGN(axes[0]) ;
-    x[idx*xstr+1] = y[SIGN(axes[1])*axes[1]-1]*SIGN(axes[1]) ;
-    x[idx*xstr+2] = y[SIGN(axes[2])*axes[2]-1]*SIGN(axes[2]) ;
+    agg_body_point_eval(b, u, v, &(x[idx*xstr]), w) ;
+
     x[idx*xstr+3] = u ;
     x[idx*xstr+4] = v ;
-    ptags[idx*ptstr] = j ;
+    ptags[idx*ptstr] = 0 ;
     idx ++ ;    
   }
   
@@ -514,8 +289,12 @@ gint agg_body_mesh_grid(agg_body_t *b, agg_grid_t *g,
     ttags[i*ttstr] = agg_mesh_distribution_number(m) ;
     ntri ++ ;
   }
-  
-  m->nt += ntri ;
+
+  g_assert(ntri == agg_grid_triangle_number(g)) ;
+
+  agg_mesh_triangle_number(m) = ntri ;
+  agg_mesh_grid(m) = g ;
+  /* m->nt += ntri ; */
   
   return 0 ;
 }
