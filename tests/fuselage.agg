@@ -13,7 +13,7 @@ global {
   len = 8.3
 # syntax: <identifier> = "<expression>" (quotes required)
   D = "len*0.2"
-  hu = 2.0 
+  hu = 1.0 
   tlen = 3.0
   nlen = 2.5
   n1 = 0.5
@@ -30,33 +30,25 @@ global {
 #     sm: spacing in t in generating mesh
 #     ss: spacing in parameter s in generating cross-section shape
 
-distribution ("cabin", 0.0, 1.0, 8, "linear", "linear", "cosine")
+
+body("nose")
 
 {
-# syntax: transform("transform", parameters ...)
-  transform("shift", -0.5, 0, "len*t")
-  transform("scale", "D")
 
-# syntax: shape("curve", parameters ...)
-#  curve: "ellipse"  (closed smooth curve)
-#  curve: "aerofoil" (aerofoil type shape)
-  shape("ellipse", hu, 1.0, n1, n2)
+  grid(16384, 32768)
+
+  {
+    ##linear(8, "halfsin", 65, "cosine")
+    cone(8, 64)
+  }
+
+  distribution ("nose", 0.0, 1, 16, "cosine")
+  {
+    transform("shrink", "0.5", 0, "sqrt(1.0-(1-s)^2)")
+    transform("shift", -0.5, 0, 0)
+    transform("scale", "D") 
+    transform("shift", 0, 0, "-(1-s)*nlen")
+    shape("ellipse", -1.0, "hu","n1", "n2")
+    ##  "n1 + (0.5-n1)*s", "n2 + (0.5-n2)*s")  
+  }
 }
-
-distribution ("nose", 0.0, 1.0, 16, "cosine", "cosine", "cosine")
-{
-  transform("shrink", "0.5", 0, "sqrt(1.0-t^2)")
-  transform("shift", -0.5, 0, "-t*nlen")
-  transform("scale", "D") 
-  shape("ellipse", hu, 1.0, "n1 + (0.5-n1)*t", "n2 + (0.5-n2)*t")
-}
-
-distribution ("tail", 0.0, 1.0, 8, "cosine", "cosine", "cosine")
-{
-  transform("shrink", 0.5, "hu*0.5^n1*0.5^n2", "(1.0-t)")
-  transform("scale", "D") 
-  transform("shift", -0.5, 0, "len+t*tlen")
-  shape("ellipse", hu, 1.0, n1, n2) ;
-}
-
-#

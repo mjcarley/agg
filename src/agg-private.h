@@ -40,4 +40,8 @@
 #define agg_transform_shrink_data(_t)	\
   (&((_t)->p[AGG_TRANSFORM_PARAMETER_SHRINK]))
 
+gint agg_interp_grid_spherical(agg_grid_t *g, gint i,
+			       gdouble s, gdouble t,
+			       gdouble *u, gdouble *v) ;
+
 #endif /*__AGG_PRIVATE_H_INCLUDED__*/

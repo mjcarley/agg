@@ -23,7 +23,8 @@
 #define AGG_SYMBOL_SHAPE        G_TOKEN_LAST + 4
 #define AGG_SYMBOL_AXES         G_TOKEN_LAST + 5
 #define AGG_SYMBOL_GRID         G_TOKEN_LAST + 6
-#define AGG_SYMBOL_MAX          G_TOKEN_LAST + 6
+#define AGG_SYMBOL_BODY         G_TOKEN_LAST + 7
+#define AGG_SYMBOL_MAX          G_TOKEN_LAST + 7
 
 typedef enum
   {
@@ -31,6 +32,7 @@ typedef enum
    AGG_SHAPE_ELLIPSE = 1   /**< generic closed curve */
   } agg_shape_type_t ;
 
+#define AGG_CROWD_BODY_NUMBER_MAX 64
 
 #define AGG_PARSER_PARAMETER_NUMBER_MAX 128
 #define AGG_PARSER_PARAMETER_RESERVED_S   0
@@ -132,8 +134,11 @@ struct _agg_distribution_t {
 
 typedef enum
   {
-   AGG_GRID_LINEAR    = 0,
-   AGG_GRID_SPHERICAL = 1
+   AGG_GRID_NONE     = 0,
+   AGG_GRID_LINEAR    = 1,
+   AGG_GRID_SPHERICAL = 2,
+   AGG_GRID_TUBE      = 3,
+   AGG_GRID_CONE      = 4
   } agg_grid_topology_t ;
 
 typedef struct _agg_grid_t agg_grid_t ;
@@ -170,6 +175,17 @@ struct _agg_body_t {
 #define agg_body_distribution(_b,_i)     (((_b)->d[(_i)]))
 #define agg_body_parser(_b)              ((_b)->p)
 #define agg_body_grid(_b)              ((_b)->g)
+
+typedef struct _agg_crowd_t agg_crowd_t ;
+
+struct _agg_crowd_t {
+  agg_body_t *b[AGG_CROWD_BODY_NUMBER_MAX] ;
+  agg_parser_t *p ;
+  gint nb ;
+} ;
+
+#define agg_crowd_body_number(_c) ((_c)->nb)
+#define agg_crowd_body(_c,_i)     ((_c)->b[(_i)])
 
 typedef struct _agg_function_call_t agg_function_call_t ;
 
@@ -257,6 +273,7 @@ gint agg_shape_root_fit(agg_shape_t *s,
 
 gint agg_shape_fit_naca_four(agg_shape_t *s, gint n,
 			     gdouble th, gdouble p, gdouble m,
+			     gboolean sharp,
 			     gint nu, gint nl, gdouble *work) ;
 gint agg_shape_parse(agg_shape_t *s, gchar *type, gdouble *p, gint np) ;
 gint agg_shape_copy(agg_shape_t *dest, agg_shape_t *src) ;
@@ -322,9 +339,9 @@ gint agg_parser_function_add(agg_parser_t *p, gchar *v, gpointer func,
 			     gint na) ;
 
 GScanner *agg_scanner_alloc(void) ;
-gint agg_parser_body_read(gint fid, GScanner *scanner,
-			  agg_parser_t *p, agg_body_t *b) ;
+gint agg_parser_body_read(GScanner *scanner, agg_parser_t *p, agg_body_t *b) ;
 gint agg_parser_constant_parse(gchar *s, guint *v) ;
+gint agg_parser_crowd_read(GScanner *scanner, agg_crowd_t *c) ;
 
 agg_body_t *agg_body_alloc(void) ;
 gint agg_body_distribution_locate_u(agg_body_t *b, gdouble u) ;
@@ -360,10 +377,16 @@ gint agg_grid_square(agg_grid_t *g,
 		     gdouble umin, gdouble umax, gint nu, agg_spacing_t su,
 		     gdouble vmin, gdouble vmax, gint nv, agg_spacing_t sv) ;
 gint agg_grid_spherical(agg_grid_t *g, gint refine) ;
+gint agg_grid_linear(agg_grid_t *g,
+		     gdouble umin, gdouble umax, gint nu, agg_spacing_t su,
+		     gdouble vmin, gdouble vmax, gint nv, agg_spacing_t sv) ;
+gint agg_grid_tube(agg_grid_t *g, gint nu, gint nv) ;
+gint agg_grid_cone(agg_grid_t *g, gint nu, gint nv) ;
 gint agg_grid_element_interpolate(agg_grid_t *g, gint i,
 				  gdouble s, gdouble t,
 				  gdouble *u, gdouble *v) ;
-gint agg_grid_parse(agg_grid_t *g, gchar *name, gdouble *p, gint np) ;
+gint agg_grid_parse(agg_grid_t *g, gchar *name, gchar *expr[],
+		    gdouble *p, gint np) ;
 
 agg_workspace_t *agg_workspace_alloc(gint ns) ;
 

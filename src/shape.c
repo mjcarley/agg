@@ -35,6 +35,7 @@ static const struct {
   {
    {"ellipse",    4, TRUE},
    {"naca",       4, FALSE },
+   {"enaca",      4, FALSE },
    /* {"root",       11, FALSE}, */
    {NULL, 0, FALSE}
   } ;
@@ -572,7 +573,16 @@ gint agg_shape_parse(agg_shape_t *s, gchar *type, gdouble *p, gint np)
 
   if ( i == 1 ) {
     /*naca four*/
-    agg_shape_fit_naca_four(s, (gint)p[0], p[1], p[2], p[3], 64, 64, work) ;
+    agg_shape_fit_naca_four(s, (gint)p[0], p[1], p[2], p[3], FALSE,
+			    64, 64, work) ;
+
+    return 0 ;
+  }
+
+  if ( i == 2 ) {
+    /*naca four, sharp trailing edge*/
+    agg_shape_fit_naca_four(s, (gint)p[0], p[1], p[2], p[3], TRUE,
+			    64, 64, work) ;
 
     return 0 ;
   }

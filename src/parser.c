@@ -39,6 +39,7 @@ static const struct {
    {"shape",        AGG_SYMBOL_SHAPE       ,},
    {"axes",         AGG_SYMBOL_AXES        ,},
    {"grid",         AGG_SYMBOL_GRID        ,},
+   {"body",         AGG_SYMBOL_BODY        ,},
    {NULL, 0}
   } ;
 
@@ -89,9 +90,8 @@ static gboolean string_is_numeric(gchar *s)
 
 /** 
  *
- * Allocate an ::agg_parser_t used for evaluation of parametric expressions
- *
- * 
+ * Allocate an ::agg_parser_t used for evaluation of parametric
+ * expressions
  * 
  * @return a newly allocated ::agg_parser_t
  */
@@ -196,9 +196,9 @@ gint agg_parser_variable_add(agg_parser_t *p, gchar *v, gdouble x)
     }
   }
 
-  vars[i].type    = TE_VARIABLE ;
-  p->values[i]    = x ;
-  p->isexpr[i]    = FALSE ;
+  vars[i].type = TE_VARIABLE ;
+  p->values[i] = x ;
+  p->isexpr[i] = FALSE ;
 
   if ( incn ) {
     vars[i].address = &(p->values[p->nvars]) ;
@@ -228,7 +228,7 @@ gint agg_parser_expression_add(agg_parser_t *p, gchar *v, gchar *w)
     }
   }
   
-  vars[i].type    = TE_VARIABLE ;
+  vars[i].type = TE_VARIABLE ;
 
   if ( incn ) {
     vars[i].name    = g_strdup(v) ;
@@ -728,17 +728,8 @@ static guint parse_grid(GScanner *scanner,
   symbol = scan_arguments(scanner, p, expr, param, &nparam) ;
   if ( symbol != G_TOKEN_NONE ) return G_TOKEN_ERROR ;
 
-  if ( agg_grid_parse(g, gname, param, nparam) != 0 )
+  if ( agg_grid_parse(g, gname, expr, param, nparam) != 0 )
     return G_TOKEN_ERROR ;
-  
-  /* fprintf(stderr, "parameters:") ; */
-  /* for ( i = 0 ; i < nparam ; i ++ ) { */
-  /*   if ( expr[i] == NULL )  */
-  /*     fprintf(stderr, " %lg", param[i]) ; */
-  /*   else */
-  /*     fprintf(stderr, " %s", expr[i]) ; */
-  /* } */
-  /* fprintf(stderr, "\n") ; */
   
   return G_TOKEN_NONE ;
 }
@@ -823,7 +814,6 @@ static gint scan_grid(GScanner *scanner,
 /** 
  * Read a body (a collection of distributions) from file
  * 
- * @param fid file identifier for input;
  * @param scanner lexical scanner;
  * @param p an ::agg_parser_t for evaluation of parametric variables;
  * @param b on exit contains the body information.
@@ -831,8 +821,7 @@ static gint scan_grid(GScanner *scanner,
  * @return 0 on success.
  */
 
-gint agg_parser_body_read(gint fid, GScanner *scanner,
-			  agg_parser_t *p, agg_body_t *b)
+gint agg_parser_body_read(GScanner *scanner, agg_parser_t *p, agg_body_t *b)
 
 {
   guint token ;
@@ -857,6 +846,7 @@ gint agg_parser_body_read(gint fid, GScanner *scanner,
     g_scanner_peek_next_token (scanner);
   } while ( token == G_TOKEN_NONE &&
 	    scanner->next_token != G_TOKEN_EOF &&
+	    scanner->next_token != G_TOKEN_RIGHT_CURLY &&
 	    scanner->next_token != G_TOKEN_ERROR ) ;
   
   if ( token == G_TOKEN_ERROR ) {
@@ -1007,5 +997,115 @@ gint agg_local_transform_set_expression(agg_local_transform_t *t,
   
   return 0 ;
 }
+
+static guint scan_body(GScanner *scanner, agg_parser_t *p, agg_body_t *b)
+
+{
+  guint symbol;
+  gchar v[128], *expr[32] ;
+  gdouble param[32] = {0} ;
+  gint nparam ;
+  
+  fprintf(stderr, "scanning body: ") ;
+
+  /*need the global data set first*/
+  if ( !agg_parser_global_set(p) ) return G_TOKEN_ERROR ;
+  
+  symbol = scan_arguments(scanner, p, expr, param, &nparam) ;
+  if ( symbol != G_TOKEN_NONE ) return G_TOKEN_ERROR ;
+
+  /*distribution name*/
+  if ( expr[0] == NULL ) return G_TOKEN_ERROR ;
+  sprintf(v, "%s", expr[0]) ;
+  fprintf(stderr, "%s\n", v) ;
+
+  /*curly brackets for the block information*/
+  if ( scanner_read(scanner) != G_TOKEN_LEFT_CURLY ) return G_TOKEN_ERROR ;
+
+  /* do { */
+    agg_parser_body_read(scanner, p, b) ;
+
+    g_scanner_peek_next_token(scanner) ;
+  /* } while ( symbol != G_TOKEN_ERROR && */
+  /* 	    symbol != G_TOKEN_EOF && */
+  /* 	    scanner->next_token != G_TOKEN_RIGHT_CURLY ) ; */
+
+  if ( symbol == G_TOKEN_ERROR || symbol == G_TOKEN_EOF ) return symbol ;
+  
+  if ( scanner->next_token == G_TOKEN_RIGHT_CURLY ) 
+    g_scanner_get_next_token(scanner) ;
+
+  return G_TOKEN_NONE ;
+}
+
+gint agg_parser_crowd_read(GScanner *scanner, agg_crowd_t *c)
+
+{
+  guint token ;
+  gint body, i ;
+  agg_parser_t *p ;
+  agg_body_t *b ;
+  
+  body = -1 ;
+
+  for ( i = 0 ; i < AGG_CROWD_BODY_NUMBER_MAX ; i ++ ) c->b[i] = NULL ;
+  c->nb = 0 ;
+  
+  p = c->p ;
+  do {
+    token = next_block(scanner, p);
+    switch ( token ) {
+    case AGG_SYMBOL_GLOBAL:
+      token = scan_global(scanner, p) ;
+      break ;
+    case AGG_SYMBOL_BODY:
+      if ( body != -1 ) {
+	fprintf(stderr,
+		"%s: body cannot be defined inside another body "
+		"line %d\n", __FUNCTION__, g_scanner_cur_line(scanner)) ;
+	exit(1) ;
+      }
+      body = c->nb ;
+      c->b[body] = b = agg_body_alloc() ;
+      token = scan_body(scanner, p, b) ;
+      c->nb ++ ;
+      body = -1 ;
+      break ;
+    case AGG_SYMBOL_DISTRIBUTION:
+      if ( body == -1 ) {
+	fprintf(stderr,
+		"line %d: cannot add distribution without defining body\n",
+		g_scanner_cur_line(scanner)) ;
+	exit(1) ;
+      }
+      break ;
+    case AGG_SYMBOL_GRID:
+      if ( body == -1 ) {
+	fprintf(stderr, "line %d: cannot add grid without defining body\n",
+		g_scanner_cur_line(scanner)) ;
+	exit(1) ;
+      }
+      /* token = scan_grid(scanner, p, b) ; */
+      break ;
+    default:
+      token = G_TOKEN_ERROR ;
+      break ;
+    }
+  
+    g_scanner_peek_next_token (scanner);
+  } while ( token == G_TOKEN_NONE &&
+	    scanner->next_token != G_TOKEN_EOF &&
+	    scanner->next_token != G_TOKEN_ERROR ) ;
+  
+  if ( token == G_TOKEN_ERROR ) {
+    fprintf(stderr, "parse error at line %d, character %d\n",
+	    g_scanner_cur_line(scanner),
+	    g_scanner_cur_position(scanner)) ;
+    return 1 ;
+  }
+
+  return 0 ;
+}
+
 
 /* @} */

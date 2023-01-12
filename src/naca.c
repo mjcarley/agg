@@ -57,27 +57,43 @@ gdouble agg_naca_four(gdouble t, gdouble p, gdouble m, gdouble x)
 
 gint agg_shape_fit_naca_four(agg_shape_t *s, gint n,
 			     gdouble th, gdouble p, gdouble m,
+			     gboolean sharp,
 			     gint nu, gint nl, gdouble *work)
 
 
 {
-  gdouble *xu, *yu, *xl, *yl, t ;
+  gdouble *xu, *yu, *xl, *yl, t, dy, y, xe ;
   gint i ;
   
   xu = work ; yu = &(xu[nu]) ;
   xl = &(yu[nu]) ; yl = &(xl[nl]) ;
 
+  /*trailing edge constants from NASA TM4741, for extended trailing edge*/
+  y = 0.002 ; dy = 0.234 ; xe = 1.0 + y/dy ;
+  
   for ( i = 0 ; i < nu ; i ++ ) {
     t = 0.5*M_PI - 0.5*M_PI*i/(nu-1) ;
     xu[i] =  cos(t) ; yu[i] = agg_naca_four(th, p, m,  xu[i]) ;
   }
-  i = 0 ;
+  if ( sharp ) {
+    xu[nu-1] = xe ; yu[nu-1] = 0.0 ;
+    for ( i = 0 ; i < nu ; i ++ ) {
+      xu[i] /= xe ;
+    }
+  }
+  
   for ( i = 0 ; i < nl ; i ++ ) {
     t = M_PI - 0.5*M_PI*i/(nl-1) ;
     xl[i] = -cos(t) ; yl[i] = agg_naca_four(th, p, m, -xl[i]) ;
   }
   xl[nl-1] = 0 ; yl[i] = agg_naca_four(th, p, m, -xl[i]) ;
-  
+  if ( sharp ) {
+    xl[0] = xe ; yl[0] = 0.0 ;
+    for ( i = 0 ; i < nl ; i ++ ) {
+      xl[i] /= xe ;
+    }
+  }
+
   agg_shape_fit(s, xu, yu, nu, xl, yl, nl,
 		0.5, 1.0, yu[nu-1], n, TRUE, &(yl[nl])) ;
 

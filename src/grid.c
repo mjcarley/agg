@@ -37,9 +37,10 @@ agg_grid_t *agg_grid_alloc(gint np, gint nt)
   g->tri = (gint *)g_malloc0(3*nt*sizeof(gint)) ;
   g->uv  = (gdouble *)g_malloc0(2*np*sizeof(gdouble)) ;
 
-  g->npmax = np ;
-  g->ntmax = nt ;
-  g->invert = FALSE ;
+  agg_grid_point_number_max(g) = np ;
+  agg_grid_triangle_number_max(g) = nt ;
+  agg_grid_invert(g) = FALSE ;
+  agg_grid_topology(g) = AGG_GRID_NONE ;
   
   return g ;
 }
@@ -96,320 +97,284 @@ gint agg_grid_square(agg_grid_t *g,
   return 0 ;
 }
 
-static gint split_index(gint i, gint j, gint n)
+gint agg_grid_linear(agg_grid_t *g,
+		     gdouble umin, gdouble umax, gint nu, agg_spacing_t su,
+		     gdouble vmin, gdouble vmax, gint nv, agg_spacing_t sv)
 
 {
-  if ( i > j ) return i*n + j ;
-
-  return j*n + i ;
-}
-
-static void sphere_point(gdouble u, gdouble v, gdouble *x)
-
-{
-  gdouble sgn ;
-  sgn = SIGN(v) ;
-
-  v = fabs(v) ;
-  x[0] = 2.0*sqrt(u)*sqrt(1.0 - u)*(v-0.5) ;
-  x[1] = sgn*2.0*sqrt(u)*sqrt(1.0-u)*sqrt(v)*sqrt(1.0-v) ;
-  x[2] = u ;
+  gint i, j, np, nt, *tri ;
   
-  return ;
-}
+  agg_grid_topology(g) = AGG_GRID_LINEAR ;
+  agg_grid_point_number(g) = np = 0 ;
 
-static void sphere_uv(gdouble *xi, gdouble *u, gdouble *v)
-
-{
-  gdouble r, x[3] ;
-  
-  /*scale radius to shift back to sphere surface*/
-  r = sqrt((xi[0] - 0.0)*(xi[0] - 0.0) +
-	   (xi[1] - 0.0)*(xi[1] - 0.0) +
-	   (xi[2] - 0.5)*(xi[2] - 0.5)) ;
-
-  x[0] = 0.0 + (xi[0] - 0.0)*0.5/r ;
-  x[1] = 0.0 + (xi[1] - 0.0)*0.5/r ;
-  x[2] = 0.5 + (xi[2] - 0.5)*0.5/r ;
-
-  /*find (u,v) for x*/
-  *u = x[2] ;
-  if ( (*u) == 0.0 || (*u) == 1.0 ) {
-    *v = 0.0 ; return ;
+  for ( i = 0 ; i < nu ; i ++ ) {
+    for ( j = 0 ; j < nv ; j ++ ) {
+      agg_grid_point_u(g, np) = agg_spacing_eval(umin, umax, nu, su, i) ;
+      agg_grid_point_v(g, np) = agg_spacing_eval(vmin, vmax, nv, sv, j) ;
+      np ++ ;
+    }
   }
-  *v = x[0]/2.0/sqrt(*u)/sqrt(1.0-*u) + 0.5 ;
-  if ( (*v) > 1.0 && (*v) < 1.0 + 1e-12 ) (*v) = 1.0 ;
-  
-  if ( x[1] < 0 ) *v = -(*v) ;
 
-  g_assert(!isnan(*u)) ;
-  g_assert((*u) >=  0.0) ;
-  g_assert((*u) <=  1.0) ;
-  g_assert(!isnan(*v)) ;
-  g_assert((*v) >= -1.0) ;
-  g_assert((*v) <=  1.0) ;
+  agg_grid_point_number(g) = np ;
+  agg_grid_triangle_number(g) = nt = 0 ;
+
+  for ( i = 0 ; i < nu - 1 ; i ++ ) {
+    for ( j = 0 ; j < nv - 1 ; j ++ ) {
+      tri = agg_grid_triangle(g, nt) ;
+      tri[0] = (i+0)*nv + j + 0 ;
+      tri[1] = (i+1)*nv + j + 0 ;
+      tri[2] = (i+0)*nv + j + 1 ;
+      nt ++ ;
+      tri = agg_grid_triangle(g, nt) ;
+      tri[0] = (i+1)*nv + j + 0 ;
+      tri[1] = (i+1)*nv + j + 1 ;
+      tri[2] = (i+0)*nv + j + 1 ;
+      nt ++ ;
+    }
+  }
+
+  agg_grid_triangle_number(g) = nt ;
   
-  return ;
+  return 0 ;
 }
 
-static void bisect_sphere_edge(gdouble *uv0, gdouble *uv1,
+gint agg_grid_tube(agg_grid_t *g, gint nu, gint nv)
+
+{
+  gint np, nt, i, j, *tri ;
+  gdouble t[256] ;
+
+  g_assert(nv < 256) ;
+  
+  agg_grid_topology(g) = AGG_GRID_TUBE ;
+  agg_grid_point_number(g) = np = 0 ;
+
+  for ( i = 0 ; i < nv ; i ++ ) {
+    t[i] = 2.0*M_PI*i/(nv-1) ;
+    if ( t[i] > M_PI ) t[i] = (1.0 + cos(t[i]))*0.5 ;
+    else t[i] = -(1.0 + cos(t[i]))*0.5 ;
+  }
+  
+  for ( i = 0 ; i < nu ; i ++ ) {
+    for ( j = 0 ; j < nv ; j ++ ) {
+      agg_grid_point_u(g, np) = (gdouble)i/(nu-1) ;
+      agg_grid_point_v(g, np) = t[j] ;
+      np ++ ;
+    }
+  }
+
+  agg_grid_point_number(g) = np ;
+  agg_grid_triangle_number(g) = nt = 0 ;
+
+  for ( i = 0 ; i < nu - 1 ; i ++ ) {
+    for ( j = 0 ; j < nv - 1 ; j ++ ) {
+      tri = agg_grid_triangle(g, nt) ;
+      tri[0] = (i+0)*nv + j + 0 ;
+      tri[1] = (i+1)*nv + j + 0 ;
+      tri[2] = (i+0)*nv + j + 1 ;
+      nt ++ ;
+      tri = agg_grid_triangle(g, nt) ;
+      tri[0] = (i+1)*nv + j + 0 ;
+      tri[1] = (i+1)*nv + j + 1 ;
+      tri[2] = (i+0)*nv + j + 1 ;
+      nt ++ ;
+    }
+  }
+
+  agg_grid_triangle_number(g) = nt ;
+  
+  return 0 ;
+}
+
+gint agg_grid_cone(agg_grid_t *g, gint nu, gint nv)
+
+{
+  gint np, nt, i, j, *tri, i1, i2 ;
+  gdouble t[256] ;
+
+  g_assert(nv < 256) ;
+  
+  agg_grid_topology(g) = AGG_GRID_CONE ;
+  agg_grid_point_number(g) = np = 0 ;
+
+  for ( i = 0 ; i < nv ; i ++ ) {
+    t[i] = 2.0*M_PI*i/(nv-1) ;
+    if ( t[i] > M_PI ) t[i] = (1.0 + cos(t[i]))*0.5 ;
+    else t[i] = -(1.0 + cos(t[i]))*0.5 ;
+  }
+
+  if ( !(g->invert) ) {
+    for ( i = 0 ; i < nu ; i ++ ) {
+      for ( j = 0 ; j < nv ; j ++ ) {
+	agg_grid_point_u(g, np) = (gdouble)i/(nu-1) ;
+	agg_grid_point_v(g, np) = t[j] ;
+	np ++ ;
+      }
+    }
+  } else {
+    for ( i = 0 ; i < nu ; i ++ ) {
+      for ( j = 0 ; j < nv ; j ++ ) {
+	agg_grid_point_u(g, np) = (gdouble)i/(nu-1) ;
+	  /* (nu-1-i)/(nu-1) ; */
+	agg_grid_point_v(g, np) = t[nv-1-j] ;
+	np ++ ;
+      }
+    }
+  }
+
+  agg_grid_point_number(g) = np ;
+
+  i1 = 1 ; i2 = 2 ;
+  /* if ( agg_grid_invert(g) ) { i2 = 1 ; i1 = 2 ; } */
+  agg_grid_triangle_number(g) = nt = 0 ;
+
+  i = 0 ;
+  for ( j = 0 ; j < nv - 1 ; j ++ ) {
+    /* tri = agg_grid_triangle(g, nt) ; */
+    /* tri[0] = (i+0)*nv + j + 0 ; */
+    /* tri[1] = (i+1)*nv + j + 0 ; */
+    /* tri[2] = (i+0)*nv + j + 1 ; */
+    /* nt ++ ; */
+    tri = agg_grid_triangle(g, nt) ;
+    tri[ 0] = (i+1)*nv + j + 0 ;
+    tri[i1] = (i+1)*nv + j + 1 ;
+    tri[i2] = (i+0)*nv + j + 1 ;
+    nt ++ ;
+  }
+
+  for ( i = 1 ; i < nu - 1 ; i ++ ) {
+    for ( j = 0 ; j < nv - 1 ; j ++ ) {
+      tri = agg_grid_triangle(g, nt) ;
+      tri[ 0] = (i+0)*nv + j + 0 ;
+      tri[i1] = (i+1)*nv + j + 0 ;
+      tri[i2] = (i+0)*nv + j + 1 ;
+      nt ++ ;
+      tri = agg_grid_triangle(g, nt) ;
+      tri[ 0] = (i+1)*nv + j + 0 ;
+      tri[i1] = (i+1)*nv + j + 1 ;
+      tri[i2] = (i+0)*nv + j + 1 ;
+      nt ++ ;
+    }
+  }
+
+  agg_grid_triangle_number(g) = nt ;
+  
+  return 0 ;
+}
+
+
+static gint interp_grid_linear(agg_grid_t *g, gint i,
+			       gdouble s, gdouble t,
 			       gdouble *u, gdouble *v)
 
 {
-  gdouble x0[3], x1[3] ;
-
-  /*find points on sphere and bisect*/
-  sphere_point(uv0[0], uv0[1], x0) ;
-  sphere_point(uv1[0], uv1[1], x1) ;
-
-  x0[0] = 0.5*(x0[0] + x1[0]) ;
-  x0[1] = 0.5*(x0[1] + x1[1]) ;
-  x0[2] = 0.5*(x0[2] + x1[2]) ;
-
-  sphere_uv(x0, u, v) ;
-    
-  return ;
-}
-
-static void split_edge(agg_grid_t *g, gint np, gint i, gint j,
-		       gint *split, gint *ns)
-
-{
-  gint idx ;
-  gdouble u, v ;
-  
-  g_assert(i != j) ;
-
-  if ( i < j ) return ;
-
-  idx = split_index(i, j, np) ;
-
-  split[2*(*ns)+0] = idx ;
-  split[2*(*ns)+1] = agg_grid_point_number(g) ;
-  (*ns) ++ ;
-  
-  bisect_sphere_edge(&(agg_grid_point_u(g, i)),
-  		     &(agg_grid_point_u(g, j)), &u, &v) ;
-  idx = agg_grid_point_number(g) ;
-  
-  agg_grid_point_u(g, idx) = u ;
-  agg_grid_point_v(g, idx) = v ;
-  agg_grid_point_number(g) ++ ;
-  
-  return ;
-}
-
-/* static gint compare_int(gconstpointer a, gconstpointer b) */
-
-/* { */
-/*   gint i, j ; */
-
-/*   i = *((gint *)a) ; j = *((gint *)b) ; */
-
-/*   if ( i < j ) return -1 ; */
-/*   if ( i > j ) return  1 ; */
-
-/*   /\* g_assert_not_reached() ; *\/ */
-  
-/*   return 0 ; */
-/* } */
-
-static gint search_split(gint *split, gint ns, gint idx)
-
-{
-  gint i ;
-
-  for ( i = 0 ; i < ns ; i ++ )
-    if ( split[2*i+0] == idx ) return split[2*i+1] ;
-  
-  g_assert_not_reached() ;
-}
-
-static void split_triangle(agg_grid_t *g, gint i, gint np, gint *split, gint ns)
-
-{
-  gint *tri, idx, new[3], *tnew ;
+  gint *tri ;
+  gdouble L[3], ut[3], vt[3] ;
 
   tri = agg_grid_triangle(g, i) ;
-  idx = split_index(tri[0], tri[1], np) ;
-  new[0] = search_split(split, ns, idx) ;
-  idx = split_index(tri[1], tri[2], np) ;
-  new[1] = search_split(split, ns, idx) ;
-  idx = split_index(tri[2], tri[0], np) ;
-  new[2] = search_split(split, ns, idx) ;
 
-  tnew = agg_grid_triangle(g, agg_grid_triangle_number(g)) ;
-  tnew[0] = new[0] ; tnew[1] = tri[1] ; tnew[2] = new[1] ;
-  agg_grid_triangle_number(g) ++ ;
+  L[0] = 1.0 - s - t ; L[1] = s ; L[2] = t ;
+  ut[0] = agg_grid_point_u(g, tri[0]) ;
+  ut[1] = agg_grid_point_u(g, tri[1]) ;
+  ut[2] = agg_grid_point_u(g, tri[2]) ;
+  vt[0] = agg_grid_point_v(g, tri[0]) ;
+  vt[1] = agg_grid_point_v(g, tri[1]) ;
+  vt[2] = agg_grid_point_v(g, tri[2]) ;
 
-  tnew = agg_grid_triangle(g, agg_grid_triangle_number(g)) ;
-  tnew[0] = new[1] ; tnew[1] = tri[2] ; tnew[2] = new[2] ;
-  agg_grid_triangle_number(g) ++ ;
+  *u = L[0]*ut[0] + L[1]*ut[1] + L[2]*ut[2] ;
+  *v = L[0]*vt[0] + L[1]*vt[1] + L[2]*vt[2] ;
 
-  tnew = agg_grid_triangle(g, agg_grid_triangle_number(g)) ;
-  tnew[0] = new[2] ; tnew[1] = tri[0] ; tnew[2] = new[0] ;
-  agg_grid_triangle_number(g) ++ ;
-
-  tri[0] = new[0] ; tri[1] = new[1] ; tri[2] = new[2] ;
-  
-  return ;
-}
-
-#if 0
-static void check_split(gint *split, gint ns)
-
-{
-  gint i, j ;
-
-  for ( i = 0 ; i < ns ; i ++ ) {
-    for ( j = i+1 ; j < ns ; j ++ ) {
-      g_assert(split[2*i+0] != split[2*j+0]) ;
-    }
-  }
-  
-  return ;
-}
-#endif
-
-gint agg_grid_spherical(agg_grid_t *g, gint refine)
-
-{
-  gint i, j, *tri, nt, split[65536], ns, np, i1, i2 ;
-  gint faces[] = {0,  11,  5,
-		  0 ,  5,  1,
-		  0 ,  1,  7,
-		  0 ,  7, 10,
-		  0 , 10, 11,
-		  1 ,  5,  9,
-		  5 , 11,  4,
-		  11, 10,  2,
-		  10,  7,  6,
-		  7 ,  1,  8,
-		  3 ,  9,  4,
-		  3 ,  4,  2,
-		  3 ,  2,  6,
-		  3 ,  6,  8,
-		  3 ,  8,  9,
-		  4 ,  9,  5,
-		  2 ,  4, 11,
-		  6 ,  2, 10,
-		  8 ,  6,  7,
-		  9 ,  8,  1} ;
-  gdouble uv[] = {5.0000000000000000e-01,  2.3713444394043320e-01,
-		  5.0000000000000000e-01,  7.6286555605956674e-01,
-		  5.0000000000000000e-01, -2.3713444394043320e-01,
-		  5.0000000000000000e-01, -7.6286555605956674e-01,
-		  9.2532540417601994e-01, -5.0000000000000000e-01,
-		  9.2532540417601994e-01,  5.0000000000000000e-01,
-		  7.4674595823980006e-02, -5.0000000000000000e-01,
-		  7.4674595823980006e-02,  5.0000000000000000e-01,
-		  2.3713444394043320e-01,  1.0000000000000000e+00,
-		  7.6286555605956674e-01,  1.0000000000000000e+00,
-		  2.3713444394043320e-01, -1.1102230246251565e-16,
-		  7.6286555605956674e-01,  0.0000000000000000e+00} ;
-
-  agg_grid_topology(g) = AGG_GRID_SPHERICAL ;
-  agg_grid_point_number(g) = 0 ;
-  for ( i = 0 ; i < 12 ; i ++ ) {
-    agg_grid_point_u(g, i) = uv[2*i+0] ;
-    agg_grid_point_v(g, i) = uv[2*i+1] ;
-    if ( agg_grid_point_number(g) >= agg_grid_point_number_max(g) ) {
-      fprintf(stderr,
-	      "%s: not enough points allocated in grid (%d)\n",
-	      __FUNCTION__,
-	      agg_grid_point_number_max(g)) ;
-      return 1 ;
-    }
-    agg_grid_point_number(g) ++ ;
-  }
-
-  i1 = 1 ; i2 = 2 ;
-  if ( agg_grid_invert(g) ) { i2 = 1 ; i1 = 2 ; }
-  agg_grid_triangle_number(g) = 0 ;
-  for ( i = 0 ; i < 20 ; i ++ ) {
-    tri = agg_grid_triangle(g, agg_grid_triangle_number(g)) ;
-    tri[ 0] = faces[3*i+0] ;
-    tri[i1] = faces[3*i+1] ;
-    tri[i2] = faces[3*i+2] ;
-    if ( agg_grid_triangle_number(g) >= agg_grid_triangle_number_max(g) ) {
-      fprintf(stderr,
-	      "%s: not enough triangles allocated in grid (%d)\n",
-	      __FUNCTION__,
-	      agg_grid_triangle_number_max(g)) ;
-      return 1 ;
-    }
-    agg_grid_triangle_number(g) ++ ;
-  }
-
-  for ( i = 0 ; i < refine ; i ++ ) {
-    nt = agg_grid_triangle_number(g) ;
-    np = agg_grid_point_number(g) ;
-    ns = 0 ;
-    for ( j = 0 ; j < nt ; j ++ ) {
-      /*split edges and index new points*/
-      if ( agg_grid_point_number(g)+3 >= agg_grid_point_number_max(g) ) {
-	fprintf(stderr,
-		"%s: not enough points allocated in grid (%d)\n",
-		__FUNCTION__,
-		agg_grid_point_number_max(g)) ;
-	return 1 ;
-      }
-      tri = agg_grid_triangle(g, j) ;
-      split_edge(g, np, tri[0], tri[1], split, &ns) ;
-      split_edge(g, np, tri[1], tri[2], split, &ns) ;
-      split_edge(g, np, tri[2], tri[0], split, &ns) ;
-    }
-    /*sort the indices for searching*/
-    /* qsort(split, ns, 2*sizeof(gint), compare_int) ; */
-    /* check_split(split, ns) ; */
-    /*split the triangles and insert into g*/
-    for ( j = 0 ; j < nt ; j ++ ) {
-      if ( agg_grid_triangle_number(g)+3 >=
-	   agg_grid_triangle_number_max(g) ) {
-	fprintf(stderr,
-		"%s: not enough triangles allocated in grid (%d)\n",
-		__FUNCTION__,
-		agg_grid_triangle_number_max(g)) ;
-	return 1 ;
-      }
-      split_triangle(g, j, np, split, ns) ;
-    }
-  }
-  
   return 0 ;
 }
 
-static gint interp_grid_spherical(agg_grid_t *g, gint i,
-				  gdouble s, gdouble t,
-				  gdouble *u, gdouble *v)
+static gdouble linear_to_angle(gdouble x)
+
+{
+  gdouble t ;
+  /* gdouble xc ; */
+
+  /* if ( x <= -1.0 ) return 0 ; */
+  /* if ( x >=  1.0 ) return 2.0*M_PI ; */
+  
+  t = acos(2.0*fabs(x) - 1.0) ;
+  if ( x > 0 ) t = 2.0*M_PI - t ;
+
+  /* if ( t > M_PI ) xc = (1.0 + cos(t))*0.5 ; */
+  /* else xc = -(1.0 + cos(t))*0.5 ; */
+
+  return t ;
+}
+
+static gint interp_grid_tube(agg_grid_t *g, gint i,
+			     gdouble s, gdouble t,
+			     gdouble *u, gdouble *v)
 
 {
   gint *tri ;
-  gdouble x[9], L[3] ;
-  
+  gdouble L[3], ut[3], vt[3] ;
+
   tri = agg_grid_triangle(g, i) ;
 
-  sphere_point(agg_grid_point_u(g, tri[0]),
-	       agg_grid_point_v(g, tri[0]),
-	       &(x[0])) ;
-  sphere_point(agg_grid_point_u(g, tri[1]),
-	       agg_grid_point_v(g, tri[1]),
-	       &(x[3])) ;
-  sphere_point(agg_grid_point_u(g, tri[2]),
-	       agg_grid_point_v(g, tri[2]),
-	       &(x[6])) ;
-
   L[0] = 1.0 - s - t ; L[1] = s ; L[2] = t ;
+  /*axial coordinate interpolates linearly*/
+  ut[0] = agg_grid_point_u(g, tri[0]) ;
+  ut[1] = agg_grid_point_u(g, tri[1]) ;
+  ut[2] = agg_grid_point_u(g, tri[2]) ;
+  *u = L[0]*ut[0] + L[1]*ut[1] + L[2]*ut[2] ;
 
-  x[0] = L[0]*x[0] + L[1]*x[3] + L[2]*x[6] ;
-  x[1] = L[0]*x[1] + L[1]*x[4] + L[2]*x[7] ;
-  x[2] = L[0]*x[2] + L[1]*x[5] + L[2]*x[8] ;
+  /*circumferential coordinate needs assistance*/
+  vt[0] = agg_grid_point_v(g, tri[0]) ;
+  vt[1] = agg_grid_point_v(g, tri[1]) ;
+  vt[2] = agg_grid_point_v(g, tri[2]) ;
 
-  sphere_uv(x, u, v) ;
+  vt[0] = linear_to_angle(vt[0]) ;
+  vt[1] = linear_to_angle(vt[1]) ;
+  vt[2] = linear_to_angle(vt[2]) ;
+  
+  *v = L[0]*vt[0] + L[1]*vt[1] + L[2]*vt[2] ;
+
+  /*v is an angle which needs reconverting to linear coordinate*/
+  if ( *v > M_PI ) *v = 0.5*(1.0 + cos(*v)) ;
+  else *v = -0.5*(1.0 + cos(*v)) ;
   
   return 0 ;
 }
+
+static gint interp_grid_cone(agg_grid_t *g, gint i,
+			     gdouble s, gdouble t,
+			     gdouble *u, gdouble *v)
+
+{
+  gint *tri ;
+  gdouble L[3], ut[3], vt[3] ;
+
+  tri = agg_grid_triangle(g, i) ;
+
+  L[0] = 1.0 - s - t ; L[1] = s ; L[2] = t ;
+  /*axial coordinate interpolates linearly*/
+  ut[0] = agg_grid_point_u(g, tri[0]) ;
+  ut[1] = agg_grid_point_u(g, tri[1]) ;
+  ut[2] = agg_grid_point_u(g, tri[2]) ;
+  *u = L[0]*ut[0] + L[1]*ut[1] + L[2]*ut[2] ;
+
+  /*circumferential coordinate needs assistance*/
+  vt[0] = agg_grid_point_v(g, tri[0]) ;
+  vt[1] = agg_grid_point_v(g, tri[1]) ;
+  vt[2] = agg_grid_point_v(g, tri[2]) ;
+
+  vt[0] = linear_to_angle(vt[0]) ;
+  vt[1] = linear_to_angle(vt[1]) ;
+  vt[2] = linear_to_angle(vt[2]) ;
   
+  *v = L[0]*vt[0] + L[1]*vt[1] + L[2]*vt[2] ;
+
+  /*v is an angle which needs reconverting to linear coordinate*/
+  if ( *v > M_PI ) *v = 0.5*(1.0 + cos(*v)) ;
+  else *v = -0.5*(1.0 + cos(*v)) ;
+  
+  return 0 ;
+}
+
 gint agg_grid_element_interpolate(agg_grid_t *g, gint i,
 				  gdouble s, gdouble t,
 				  gdouble *u, gdouble *v)
@@ -422,26 +387,38 @@ gint agg_grid_element_interpolate(agg_grid_t *g, gint i,
 	    __FUNCTION__, agg_grid_topology(g)) ;
     break ;
   case AGG_GRID_LINEAR:
-    g_assert_not_reached() ;
+    return interp_grid_linear(g, i, s, t, u, v) ;
     break ;
   case AGG_GRID_SPHERICAL:
-    return interp_grid_spherical(g, i, s, t, u, v) ;
+    return agg_interp_grid_spherical(g, i, s, t, u, v) ;
+    break ;
+  case AGG_GRID_TUBE:
+    return interp_grid_tube(g, i, s, t, u, v) ;
+  case AGG_GRID_CONE:
+    return interp_grid_cone(g, i, s, t, u, v) ;
     break ;
   }
   
   return 0 ;
 }
 
-static gint set_grid_spherical(agg_grid_t *g, gdouble *p, gint np)
+static gint set_grid_spherical(agg_grid_t *g, gchar *expr[], gdouble *p,
+			       gint np)
 
 {
   gint refine ;
+
   if ( np != 1 ) {
     fprintf(stderr,
 	    "spherical grid requires one argument (refinement level)\n") ;
     return 1 ;
   }
 
+  if ( expr[0] != NULL ) {
+    fprintf(stderr, "refinement level must be a numerical constant\n") ;
+    return 1 ;
+  }
+  
   if ( p[0] != round(p[0]) || p[0] < 0 ) {
     fprintf(stderr, "refinement level must be non-negative integer\n") ;
     return 1 ;
@@ -450,18 +427,172 @@ static gint set_grid_spherical(agg_grid_t *g, gdouble *p, gint np)
   refine = (gint)p[0] ;
 
   return agg_grid_spherical(g, refine) ;
-  
-  return 0 ;
 }
 
-gint agg_grid_parse(agg_grid_t *g, gchar *name, gdouble *p, gint np)
+static gint set_grid_linear(agg_grid_t *g, gchar *expr[], gdouble *p, gint np)
+
+{
+  gint ns, nt ;
+  agg_spacing_t ss, st ;
+  gdouble smin, smax, tmin, tmax ;
+
+  smin =  0.0 ; smax = 1.0 ;
+  /* tmin =  0.0 ; tmax = 1.0 ; */
+  /* tmin =  -1.0 ; tmax = 0.0 ; */
+  tmin =  -1.0 ; tmax = 1.0 ;
+  
+  if ( np != 4 ) {
+    fprintf(stderr,
+	    "linear grid requires four arguments\n"
+	    "  (# points in s) (distribution in s) "
+	    "(# points in t) (distribution in t)\n"
+	    ) ;
+    return 1 ;
+  }
+
+  if ( expr[0] != NULL ) {
+    fprintf(stderr, "# points in s must be a numerical constant\n") ;
+    return 1 ;
+  }
+
+  if ( p[0] != round(p[0]) || p[0] <= 0 ) {
+    fprintf(stderr, "# points in s must be a positive integer\n") ;
+    return 1 ;
+  }
+
+  if ( expr[2] != NULL ) {
+    fprintf(stderr, "# points in t must be a numerical constant\n") ;
+    return 1 ;
+  }
+  
+  if ( p[2] != round(p[2]) || p[2] <= 0 ) {
+    fprintf(stderr, "# points in t must be a positive integer\n") ;
+    return 1 ;
+  }
+
+  if ( expr[1] == NULL ) {
+    fprintf(stderr, "s spacing must be a string\n") ;
+    return 1 ;
+  }
+  if ( agg_parser_constant_parse(expr[1], &ss) != 0 ) {
+    fprintf(stderr, "cannot parse s spacing %s\n", expr[1]) ;
+    return 1 ;
+  }    
+
+  if ( expr[3] == NULL ) {
+    fprintf(stderr, "t spacing must be a string\n") ;
+    return 1 ;
+  }
+  if ( agg_parser_constant_parse(expr[3], &st) != 0 ) {
+    fprintf(stderr, "cannot parse t spacing %s\n", expr[3]) ;
+    return 1 ;
+  }    
+
+  ns = (gint)p[0] ; nt = (gint)p[2] ;
+  return agg_grid_linear(g,
+			 smin, smax, ns, ss,
+			 tmin, tmax, nt, st) ;
+}
+
+static gint set_grid_tube(agg_grid_t *g, gchar *expr[], gdouble *p, gint np)
+
+{
+  gint ns, nt ;
+  
+  if ( np != 2 ) {
+    fprintf(stderr,
+	    "tubular grid requires two arguments "
+	    "(# points in s) (# points in t)\n") ;
+    return 1 ;
+  }
+
+  if ( expr[0] != NULL ) {
+    fprintf(stderr, "# points in s must be a numerical constant\n") ;
+    return 1 ;
+  }
+
+  if ( p[0] != round(p[0]) || p[0] <= 0 ) {
+    fprintf(stderr, "# points in s must be a positive integer\n") ;
+    return 1 ;
+  }
+
+  if ( expr[1] != NULL ) {
+    fprintf(stderr, "# points in t must be a numerical constant\n") ;
+    return 1 ;
+  }
+  
+  if ( p[1] != round(p[1]) || p[1] <= 0 ) {
+    fprintf(stderr, "# points in t must be a positive integer\n") ;
+    return 1 ;
+  }
+
+  ns = (gint)p[0] ; nt = (gint)p[1] ;
+  return agg_grid_tube(g, ns, nt) ;
+}
+
+static gint set_grid_cone(agg_grid_t *g, gchar *expr[], gdouble *p, gint np)
+
+{
+  gint ns, nt ;
+
+  if ( np != 2 ) {
+    fprintf(stderr,
+	    "conical grid requires two arguments "
+	    "(# points in s) (# points in t)\n") ;
+    return 1 ;
+  }
+
+  if ( expr[0] != NULL ) {
+    fprintf(stderr, "# points in s must be a numerical constant\n") ;
+    return 1 ;
+  }
+
+  if ( p[0] != round(p[0]) || p[0] <= 0 ) {
+    fprintf(stderr, "# points in s must be a positive integer\n") ;
+    return 1 ;
+  }
+
+  if ( expr[1] != NULL ) {
+    fprintf(stderr, "# points in t must be a numerical constant\n") ;
+    return 1 ;
+  }
+  
+  if ( p[1] != round(p[1]) || p[1] <= 0 ) {
+    fprintf(stderr, "# points in t must be a positive integer\n") ;
+    return 1 ;
+  }
+
+  ns = (gint)p[0] ; nt = (gint)p[1] ;
+  return agg_grid_cone(g, ns, nt) ;
+}
+
+gint agg_grid_parse(agg_grid_t *g, gchar *name, gchar *expr[],
+		    gdouble *p, gint np)
 
 {
   if ( strcmp(name, "spherical") == 0 ) {
-    return set_grid_spherical(g, p, np) ;
+    return set_grid_spherical(g, expr, p, np) ;
   }
 
+  if ( strcmp(name, "linear") == 0 ) {
+    return set_grid_linear(g, expr, p, np) ;
+  }
+
+  if ( strcmp(name, "tube") == 0 ) {
+    return set_grid_tube(g, expr, p, np) ;
+  }
+
+  if ( strcmp(name, "cone") == 0 ) {
+    return set_grid_cone(g, expr, p, np) ;
+  }
+  
   if ( strcmp(name, "invert") == 0 ) {
+    if ( agg_grid_topology(g) != AGG_GRID_NONE ) {
+      fprintf(stderr, "%s: set grid inversion before choosing grid topology\n",
+	      __FUNCTION__) ;
+      return 1 ;
+    }
+    
     agg_grid_invert(g) = TRUE ;
 
     return 0 ;

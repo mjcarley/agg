@@ -175,7 +175,7 @@ static void transform_test(void)
   work = (gdouble *)g_malloc0((4*(nu+nl)+2*(nu+nl+1)*(n+1))*
 			      sizeof(gdouble)) ;
 
-  agg_shape_fit_naca_four(s, n, th, p, m, nu, nl, work) ;
+  agg_shape_fit_naca_four(s, n, th, p, m, TRUE, nu, nl, work) ;
 
   for ( t = M_PI ; t > 0.5*M_PI ; t -= 0.5*M_PI/256 ) {
     x[0] = -cos(t) ;
@@ -248,7 +248,7 @@ static void wing_test(void)
     pm[0] = 0 ; pm[1] = 0 ; pm[2] = t*span ;
     agg_local_transform_parse(T, "shift", pm, 3) ;
 
-    agg_shape_fit_naca_four(sh, n, th, p, m, nu, nl, work) ;
+    agg_shape_fit_naca_four(sh, n, th, p, m, TRUE, nu, nl, work) ;
     agg_distribution_add_shape(wing, t, sh) ;
   }
 
@@ -267,9 +267,10 @@ static void wing_test(void)
 static void parser_test(void)
 
 {
-  gint fid = 0, i ;
+  gint fid = 0, i, j, npts, ntri ;
   agg_parser_t *p ;
   agg_body_t *b ;
+  agg_crowd_t c ;
   agg_distribution_t *d ;
   agg_workspace_t *w ;
   agg_mesh_t *m ;
@@ -280,33 +281,50 @@ static void parser_test(void)
 
   w = agg_workspace_alloc(32) ;
   p = agg_parser_alloc() ;
-  b = agg_body_alloc() ;
   scanner = agg_scanner_alloc() ;
   g_scanner_input_file(scanner, fid) ;
 
-  if ( agg_parser_body_read(fid, scanner, p, b) != 0 ) {
-    exit(1) ;
+  c.p = p ;
+
+  agg_parser_crowd_read(scanner, &c) ;
+
+  fprintf(stderr, "%d bod%s in crowd\n",
+	  agg_crowd_body_number(&c),
+	  (agg_crowd_body_number(&c) == 1 ? "y" : "ies")) ;
+
+  npts = ntri = 0 ;
+  for ( i = 0 ; i < agg_crowd_body_number(&c) ; i ++ ) {
+    if ( c.b[i]->g != NULL ) {
+      fprintf(stderr, "  body %d: %d grid points; %d triangles\n", i,
+	      agg_grid_point_number_max(c.b[i]->g),
+	      agg_grid_triangle_number_max(c.b[i]->g)) ;
+      npts += agg_grid_point_number_max(c.b[i]->g) ;
+      ntri += agg_grid_triangle_number_max(c.b[i]->g) ;
+    }
   }
-  agg_parser_expressions_evaluate(p) ;
 
-  /*generate distributions*/
-  agg_body_distributions_list(stderr, b) ;
+  fprintf(stderr, "   total: %d grid points; %d triangles\n", npts, ntri) ;
 
-  for ( i = 0 ; i < agg_body_distribution_number(b) ; i ++ ) {
-    d = agg_body_distribution(b,i) ;
-    agg_distribution_interpolation_weights(d) ;
-  }
-
-  m = agg_mesh_alloc(agg_grid_point_number_max(b->g),
-		     agg_grid_triangle_number_max(b->g),
-		     0, 0, 0) ;
+  agg_parser_expressions_evaluate(c.p) ;
   
-  agg_body_mesh_grid(b, b->g, m, w) ;
+  m = agg_mesh_alloc(npts, ntri, 0, 0, 0) ;
+  for ( i = 0 ; i < agg_crowd_body_number(&c) ; i ++ ) {
+    fprintf(stderr, "meshing body %d\n", i) ;
+    b = agg_crowd_body(&c, i) ;
+    for ( j = 0 ; j < agg_body_distribution_number(b) ; j ++ ) {
+      d = agg_body_distribution(b,j) ;
+      agg_distribution_interpolation_weights(d) ;
+    }
+    if ( b->g != NULL ) agg_body_mesh_grid(b, b->g, m, w) ;
+
+    /* gdouble u, v ; */
+    /* agg_grid_element_interpolate(b->g, 62, 0.5, 0.5, &u, &v) ; */    
+  }
   
   agg_mesh_points_write(stdout, m) ;
   agg_mesh_tri_write(stdout, m) ;
   
-  return ; 
+  return ;
 }
 
 gint main(gint argc, gchar **argv)

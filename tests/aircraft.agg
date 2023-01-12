@@ -48,45 +48,50 @@ global {
 #  shape("ellipse", -1.0, hu, n1, n2)
 #}
 
-distribution ("root", 0.0, 1.0, 8, "linear", "linear", "cosine")
+#distribution ("root", 0.0, 1.0, 8, "linear", "linear", "cosine")
 
-{
+#{
 # syntax: transform("transform", parameters ...)
-  transform("shrink", 0.5, 0, "1.0+0.4*sqrt(t*(1-t))")
-  transform("shift", -0.5, 0, "l1+lr*t")
-  transform("scale", "D")
+#  transform("shrink", 0.5, 0, "1.0+0.4*sqrt(s*(1-s))")
+#  transform("shift", -0.5, 0, "l1+lr*s")
+#  transform("scale", "D")
 ## n1, n2, main height, shoulder breakaway, displacement, height
-  shape("root", 0.5, 0.5,
-    		hu, 0.45, "0.2*sqrt(t*(1-t))", "0.2*sqrt(t*(1-t))",
-		-1, 0.45, "0.2*sqrt(t*(1-t))", "-0.2*sqrt(t*(1-t))",
-		16)
+#  shape("root", 0.5, 0.5,
+#    		hu, 0.45, "0.2*sqrt(s*(1-s))", "0.2*sqrt(s*(1-s))",
+#		-1, 0.45, "0.2*sqrt(s*(1-s))", "-0.2*sqrt(s*(1-s))",
+#		16)
+#}
+
+grid(16384, 32768)
+{
+spherical(3)
 }
 
-#distribution ("rear", 0.0, 1.0, 8, "linear", "linear", "cosine")
+distribution ("rear", 0.1, 0.9, 8, "cosine")
 
-#{
+{
 ## syntax: transform("transform", parameters ...)
-#  transform("shift", -0.5, 0, "l1+lr+l2*t")
-#  transform("scale", "D")
+  transform("shift", -0.5, 0, "l1+lr+l2*(s-0.1)/0.8")
+  transform("scale", "D")
 
-#  shape("ellipse", -1.0, hu, n1, n2)
-#}
+  shape("ellipse", -1.0, 1, n1, n2)
+}
 
-#distribution ("nose", 0.0, 1.0, 16, "cosine", "cosine", "cosine")
-#{
-#  transform("shrink", "0.5", 0, "sqrt(1.0-t^2)")
-#  transform("shift", -0.5, 0, "-t*nlen")
-#  transform("scale", "D") 
-#  shape("ellipse", 1.0, hu, "n1 + (0.5-n1)*t", "n2 + (0.5-n2)*t")
-#}
+distribution ("nose", 0.0, 0.1, 16, "cosine")
+{
+  transform("shrink", "0.5", 0, "sqrt(1.0-(s/0.1)^2)")
+  transform("shift", -0.5, 0, "-(s/0.1)*nlen")
+  transform("scale", "D") 
+  shape("ellipse", 1.0, hu, "n1 + (0.5-n1)*s/0.1", "n2 + (0.5-n2)*s/0.1")
+}
 
-#distribution ("tail", 0.0, 1.0, 8, "cosine", "cosine", "cosine")
-#{
-#  transform("shrink", 0.5, "hu*0.5^n1*0.5^n2", "(1.0-t)")
-#  transform("scale", "D") 
-#  transform("shift", -0.5, 0, "len+t*tlen")
-#  shape("ellipse", 1.0, hu, n1, n2) ;
-#}
+distribution ("tail", 0.9, 1.0, 8, "cosine")
+{
+  transform("shrink", 0.5, "hu*0.5^n1*0.5^n2", "(1.0-(s-0.9)/0.1)")
+  transform("scale", "D") 
+  transform("shift", -0.5, 0, "len+(s-0.9)/0.1*tlen")
+  shape("ellipse", 1.0, hu, n1, n2) ;
+}
 
 #distribution("rwing", 0.0, 1, 8, "cosine", "cosine", "cosine")
 #{

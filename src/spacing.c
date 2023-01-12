@@ -48,25 +48,25 @@ gdouble agg_spacing_eval(gdouble tmin, gdouble tmax, gint nt,
 {
   gdouble t ;
 
-  /* t = tmin + (tmax-tmin)*i/(nt-1) ; */
-  /* switch ( s ) { */
-  /* default: g_error("%s: unknown spacing type %u", __FUNCTION__, s) ; */
-  /* case AGG_SPACING_LINEAR:  return                     t ; break ; */
-  /* case AGG_SPACING_COSINE:  return SIGN(t)*0.5*(1.0-cos(M_PI*t)) ; break ; */
-  /* case AGG_SPACING_HALFCOS: return SIGN(t)*(1.0-cos(0.5*M_PI*t)) ; break ; */
-  /* case AGG_SPACING_HALFSIN: return sin(0.5*M_PI*t) ; break ;     */
-  /* } */
-  t = (gdouble)i/(nt-1) ;
-
+  t = tmin + (tmax-tmin)*i/(nt-1) ;
   switch ( s ) {
   default: g_error("%s: unknown spacing type %u", __FUNCTION__, s) ;
-  case AGG_SPACING_LINEAR:  break ;
-  case AGG_SPACING_COSINE:  t = 0.5*(1.0-cos(M_PI*t)) ; break ;
-  case AGG_SPACING_HALFCOS: t = (1.0-cos(0.5*M_PI*t)) ; break ;
-  case AGG_SPACING_HALFSIN: t = sin(0.5*M_PI*t) ; break ;    
+  case AGG_SPACING_LINEAR:  return                     t ; break ;
+  case AGG_SPACING_COSINE:  return SIGN(t)*0.5*(1.0-cos(M_PI*t)) ; break ;
+  case AGG_SPACING_HALFCOS: return SIGN(t)*(1.0-cos(0.5*M_PI*t)) ; break ;
+  case AGG_SPACING_HALFSIN: return sin(0.5*M_PI*t) ; break ;
   }
+  /* t = (gdouble)i/(nt-1) ; */
 
-  return tmin + (tmax - tmin)*t ;
+  /* switch ( s ) { */
+  /* default: g_error("%s: unknown spacing type %u", __FUNCTION__, s) ; */
+  /* case AGG_SPACING_LINEAR:  break ; */
+  /* case AGG_SPACING_COSINE:  t = 0.5*(1.0-cos(M_PI*t)) ; break ; */
+  /* case AGG_SPACING_HALFCOS: t = (1.0-cos(0.5*M_PI*t)) ; break ; */
+  /* case AGG_SPACING_HALFSIN: t = sin(0.5*M_PI*t) ; break ;     */
+  /* } */
+
+  /* return tmin + (tmax - tmin)*t ; */
 }
 
 

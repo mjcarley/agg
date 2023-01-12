@@ -280,7 +280,7 @@ gint agg_body_mesh_grid(agg_body_t *b, agg_grid_t *g,
   ttags = &(agg_mesh_triangle_distribution(m,ntri)) ;
   ttstr = agg_mesh_triangle_tag_number(m)+3+1 ;
 
-  ntri = 0 ;
+  /* ntri = 0 ; */
   for ( i = 0 ; i < agg_grid_triangle_number(g) ; i ++ ) {
     tg = agg_grid_triangle(g, i) ;
     tr[i*(tstr)+0] = tg[0] + np ;
@@ -290,11 +290,10 @@ gint agg_body_mesh_grid(agg_body_t *b, agg_grid_t *g,
     ntri ++ ;
   }
 
-  g_assert(ntri == agg_grid_triangle_number(g)) ;
+  /* g_assert(ntri == agg_grid_triangle_number(g)) ; */
 
   agg_mesh_triangle_number(m) = ntri ;
   agg_mesh_grid(m) = g ;
-  /* m->nt += ntri ; */
   
   return 0 ;
 }
