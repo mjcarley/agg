@@ -2,30 +2,7 @@ function [x, t, u, v, y]=hemisphere()
 
 ## http://blog.andreaskahler.com/2009/06/creating-icosphere-mesh-in-code.html
 ##
-  ## modified to return upper half (z >= 0) sphere
-
-  if 0
-  t = [0   11   5;
-       0    5   1;
-       0    1   7;
-       0    7  10;
-       0   10  11;
-       1    5   9;
-       5   11   4;
-       11  10   2;
-       10   7   6;
-       7    1   8;
-       3    9   4;
-       3    4   2;
-       3    2   6;
-       3    6   8;
-       3    8   9;
-       4    9   5;
-       2    4  11;
-       6    2  10;
-       8    6   7;
-       9    8   1] ;
-  endif
+## modified to return upper half (z >= 0) sphere
   
   t = [0    2   5;
        0    5   1;
@@ -67,7 +44,7 @@ function [x, t, u, v, y]=hemisphere()
   v(ii) = -v(ii) ;
 
   v(8) = 0 ;
-  y = [(abs(v)-0.5).*r+0.5 sign(v).*sqrt(abs(v)).*sqrt(1-abs(v)).*r u/2] ;
+  y = [(abs(v)-0.5).*r+0.0 sign(v).*sqrt(abs(v)).*sqrt(1-abs(v)).*r u/2] ;
   
 
   return

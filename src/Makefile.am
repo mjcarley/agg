@@ -29,7 +29,8 @@ libagg_la_SOURCES = \
 	shape.c \
 	functions.c \
 	grid.c \
-	grid-sphere.c
+	grid-sphere.c \
+	grid-hemisphere.c
 
 include_HEADERS = \
 	agg.h

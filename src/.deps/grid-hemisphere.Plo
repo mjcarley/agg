@@ -1,8 +1,8 @@
-functions.lo: functions.c /usr/include/stdc-predef.h /usr/include/stdio.h \
- /usr/include/bits/libc-header-start.h /usr/include/features.h \
- /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h \
- /usr/include/bits/long-double.h /usr/include/gnu/stubs.h \
- /usr/include/gnu/stubs-64.h \
+grid-hemisphere.lo: grid-hemisphere.c /usr/include/stdc-predef.h \
+ /usr/include/stdio.h /usr/include/bits/libc-header-start.h \
+ /usr/include/features.h /usr/include/sys/cdefs.h \
+ /usr/include/bits/wordsize.h /usr/include/bits/long-double.h \
+ /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h \
  /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/include/stddef.h \
  /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/include/stdarg.h \
  /usr/include/bits/types.h /usr/include/bits/timesize.h \
@@ -36,7 +36,7 @@ functions.lo: functions.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/bits/mathcalls-helper-functions.h \
  /usr/include/bits/mathcalls.h /usr/include/bits/mathcalls-narrow.h \
  /usr/include/bits/iscanonical.h /usr/include/string.h \
- /usr/include/strings.h /usr/include/ctype.h /usr/include/glib-2.0/glib.h \
+ /usr/include/strings.h /usr/include/glib-2.0/glib.h \
  /usr/include/glib-2.0/glib/galloca.h /usr/include/glib-2.0/glib/gtypes.h \
  /usr/lib64/glib-2.0/include/glibconfig.h \
  /usr/include/glib-2.0/glib/gmacros.h \
@@ -136,7 +136,7 @@ functions.lo: functions.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/bits/setjmp.h \
  /usr/include/bits/types/struct___jmp_buf_tag.h \
  /usr/include/glib-2.0/glib/glib-autocleanups.h \
- /home/michael/Codes/include/blaswrap.h agg.h
+ /home/michael/Codes/include/blaswrap.h agg.h agg-private.h
 /usr/include/stdc-predef.h:
 /usr/include/stdio.h:
 /usr/include/bits/libc-header-start.h:
@@ -205,7 +205,6 @@ functions.lo: functions.c /usr/include/stdc-predef.h /usr/include/stdio.h \
 /usr/include/bits/iscanonical.h:
 /usr/include/string.h:
 /usr/include/strings.h:
-/usr/include/ctype.h:
 /usr/include/glib-2.0/glib.h:
 /usr/include/glib-2.0/glib/galloca.h:
 /usr/include/glib-2.0/glib/gtypes.h:
@@ -346,3 +345,4 @@ functions.lo: functions.c /usr/include/stdc-predef.h /usr/include/stdio.h \
 /usr/include/glib-2.0/glib/glib-autocleanups.h:
 /home/michael/Codes/include/blaswrap.h:
 agg.h:
+agg-private.h:

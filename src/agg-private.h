@@ -43,5 +43,8 @@
 gint agg_interp_grid_spherical(agg_grid_t *g, gint i,
 			       gdouble s, gdouble t,
 			       gdouble *u, gdouble *v) ;
+gint agg_interp_grid_hemispherical(agg_grid_t *g, gint i,
+				   gdouble s, gdouble t,
+				   gdouble *u, gdouble *v) ;
 
 #endif /*__AGG_PRIVATE_H_INCLUDED__*/

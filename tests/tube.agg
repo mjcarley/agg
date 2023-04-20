@@ -10,12 +10,9 @@
 
 global {
 # syntax: <identifier> = <constant>
-  len = 8.3
+  len = 1.5
 # syntax: <identifier> = "<expression>" (quotes required)
-  D = "len*0.2"
-  hu = 1.0 
-  tlen = 3.0
-  nlen = 2.5
+  D = 1.2
   n1 = 0.5
   n2 = 0.5
 }
@@ -31,24 +28,24 @@ global {
 #     ss: spacing in parameter s in generating cross-section shape
 
 
-body("nose")
+body("tube")
 
 {
 
   grid(16384, 32768)
 
   {
-    ##linear(8, "halfsin", 65, "cosine")
-    hemispherical(3)
+    #tube(65, 33)
+    linear(20, 0, 0.5, "linear", 30, -0.5, 1.0, "cosine")
+
+    #linear(20, "linear", 30, "cosine")
   }
 
-  distribution ("nose", 0.0, 1, 16, "cosine")
+  distribution ("tube", 0.0, 1, 16, "cosine")
   {
-    transform("shrink", "0.5", 0, "sqrt(1.0-s^2)")
     transform("shift", -0.5, 0, 0)
-    transform("scale", "D") 
-    transform("shift", 0, 0, "-(1-s)*nlen")
-    shape("ellipse", -1.0, "hu","n1", "n2")
-    ##  "n1 + (0.5-n1)*s", "n2 + (0.5-n2)*s")  
+    transform("scale", "2*D") 
+    transform("shift", 0, 0, "s*len-0.5")
+    shape("ellipse", -1.0, 1,"n1", "n2")
   }
 }

@@ -164,22 +164,15 @@ AC_PROG_F77
 AC_F77_LIBRARY_LDFLAGS
 AC_F77_DUMMY_MAIN
 AC_F77_WRAPPERS
-ACX_BLAS
-ACX_LAPACK
-
-blas_libs="$BLAS_LIBS"
-lapack_libs="$LAPACK_LIBS"
 
 CFLAGS="$CFLAGS $OPENMP_CFLAGS $SIMD_FLAGS $glib_cflags $blaswrap_cflags"
-LDFLAGS="$LDFLAGS $glib_libs $gqr_libs $mop_libs $gtv_libs -lstdc++"
+LDFLAGS="$LDFLAGS $blaswrap_libs $glib_libs $gqr_libs $mop_libs $gtv_libs -lstdc++"
 
-AC_SUBST(blas_libs)
-AC_SUBST(lapack_libs)
 AC_SUBST(CFLAGS)
 AC_SUBST(LDFLAGS)
 #AC_SUBST(DX_RULES)
 
-LIBS="$glib_libs $LAPACK_LIBS $BLAS_LIBS $LIBS $FLIBS"
+LIBS="$glib_libs $LIBS $FLIBS"
 
 AC_CONFIG_FILES([Makefile
                  src/Makefile

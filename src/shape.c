@@ -565,8 +565,8 @@ gint agg_shape_parse(agg_shape_t *s, gchar *type, gdouble *p, gint np)
     /*modify settings if defaults are overridden*/
     if ( np > 0 ) s->s[0]  = p[0] ; 
     if ( np > 1 ) s->s[1]  = p[1] ; 
-    if ( np > 2 ) s->n1[0] = p[2] ; 
-    if ( np > 3 ) s->n2[0] = p[3] ; 
+    if ( np > 2 ) s->n1[0] = s->n1[1] = p[2] ; 
+    if ( np > 3 ) s->n2[0] = s->n2[1] = p[3] ; 
     
     return 0 ;
   }

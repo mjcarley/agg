@@ -392,6 +392,9 @@ gint agg_grid_element_interpolate(agg_grid_t *g, gint i,
   case AGG_GRID_SPHERICAL:
     return agg_interp_grid_spherical(g, i, s, t, u, v) ;
     break ;
+  case AGG_GRID_HEMISPHERICAL:
+    return agg_interp_grid_hemispherical(g, i, s, t, u, v) ;
+    break ;
   case AGG_GRID_TUBE:
     return interp_grid_tube(g, i, s, t, u, v) ;
   case AGG_GRID_CONE:
@@ -429,66 +432,160 @@ static gint set_grid_spherical(agg_grid_t *g, gchar *expr[], gdouble *p,
   return agg_grid_spherical(g, refine) ;
 }
 
+static gint set_grid_hemispherical(agg_grid_t *g, gchar *expr[], gdouble *p,
+				   gint np)
+
+{
+  gint refine ;
+
+  if ( np != 1 ) {
+    fprintf(stderr,
+	    "hemispherical grid requires one argument (refinement level)\n") ;
+    return 1 ;
+  }
+
+  if ( expr[0] != NULL ) {
+    fprintf(stderr, "refinement level must be a numerical constant\n") ;
+    return 1 ;
+  }
+  
+  if ( p[0] != round(p[0]) || p[0] < 0 ) {
+    fprintf(stderr, "refinement level must be non-negative integer\n") ;
+    return 1 ;
+  }
+
+  refine = (gint)p[0] ;
+
+  return agg_grid_hemispherical(g, refine) ;
+}
+
+static gboolean check_int(gdouble p, gchar *message)
+
+{
+  if ( p != round(p) || p <= 0 ) {
+    fprintf(stderr, "%s", message) ;
+    return FALSE ;
+  }
+  return TRUE ;
+}
+
 static gint set_grid_linear(agg_grid_t *g, gchar *expr[], gdouble *p, gint np)
 
 {
   gint ns, nt ;
   agg_spacing_t ss, st ;
   gdouble smin, smax, tmin, tmax ;
-
-  smin =  0.0 ; smax = 1.0 ;
-  /* tmin =  0.0 ; tmax = 1.0 ; */
-  /* tmin =  -1.0 ; tmax = 0.0 ; */
-  tmin =  -1.0 ; tmax = 1.0 ;
   
-  if ( np != 4 ) {
+  /*
+   * linear grid can be defined as follows:
+   *  ns sdist nt tdist
+   *  ns smin smax sdist nt tdist
+   *  ns sdist nt tmin tmax tdist
+   *  ns smin smax sdist nt tmin tmax tdist
+   * 
+   */
+
+  smin =   0.0 ; smax = 1.0 ;
+  tmin =  -1.0 ; tmax = 1.0 ;
+  ns = 0 ; nt = 0 ;
+  
+  if ( np != 4 && np != 8 ) {
     fprintf(stderr,
-	    "linear grid requires four arguments\n"
-	    "  (# points in s) (distribution in s) "
-	    "(# points in t) (distribution in t)\n"
+	    "linear grid requires four or eight arguments\n"
+	    /* "  (# points in s) (distribution in s) " */
+	    /* "(# points in t) (distribution in t)\n" */
 	    ) ;
     return 1 ;
   }
 
-  if ( expr[0] != NULL ) {
-    fprintf(stderr, "# points in s must be a numerical constant\n") ;
-    return 1 ;
+  if ( np == 4 ) {
+    if ( expr[0] != NULL ) {
+      fprintf(stderr, "# points in s must be a numerical constant\n") ;
+      return 1 ;
+    }
+    if ( !check_int(p[0], "# points in s must be a positive integer\n") )
+      return 1 ;
+    ns = (gint)p[0] ;
+    if ( expr[1] == NULL ) {
+      fprintf(stderr, "point spacing in s must be a string") ;
+      return 1 ;
+    }
+    if ( agg_parser_constant_parse(expr[1], &ss) != 0 ) {
+      fprintf(stderr, "cannot parse s spacing %s\n", expr[1]) ;
+      return 1 ;
+    }
+
+    if ( expr[2] != NULL ) {
+      fprintf(stderr, "# points in t must be a numerical constant\n") ;
+      return 1 ;
+    }
+    if ( !check_int(p[2], "# points in t must be a positive integer\n") )
+      return 1 ;
+    nt = (gint)p[2] ;
+    if ( expr[3] == NULL ) {
+      fprintf(stderr, "point spacing in t must be a string") ;
+      return 1 ;
+    }
+    if ( agg_parser_constant_parse(expr[3], &st) != 0 ) {
+      fprintf(stderr, "cannot parse t spacing %s\n", expr[3]) ;
+      return 1 ;
+    }
   }
 
-  if ( p[0] != round(p[0]) || p[0] <= 0 ) {
-    fprintf(stderr, "# points in s must be a positive integer\n") ;
-    return 1 ;
-  }
+  if ( np == 8 ) {
+    if ( expr[0] != NULL ) {
+      fprintf(stderr, "# points in s must be a numerical constant\n") ;
+      return 1 ;
+    }
+    if ( !check_int(p[0], "# points in s must be a positive integer\n") )
+      return 1 ;
+    ns = (gint)p[0] ;
+    if ( expr[1] != NULL ) {
+      fprintf(stderr, "# smin must be a numerical constant\n") ;
+      return 1 ;
+    }
+    smin = p[1] ;
+    if ( expr[2] != NULL ) {
+      fprintf(stderr, "# smax must be a numerical constant\n") ;
+      return 1 ;
+    }
+    smax = p[2] ;
+    if ( expr[3] == NULL ) {
+      fprintf(stderr, "point spacing in s must be a string") ;
+      return 1 ;
+    }
+    if ( agg_parser_constant_parse(expr[3], &ss) != 0 ) {
+      fprintf(stderr, "cannot parse s spacing %s\n", expr[3]) ;
+      return 1 ;
+    }
 
-  if ( expr[2] != NULL ) {
-    fprintf(stderr, "# points in t must be a numerical constant\n") ;
-    return 1 ;
+    if ( expr[4] != NULL ) {
+      fprintf(stderr, "# points in t must be a numerical constant\n") ;
+      return 1 ;
+    }
+    if ( !check_int(p[4], "# points in t must be a positive integer\n") )
+      return 1 ;
+    nt = (gint)p[4] ;
+    if ( expr[5] != NULL ) {
+      fprintf(stderr, "# tmin must be a numerical constant\n") ;
+      return 1 ;
+    }
+    tmin = p[5] ;
+    if ( expr[6] != NULL ) {
+      fprintf(stderr, "# tmax must be a numerical constant\n") ;
+      return 1 ;
+    }
+    tmax = p[6] ;
+    if ( expr[7] == NULL ) {
+      fprintf(stderr, "point spacing in t must be a string") ;
+      return 1 ;
+    }
+    if ( agg_parser_constant_parse(expr[7], &st) != 0 ) {
+      fprintf(stderr, "cannot parse t spacing %s\n", expr[7]) ;
+      return 1 ;
+    }    
   }
   
-  if ( p[2] != round(p[2]) || p[2] <= 0 ) {
-    fprintf(stderr, "# points in t must be a positive integer\n") ;
-    return 1 ;
-  }
-
-  if ( expr[1] == NULL ) {
-    fprintf(stderr, "s spacing must be a string\n") ;
-    return 1 ;
-  }
-  if ( agg_parser_constant_parse(expr[1], &ss) != 0 ) {
-    fprintf(stderr, "cannot parse s spacing %s\n", expr[1]) ;
-    return 1 ;
-  }    
-
-  if ( expr[3] == NULL ) {
-    fprintf(stderr, "t spacing must be a string\n") ;
-    return 1 ;
-  }
-  if ( agg_parser_constant_parse(expr[3], &st) != 0 ) {
-    fprintf(stderr, "cannot parse t spacing %s\n", expr[3]) ;
-    return 1 ;
-  }    
-
-  ns = (gint)p[0] ; nt = (gint)p[2] ;
   return agg_grid_linear(g,
 			 smin, smax, ns, ss,
 			 tmin, tmax, nt, st) ;
@@ -574,6 +671,10 @@ gint agg_grid_parse(agg_grid_t *g, gchar *name, gchar *expr[],
     return set_grid_spherical(g, expr, p, np) ;
   }
 
+  if ( strcmp(name, "hemispherical") == 0 ) {
+    return set_grid_hemispherical(g, expr, p, np) ;
+  }
+  
   if ( strcmp(name, "linear") == 0 ) {
     return set_grid_linear(g, expr, p, np) ;
   }

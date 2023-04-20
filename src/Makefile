@@ -95,7 +95,6 @@ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
 	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
 	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
-	$(top_srcdir)/acx_blas.m4 $(top_srcdir)/acx_lapack.m4 \
 	$(top_srcdir)/ax_gcc_x86_cpu_supports.m4 \
 	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
@@ -139,7 +138,8 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 libagg_la_LIBADD =
 am_libagg_la_OBJECTS = agg.lo binomials.lo naca.lo transform.lo \
 	distribution.lo mesh.lo spacing.lo tinyexpr.lo parser.lo \
-	body.lo shape.lo functions.lo grid.lo grid-sphere.lo
+	body.lo shape.lo functions.lo grid.lo grid-sphere.lo \
+	grid-hemisphere.lo
 libagg_la_OBJECTS = $(am_libagg_la_OBJECTS)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
@@ -166,8 +166,9 @@ depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/agg.Plo ./$(DEPDIR)/binomials.Plo \
 	./$(DEPDIR)/body.Plo ./$(DEPDIR)/distribution.Plo \
-	./$(DEPDIR)/functions.Plo ./$(DEPDIR)/grid-sphere.Plo \
-	./$(DEPDIR)/grid.Plo ./$(DEPDIR)/mesh.Plo ./$(DEPDIR)/naca.Plo \
+	./$(DEPDIR)/functions.Plo ./$(DEPDIR)/grid-hemisphere.Plo \
+	./$(DEPDIR)/grid-sphere.Plo ./$(DEPDIR)/grid.Plo \
+	./$(DEPDIR)/mesh.Plo ./$(DEPDIR)/naca.Plo \
 	./$(DEPDIR)/parser.Plo ./$(DEPDIR)/shape.Plo \
 	./$(DEPDIR)/spacing.Plo ./$(DEPDIR)/tinyexpr.Plo \
 	./$(DEPDIR)/transform.Plo
@@ -233,10 +234,9 @@ AUTOHEADER = ${SHELL} /home/michael/Codes/Libraries/agg/missing autoheader
 AUTOMAKE = ${SHELL} /home/michael/Codes/Libraries/agg/missing automake-1.16
 AWK = gawk
 BLASWRAP = yes
-BLAS_LIBS = -lblas
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g -O0 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -D_GNU_SOURCE -fopenmp  -mavx -mavx2 -mfma -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/home/michael/Codes/include
+CFLAGS = -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -D_GNU_SOURCE -fopenmp  -mavx -mavx2 -mfma -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/home/michael/Codes/include
 CPP = gcc -E
 CPPFLAGS = 
 CYGPATH_W = echo
@@ -267,11 +267,10 @@ INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-LAPACK_LIBS = 
 LD = /usr/bin/ld -m elf_x86_64
-LDFLAGS =  -lglib-2.0    -lstdc++
+LDFLAGS =  -lglib-2.0 -lblas -L/home/michael/Codes/lib -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../.. -lgfortran -lquadmath -lm -lglib-2.0    -lstdc++
 LIBOBJS = 
-LIBS = -lglib-2.0  -lblas -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../.. -lgfortran -lm -lquadmath
+LIBS = -lglib-2.0 -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../.. -lgfortran -lm -lquadmath
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LIPO = 
 LN_S = ln -s
@@ -322,7 +321,6 @@ am__quote =
 am__tar = $${TAR-tar} chof - "$$tardir"
 am__untar = $${TAR-tar} xf -
 bindir = ${exec_prefix}/bin
-blas_libs = -lblas
 build = x86_64-pc-linux-gnu
 build_alias = 
 build_cpu = x86_64
@@ -343,7 +341,6 @@ htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
 install_sh = ${SHELL} /home/michael/Codes/Libraries/agg/install-sh
-lapack_libs = 
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -389,7 +386,8 @@ libagg_la_SOURCES = \
 	shape.c \
 	functions.c \
 	grid.c \
-	grid-sphere.c
+	grid-sphere.c \
+	grid-hemisphere.c
 
 include_HEADERS = \
 	agg.h
@@ -516,6 +514,7 @@ include ./$(DEPDIR)/binomials.Plo # am--include-marker
 include ./$(DEPDIR)/body.Plo # am--include-marker
 include ./$(DEPDIR)/distribution.Plo # am--include-marker
 include ./$(DEPDIR)/functions.Plo # am--include-marker
+include ./$(DEPDIR)/grid-hemisphere.Plo # am--include-marker
 include ./$(DEPDIR)/grid-sphere.Plo # am--include-marker
 include ./$(DEPDIR)/grid.Plo # am--include-marker
 include ./$(DEPDIR)/mesh.Plo # am--include-marker
@@ -717,6 +716,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/body.Plo
 	-rm -f ./$(DEPDIR)/distribution.Plo
 	-rm -f ./$(DEPDIR)/functions.Plo
+	-rm -f ./$(DEPDIR)/grid-hemisphere.Plo
 	-rm -f ./$(DEPDIR)/grid-sphere.Plo
 	-rm -f ./$(DEPDIR)/grid.Plo
 	-rm -f ./$(DEPDIR)/mesh.Plo
@@ -776,6 +776,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/body.Plo
 	-rm -f ./$(DEPDIR)/distribution.Plo
 	-rm -f ./$(DEPDIR)/functions.Plo
+	-rm -f ./$(DEPDIR)/grid-hemisphere.Plo
 	-rm -f ./$(DEPDIR)/grid-sphere.Plo
 	-rm -f ./$(DEPDIR)/grid.Plo
 	-rm -f ./$(DEPDIR)/mesh.Plo

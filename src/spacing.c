@@ -27,6 +27,34 @@
 
 #include "agg-private.h"
 
+static gdouble linear_to_angle_cosine(gdouble t)
+
+{
+  gdouble th ;
+  
+  if ( t < 0 ) {
+    th = acos(1.0 + 2.0*t) + M_PI ;
+    return th ;
+  }
+
+  th = acos(2.0*t - 1.0) ;
+  return th ;
+}
+
+static gdouble angle_to_linear_cosine(gdouble th)
+
+{
+  gdouble t ;
+  
+  if ( th > M_PI ) {
+    t = -0.5*(1.0 - cos(th)) ;
+    return t ;
+  }
+  
+  t = 0.5*(1.0 - cos(th)) ;
+  return t ;
+}
+
 /** 
  * Evaluate point in discretization of an interval
  *
@@ -46,27 +74,29 @@ gdouble agg_spacing_eval(gdouble tmin, gdouble tmax, gint nt,
 			 agg_spacing_t s, gint i)
 
 {
-  gdouble t ;
+  gdouble t, th0, th1, th ;
+
+  if ( s == AGG_SPACING_LINEAR ) {
+    return (tmin + (tmax-tmin)*i/(nt-1)) ;
+  }
+
+  if ( s == AGG_SPACING_COSINE ) {
+    th0 = linear_to_angle_cosine(tmin) ;
+    th1 = linear_to_angle_cosine(tmax) ;
+    th = th0 + (th1-th0)*i/(nt-1) ;
+    t = angle_to_linear_cosine(th) ;
+    return t ;
+  }
 
   t = tmin + (tmax-tmin)*i/(nt-1) ;
   switch ( s ) {
   default: g_error("%s: unknown spacing type %u", __FUNCTION__, s) ;
-  case AGG_SPACING_LINEAR:  return                     t ; break ;
   case AGG_SPACING_COSINE:  return SIGN(t)*0.5*(1.0-cos(M_PI*t)) ; break ;
   case AGG_SPACING_HALFCOS: return SIGN(t)*(1.0-cos(0.5*M_PI*t)) ; break ;
   case AGG_SPACING_HALFSIN: return sin(0.5*M_PI*t) ; break ;
   }
-  /* t = (gdouble)i/(nt-1) ; */
 
-  /* switch ( s ) { */
-  /* default: g_error("%s: unknown spacing type %u", __FUNCTION__, s) ; */
-  /* case AGG_SPACING_LINEAR:  break ; */
-  /* case AGG_SPACING_COSINE:  t = 0.5*(1.0-cos(M_PI*t)) ; break ; */
-  /* case AGG_SPACING_HALFCOS: t = (1.0-cos(0.5*M_PI*t)) ; break ; */
-  /* case AGG_SPACING_HALFSIN: t = sin(0.5*M_PI*t) ; break ;     */
-  /* } */
-
-  /* return tmin + (tmax - tmin)*t ; */
+  return 0.0 ;
 }
 
 

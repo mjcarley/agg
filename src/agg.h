@@ -134,11 +134,12 @@ struct _agg_distribution_t {
 
 typedef enum
   {
-   AGG_GRID_NONE     = 0,
-   AGG_GRID_LINEAR    = 1,
-   AGG_GRID_SPHERICAL = 2,
-   AGG_GRID_TUBE      = 3,
-   AGG_GRID_CONE      = 4
+   AGG_GRID_NONE          = 0,
+   AGG_GRID_LINEAR        = 1,
+   AGG_GRID_SPHERICAL     = 2,
+   AGG_GRID_HEMISPHERICAL = 3,
+   AGG_GRID_TUBE          = 4,
+   AGG_GRID_CONE          = 5
   } agg_grid_topology_t ;
 
 typedef struct _agg_grid_t agg_grid_t ;
@@ -377,6 +378,7 @@ gint agg_grid_square(agg_grid_t *g,
 		     gdouble umin, gdouble umax, gint nu, agg_spacing_t su,
 		     gdouble vmin, gdouble vmax, gint nv, agg_spacing_t sv) ;
 gint agg_grid_spherical(agg_grid_t *g, gint refine) ;
+gint agg_grid_hemispherical(agg_grid_t *g, gint refine) ;
 gint agg_grid_linear(agg_grid_t *g,
 		     gdouble umin, gdouble umax, gint nu, agg_spacing_t su,
 		     gdouble vmin, gdouble vmax, gint nv, agg_spacing_t sv) ;
