@@ -59,30 +59,50 @@ Definition of a sphere of unit diameter centred at $[0,0,1/2]$:
   \end{align}
 \end{subequations}
 
-To generate using AGG:
-\begin{verbatim}
-global {
-# syntax: <identifier> = "<expression>" (quotes required)
-# diameter of sphere
-  D = 1.0
-  n1 = 0.5
-  n2 = 0.5
-}
+Cosine point spacing:
+\begin{subequations}
+  \begin{align}
+    t &=
+    \left\{
+      \begin{aligned}
+        (1-\cos\theta)/2,  & \quad\theta < \pi;\\
+        -(1-\cos\theta)/2, & \quad\theta \geq \pi.
+      \end{aligned}
+    \right.\\
+    \theta &=
+    \left\{
+    \begin{aligned}
+      &\cos^{-1}(2t-1), &\quad t > 0,\\
+      &\cos^{-1}(2t+1) + \pi, &\quad t \leq 0.
+    \end{aligned}
+    \right.
+  \end{align}
+\end{subequations}
 
-body("sphere")
+% To generate using AGG:
+% \begin{verbatim}
+% global {
+% # syntax: <identifier> = "<expression>" (quotes required)
+% # diameter of sphere
+%   D = 1.0
+%   n1 = 0.5
+%   n2 = 0.5
+% }
 
-{
+% body("sphere")
 
-  distribution("sphere", 0, 1, 24, "cosine")
-  {
-    shape("ellipse", -1, 1, n1, n2) 
-    transform("shrink", 0.5, 0.0, "sqrt(s*(1-s))")
-    transform("scale", "2*D")
-    transform("shift", "-D", 0.0, "D*s")
-  }
+% {
 
-}
-\end{verbatim}
+%   distribution("sphere", 0, 1, 24, "cosine")
+%   {
+%     shape("ellipse", -1, 1, n1, n2) 
+%     transform("shrink", 0.5, 0.0, "sqrt(s*(1-s))")
+%     transform("scale", "2*D")
+%     transform("shift", "-D", 0.0, "D*s")
+%   }
+
+% }
+% \end{verbatim}
 
 \end{document}
 

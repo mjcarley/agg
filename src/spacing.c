@@ -31,13 +31,16 @@ static gdouble linear_to_angle_cosine(gdouble t)
 
 {
   gdouble th ;
+
+  if ( t == 0 ) return M_PI ;
   
-  if ( t < 0 ) {
-    th = acos(1.0 + 2.0*t) + M_PI ;
+  if ( t > 0 ) {
+    th = 2.0*M_PI - acos(2.0*t - 1.0) ;
     return th ;
   }
 
-  th = acos(2.0*t - 1.0) ;
+  th = acos(-2.0*t - 1.0) ;
+
   return th ;
 }
 
@@ -47,11 +50,11 @@ static gdouble angle_to_linear_cosine(gdouble th)
   gdouble t ;
   
   if ( th > M_PI ) {
-    t = -0.5*(1.0 - cos(th)) ;
+    t = 0.5*(1.0 + cos(th)) ;
     return t ;
   }
   
-  t = 0.5*(1.0 - cos(th)) ;
+  t = -0.5*(1.0 + cos(th)) ;
   return t ;
 }
 

@@ -36,7 +36,7 @@ body("tube")
 
   {
     #tube(65, 33)
-    linear(20, 0, 0.5, "linear", 30, -0.5, 1.0, "cosine")
+    linear(2, 0, 1, "linear", 33, -1, 1, "cosine")
 
     #linear(20, "linear", 30, "cosine")
   }

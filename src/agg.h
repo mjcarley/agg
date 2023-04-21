@@ -382,7 +382,8 @@ gint agg_grid_hemispherical(agg_grid_t *g, gint refine) ;
 gint agg_grid_linear(agg_grid_t *g,
 		     gdouble umin, gdouble umax, gint nu, agg_spacing_t su,
 		     gdouble vmin, gdouble vmax, gint nv, agg_spacing_t sv) ;
-gint agg_grid_tube(agg_grid_t *g, gint nu, gint nv) ;
+gint agg_grid_tube(agg_grid_t *g, gint nu,
+		   gdouble vmin, gdouble vmax, gint nv) ;
 gint agg_grid_cone(agg_grid_t *g, gint nu, gint nv) ;
 gint agg_grid_element_interpolate(agg_grid_t *g, gint i,
 				  gdouble s, gdouble t,

@@ -27,6 +27,17 @@
 
 #include "agg-private.h"
 
+static gdouble linear_to_angle(gdouble x)
+
+{
+  gdouble t ;
+  
+  t = acos(2.0*fabs(x) - 1.0) ;
+  if ( x > 0 ) t = 2.0*M_PI - t ;
+
+  return t ;
+}
+
 agg_grid_t *agg_grid_alloc(gint np, gint nt)
 
 {
@@ -138,19 +149,24 @@ gint agg_grid_linear(agg_grid_t *g,
   return 0 ;
 }
 
-gint agg_grid_tube(agg_grid_t *g, gint nu, gint nv)
+gint agg_grid_tube(agg_grid_t *g, gint nu, gdouble vmin, gdouble vmax, gint nv)
 
 {
   gint np, nt, i, j, *tri ;
-  gdouble t[256] ;
+  gdouble t[256], thmin, thmax ;
 
   g_assert(nv < 256) ;
   
   agg_grid_topology(g) = AGG_GRID_TUBE ;
   agg_grid_point_number(g) = np = 0 ;
 
+  thmin = linear_to_angle(vmin) ;
+  thmax = linear_to_angle(vmax) ;
+
+  fprintf(stderr, "th: %lg--%lg\n", thmin, thmax) ;
   for ( i = 0 ; i < nv ; i ++ ) {
-    t[i] = 2.0*M_PI*i/(nv-1) ;
+    /* t[i] = 2.0*M_PI*i/(nv-1) ; */
+    t[i] = thmin + (thmax - thmin)*i/(nv-1) ;
     if ( t[i] > M_PI ) t[i] = (1.0 + cos(t[i]))*0.5 ;
     else t[i] = -(1.0 + cos(t[i]))*0.5 ;
   }
@@ -287,23 +303,6 @@ static gint interp_grid_linear(agg_grid_t *g, gint i,
   return 0 ;
 }
 
-static gdouble linear_to_angle(gdouble x)
-
-{
-  gdouble t ;
-  /* gdouble xc ; */
-
-  /* if ( x <= -1.0 ) return 0 ; */
-  /* if ( x >=  1.0 ) return 2.0*M_PI ; */
-  
-  t = acos(2.0*fabs(x) - 1.0) ;
-  if ( x > 0 ) t = 2.0*M_PI - t ;
-
-  /* if ( t > M_PI ) xc = (1.0 + cos(t))*0.5 ; */
-  /* else xc = -(1.0 + cos(t))*0.5 ; */
-
-  return t ;
-}
 
 static gint interp_grid_tube(agg_grid_t *g, gint i,
 			     gdouble s, gdouble t,
@@ -595,10 +594,12 @@ static gint set_grid_tube(agg_grid_t *g, gchar *expr[], gdouble *p, gint np)
 
 {
   gint ns, nt ;
-  
-  if ( np != 2 ) {
+  gdouble tmin, tmax ;
+
+  tmin = -1 ; tmax = 1 ;
+  if ( np != 2 && np != 4) {
     fprintf(stderr,
-	    "tubular grid requires two arguments "
+	    "tubular grid requires two or four arguments arguments "
 	    "(# points in s) (# points in t)\n") ;
     return 1 ;
   }
@@ -612,6 +613,7 @@ static gint set_grid_tube(agg_grid_t *g, gchar *expr[], gdouble *p, gint np)
     fprintf(stderr, "# points in s must be a positive integer\n") ;
     return 1 ;
   }
+  ns = (gint)p[0] ;
 
   if ( expr[1] != NULL ) {
     fprintf(stderr, "# points in t must be a numerical constant\n") ;
@@ -622,9 +624,23 @@ static gint set_grid_tube(agg_grid_t *g, gchar *expr[], gdouble *p, gint np)
     fprintf(stderr, "# points in t must be a positive integer\n") ;
     return 1 ;
   }
+  
+  nt = (gint)p[1] ;
 
-  ns = (gint)p[0] ; nt = (gint)p[1] ;
-  return agg_grid_tube(g, ns, nt) ;
+  if ( np == 4 ) {
+    if ( expr[2] != NULL ) {
+      fprintf(stderr, "tmin must be a numerical constant\n") ;
+      return 1 ;
+    }
+    tmin = p[2] ;
+    if ( expr[3] != NULL ) {
+      fprintf(stderr, "tmax must be a numerical constant\n") ;
+      return 1 ;
+    }
+    tmax = p[3] ;
+  }
+
+  return agg_grid_tube(g, ns, tmin, tmax, nt) ;
 }
 
 static gint set_grid_cone(agg_grid_t *g, gchar *expr[], gdouble *p, gint np)

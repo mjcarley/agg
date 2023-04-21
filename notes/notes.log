@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.2)  4 JAN 2023 17:28
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.2)  20 APR 2023 17:08
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -180,23 +180,18 @@ Overfull \hbox (41.34225pt too wide) in paragraph at lines 28--47
  [][] 
  []
 
-
-Overfull \hbox (20.39983pt too wide) in paragraph at lines 85--85
-[]\OT1/pcr/m/n/12 # syntax: <identifier> = "<expression>" (quotes required)[] 
- []
-
 [1{/home/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
-] [2]
+]
 (./notes.aux) ) 
 Here is how much of TeX's memory you used:
  2126 strings out of 476189
  32806 string characters out of 5800721
- 379897 words of memory out of 5000000
+ 381897 words of memory out of 5000000
  23354 multiletter control sequences out of 15000+600000
  479375 words of font info for 53 fonts, out of 8000000 for 9000
  430 hyphenation exceptions out of 8191
- 55i,12n,62p,222b,357s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 55i,15n,62p,222b,357s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/home/texlive/2022/texmf-dist/fonts/enc/dvips/base/8r.enc}</hom
 e/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></home/texl
 ive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></home/texlive/20
@@ -205,13 +200,14 @@ mf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></home/texlive/2022/texmf-dist
 /fonts/type1/public/amsfonts/cm/cmr12.pfb></home/texlive/2022/texmf-dist/fonts/
 type1/public/amsfonts/cm/cmr6.pfb></home/texlive/2022/texmf-dist/fonts/type1/pu
 blic/amsfonts/cm/cmr8.pfb></home/texlive/2022/texmf-dist/fonts/type1/public/ams
-fonts/cm/cmsy10.pfb></home/texlive/2022/texmf-dist/fonts/type1/urw/courier/ucrr
-8a.pfb></home/texlive/2022/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></home/t
-exlive/2022/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
-Output written on notes.pdf (2 pages, 110022 bytes).
+fonts/cm/cmsy10.pfb></home/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmsy8.pfb></home/texlive/2022/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb>
+</home/texlive/2022/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></home/texlive/
+2022/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
+Output written on notes.pdf (1 page, 109350 bytes).
 PDF statistics:
- 67 PDF objects out of 1000 (max. 8388607)
- 40 compressed objects within 1 object stream
+ 69 PDF objects out of 1000 (max. 8388607)
+ 41 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
