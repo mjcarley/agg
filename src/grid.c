@@ -163,7 +163,6 @@ gint agg_grid_tube(agg_grid_t *g, gint nu, gdouble vmin, gdouble vmax, gint nv)
   thmin = linear_to_angle(vmin) ;
   thmax = linear_to_angle(vmax) ;
 
-  fprintf(stderr, "th: %lg--%lg\n", thmin, thmax) ;
   for ( i = 0 ; i < nv ; i ++ ) {
     /* t[i] = 2.0*M_PI*i/(nv-1) ; */
     t[i] = thmin + (thmax - thmin)*i/(nv-1) ;

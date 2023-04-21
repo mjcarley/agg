@@ -79,30 +79,7 @@ Cosine point spacing:
   \end{align}
 \end{subequations}
 
-% To generate using AGG:
-% \begin{verbatim}
-% global {
-% # syntax: <identifier> = "<expression>" (quotes required)
-% # diameter of sphere
-%   D = 1.0
-%   n1 = 0.5
-%   n2 = 0.5
-% }
-
-% body("sphere")
-
-% {
-
-%   distribution("sphere", 0, 1, 24, "cosine")
-%   {
-%     shape("ellipse", -1, 1, n1, n2) 
-%     transform("shrink", 0.5, 0.0, "sqrt(s*(1-s))")
-%     transform("scale", "2*D")
-%     transform("shift", "-D", 0.0, "D*s")
-%   }
-
-% }
-% \end{verbatim}
+Built-in grids: spherical,  hemispherical, tube, linear. 
 
 \end{document}
 
