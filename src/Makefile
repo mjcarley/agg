@@ -139,7 +139,7 @@ libagg_la_LIBADD =
 am_libagg_la_OBJECTS = agg.lo binomials.lo naca.lo transform.lo \
 	distribution.lo mesh.lo spacing.lo tinyexpr.lo parser.lo \
 	body.lo shape.lo functions.lo grid.lo grid-sphere.lo \
-	grid-hemisphere.lo
+	grid-hemisphere.lo moller-tri.lo moller-raytri.lo broyden.lo
 libagg_la_OBJECTS = $(am_libagg_la_OBJECTS)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
@@ -165,13 +165,14 @@ DEFAULT_INCLUDES = -I. -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/agg.Plo ./$(DEPDIR)/binomials.Plo \
-	./$(DEPDIR)/body.Plo ./$(DEPDIR)/distribution.Plo \
-	./$(DEPDIR)/functions.Plo ./$(DEPDIR)/grid-hemisphere.Plo \
-	./$(DEPDIR)/grid-sphere.Plo ./$(DEPDIR)/grid.Plo \
-	./$(DEPDIR)/mesh.Plo ./$(DEPDIR)/naca.Plo \
-	./$(DEPDIR)/parser.Plo ./$(DEPDIR)/shape.Plo \
-	./$(DEPDIR)/spacing.Plo ./$(DEPDIR)/tinyexpr.Plo \
-	./$(DEPDIR)/transform.Plo
+	./$(DEPDIR)/body.Plo ./$(DEPDIR)/broyden.Plo \
+	./$(DEPDIR)/distribution.Plo ./$(DEPDIR)/functions.Plo \
+	./$(DEPDIR)/grid-hemisphere.Plo ./$(DEPDIR)/grid-sphere.Plo \
+	./$(DEPDIR)/grid.Plo ./$(DEPDIR)/mesh.Plo \
+	./$(DEPDIR)/moller-raytri.Plo ./$(DEPDIR)/moller-tri.Plo \
+	./$(DEPDIR)/naca.Plo ./$(DEPDIR)/parser.Plo \
+	./$(DEPDIR)/shape.Plo ./$(DEPDIR)/spacing.Plo \
+	./$(DEPDIR)/tinyexpr.Plo ./$(DEPDIR)/transform.Plo
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -387,7 +388,10 @@ libagg_la_SOURCES = \
 	functions.c \
 	grid.c \
 	grid-sphere.c \
-	grid-hemisphere.c
+	grid-hemisphere.c \
+	moller-tri.c \
+	moller-raytri.c \
+	broyden.c
 
 include_HEADERS = \
 	agg.h
@@ -512,12 +516,15 @@ distclean-compile:
 include ./$(DEPDIR)/agg.Plo # am--include-marker
 include ./$(DEPDIR)/binomials.Plo # am--include-marker
 include ./$(DEPDIR)/body.Plo # am--include-marker
+include ./$(DEPDIR)/broyden.Plo # am--include-marker
 include ./$(DEPDIR)/distribution.Plo # am--include-marker
 include ./$(DEPDIR)/functions.Plo # am--include-marker
 include ./$(DEPDIR)/grid-hemisphere.Plo # am--include-marker
 include ./$(DEPDIR)/grid-sphere.Plo # am--include-marker
 include ./$(DEPDIR)/grid.Plo # am--include-marker
 include ./$(DEPDIR)/mesh.Plo # am--include-marker
+include ./$(DEPDIR)/moller-raytri.Plo # am--include-marker
+include ./$(DEPDIR)/moller-tri.Plo # am--include-marker
 include ./$(DEPDIR)/naca.Plo # am--include-marker
 include ./$(DEPDIR)/parser.Plo # am--include-marker
 include ./$(DEPDIR)/shape.Plo # am--include-marker
@@ -714,12 +721,15 @@ distclean: distclean-am
 		-rm -f ./$(DEPDIR)/agg.Plo
 	-rm -f ./$(DEPDIR)/binomials.Plo
 	-rm -f ./$(DEPDIR)/body.Plo
+	-rm -f ./$(DEPDIR)/broyden.Plo
 	-rm -f ./$(DEPDIR)/distribution.Plo
 	-rm -f ./$(DEPDIR)/functions.Plo
 	-rm -f ./$(DEPDIR)/grid-hemisphere.Plo
 	-rm -f ./$(DEPDIR)/grid-sphere.Plo
 	-rm -f ./$(DEPDIR)/grid.Plo
 	-rm -f ./$(DEPDIR)/mesh.Plo
+	-rm -f ./$(DEPDIR)/moller-raytri.Plo
+	-rm -f ./$(DEPDIR)/moller-tri.Plo
 	-rm -f ./$(DEPDIR)/naca.Plo
 	-rm -f ./$(DEPDIR)/parser.Plo
 	-rm -f ./$(DEPDIR)/shape.Plo
@@ -774,12 +784,15 @@ maintainer-clean: maintainer-clean-am
 		-rm -f ./$(DEPDIR)/agg.Plo
 	-rm -f ./$(DEPDIR)/binomials.Plo
 	-rm -f ./$(DEPDIR)/body.Plo
+	-rm -f ./$(DEPDIR)/broyden.Plo
 	-rm -f ./$(DEPDIR)/distribution.Plo
 	-rm -f ./$(DEPDIR)/functions.Plo
 	-rm -f ./$(DEPDIR)/grid-hemisphere.Plo
 	-rm -f ./$(DEPDIR)/grid-sphere.Plo
 	-rm -f ./$(DEPDIR)/grid.Plo
 	-rm -f ./$(DEPDIR)/mesh.Plo
+	-rm -f ./$(DEPDIR)/moller-raytri.Plo
+	-rm -f ./$(DEPDIR)/moller-tri.Plo
 	-rm -f ./$(DEPDIR)/naca.Plo
 	-rm -f ./$(DEPDIR)/parser.Plo
 	-rm -f ./$(DEPDIR)/shape.Plo

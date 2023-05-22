@@ -233,7 +233,11 @@ gdouble agg_shape_ellipse_eval(agg_shape_t *s, gdouble x, gint b)
 	  b ++ ) ;
   }
 
-  g_assert(b < agg_shape_break_number(s)) ;
+  /* g_assert(b < agg_shape_break_number(s)) ; */
+  if ( b >= agg_shape_break_number(s) ) {
+    g_error("%s: parameter (%1.16e) out of range", __FUNCTION__, x) ;
+  }
+  
   i0 = s->i[b] ; i1 = s->i[b+1] ;
   if ( x < 0.0 ) { x = -x ; }
   

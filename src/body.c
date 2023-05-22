@@ -118,3 +118,20 @@ gint agg_body_point_eval(agg_body_t *b, gdouble u, gdouble v, gdouble *x,
 
   return 0 ;
 }
+
+gint agg_body_parameter_limits(agg_body_t *b, gdouble *umin, gdouble *umax)
+
+{
+  gint i ;
+  agg_distribution_t *d ;
+  
+  *umin = G_MAXDOUBLE ; *umax = -G_MAXDOUBLE ;
+
+  for ( i = 0 ; i < agg_body_distribution_number(b) ; i ++ ) {
+    d = agg_body_distribution(b,i) ;
+    *umin = MIN(*umin, agg_distribution_parameter_min(d)) ;
+    *umax = MAX(*umax, agg_distribution_parameter_max(d)) ;
+  }
+  
+  return umin ;
+}

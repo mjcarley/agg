@@ -1,9 +1,21 @@
 AGG is a library for generating geometries of the type found in
 aeronautical applications. It was written by Michael Carley, except
-where noted
+where noted. 
+
+* Expression parser
 
 AGG contains the tinyexpr parser and evaluation library written by
 Lewis Van Winkle and released under the zlib licence. It is maintained
 here:
 
 https://github.com/codeplea/tinyexpr
+
+* Triangle intersections
+
+AGG contains the triangle-triangle intersection code of Tomas Moller,
+
+https://www.tandfonline.com/doi/abs/10.1080/10867651.1997.10487472
+
+Implementation available from
+
+https://fileadmin.cs.lth.se/cs/Personal/Tomas_Akenine-Moller/code/opttritri.txt

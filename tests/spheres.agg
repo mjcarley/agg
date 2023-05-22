@@ -1,0 +1,60 @@
+# test file for parametrically specified generic aircraft
+#
+# syntax:
+#
+# global block contains parameter declarations
+#
+# distribution block(s) contain(s) description of geometry as
+# parameterized patches
+#
+
+global {
+# syntax: <identifier> = "<expression>" (quotes required for non-numeric values)
+  D = 1.0
+  x1 = 0.3
+  x2 = -0.1
+  n1 = 0.5
+  n2 = 0.5
+}
+
+body("sphere1")
+
+{
+  grid(16384, 32768)
+  {
+    invert()
+    spherical(3)
+  }
+
+  distribution("ball", 0, 1, 32, "cosine")
+
+  {
+    shape("ellipse", -1, 1, n1, n2) ;    
+    transform("shrink", 0.5, 0.0, "sqrt(s*(1-s))")
+    ##transform("shrink", 0.5, 0.0, "sqrt(s/2*(1-s/2))")
+    transform("scale", "2*D")
+    transform("shift", "-D+x1", 0.0, "D*s")
+
+  }
+}
+
+body("sphere2")
+
+{
+  grid(16384, 32768)
+  {
+    invert()
+    spherical(3)
+  }
+
+  distribution("ball", 0, 1, 32, "cosine")
+
+  {
+    shape("ellipse", -1, 1, n1, n2) ;    
+    transform("shrink", 0.5, 0.0, "sqrt(s*(1-s))")
+    ##transform("shrink", 0.5, 0.0, "sqrt(s/2*(1-s/2))")
+    transform("scale", "2*D")
+    transform("shift", "-D+x2", 0.0, "D*s")
+
+  }
+}

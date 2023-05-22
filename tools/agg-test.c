@@ -29,6 +29,7 @@ const gchar *tests[] = {"bernstein",
 			"transform",
 			"wing",
 			"parser",
+			"intersection",
 			""} ;
 
 static gint parse_test(gchar *s)
@@ -327,6 +328,14 @@ static void parser_test(void)
   return ;
 }
 
+static void intersection_test(void)
+
+{
+  
+  return ;
+}
+
+
 gint main(gint argc, gchar **argv)
 
 {
@@ -374,6 +383,12 @@ gint main(gint argc, gchar **argv)
 
   if ( test == 4 ) {
     parser_test() ;
+
+    return 0 ;
+  }
+
+  if ( test == 5 ) {
+    intersection_test() ;
 
     return 0 ;
   }

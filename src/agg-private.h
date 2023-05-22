@@ -40,11 +40,96 @@
 #define agg_transform_shrink_data(_t)	\
   (&((_t)->p[AGG_TRANSFORM_PARAMETER_SHRINK]))
 
-gint agg_interp_grid_spherical(agg_grid_t *g, gint i,
+#define agg_vector_cross(_C,_A,_B)				\
+  ((_C)[0] = (_A)[1]*(_B)[2] - (_A)[2]*(_B)[1],			\
+   (_C)[1] = (_A)[2]*(_B)[0] - (_A)[0]*(_B)[2],			\
+   (_C)[2] = (_A)[0]*(_B)[1] - (_A)[1]*(_B)[0])
+#define agg_vector_diff(_A,_B,_C)		\
+  do {						\
+    (_A)[0] = (_B)[0] - (_C)[0] ;		\
+    (_A)[1] = (_B)[1] - (_C)[1] ;		\
+    (_A)[2] = (_B)[2] - (_C)[2] ;		\
+  } while (0)
+#define agg_vector_length(_A)				\
+  (sqrt(((_A)[0])*((_A)[0])+				\
+	((_A)[1])*((_A)[1]) +				\
+	((_A)[2])*((_A)[2])))
+
+#define agg_point_copy(_fb,_i,_fe,_j)			\
+  do {							\
+    (_fb)[2*(_j)+0] = (_fe)[2*(_i)+0] ;			\
+    (_fb)[2*(_j)+1] = (_fe)[2*(_i)+1] ;			\
+  } while ( 0 ) 
+
+#define agg_point_interp3(_fb,_i,_fe,_L0,_L1,_L2)			\
+  do  {									\
+  (_fb)[2*(_i)+0] = (_L0)*(_fe)[0] + (_L1)*(_fe)[2] + (_L2)*(_fe)[4] ;	\
+  (_fb)[2*(_i)+1] = (_L0)*(_fe)[1] + (_L1)*(_fe)[3] + (_L2)*(_fe)[5] ;	\
+} while (0)
+
+#define agg_triangle_divide_loop30(_fe,_fl)				\
+  {									\
+    agg_point_copy((_fl), 0, (_fe), 0) ;				\
+    agg_point_interp3((_fl), 1, (_fe), 0.5, 0.5, 0.0) ;			\
+    agg_point_interp3((_fl), 2, (_fe), 0.5, 0.0, 0.5) ;			\
+} while (0)
+
+#define agg_triangle_divide_loop31(_fe,_fl)				\
+  {									\
+    agg_point_copy((_fl), 1, (_fe), 1) ;				\
+    agg_point_interp3((_fl), 0, (_fe), 0.5, 0.5, 0.0) ;			\
+    agg_point_interp3((_fl), 2, (_fe), 0.0, 0.5, 0.5) ;			\
+} while (0)
+
+#define agg_triangle_divide_loop32(_fe,_fl)				\
+  {									\
+    agg_point_copy((_fl), 2, (_fe), 2) ;				\
+    agg_point_interp3((_fl), 0, (_fe), 0.5, 0.0, 0.5) ;			\
+    agg_point_interp3((_fl), 1, (_fe), 0.0, 0.5, 0.5) ;			\
+} while (0)
+
+#define agg_triangle_divide_loop33(_fe,_fl)				\
+  {									\
+    agg_point_interp3((_fl), 0, (_fe), 0.5, 0.5, 0.0) ;			\
+    agg_point_interp3((_fl), 1, (_fe), 0.0, 0.5, 0.5) ;			\
+    agg_point_interp3((_fl), 2, (_fe), 0.5, 0.0, 0.5) ;			\
+} while (0)
+
+#define agg_triangle_divide_loop(_i,_fe,_fl)		 \
+  {							 \
+   switch ((_i)) {					 \
+   case 0: agg_triangle_divide_loop30(_fe,_fl) ; break ; \
+   case 1: agg_triangle_divide_loop31(_fe,_fl) ; break ; \
+   case 2: agg_triangle_divide_loop32(_fe,_fl) ; break ; \
+   case 3: agg_triangle_divide_loop33(_fe,_fl) ; break ; \
+   }							 \
+  } while(0)
+
+gint agg_grid_interp_area_linear(agg_grid_t *g, gdouble *uv,
+				 gdouble s, gdouble t,
+				 gdouble *u, gdouble *v) ;
+gint agg_grid_interp_area_spherical(agg_grid_t *g, gdouble *uv,
+				    gdouble s, gdouble t,
+				    gdouble *u, gdouble *v) ;
+gint agg_grid_interp_line_spherical(agg_grid_t *g, gdouble *uv,
+				    gdouble s,
+				    gdouble *u, gdouble *v) ;
+gint agg_grid_interp_area_hemispherical(agg_grid_t *g, gdouble *uv,
+					gdouble s, gdouble t,
+					gdouble *u, gdouble *v) ;
+gint agg_grid_interp_area_tube(agg_grid_t *g, gdouble *uv,
 			       gdouble s, gdouble t,
 			       gdouble *u, gdouble *v) ;
-gint agg_interp_grid_hemispherical(agg_grid_t *g, gint i,
-				   gdouble s, gdouble t,
-				   gdouble *u, gdouble *v) ;
+
+int coplanar_tri_tri(double N[3],double V0[3],double V1[3],double V2[3],
+                     double U0[3],double U1[3],double U2[3]) ;
+int tri_tri_intersect(double V0[3],double V1[3],double V2[3],
+                      double U0[3],double U1[3],double U2[3]) ;
+int tri_tri_intersect_with_isectline(double V0[3],double V1[3],double V2[3],
+				     double U0[3],double U1[3],double U2[3],
+				     int *coplanar, double isectpt1[3],
+				     double isectpt2[3]) ;
+int NoDivTriTriIsect(double V0[3],double V1[3],double V2[3],
+                     double U0[3],double U1[3],double U2[3]) ;
 
 #endif /*__AGG_PRIVATE_H_INCLUDED__*/

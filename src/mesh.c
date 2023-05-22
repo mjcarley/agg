@@ -33,36 +33,36 @@ static gboolean points_coincide(gdouble *x, gdouble *y)
   return ((x[0] == y[0]) && (x[1] == y[1]) && (x[2] == y[2])) ;
 }
 
-static void add_elements(gint *tr, gint tstr, gint *ttags, gint ttstr, gint id,
-			 gdouble *x, gint xstr, gint i0, gint i1,
-			 gint idx0, gint d, gint *ntr)
+/* static void add_elements(gint *tr, gint tstr, gint *ttags, gint ttstr, gint id, */
+/* 			 gdouble *x, gint xstr, gint i0, gint i1, */
+/* 			 gint idx0, gint d, gint *ntr) */
 
-{
-  gint j0, j1, j2, j3 ;
+/* { */
+/*   gint j0, j1, j2, j3 ; */
   
-  /*check for degenerate quadrilateral*/
-  j0 = idx0 ; j1 = idx0 + d ; j2 = idx0 + d + 1 ; j3 = idx0 + 1 ;
+/*   /\*check for degenerate quadrilateral*\/ */
+/*   j0 = idx0 ; j1 = idx0 + d ; j2 = idx0 + d + 1 ; j3 = idx0 + 1 ; */
   
-  if ( !points_coincide(&(x[j0*xstr]), &(x[j1*xstr])) &&
-       !points_coincide(&(x[j1*xstr]), &(x[j2*xstr])) ) {
-    tr[tstr*(*ntr) +  0] = j0 ;
-    tr[tstr*(*ntr) + i0] = j1 ;
-    tr[tstr*(*ntr) + i1] = j2 ;
-    ttags[(*ntr)*ttstr] = id ;
-    (*ntr) ++ ;
-  }
+/*   if ( !points_coincide(&(x[j0*xstr]), &(x[j1*xstr])) && */
+/*        !points_coincide(&(x[j1*xstr]), &(x[j2*xstr])) ) { */
+/*     tr[tstr*(*ntr) +  0] = j0 ; */
+/*     tr[tstr*(*ntr) + i0] = j1 ; */
+/*     tr[tstr*(*ntr) + i1] = j2 ; */
+/*     ttags[(*ntr)*ttstr] = id ; */
+/*     (*ntr) ++ ; */
+/*   } */
 
-  if ( !points_coincide(&(x[j2*xstr]), &(x[j3*xstr])) &&
-       !points_coincide(&(x[j3*xstr]), &(x[j0*xstr])) ) {
-    tr[tstr*(*ntr) +  0] = j0 ;
-    tr[tstr*(*ntr) + i0] = j2 ;
-    tr[tstr*(*ntr) + i1] = j3 ;
-    ttags[(*ntr)*ttstr] = id ;
-    (*ntr) ++ ;
-  }
+/*   if ( !points_coincide(&(x[j2*xstr]), &(x[j3*xstr])) && */
+/*        !points_coincide(&(x[j3*xstr]), &(x[j0*xstr])) ) { */
+/*     tr[tstr*(*ntr) +  0] = j0 ; */
+/*     tr[tstr*(*ntr) + i0] = j2 ; */
+/*     tr[tstr*(*ntr) + i1] = j3 ; */
+/*     ttags[(*ntr)*ttstr] = id ; */
+/*     (*ntr) ++ ; */
+/*   } */
   
-  return ;
-}
+/*   return ; */
+/* } */
 
 /** 
  * Write the points of an ::agg_mesh_t to file
@@ -163,7 +163,8 @@ agg_mesh_t *agg_mesh_alloc(gint np, gint nt, gint nptags, gint nttags,
   /*extra tag for the distribution index*/
   m->ptags = (gint *)g_malloc0(np*(nptags+1)*sizeof(gint)) ;
   m->tri = (gint *)g_malloc0(nt*(3+1+nttags)*sizeof(gint)) ;
-
+  m->bboxes = (agg_bbox_t *)g_malloc0(nt*sizeof(agg_bbox_t)) ;
+  
   agg_mesh_init(m) ;
   
   return m ;
@@ -294,6 +295,35 @@ gint agg_body_mesh_grid(agg_body_t *b, agg_grid_t *g,
 
   agg_mesh_triangle_number(m) = ntri ;
   agg_mesh_grid(m) = g ;
+  
+  return 0 ;
+}
+
+static void bbox_limits(agg_bbox_t *b, gdouble *x1, gdouble *x2, gdouble *x3)
+
+{
+  b->xmin = MIN(x1[0], MIN(x2[0], x3[0])) ;
+  b->xmax = MAX(x1[0], MAX(x2[0], x3[0])) ;
+  b->ymin = MIN(x1[1], MIN(x2[1], x3[1])) ;
+  b->ymax = MAX(x1[1], MAX(x2[1], x3[1])) ;
+  b->zmin = MIN(x1[2], MIN(x2[2], x3[2])) ;
+  b->zmax = MAX(x1[2], MAX(x2[2], x3[2])) ;
+  
+  return ;
+}
+
+gint agg_mesh_bounding_boxes(agg_mesh_t *m)
+
+{
+  gint i, *t ;
+
+  for ( i = 0 ; i < agg_mesh_triangle_number(m) ; i ++ ) {
+    t = agg_mesh_triangle(m, i) ;
+    bbox_limits(&(m->bboxes[i]),
+		agg_mesh_point(m,t[0]),
+		agg_mesh_point(m,t[1]),
+		agg_mesh_point(m,t[2])) ;
+  }
   
   return 0 ;
 }

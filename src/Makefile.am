@@ -30,7 +30,10 @@ libagg_la_SOURCES = \
 	functions.c \
 	grid.c \
 	grid-sphere.c \
-	grid-hemisphere.c
+	grid-hemisphere.c \
+	moller-tri.c \
+	moller-raytri.c \
+	broyden.c
 
 include_HEADERS = \
 	agg.h

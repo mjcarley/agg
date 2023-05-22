@@ -285,28 +285,33 @@ gint agg_grid_hemispherical(agg_grid_t *g, gint refine)
     }
   }
   
+  g->interp_area = agg_grid_interp_area_hemispherical ;
+
   return 0 ;
 }  
 
-gint agg_interp_grid_hemispherical(agg_grid_t *g, gint i,
-				   gdouble s, gdouble t,
-				   gdouble *u, gdouble *v)
+gint agg_grid_interp_area_hemispherical(agg_grid_t *g, gdouble *uv,
+					gdouble s, gdouble t,
+					gdouble *u, gdouble *v)
 
 {
   gint *tri ;
   gdouble x[9], L[3] ;
   
-  tri = agg_grid_triangle(g, i) ;
+  /* tri = agg_grid_triangle(g, i) ; */
 
-  hemisphere_point(agg_grid_point_u(g, tri[0]),
-		   agg_grid_point_v(g, tri[0]),
-		   &(x[0])) ;
-  hemisphere_point(agg_grid_point_u(g, tri[1]),
-		   agg_grid_point_v(g, tri[1]),
-		   &(x[3])) ;
-  hemisphere_point(agg_grid_point_u(g, tri[2]),
-		   agg_grid_point_v(g, tri[2]),
-		   &(x[6])) ;
+  /* hemisphere_point(agg_grid_point_u(g, tri[0]), */
+  /* 		   agg_grid_point_v(g, tri[0]), */
+  /* 		   &(x[0])) ; */
+  /* hemisphere_point(agg_grid_point_u(g, tri[1]), */
+  /* 		   agg_grid_point_v(g, tri[1]), */
+  /* 		   &(x[3])) ; */
+  /* hemisphere_point(agg_grid_point_u(g, tri[2]), */
+  /* 		   agg_grid_point_v(g, tri[2]), */
+  /* 		   &(x[6])) ; */
+  hemisphere_point(uv[0], uv[1], &(x[3*0])) ;
+  hemisphere_point(uv[2], uv[3], &(x[3*1])) ;
+  hemisphere_point(uv[4], uv[5], &(x[3*2])) ;
 
   L[0] = 1.0 - s - t ; L[1] = s ; L[2] = t ;
 

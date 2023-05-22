@@ -314,34 +314,59 @@ gint agg_grid_spherical(agg_grid_t *g, gint refine)
     }
   }
   
+  g->interp_area = agg_grid_interp_area_spherical ;
+  g->interp_line = agg_grid_interp_line_spherical ;
+  
   return 0 ;
 }
 
-gint agg_interp_grid_spherical(agg_grid_t *g, gint i,
-			       gdouble s, gdouble t,
-			       gdouble *u, gdouble *v)
+gint agg_grid_interp_area_spherical(agg_grid_t *g, gdouble *uv,
+				    gdouble s, gdouble t,
+				    gdouble *u, gdouble *v)
 
 {
-  gint *tri ;
+  /* gint *tri ; */
   gdouble x[9], L[3] ;
   
-  tri = agg_grid_triangle(g, i) ;
+  /* tri = agg_grid_triangle(g, i) ; */
 
-  sphere_point(agg_grid_point_u(g, tri[0]),
-	       agg_grid_point_v(g, tri[0]),
-	       &(x[0])) ;
-  sphere_point(agg_grid_point_u(g, tri[1]),
-	       agg_grid_point_v(g, tri[1]),
-	       &(x[3])) ;
-  sphere_point(agg_grid_point_u(g, tri[2]),
-	       agg_grid_point_v(g, tri[2]),
-	       &(x[6])) ;
+  /* sphere_point(agg_grid_point_u(g, tri[0]), */
+  /* 	       agg_grid_point_v(g, tri[0]), */
+  /* 	       &(x[0])) ; */
+  /* sphere_point(agg_grid_point_u(g, tri[1]), */
+  /* 	       agg_grid_point_v(g, tri[1]), */
+  /* 	       &(x[3])) ; */
+  /* sphere_point(agg_grid_point_u(g, tri[2]), */
+  /* 	       agg_grid_point_v(g, tri[2]), */
+  /* 	       &(x[6])) ; */
+  sphere_point(uv[0], uv[1], &(x[3*0])) ;
+  sphere_point(uv[2], uv[3], &(x[3*1])) ;
+  sphere_point(uv[4], uv[5], &(x[3*2])) ;
 
   L[0] = 1.0 - s - t ; L[1] = s ; L[2] = t ;
 
   x[0] = L[0]*x[0] + L[1]*x[3] + L[2]*x[6] ;
   x[1] = L[0]*x[1] + L[1]*x[4] + L[2]*x[7] ;
   x[2] = L[0]*x[2] + L[1]*x[5] + L[2]*x[8] ;
+
+  sphere_uv(x, u, v) ;
+  
+  return 0 ;
+}
+
+gint agg_grid_interp_line_spherical(agg_grid_t *g, gdouble *uv,
+				    gdouble s,
+				    gdouble *u, gdouble *v)
+
+{
+  gdouble x[6] ;
+
+  sphere_point(uv[0], uv[1], &(x[3*0])) ;
+  sphere_point(uv[2], uv[3], &(x[3*1])) ;
+
+  x[0] = x[0] + s*(x[3] - x[0]) ;
+  x[1] = x[1] + s*(x[4] - x[1]) ;
+  x[2] = x[2] + s*(x[5] - x[2]) ;
 
   sphere_uv(x, u, v) ;
   
