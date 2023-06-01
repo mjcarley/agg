@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.2)  21 APR 2023 09:45
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.2)  22 MAY 2023 12:34
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -182,12 +182,12 @@ Overfull \hbox (41.34225pt too wide) in paragraph at lines 28--47
 
 [1{/home/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
-]
+] [2]
 (./notes.aux) ) 
 Here is how much of TeX's memory you used:
  2126 strings out of 476189
  32806 string characters out of 5800721
- 381897 words of memory out of 5000000
+ 383897 words of memory out of 5000000
  23354 multiletter control sequences out of 15000+600000
  479375 words of font info for 53 fonts, out of 8000000 for 9000
  430 hyphenation exceptions out of 8191
@@ -204,10 +204,10 @@ fonts/cm/cmsy10.pfb></home/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/
 cm/cmsy8.pfb></home/texlive/2022/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb>
 </home/texlive/2022/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></home/texlive/
 2022/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
-Output written on notes.pdf (1 page, 109687 bytes).
+Output written on notes.pdf (2 pages, 112423 bytes).
 PDF statistics:
- 69 PDF objects out of 1000 (max. 8388607)
- 41 compressed objects within 1 object stream
+ 72 PDF objects out of 1000 (max. 8388607)
+ 43 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

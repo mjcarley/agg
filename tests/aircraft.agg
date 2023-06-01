@@ -9,18 +9,23 @@
 #
 
 global {
-# syntax: <identifier> = <constant>
-  l1 = 3.0
-  lr = 1.5
-  l2 = 3.0
-  span = 1
-  lt = 1
+  # syntax: <identifier> = <constant>
+  # fuselage diameter
+  D = 2.0
+  # cabin length
+  lenc = 8.0
+  # nose length
+  lenn = 1.5
+  # tail length
+  lent = 2.5
+  # wing semispan
+  semispan = 4.5
+  # wing chord
+  chord = 2
+  ## wing leading edge
+  wle = 3
+  
 # syntax: <identifier> = "<expression>" (quotes required)
-  len = "l1+lr+l2"
-  D = "len*0.25"
-  hu = 1.3
-  tlen = 3.0
-  nlen = 2.5
   n1 = 0.5
   n2 = 0.5
 }
@@ -48,65 +53,97 @@ global {
 #  shape("ellipse", -1.0, hu, n1, n2)
 #}
 
-#distribution ("root", 0.0, 1.0, 8, "linear", "linear", "cosine")
+body("fuselage") {
 
-#{
-# syntax: transform("transform", parameters ...)
-#  transform("shrink", 0.5, 0, "1.0+0.4*sqrt(s*(1-s))")
-#  transform("shift", -0.5, 0, "l1+lr*s")
-#  transform("scale", "D")
-## n1, n2, main height, shoulder breakaway, displacement, height
-#  shape("root", 0.5, 0.5,
-#    		hu, 0.45, "0.2*sqrt(s*(1-s))", "0.2*sqrt(s*(1-s))",
-#		-1, 0.45, "0.2*sqrt(s*(1-s))", "-0.2*sqrt(s*(1-s))",
-#		16)
-#}
+  grid(16384, 32768)
+  {
+    tube(33, 33)
+  }
 
-grid(16384, 32768)
-{
-spherical(3)
+  distribution ("cabin", 0.0, 1, 16, "cosine")
+  {
+    transform("shift", -0.5, 0, 0)
+    transform("scale", "2*D") 
+    transform("shift", 0, 0, "s*lenc")
+    shape("ellipse", -1.0, 1,"n1", "n2")
+  }
 }
 
-distribution ("rear", 0.1, 0.9, 8, "cosine")
 
-{
-## syntax: transform("transform", parameters ...)
-  transform("shift", -0.5, 0, "l1+lr+l2*(s-0.1)/0.8")
-  transform("scale", "D")
+body("nose") {
 
-  shape("ellipse", -1.0, 1, n1, n2)
+  grid(16384, 32768)
+  {
+    hemispherical(2)
+  }
+
+  distribution ("nose", 0.0, 1, 2, "cosine")
+  {
+    ## this needs some non-linear transformation to give it a cockpit shape
+    transform("shrink", "0.5", 0, "sqrt(1-s)*(1.5-0.5*(1-s))")
+    transform("shift", -0.5, 0, 0)
+    transform("scale", "2*D")
+    transform("shift", 0, 0, "-s*lenn")
+    shape("ellipse", -1, 1, "n1", "n2")
+  }
+
 }
 
-distribution ("nose", 0.0, 0.1, 16, "cosine")
-{
-  transform("shrink", "0.5", 0, "sqrt(1.0-(s/0.1)^2)")
-  transform("shift", -0.5, 0, "-(s/0.1)*nlen")
-  transform("scale", "D") 
-  shape("ellipse", 1.0, hu, "n1 + (0.5-n1)*s/0.1", "n2 + (0.5-n2)*s/0.1")
+body("tail") {
+
+  grid(16384, 32768)
+  {
+    hemispherical(2)
+  }
+
+  distribution ("tail", 0.0, 1, 16, "cosine")
+  {
+    ## this needs some non-linear transformation to make it a tail cone
+    transform("shrink", "0.5", 0, "sqrt(1-s)*(1.5-0.5*(1-s))")
+    transform("shift", -0.5, 0, 0)
+    transform("scale", "2*D")
+    transform("shift", 0, 0, "lenc + s*lent")
+    shape("ellipse", -1, 1, "n1", "n2")
+  }
+
 }
 
-distribution ("tail", 0.9, 1.0, 8, "cosine")
+body("leftwing") {
+  grid(16384, 32768)
+  {
+    hemispherical(3)
+  }
+
+ distribution("leftwing", 0.0, 0.9, 24, "cosine")
+
+## argument list:
+##   distribution label (for readability)
+##   tmin, tmax: parameter range
+##   number of sections to be generated for interpolation of shape
+##   section spacing for geometry
+
 {
-  transform("shrink", 0.5, "hu*0.5^n1*0.5^n2", "(1.0-(s-0.9)/0.1)")
-  transform("scale", "D") 
-  transform("shift", -0.5, 0, "len+(s-0.9)/0.1*tlen")
-  shape("ellipse", 1.0, hu, n1, n2) ;
+  axes("zyx")
+  transform("shrink", 0.5, 0.0, "tipright(0.5, 0.9, s)") ;
+  transform("rotate", 0.5, 0.0, "0.0*s")
+  transform("scale", "chord")
+  transform("shift", "wle", 0.0, "2*s*semispan")
+
+  shape("enaca", 4, 0.12, 0.0, 0.0) ;
+ ## shape("ellipse", -0.2, 0.2, n1, n2) ;  
+}
+ 
+distribution("ltip", 0.9, 1.0, 8, "cosine")
+
+{
+  axes("zyx")
+  transform("shrink", 0.5, 0.0, "tipright(0.5, 0.9, s)") ;
+  transform("rotate", 0.5, 0.0, "0.0*s")
+  transform("scale", "chord")
+  transform("shift", "wle", 0.0, "2*s*semispan")
+
+  shape("enaca", 4, 0.12, 0.0, 0.0) ;
+  ##shape("ellipse", -0.2, 0.2, n1, n2) ;  
 }
 
-#distribution("rwing", 0.0, 1, 8, "cosine", "cosine", "cosine")
-#{
-  ## transformation between local and global coordinate systems
-#  axes("zyx")
-#  transform("shrink", 0.0, 0, "lr + t*(lt-lr)")
-#  transform("shift", "l1+3*t", "t", "D/2+0.1+t*span")
-#  shape("ellipse", 0.1, 0.1, n1, n2) ;  
-#}
-
-#distribution("lwing", 0.0, 1, 8, "cosine", "cosine", "cosine")
-
-#{
-#  axes("-zyx")
-#  transform("shrink", 0.0, 0, "lr + t*(lt-lr)")
-#  transform("shift", "l1+0.5*t", "0.1*t", "D/2+0.3+t*span")
-#  shape("ellipse", -0.2, 0.2, n1, n2) ;  
-#}
+}

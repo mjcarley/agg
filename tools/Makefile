@@ -88,7 +88,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = x86_64-pc-linux-gnu
 host_triplet = x86_64-pc-linux-gnu
-bin_PROGRAMS = agg-generate$(EXEEXT) agg-test$(EXEEXT)
+bin_PROGRAMS = agg-test$(EXEEXT) agg-parse$(EXEEXT)
 subdir = tools
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
@@ -105,15 +105,17 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-agg_generate_SOURCES = agg-generate.c
-agg_generate_OBJECTS = agg-generate.$(OBJEXT)
-agg_generate_DEPENDENCIES = $(top_builddir)/src/.libs/libagg.a
+agg_parse_SOURCES = agg-parse.c
+agg_parse_OBJECTS = agg-parse.$(OBJEXT)
+agg_parse_LDADD = $(LDADD)
+agg_parse_DEPENDENCIES = $(top_builddir)/src/.libs/libagg.a
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
 am__v_lt_0 = --silent
 am__v_lt_1 = 
 agg_test_SOURCES = agg-test.c
 agg_test_OBJECTS = agg-test.$(OBJEXT)
+agg_test_LDADD = $(LDADD)
 agg_test_DEPENDENCIES = $(top_builddir)/src/.libs/libagg.a
 AM_V_P = $(am__v_P_$(V))
 am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
@@ -130,8 +132,7 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I. -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/agg-generate.Po \
-	./$(DEPDIR)/agg-test.Po
+am__depfiles_remade = ./$(DEPDIR)/agg-parse.Po ./$(DEPDIR)/agg-test.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -151,8 +152,8 @@ AM_V_CCLD = $(am__v_CCLD_$(V))
 am__v_CCLD_ = $(am__v_CCLD_$(AM_DEFAULT_VERBOSITY))
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = agg-generate.c agg-test.c
-DIST_SOURCES = agg-generate.c agg-test.c
+SOURCES = agg-parse.c agg-test.c
+DIST_SOURCES = agg-parse.c agg-test.c
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -320,12 +321,7 @@ top_builddir = ..
 top_srcdir = ..
 AM_CPPFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src -I$(includedir)
 DEPS = $(top_builddir)/src/libagg.la
-agg_generate_LDADD = \
-	$(top_builddir)/src/.libs/libagg.a 
-
-agg_test_LDADD = \
-	$(top_builddir)/src/.libs/libagg.a 
-
+LDADD = $(top_builddir)/src/.libs/libagg.a 
 all: all-am
 
 .SUFFIXES:
@@ -409,9 +405,9 @@ clean-binPROGRAMS:
 	echo " rm -f" $$list; \
 	rm -f $$list
 
-agg-generate$(EXEEXT): $(agg_generate_OBJECTS) $(agg_generate_DEPENDENCIES) $(EXTRA_agg_generate_DEPENDENCIES) 
-	@rm -f agg-generate$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(agg_generate_OBJECTS) $(agg_generate_LDADD) $(LIBS)
+agg-parse$(EXEEXT): $(agg_parse_OBJECTS) $(agg_parse_DEPENDENCIES) $(EXTRA_agg_parse_DEPENDENCIES) 
+	@rm -f agg-parse$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(agg_parse_OBJECTS) $(agg_parse_LDADD) $(LIBS)
 
 agg-test$(EXEEXT): $(agg_test_OBJECTS) $(agg_test_DEPENDENCIES) $(EXTRA_agg_test_DEPENDENCIES) 
 	@rm -f agg-test$(EXEEXT)
@@ -423,7 +419,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-include ./$(DEPDIR)/agg-generate.Po # am--include-marker
+include ./$(DEPDIR)/agg-parse.Po # am--include-marker
 include ./$(DEPDIR)/agg-test.Po # am--include-marker
 
 $(am__depfiles_remade):
@@ -586,7 +582,7 @@ clean: clean-am
 clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ./$(DEPDIR)/agg-generate.Po
+		-rm -f ./$(DEPDIR)/agg-parse.Po
 	-rm -f ./$(DEPDIR)/agg-test.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
@@ -633,7 +629,7 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ./$(DEPDIR)/agg-generate.Po
+		-rm -f ./$(DEPDIR)/agg-parse.Po
 	-rm -f ./$(DEPDIR)/agg-test.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic

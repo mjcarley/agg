@@ -19,3 +19,13 @@ https://www.tandfonline.com/doi/abs/10.1080/10867651.1997.10487472
 Implementation available from
 
 https://fileadmin.cs.lth.se/cs/Personal/Tomas_Akenine-Moller/code/opttritri.txt
+
+* Triangulation
+
+AGG contains a modified version of Jonathan Shewchuk's Triangle
+code. The original code and relevant publications are available from:
+
+https://www.cs.cmu.edu/~quake/triangle.html
+
+Copyright in the code remains with Jonathan Shewchuck and the code is
+distributed subject to conditions which are given in src/triangle.c

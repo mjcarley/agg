@@ -58,10 +58,11 @@ struct _agg_parser_t {
 
 typedef enum
   {
-   AGG_SPACING_LINEAR  = 0,  /**< \f$t\f$ equal intervals over range */
-   AGG_SPACING_COSINE  = 1,  /**< \f$\mathrm{sgn}(t)(1-\cos \pi t)/2\f$ */
-   AGG_SPACING_HALFCOS = 2,  /**< \f$\mathrm{sgn}(t)(1-\cos \pi t/2)\f$ */
-   AGG_SPACING_HALFSIN = 3   /**< \f$\sin \pi t/2\f$ */
+   AGG_SPACING_LINEAR  =  0,  /**< \f$t\f$ equal intervals over range */
+   AGG_SPACING_COSINE  =  1,  /**< \f$\mathrm{sgn}(t)(1-\cos \pi t)/2\f$ */
+   AGG_SPACING_HALFCOS =  2,  /**< \f$\mathrm{sgn}(t)(1-\cos \pi t/2)\f$ */
+   AGG_SPACING_HALFSIN =  3,  /**< \f$\sin \pi t/2\f$ */
+   AGG_SPACING_CIRCULAR = 4   /**< interpolate on \f$\cos^{-1}t\f$ */
   } agg_spacing_t ;
 
 typedef struct _agg_shape_t agg_shape_t ;
@@ -117,6 +118,7 @@ struct _agg_distribution_t {
     ns, /**< number of shapes/sections in distribution */
     nsmax, /**< maximum number of shapes/sections in distribution */
     axes[3] ; /**< permutation of axes (coordinate indices) */
+  gchar *name ;
   gdouble smin, smax, *ts, *w ;
   gboolean invert ; /**< when meshing reorient triangles to invert normals */
   agg_shape_t **sh ;
@@ -130,6 +132,7 @@ struct _agg_distribution_t {
 #define agg_distribution_parameter_min(_d) ((_d)->smin)
 #define agg_distribution_parameter_max(_d) ((_d)->smax)
 #define agg_distribution_invert(_d) ((_d)->invert)
+#define agg_distribution_name(_d) ((_d)->name)
 
 typedef enum
   {
@@ -137,7 +140,8 @@ typedef enum
    AGG_GRID_LINEAR        = 1,
    AGG_GRID_SPHERICAL     = 2,
    AGG_GRID_HEMISPHERICAL = 3,
-   AGG_GRID_TUBE          = 4
+   AGG_GRID_TUBE          = 4,
+   AGG_GRID_ADAPTIVE      = 5
   } agg_grid_topology_t ;
 
 typedef struct _agg_grid_t agg_grid_t ;
@@ -147,14 +151,19 @@ typedef gint (*agg_grid_area_interp_func_t)(agg_grid_t *g, gdouble *uv,
 typedef gint (*agg_grid_line_interp_func_t)(agg_grid_t *g, gdouble *uv,
 					    gdouble s,
 					    gdouble *u, gdouble *v) ;
+/*void pointers to body and mesh because the types haven't been defined yet*/
+/* typedef gint (*agg_grid_mesh_init_func_t)(agg_grid_t *g, gpointer b, */
+/* 					  gpointer m, gpointer w) ; */
 
 struct _agg_grid_t {
   agg_grid_topology_t t ;
   agg_grid_area_interp_func_t interp_area ;
   agg_grid_line_interp_func_t interp_line ;
+  /* agg_grid_mesh_init_func_t   init_func, refine_func ; */
   gint np, npmax, nt, ntmax, *tri ;
   gdouble *uv ;
   gboolean invert ;
+  gpointer data ;
 } ;
 
 #define agg_grid_topology(_g)            ((_g)->t)
@@ -166,6 +175,35 @@ struct _agg_grid_t {
 #define agg_grid_point_u(_g,_i)          ((_g)->uv[2*(_i)+0])
 #define agg_grid_point_v(_g,_i)          ((_g)->uv[2*(_i)+1])
 #define agg_grid_invert(_g)              ((_g)->invert)
+#define agg_grid_data(_g)                ((_g)->data)
+
+typedef struct _agg_adaptive_grid_data_t agg_adaptive_grid_data_t ;
+
+struct _agg_adaptive_grid_data_t {
+  gint nsmin, nsmax, ntmin, ntmax ;
+  gdouble amin, amax, lmin, lmax, ncos ;
+  agg_spacing_t is, it ;
+} ;
+
+/* #define agg_adaptive_grid_nsmin(_g)    ((_g)->nsmin) */
+/* #define agg_adaptive_grid_nsmax(_g)    ((_g)->nsmax) */
+/* #define agg_adaptive_grid_ntmin(_g)    ((_g)->ntmin) */
+/* #define agg_adaptive_grid_ntmax(_g)    ((_g)->ntmax) */
+#define agg_adaptive_grid_amin(_g)     ((_g)->amin)
+#define agg_adaptive_grid_amax(_g)     ((_g)->amax)
+#define agg_adaptive_grid_lmin(_g)     ((_g)->lmin)
+#define agg_adaptive_grid_lmax(_g)     ((_g)->lmax)
+#define agg_adaptive_grid_ncos(_g)     ((_g)->ncos)
+/* #define agg_adaptive_grid_interp_s(_g) ((_g)->is) */
+/* #define agg_adaptive_grid_interp_t(_g) ((_g)->it) */
+
+typedef struct _agg_adaptive_grid_workspace_t agg_adaptive_grid_workspace_t ;
+
+/*generic pointers to Triangle triangulateio structs*/
+struct _agg_adaptive_grid_workspace_t {
+  gpointer in, out ;
+  gint np, npmax, ns, nsmax, nt, ntmax ;
+} ;
 
 #define AGG_BODY_DISTRIBUTION_NUMBER_MAX 64
 
@@ -173,8 +211,9 @@ typedef struct _agg_body_t agg_body_t ;
 
 struct _agg_body_t {
   gint nd ;
-  gchar *names[AGG_BODY_DISTRIBUTION_NUMBER_MAX] ;
+  gchar *name, *names[AGG_BODY_DISTRIBUTION_NUMBER_MAX] ;
   agg_distribution_t *d[AGG_BODY_DISTRIBUTION_NUMBER_MAX] ;
+  gdouble smin, smax, tmin, tmax ;
   agg_parser_t *p ;
   agg_grid_t *g ;
 } ;
@@ -182,7 +221,12 @@ struct _agg_body_t {
 #define agg_body_distribution_number(_b) ((_b)->nd)
 #define agg_body_distribution(_b,_i)     (((_b)->d[(_i)]))
 #define agg_body_parser(_b)              ((_b)->p)
-#define agg_body_grid(_b)              ((_b)->g)
+#define agg_body_grid(_b)                ((_b)->g)
+#define agg_body_name(_b)                ((_b)->name)
+#define agg_body_smin(_b)                ((_b)->smin)
+#define agg_body_smax(_b)                ((_b)->smax)
+#define agg_body_tmin(_b)                ((_b)->tmin)
+#define agg_body_tmax(_b)                ((_b)->tmax)
 
 typedef struct _agg_crowd_t agg_crowd_t ;
 
@@ -252,7 +296,6 @@ struct _agg_mesh_t {
   ((_m)->tri[(3+1+(_m)->nttags)*(_i)+3+1+(_j)])
 #define agg_mesh_grid(_m) ((_m)->g)
 
-
 typedef struct _agg_workspace_t agg_workspace_t ;
 
 struct _agg_workspace_t {
@@ -276,6 +319,7 @@ gint agg_shape_fit(agg_shape_t *c,
 		   gdouble *xl, gdouble *yl, gint nl,
 		   gdouble n1, gdouble n2, gdouble d,
 		   gint n, gboolean closed, gdouble *work) ;
+gint agg_shape_parameter_limits(agg_shape_t *s, gdouble *tmin, gdouble *tmax) ;
 gint agg_shape_interval_add(agg_shape_t *s,
 			    gdouble x1, gdouble x2,
 			    gdouble *x, gdouble *y, gint np,
@@ -323,7 +367,6 @@ gint agg_distribution_mesh(agg_distribution_t *d,
 			   agg_spacing_t ss,
 			   gdouble tmin, gdouble tmax, gint nt,
 			   agg_spacing_t st,
-			   /* agg_shape_t *sh, agg_local_transform_t *T, */
 			   agg_parser_t *p,			   
 			   agg_mesh_t *m, agg_workspace_t *w) ;
 gint agg_body_mesh_grid(agg_body_t *b, agg_grid_t *g,
@@ -360,14 +403,20 @@ GScanner *agg_scanner_alloc(void) ;
 gint agg_parser_body_read(GScanner *scanner, agg_parser_t *p, agg_body_t *b) ;
 gint agg_parser_constant_parse(gchar *s, guint *v) ;
 gint agg_parser_crowd_read(GScanner *scanner, agg_crowd_t *c) ;
+gint agg_crowd_add_body(agg_crowd_t *c, agg_body_t *b) ;
+gint agg_crowd_list_bodies(FILE *f, agg_crowd_t *c) ;
 
 agg_body_t *agg_body_alloc(void) ;
 gint agg_body_distribution_locate_u(agg_body_t *b, gdouble u) ;
 gint agg_body_point_eval(agg_body_t *b, gdouble u, gdouble v, gdouble *x,
 			 agg_workspace_t *w) ;
+gint agg_body_point_normal_eval(agg_body_t *b, gdouble u, gdouble v,
+				gdouble *x, gdouble *n, agg_workspace_t *w) ;
 gint agg_body_distributions_list(FILE *f, agg_body_t *b) ;
 gint agg_body_distribution_add(agg_body_t *b, agg_distribution_t *d,
 			       gchar *name) ;
+gint agg_distribution_parameter_limits(agg_distribution_t *d,
+				       gdouble *tmin, gdouble *tmax) ;
 gint agg_body_parameter_limits(agg_body_t *b, gdouble *umin, gdouble *umax) ;
 
 gint agg_local_transform_init(agg_local_transform_t *t) ;
@@ -402,6 +451,14 @@ gint agg_grid_linear(agg_grid_t *g,
 		     gdouble vmin, gdouble vmax, gint nv, agg_spacing_t sv) ;
 gint agg_grid_tube(agg_grid_t *g, gint nu,
 		   gdouble vmin, gdouble vmax, gint nv) ;
+gint agg_grid_adaptive(agg_grid_t *g, agg_adaptive_grid_data_t *d) ;
+agg_adaptive_grid_workspace_t *agg_adaptive_grid_workspace_alloc(gint np,
+								 gint ns,
+								 gint nt) ;
+gint agg_adaptive_grid_make(agg_grid_t *g, agg_body_t *b,
+			    agg_workspace_t *w,
+			    agg_adaptive_grid_workspace_t *wg) ;
+
 gint agg_grid_cone(agg_grid_t *g, gint nu, gint nv) ;
 gint agg_grid_area_interpolate(agg_grid_t *g, gdouble *uv,
 			       gdouble s, gdouble t,

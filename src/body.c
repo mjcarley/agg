@@ -119,6 +119,35 @@ gint agg_body_point_eval(agg_body_t *b, gdouble u, gdouble v, gdouble *x,
   return 0 ;
 }
 
+gint agg_body_point_normal_eval(agg_body_t *b, gdouble u, gdouble v,
+				gdouble *x, gdouble *n, agg_workspace_t *w)
+
+{
+  gdouble ee, xu[3], xv[3], t ;
+
+  ee = 1e-6 ;
+
+  agg_body_point_eval(b, u, v, x, w) ;
+
+  t = (u > agg_body_smin(b) + ee ? u-ee : u+ee) ; 
+  agg_body_point_eval(b, t, v, xu, w) ;
+  xu[0] = (xu[0] - x[0])/(t - u) ;
+  xu[1] = (xu[1] - x[1])/(t - u) ;
+  xu[2] = (xu[2] - x[2])/(t - u) ;
+
+  t = (v > agg_body_tmin(b) + ee ? v-ee : v+ee) ; 
+  agg_body_point_eval(b, u, t, xv, w) ;
+  xv[0] = (xv[0] - x[0])/(t - v) ;
+  xv[1] = (xv[1] - x[1])/(t - v) ;
+  xv[2] = (xv[2] - x[2])/(t - v) ;
+
+  agg_vector_cross(n, xu, xv) ;
+  t = agg_vector_length(n) ;
+  n[0] /= t ; n[1] /= t ; n[2] /= t ;
+  
+  return 0 ;
+}
+
 gint agg_body_parameter_limits(agg_body_t *b, gdouble *umin, gdouble *umax)
 
 {
@@ -133,5 +162,5 @@ gint agg_body_parameter_limits(agg_body_t *b, gdouble *umin, gdouble *umax)
     *umax = MAX(*umax, agg_distribution_parameter_max(d)) ;
   }
   
-  return umin ;
+  return 0 ;
 }

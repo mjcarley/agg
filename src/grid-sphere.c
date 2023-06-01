@@ -325,20 +325,8 @@ gint agg_grid_interp_area_spherical(agg_grid_t *g, gdouble *uv,
 				    gdouble *u, gdouble *v)
 
 {
-  /* gint *tri ; */
   gdouble x[9], L[3] ;
   
-  /* tri = agg_grid_triangle(g, i) ; */
-
-  /* sphere_point(agg_grid_point_u(g, tri[0]), */
-  /* 	       agg_grid_point_v(g, tri[0]), */
-  /* 	       &(x[0])) ; */
-  /* sphere_point(agg_grid_point_u(g, tri[1]), */
-  /* 	       agg_grid_point_v(g, tri[1]), */
-  /* 	       &(x[3])) ; */
-  /* sphere_point(agg_grid_point_u(g, tri[2]), */
-  /* 	       agg_grid_point_v(g, tri[2]), */
-  /* 	       &(x[6])) ; */
   sphere_point(uv[0], uv[1], &(x[3*0])) ;
   sphere_point(uv[2], uv[3], &(x[3*1])) ;
   sphere_point(uv[4], uv[5], &(x[3*2])) ;

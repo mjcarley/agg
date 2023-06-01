@@ -1,4 +1,5 @@
-AM_CPPFLAGS = -I$(top_srcdir) -I$(includedir) -DG_LOG_DOMAIN=\"AGG\"
+AM_CPPFLAGS = -I$(top_srcdir) -I$(includedir) -DG_LOG_DOMAIN=\"AGG\" \
+	-DTRILIBRARY -DANSI_DECLARATORS -DEXTERNAL_TEST
 
 bin_SCRIPTS=agg-config
 
@@ -31,9 +32,11 @@ libagg_la_SOURCES = \
 	grid.c \
 	grid-sphere.c \
 	grid-hemisphere.c \
+	grid-adaptive.c \
 	moller-tri.c \
 	moller-raytri.c \
-	broyden.c
+	triangle.c \
+	triangle.h
 
 include_HEADERS = \
 	agg.h

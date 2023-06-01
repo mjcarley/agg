@@ -81,6 +81,36 @@ Cosine point spacing:
 
 Built-in grids: spherical,  hemispherical, tube, linear. 
 
+Spherical grid:
+\begin{align}
+  \mathbf{x}
+  &=
+  \left[
+    \begin{aligned}
+      &2s^{1/2}(1-s)^{1/2}(|t|-1/2)\\
+      &(\sgn{t})2s^{1/2}(1-s)^{1/2}t^{1/2}(1-t)^{1/2}\\
+      &s
+    \end{aligned}
+  \right]\\
+  &0\leq s\leq 1,\, -1\leq t\leq 1,
+\end{align}
+sphere of unit diameter centred at $[0,0,1/2]$
+
+Hemispherical grid:
+\begin{align}
+  r &= (1-s^{2})^{1/2},\\
+  \mathbf{x}
+  &=
+  \left[
+    \begin{aligned}
+      &(|t|-1/2)r\\
+      &(\sgn(t))t^{1/2}(1-|t|)^{1/2}r\\
+      &s/2
+    \end{aligned}
+  \right],
+\end{align}
+hemisphere of radius $1/2$ centred at $[0,0,0]$. 
+
 \end{document}
 
 %%% Local Variables:

@@ -40,6 +40,9 @@
 #define agg_transform_shrink_data(_t)	\
   (&((_t)->p[AGG_TRANSFORM_PARAMETER_SHRINK]))
 
+#define agg_vector_scalar(_A,_B)				\
+  (((_A)[0])*((_B)[0])+((_A)[1])*((_B)[1])+((_A)[2])*((_B)[2]))
+
 #define agg_vector_cross(_C,_A,_B)				\
   ((_C)[0] = (_A)[1]*(_B)[2] - (_A)[2]*(_B)[1],			\
    (_C)[1] = (_A)[2]*(_B)[0] - (_A)[0]*(_B)[2],			\
@@ -54,6 +57,13 @@
   (sqrt(((_A)[0])*((_A)[0])+				\
 	((_A)[1])*((_A)[1]) +				\
 	((_A)[2])*((_A)[2])))
+#define agg_vector_distance2(_A,_B)		\
+  ( ((_A)[0]-(_B)[0])*((_A)[0]-(_B)[0]) +	\
+    ((_A)[1]-(_B)[1])*((_A)[1]-(_B)[1]) +	\
+    ((_A)[2]-(_B)[2])*((_A)[2]-(_B)[2]) )
+
+#define agg_vector_distance(_A,_B)	\
+  (sqrt((agg_vector_distance2(_A,_B))))
 
 #define agg_point_copy(_fb,_i,_fe,_j)			\
   do {							\
@@ -120,6 +130,16 @@ gint agg_grid_interp_area_hemispherical(agg_grid_t *g, gdouble *uv,
 gint agg_grid_interp_area_tube(agg_grid_t *g, gdouble *uv,
 			       gdouble s, gdouble t,
 			       gdouble *u, gdouble *v) ;
+gint agg_grid_interp_area_adaptive(agg_grid_t *g, gdouble *uv,
+				   gdouble s, gdouble t,
+				   gdouble *u, gdouble *v) ;
+gint agg_grid_interp_line_adaptive(agg_grid_t *g, gdouble *uv,
+				   gdouble s,
+				   gdouble *u, gdouble *v) ;
+/* gint agg_grid_mesh_init_adaptive(agg_grid_t *g, agg_body_t *b, */
+/* 				 agg_mesh_t *m, agg_workspace_t *w) ; */
+/* gint agg_grid_mesh_refine_adaptive(agg_grid_t *g, agg_body_t *b, */
+/* 				   agg_mesh_t *m, agg_workspace_t *w) ; */
 
 int coplanar_tri_tri(double N[3],double V0[3],double V1[3],double V2[3],
                      double U0[3],double U1[3],double U2[3]) ;
@@ -131,5 +151,7 @@ int tri_tri_intersect_with_isectline(double V0[3],double V1[3],double V2[3],
 				     double isectpt2[3]) ;
 int NoDivTriTriIsect(double V0[3],double V1[3],double V2[3],
                      double U0[3],double U1[3],double U2[3]) ;
+gint triunsuitable(gdouble *triorg, gdouble *tridest, gdouble *triapex,
+		   gdouble area, gpointer data) ;
 
 #endif /*__AGG_PRIVATE_H_INCLUDED__*/

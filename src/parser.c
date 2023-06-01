@@ -52,6 +52,7 @@ static const struct {
    {"cosine", AGG_SPACING_COSINE},
    {"halfcos", AGG_SPACING_HALFCOS},
    {"halfsin", AGG_SPACING_HALFSIN},
+   {"circular", AGG_SPACING_CIRCULAR},
    {NULL, 0}
   } ;
 
@@ -607,7 +608,7 @@ static guint scan_distribution(GScanner *scanner, agg_parser_t *p,
   guint symbol;
   agg_distribution_t *d ;
   gchar v[128], *expr[32] ;
-  gdouble smin, smax, s, param[32] = {0} ;
+  gdouble smin, smax, tmin, tmax, s, param[32] = {0} ;
   gint ns, ntr, i, nparam ;
   agg_function_call_t shape ;
   
@@ -625,18 +626,19 @@ static guint scan_distribution(GScanner *scanner, agg_parser_t *p,
   
   /*distribution name*/
   if ( expr[0] == NULL ) return G_TOKEN_ERROR ;
-  sprintf(v, "%s", expr[0]) ;
-  fprintf(stderr, "%s\n", v) ;
-
+  agg_distribution_name(d) = g_strdup(expr[0]) ;
+  
   if ( !expression_null(expr[1], "parameter %d must be constant", 1) ) {
     return G_TOKEN_ERROR ;
   }
   smin = param[1] ;
+  agg_body_smin(b) = MIN(agg_body_smin(b), smin) ;
 
   if ( !expression_null(expr[2], "parameter %d must be constant", 2) ) {
     return G_TOKEN_ERROR ;
   }
   smax = param[2] ;
+  agg_body_smax(b) = MAX(agg_body_smax(b), smax) ;
 
   /*number of steps in parameter*/  
   if ( !expression_null(expr[3], "parameter %d must be constant", 3) ) {
@@ -646,7 +648,7 @@ static guint scan_distribution(GScanner *scanner, agg_parser_t *p,
   
   d = agg_distribution_alloc(ns) ;
   agg_body_distribution_add(b, d, v) ;
- 
+
   /*step spacing in generating shapes*/
   i = agg_parser_constant_parse(expr[4], &(d->sg)) ;
   if ( i != 0 )
@@ -710,6 +712,10 @@ static guint scan_distribution(GScanner *scanner, agg_parser_t *p,
     agg_distribution_add_shape(d, s, sh) ;
   }
 
+  agg_distribution_parameter_limits(d, &tmin, &tmax) ;
+  agg_body_tmin(b) = MIN(agg_body_tmin(b), tmin) ;
+  agg_body_tmax(b) = MAX(agg_body_tmax(b), tmax) ;
+    
   return G_TOKEN_NONE ;
 }
 
@@ -826,6 +832,11 @@ gint agg_parser_body_read(GScanner *scanner, agg_parser_t *p, agg_body_t *b)
 {
   guint token ;
   
+  agg_body_smin(b) =  G_MAXDOUBLE ; 
+  agg_body_smax(b) = -G_MAXDOUBLE ;
+  agg_body_tmin(b) =  G_MAXDOUBLE ; 
+  agg_body_tmax(b) = -G_MAXDOUBLE ;
+
   do {
     token = next_block(scanner, p);
     switch ( token ) {
@@ -857,7 +868,7 @@ gint agg_parser_body_read(GScanner *scanner, agg_parser_t *p, agg_body_t *b)
   }
   
   agg_body_parser(b) = p ;
-  
+ 
   return 0 ;
 }
 
@@ -1002,11 +1013,11 @@ static guint scan_body(GScanner *scanner, agg_parser_t *p, agg_body_t *b)
 
 {
   guint symbol;
-  gchar v[128], *expr[32] ;
+  gchar *expr[32] ;
   gdouble param[32] = {0} ;
   gint nparam ;
   
-  fprintf(stderr, "scanning body: ") ;
+  /* fprintf(stderr, "scanning body: ") ; */
 
   /*need the global data set first*/
   if ( !agg_parser_global_set(p) ) return G_TOKEN_ERROR ;
@@ -1014,21 +1025,16 @@ static guint scan_body(GScanner *scanner, agg_parser_t *p, agg_body_t *b)
   symbol = scan_arguments(scanner, p, expr, param, &nparam) ;
   if ( symbol != G_TOKEN_NONE ) return G_TOKEN_ERROR ;
 
-  /*distribution name*/
+  /*body name*/
   if ( expr[0] == NULL ) return G_TOKEN_ERROR ;
-  sprintf(v, "%s", expr[0]) ;
-  fprintf(stderr, "%s\n", v) ;
+  agg_body_name(b) = g_strdup(expr[0]) ;
 
   /*curly brackets for the block information*/
   if ( scanner_read(scanner) != G_TOKEN_LEFT_CURLY ) return G_TOKEN_ERROR ;
 
-  /* do { */
-    agg_parser_body_read(scanner, p, b) ;
+  agg_parser_body_read(scanner, p, b) ;
 
-    g_scanner_peek_next_token(scanner) ;
-  /* } while ( symbol != G_TOKEN_ERROR && */
-  /* 	    symbol != G_TOKEN_EOF && */
-  /* 	    scanner->next_token != G_TOKEN_RIGHT_CURLY ) ; */
+  g_scanner_peek_next_token(scanner) ;
 
   if ( symbol == G_TOKEN_ERROR || symbol == G_TOKEN_EOF ) return symbol ;
   
@@ -1065,11 +1071,9 @@ gint agg_parser_crowd_read(GScanner *scanner, agg_crowd_t *c)
 		"line %d\n", __FUNCTION__, g_scanner_cur_line(scanner)) ;
 	exit(1) ;
       }
-      body = c->nb ;
-      c->b[body] = b = agg_body_alloc() ;
+      b = agg_body_alloc() ;
       token = scan_body(scanner, p, b) ;
-      c->nb ++ ;
-      body = -1 ;
+      agg_crowd_add_body(c, b) ;
       break ;
     case AGG_SYMBOL_DISTRIBUTION:
       if ( body == -1 ) {
@@ -1107,5 +1111,46 @@ gint agg_parser_crowd_read(GScanner *scanner, agg_crowd_t *c)
   return 0 ;
 }
 
+gint agg_crowd_add_body(agg_crowd_t *c, agg_body_t *b)
+
+{
+  gint i, j, cmp ;
+
+  cmp = 1 ;
+  for ( i = 0 ; i < agg_crowd_body_number(c) ; i ++ ) {
+    if ( (cmp = strcmp(agg_body_name(b), agg_body_name(agg_crowd_body(c,i))))
+	 <= 0 ) break ;
+  }
+  
+  if ( cmp == 0 ) {
+    g_error("%s: body names must be distinct (%s repeated)\n",
+	    __FUNCTION__, agg_body_name(b)) ;
+  }
+  
+  for ( j = agg_crowd_body_number(c) ; j >= i ; j -- ) {
+    agg_crowd_body(c,j+1) = agg_crowd_body(c,j) ;
+  }
+  agg_crowd_body(c,i) = b ;
+  agg_crowd_body_number(c) ++ ;
+  
+  return 0 ;
+}
+
+gint agg_crowd_list_bodies(FILE *f, agg_crowd_t *c)
+
+{
+  gint i ;
+
+  for ( i = 0 ; i < agg_crowd_body_number(c) ; i ++ ) {
+    fprintf(f, "body %d: %s (%lg,%lg)x(%lg,%lg)\n", i,
+	    agg_body_name(agg_crowd_body(c,i)),
+	    agg_body_smin(agg_crowd_body(c,i)),
+	    agg_body_smax(agg_crowd_body(c,i)),
+	    agg_body_tmin(agg_crowd_body(c,i)),
+	    agg_body_tmax(agg_crowd_body(c,i))) ;
+  }
+  
+  return 0 ;
+}
 
 /* @} */

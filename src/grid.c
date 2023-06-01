@@ -27,6 +27,54 @@
 
 #include "agg-private.h"
 
+static gboolean check_constant(gchar *str, gpointer expr)
+
+{
+  if ( expr != NULL ) {
+    fprintf(stderr, "%s must be a numerical constant\n", str) ;    
+    return FALSE ;
+  }
+
+  return TRUE ;
+}
+
+static gboolean check_non_negative(gchar *str, gdouble p, gdouble *v)
+
+{
+  if ( p < 0 ) {
+    fprintf(stderr, "%s must be non-negative (%lg)\n", str, p) ;
+    return FALSE ;
+  }
+  
+  *v = p ;
+  return TRUE ;
+}
+
+static gboolean check_positive(gchar *str, gdouble p, gdouble *v)
+
+{
+  if ( p <= 0 ) {
+    fprintf(stderr, "%s must be greater than zero (%lg)\n", str, p) ;
+    return FALSE ;
+  }
+  if ( v != NULL ) *v = p ;
+
+  return TRUE ;
+}
+
+static gboolean check_int(gchar *str, gdouble p, gint *v)
+
+{
+  if ( p != round(p) ) {
+    fprintf(stderr, "%s must be an integer (%lg)\n", str, p) ;
+    return FALSE ;
+  }
+  
+  *v = (gint)p ;
+  
+  return TRUE ;
+}
+
 static gdouble linear_to_angle(gdouble x)
 
 {
@@ -52,7 +100,8 @@ agg_grid_t *agg_grid_alloc(gint np, gint nt)
   agg_grid_triangle_number_max(g) = nt ;
   agg_grid_invert(g) = FALSE ;
   agg_grid_topology(g) = AGG_GRID_NONE ;
-  
+  agg_grid_data(g) = NULL ;
+
   return g ;
 }
 
@@ -203,99 +252,14 @@ gint agg_grid_tube(agg_grid_t *g, gint nu, gdouble vmin, gdouble vmax, gint nv)
   return 0 ;
 }
 
-/* gint agg_grid_cone(agg_grid_t *g, gint nu, gint nv) */
-
-/* { */
-/*   gint np, nt, i, j, *tri, i1, i2 ; */
-/*   gdouble t[256] ; */
-
-/*   g_assert(nv < 256) ; */
-  
-/*   agg_grid_topology(g) = AGG_GRID_CONE ; */
-/*   agg_grid_point_number(g) = np = 0 ; */
-
-/*   for ( i = 0 ; i < nv ; i ++ ) { */
-/*     t[i] = 2.0*M_PI*i/(nv-1) ; */
-/*     if ( t[i] > M_PI ) t[i] = (1.0 + cos(t[i]))*0.5 ; */
-/*     else t[i] = -(1.0 + cos(t[i]))*0.5 ; */
-/*   } */
-
-/*   if ( !(g->invert) ) { */
-/*     for ( i = 0 ; i < nu ; i ++ ) { */
-/*       for ( j = 0 ; j < nv ; j ++ ) { */
-/* 	agg_grid_point_u(g, np) = (gdouble)i/(nu-1) ; */
-/* 	agg_grid_point_v(g, np) = t[j] ; */
-/* 	np ++ ; */
-/*       } */
-/*     } */
-/*   } else { */
-/*     for ( i = 0 ; i < nu ; i ++ ) { */
-/*       for ( j = 0 ; j < nv ; j ++ ) { */
-/* 	agg_grid_point_u(g, np) = (gdouble)i/(nu-1) ; */
-/* 	  /\* (nu-1-i)/(nu-1) ; *\/ */
-/* 	agg_grid_point_v(g, np) = t[nv-1-j] ; */
-/* 	np ++ ; */
-/*       } */
-/*     } */
-/*   } */
-
-/*   agg_grid_point_number(g) = np ; */
-
-/*   i1 = 1 ; i2 = 2 ; */
-/*   /\* if ( agg_grid_invert(g) ) { i2 = 1 ; i1 = 2 ; } *\/ */
-/*   agg_grid_triangle_number(g) = nt = 0 ; */
-
-/*   i = 0 ; */
-/*   for ( j = 0 ; j < nv - 1 ; j ++ ) { */
-/*     /\* tri = agg_grid_triangle(g, nt) ; *\/ */
-/*     /\* tri[0] = (i+0)*nv + j + 0 ; *\/ */
-/*     /\* tri[1] = (i+1)*nv + j + 0 ; *\/ */
-/*     /\* tri[2] = (i+0)*nv + j + 1 ; *\/ */
-/*     /\* nt ++ ; *\/ */
-/*     tri = agg_grid_triangle(g, nt) ; */
-/*     tri[ 0] = (i+1)*nv + j + 0 ; */
-/*     tri[i1] = (i+1)*nv + j + 1 ; */
-/*     tri[i2] = (i+0)*nv + j + 1 ; */
-/*     nt ++ ; */
-/*   } */
-
-/*   for ( i = 1 ; i < nu - 1 ; i ++ ) { */
-/*     for ( j = 0 ; j < nv - 1 ; j ++ ) { */
-/*       tri = agg_grid_triangle(g, nt) ; */
-/*       tri[ 0] = (i+0)*nv + j + 0 ; */
-/*       tri[i1] = (i+1)*nv + j + 0 ; */
-/*       tri[i2] = (i+0)*nv + j + 1 ; */
-/*       nt ++ ; */
-/*       tri = agg_grid_triangle(g, nt) ; */
-/*       tri[ 0] = (i+1)*nv + j + 0 ; */
-/*       tri[i1] = (i+1)*nv + j + 1 ; */
-/*       tri[i2] = (i+0)*nv + j + 1 ; */
-/*       nt ++ ; */
-/*     } */
-/*   } */
-
-/*   agg_grid_triangle_number(g) = nt ; */
-  
-/*   return 0 ; */
-/* } */
-
 gint agg_grid_interp_area_linear(agg_grid_t *g, gdouble *uv,
 				 gdouble s, gdouble t,
 				 gdouble *u, gdouble *v)
 
 {
-  /* gint *tri ; */
-  /* gdouble L[3], ut[3], vt[3] ; */
   gdouble L[3] ;
-  /* tri = agg_grid_triangle(g, i) ; */
 
   L[0] = 1.0 - s - t ; L[1] = s ; L[2] = t ;
-  /* ut[0] = agg_grid_point_u(g, tri[0]) ; */
-  /* ut[1] = agg_grid_point_u(g, tri[1]) ; */
-  /* ut[2] = agg_grid_point_u(g, tri[2]) ; */
-  /* vt[0] = agg_grid_point_v(g, tri[0]) ; */
-  /* vt[1] = agg_grid_point_v(g, tri[1]) ; */
-  /* vt[2] = agg_grid_point_v(g, tri[2]) ; */
 
   *u = L[0]*uv[0] + L[1]*uv[2] + L[2]*uv[4] ;
   *v = L[0]*uv[1] + L[1]*uv[3] + L[2]*uv[5] ;
@@ -308,31 +272,17 @@ gint agg_grid_interp_area_tube(agg_grid_t *g, gdouble *uv,
 			       gdouble *u, gdouble *v)
 
 {
-  gint *tri ;
-  gdouble L[3], ut[3], vt[3] ;
-
-  /* tri = agg_grid_triangle(g, i) ; */
+  gdouble L[3], vt[3] ;
 
   L[0] = 1.0 - s - t ; L[1] = s ; L[2] = t ;
-  /*axial coordinate interpolates linearly*/
-  /* ut[0] = agg_grid_point_u(g, tri[0]) ; */
-  /* ut[1] = agg_grid_point_u(g, tri[1]) ; */
-  /* ut[2] = agg_grid_point_u(g, tri[2]) ; */
-  /* *u = L[0]*ut[0] + L[1]*ut[1] + L[2]*ut[2] ; */
 
-  /*circumferential coordinate needs assistance*/
-  /* vt[0] = agg_grid_point_v(g, tri[0]) ; */
-  /* vt[1] = agg_grid_point_v(g, tri[1]) ; */
-  /* vt[2] = agg_grid_point_v(g, tri[2]) ; */
-
-  uv[0] = linear_to_angle(uv[1]) ;
+  vt[0] = linear_to_angle(uv[1]) ;
   vt[1] = linear_to_angle(uv[3]) ;
   vt[2] = linear_to_angle(uv[5]) ;
   
   *v = L[0]*vt[0] + L[1]*vt[1] + L[2]*vt[2] ;
 
   *u = L[0]*uv[0] + L[1]*uv[2] + L[2]*uv[4] ;
-  /* *v = L[0]*uv[1] + L[1]*uv[3] + L[2]*uv[5] ; */
   
   /*v is an angle which needs reconverting to linear coordinate*/
   if ( *v > M_PI ) *v = 0.5*(1.0 + cos(*v)) ;
@@ -340,41 +290,6 @@ gint agg_grid_interp_area_tube(agg_grid_t *g, gdouble *uv,
   
   return 0 ;
 }
-
-/* static gint interp_grid_cone(agg_grid_t *g, gint i, */
-/* 			     gdouble s, gdouble t, */
-/* 			     gdouble *u, gdouble *v) */
-
-/* { */
-/*   gint *tri ; */
-/*   gdouble L[3], ut[3], vt[3] ; */
-
-/*   tri = agg_grid_triangle(g, i) ; */
-
-/*   L[0] = 1.0 - s - t ; L[1] = s ; L[2] = t ; */
-/*   /\*axial coordinate interpolates linearly*\/ */
-/*   ut[0] = agg_grid_point_u(g, tri[0]) ; */
-/*   ut[1] = agg_grid_point_u(g, tri[1]) ; */
-/*   ut[2] = agg_grid_point_u(g, tri[2]) ; */
-/*   *u = L[0]*ut[0] + L[1]*ut[1] + L[2]*ut[2] ; */
-
-/*   /\*circumferential coordinate needs assistance*\/ */
-/*   vt[0] = agg_grid_point_v(g, tri[0]) ; */
-/*   vt[1] = agg_grid_point_v(g, tri[1]) ; */
-/*   vt[2] = agg_grid_point_v(g, tri[2]) ; */
-
-/*   vt[0] = linear_to_angle(vt[0]) ; */
-/*   vt[1] = linear_to_angle(vt[1]) ; */
-/*   vt[2] = linear_to_angle(vt[2]) ; */
-  
-/*   *v = L[0]*vt[0] + L[1]*vt[1] + L[2]*vt[2] ; */
-
-/*   /\*v is an angle which needs reconverting to linear coordinate*\/ */
-/*   if ( *v > M_PI ) *v = 0.5*(1.0 + cos(*v)) ; */
-/*   else *v = -0.5*(1.0 + cos(*v)) ; */
-  
-/*   return 0 ; */
-/* } */
 
 gint agg_grid_area_interpolate(agg_grid_t *g, gdouble *uv,
 			       gdouble s, gdouble t,
@@ -431,17 +346,8 @@ static gint set_grid_spherical(agg_grid_t *g, gchar *expr[], gdouble *p,
     return 1 ;
   }
 
-  if ( expr[0] != NULL ) {
-    fprintf(stderr, "refinement level must be a numerical constant\n") ;
-    return 1 ;
-  }
-  
-  if ( p[0] != round(p[0]) || p[0] < 0 ) {
-    fprintf(stderr, "refinement level must be non-negative integer\n") ;
-    return 1 ;
-  }
-
-  refine = (gint)p[0] ;
+  if ( !check_constant("refinement level", expr[0]) ) return 1 ;
+  if ( !check_int("refinement level", p[0], &refine) ) return 1 ;
 
   return agg_grid_spherical(g, refine) ;
 }
@@ -458,29 +364,10 @@ static gint set_grid_hemispherical(agg_grid_t *g, gchar *expr[], gdouble *p,
     return 1 ;
   }
 
-  if ( expr[0] != NULL ) {
-    fprintf(stderr, "refinement level must be a numerical constant\n") ;
-    return 1 ;
-  }
-  
-  if ( p[0] != round(p[0]) || p[0] < 0 ) {
-    fprintf(stderr, "refinement level must be non-negative integer\n") ;
-    return 1 ;
-  }
-
-  refine = (gint)p[0] ;
+  if ( !check_constant("refinement level", expr[0]) ) return 1 ;
+  if ( !check_int("refinement level", p[0], &refine) ) return 1 ;
 
   return agg_grid_hemispherical(g, refine) ;
-}
-
-static gboolean check_int(gdouble p, gchar *message)
-
-{
-  if ( p != round(p) || p <= 0 ) {
-    fprintf(stderr, "%s", message) ;
-    return FALSE ;
-  }
-  return TRUE ;
 }
 
 static gint set_grid_linear(agg_grid_t *g, gchar *expr[], gdouble *p, gint np)
@@ -513,13 +400,9 @@ static gint set_grid_linear(agg_grid_t *g, gchar *expr[], gdouble *p, gint np)
   }
 
   if ( np == 4 ) {
-    if ( expr[0] != NULL ) {
-      fprintf(stderr, "# points in s must be a numerical constant\n") ;
-      return 1 ;
-    }
-    if ( !check_int(p[0], "# points in s must be a positive integer\n") )
-      return 1 ;
-    ns = (gint)p[0] ;
+    if ( !check_constant("number of points in s", expr[0]) ) return 1 ;
+    if ( !check_positive("number of points in s", p[0], NULL) ) return 1 ;
+    if ( !check_int("number of points in s", p[0], &ns) ) return 1 ;
     if ( expr[1] == NULL ) {
       fprintf(stderr, "point spacing in s must be a string") ;
       return 1 ;
@@ -529,13 +412,10 @@ static gint set_grid_linear(agg_grid_t *g, gchar *expr[], gdouble *p, gint np)
       return 1 ;
     }
 
-    if ( expr[2] != NULL ) {
-      fprintf(stderr, "# points in t must be a numerical constant\n") ;
-      return 1 ;
-    }
-    if ( !check_int(p[2], "# points in t must be a positive integer\n") )
-      return 1 ;
-    nt = (gint)p[2] ;
+    if ( !check_constant("number of points in t", expr[2]) ) return 1 ;
+    if ( !check_positive("number of points in t", p[2], NULL) ) return 1 ;
+    if ( !check_int("number of points in t", p[2], &nt) ) return 1 ;
+
     if ( expr[3] == NULL ) {
       fprintf(stderr, "point spacing in t must be a string") ;
       return 1 ;
@@ -547,23 +427,15 @@ static gint set_grid_linear(agg_grid_t *g, gchar *expr[], gdouble *p, gint np)
   }
 
   if ( np == 8 ) {
-    if ( expr[0] != NULL ) {
-      fprintf(stderr, "# points in s must be a numerical constant\n") ;
-      return 1 ;
-    }
-    if ( !check_int(p[0], "# points in s must be a positive integer\n") )
-      return 1 ;
-    ns = (gint)p[0] ;
-    if ( expr[1] != NULL ) {
-      fprintf(stderr, "# smin must be a numerical constant\n") ;
-      return 1 ;
-    }
+    if ( !check_constant("number of points in s", expr[0]) ) return 1 ;
+    if ( !check_positive("number of points in s", p[0], NULL) ) return 1 ;
+    if ( !check_int("number of points in s", p[0], &ns) ) return 1 ;
+
+    if ( !check_constant("smin", expr[1]) ) return 1 ;
     smin = p[1] ;
-    if ( expr[2] != NULL ) {
-      fprintf(stderr, "# smax must be a numerical constant\n") ;
-      return 1 ;
-    }
+    if ( !check_constant("smax", expr[2]) ) return 1 ;
     smax = p[2] ;
+
     if ( expr[3] == NULL ) {
       fprintf(stderr, "point spacing in s must be a string") ;
       return 1 ;
@@ -573,22 +445,13 @@ static gint set_grid_linear(agg_grid_t *g, gchar *expr[], gdouble *p, gint np)
       return 1 ;
     }
 
-    if ( expr[4] != NULL ) {
-      fprintf(stderr, "# points in t must be a numerical constant\n") ;
-      return 1 ;
-    }
-    if ( !check_int(p[4], "# points in t must be a positive integer\n") )
-      return 1 ;
-    nt = (gint)p[4] ;
-    if ( expr[5] != NULL ) {
-      fprintf(stderr, "# tmin must be a numerical constant\n") ;
-      return 1 ;
-    }
+    if ( !check_constant("number of points in t", expr[4]) ) return 1 ;
+    if ( !check_positive("number of points in t", p[4], NULL) ) return 1 ;
+    if ( !check_int("number of points in t", p[4], &nt) ) return 1 ;
+
+    if ( !check_constant("tmin", expr[5]) ) return 1 ;
     tmin = p[5] ;
-    if ( expr[6] != NULL ) {
-      fprintf(stderr, "# tmax must be a numerical constant\n") ;
-      return 1 ;
-    }
+    if ( !check_constant("tmax", expr[6]) ) return 1 ;
     tmax = p[6] ;
     if ( expr[7] == NULL ) {
       fprintf(stderr, "point spacing in t must be a string") ;
@@ -619,104 +482,82 @@ static gint set_grid_tube(agg_grid_t *g, gchar *expr[], gdouble *p, gint np)
     return 1 ;
   }
 
-  if ( expr[0] != NULL ) {
-    fprintf(stderr, "# points in s must be a numerical constant\n") ;
-    return 1 ;
-  }
+  if ( !check_constant("number of points in s", expr[0]) ) return 1 ;
+  if ( !check_positive("number of points in s", p[0], NULL) ) return 1 ;
+  if ( !check_int("number of points in s", p[0], &ns) ) return 1 ;
 
-  if ( p[0] != round(p[0]) || p[0] <= 0 ) {
-    fprintf(stderr, "# points in s must be a positive integer\n") ;
-    return 1 ;
-  }
-  ns = (gint)p[0] ;
-
-  if ( expr[1] != NULL ) {
-    fprintf(stderr, "# points in t must be a numerical constant\n") ;
-    return 1 ;
-  }
-  
-  if ( p[1] != round(p[1]) || p[1] <= 0 ) {
-    fprintf(stderr, "# points in t must be a positive integer\n") ;
-    return 1 ;
-  }
-  
-  nt = (gint)p[1] ;
+  if ( !check_constant("number of points in t", expr[1]) ) return 1 ;
+  if ( !check_positive("number of points in t", p[1], NULL) ) return 1 ;
+  if ( !check_int("number of points in t", p[1], &nt) ) return 1 ;
 
   if ( np == 4 ) {
-    if ( expr[2] != NULL ) {
-      fprintf(stderr, "tmin must be a numerical constant\n") ;
-      return 1 ;
-    }
+    if ( !check_constant("tmin", expr[2]) ) return 1 ;
     tmin = p[2] ;
-    if ( expr[3] != NULL ) {
-      fprintf(stderr, "tmax must be a numerical constant\n") ;
-      return 1 ;
-    }
+    if ( !check_constant("tmax", expr[3]) ) return 1 ;
     tmax = p[3] ;
   }
 
   return agg_grid_tube(g, ns, tmin, tmax, nt) ;
 }
 
-/* static gint set_grid_cone(agg_grid_t *g, gchar *expr[], gdouble *p, gint np) */
+static gint set_grid_adaptive(agg_grid_t *g, gchar *expr[], gdouble *p, gint np)
 
-/* { */
-/*   gint ns, nt ; */
-
-/*   if ( np != 2 ) { */
-/*     fprintf(stderr, */
-/* 	    "conical grid requires two arguments " */
-/* 	    "(# points in s) (# points in t)\n") ; */
-/*     return 1 ; */
-/*   } */
-
-/*   if ( expr[0] != NULL ) { */
-/*     fprintf(stderr, "# points in s must be a numerical constant\n") ; */
-/*     return 1 ; */
-/*   } */
-
-/*   if ( p[0] != round(p[0]) || p[0] <= 0 ) { */
-/*     fprintf(stderr, "# points in s must be a positive integer\n") ; */
-/*     return 1 ; */
-/*   } */
-
-/*   if ( expr[1] != NULL ) { */
-/*     fprintf(stderr, "# points in t must be a numerical constant\n") ; */
-/*     return 1 ; */
-/*   } */
+{
+  agg_adaptive_grid_data_t data ;
   
-/*   if ( p[1] != round(p[1]) || p[1] <= 0 ) { */
-/*     fprintf(stderr, "# points in t must be a positive integer\n") ; */
-/*     return 1 ; */
-/*   } */
+  if ( np != 5 ) {
+    fprintf(stderr, "adaptive grid requires eight arguments:\n"
+	    "  (nsmax, sinterp, ntmax, tinterp, amin, amax, lmin, lmax)\n") ;
+    return 1 ;
+  }
+  
+  if ( !check_constant("minimum element area", expr[0]) ) return 1 ;
+  if ( !check_non_negative("minimum element area", p[0],
+			   &(agg_adaptive_grid_amin(&data))) ) return 1 ;
 
-/*   ns = (gint)p[0] ; nt = (gint)p[1] ; */
-/*   return agg_grid_cone(g, ns, nt) ; */
-/* } */
+  if ( !check_constant("maximum element area", expr[1]) ) return 1 ;
+  if ( !check_positive("maximum element area", p[1],
+		       &(agg_adaptive_grid_amax(&data))) ) return 1 ;
+
+  if ( !check_constant("minimum edge length", expr[2]) ) return 1 ;
+  if ( !check_non_negative("minimum edge length", p[2],
+			   &(agg_adaptive_grid_lmin(&data))) ) return 1 ;
+
+  if ( !check_constant("maximum edge length", expr[3]) ) return 1 ;
+  if ( !check_positive("maximum edge length", p[3],
+		       &(agg_adaptive_grid_lmax(&data))) ) return 1 ;
+
+  if ( !check_constant("maximum edge length", expr[4]) ) return 1 ;
+  if ( !check_positive("maximum edge length", p[4],
+		       &(agg_adaptive_grid_ncos(&data))) ) return 1 ;
+  agg_adaptive_grid_ncos(&data) =
+    cos(agg_adaptive_grid_ncos(&data)*M_PI/180.0) ;
+  
+  return agg_grid_adaptive(g, &data) ;
+
+  return 0 ;
+}
 
 gint agg_grid_parse(agg_grid_t *g, gchar *name, gchar *expr[],
 		    gdouble *p, gint np)
 
 {
-  if ( strcmp(name, "spherical") == 0 ) {
-    return set_grid_spherical(g, expr, p, np) ;
-  }
+  gint (* grid_func)(agg_grid_t *, gchar **, gdouble *, gint) ;
+  gint i ;
+  gpointer grids[] = {
+    "adaptive", set_grid_adaptive,
+    "hemispherical", set_grid_hemispherical,
+    "linear", set_grid_linear,
+    "spherical", set_grid_spherical,
+    "tube", set_grid_tube,
+    NULL, NULL} ;
 
-  if ( strcmp(name, "hemispherical") == 0 ) {
-    return set_grid_hemispherical(g, expr, p, np) ;
+  for ( i = 0 ; grids[2*i+0] != NULL ; i ++ ) {
+    if ( strcmp(name, (gchar *)(grids[2*i+0])) == 0 ) {
+      grid_func = grids[2*i+1] ;
+      return grid_func(g, expr, p, np) ;
+    }
   }
-  
-  if ( strcmp(name, "linear") == 0 ) {
-    return set_grid_linear(g, expr, p, np) ;
-  }
-
-  if ( strcmp(name, "tube") == 0 ) {
-    return set_grid_tube(g, expr, p, np) ;
-  }
-
-  /* if ( strcmp(name, "cone") == 0 ) { */
-  /*   return set_grid_cone(g, expr, p, np) ; */
-  /* } */
   
   if ( strcmp(name, "invert") == 0 ) {
     if ( agg_grid_topology(g) != AGG_GRID_NONE ) {

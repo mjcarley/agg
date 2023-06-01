@@ -26,26 +26,6 @@ global {
   n2 = 0.5
 }
 
-body("sphere")
-
-{
-  grid(16384, 32768)
-  {
-    invert()
-    spherical(3)
-  }
-
-  distribution("ball", 0, 1, 32, "cosine")
-
-  {
-    shape("ellipse", -1, 1, n1, n2) ;    
-    transform("shrink", 0.5, 0.0, "sqrt(s*(1-s))")
-    transform("scale", "2*D")
-    transform("shift", "-D", 0.0, "D*s")
-
-  }
-}
-
 body("wing-body") 
 
 {
@@ -60,45 +40,21 @@ grid(16384, 32768)
 
 {
   invert()
-  spherical(3)
+  ##hemispherical(3)
+  adaptive(0.0, 0.01, 0.05, 0.2, 30)
 }
 
-distribution("wing", 0.1, 0.9, 24, "cosine")
+distribution("wing", 0.0, 1.0, 24, "cosine")
 
 ## argument list:
 ##   distribution label (for readability)
-##   tmin, tmax: parameter range
+##   smin, smax: parameter range
 ##   number of sections to be generated for interpolation of shape
 ##   section spacing for geometry
 
 {
   axes("zyx")
-  transform("shrink", 0.5, 0.0, "tipright(0.5, 0.9, s)") ;
-  transform("rotate", 0.5, 0.0, "0.0*s")
-  transform("shift", "0", 0.0, "D/2+(s-0.5)*span")
-
-  ##shape("enaca", 4, 0.12, 0.0, 0.0) ;
-  shape("ellipse", -0.2, 0.2, n1, n2) ;  
-}
-
-distribution("ltip", 0.9, 1.0, 8, "cosine")
-
-{
-  axes("zyx")
-  transform("shrink", 0.5, 0.0, "tipright(0.5, 0.9, s)") ;
-  transform("rotate", 0.5, 0.0, "0.0*s")
-  transform("shift", "0", 0.0, "D/2+(s-0.5)*span")
-
-  ##shape("enaca", 4, 0.12, 0.0, 0.0) ;
-  shape("ellipse", -0.2, 0.2, n1, n2) ;  
-}
-
-distribution("rtip", 0.1, 0.0, 8, "cosine")
-
-{
-  invert
-  axes("zyx")
-  transform("shrink", 0.5, 0.0, "tipleft(0.5, 0.1, s)") ;
+  transform("shrink", 0.5, 0.0, "tipright(0.5, 0.5, s)") ;
   transform("rotate", 0.5, 0.0, "0.0*s")
   transform("shift", "0", 0.0, "D/2+(s-0.5)*span")
 

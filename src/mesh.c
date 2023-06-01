@@ -1,6 +1,6 @@
 /* This file is part of AGG, a library for Aerodynamic Geometry Generation
  *
- * Copyright (C) 2022 Michael Carley
+ * Copyright (C) 2022, 2023 Michael Carley
  *
  * AGG is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by
@@ -32,37 +32,6 @@ static gboolean points_coincide(gdouble *x, gdouble *y)
 {
   return ((x[0] == y[0]) && (x[1] == y[1]) && (x[2] == y[2])) ;
 }
-
-/* static void add_elements(gint *tr, gint tstr, gint *ttags, gint ttstr, gint id, */
-/* 			 gdouble *x, gint xstr, gint i0, gint i1, */
-/* 			 gint idx0, gint d, gint *ntr) */
-
-/* { */
-/*   gint j0, j1, j2, j3 ; */
-  
-/*   /\*check for degenerate quadrilateral*\/ */
-/*   j0 = idx0 ; j1 = idx0 + d ; j2 = idx0 + d + 1 ; j3 = idx0 + 1 ; */
-  
-/*   if ( !points_coincide(&(x[j0*xstr]), &(x[j1*xstr])) && */
-/*        !points_coincide(&(x[j1*xstr]), &(x[j2*xstr])) ) { */
-/*     tr[tstr*(*ntr) +  0] = j0 ; */
-/*     tr[tstr*(*ntr) + i0] = j1 ; */
-/*     tr[tstr*(*ntr) + i1] = j2 ; */
-/*     ttags[(*ntr)*ttstr] = id ; */
-/*     (*ntr) ++ ; */
-/*   } */
-
-/*   if ( !points_coincide(&(x[j2*xstr]), &(x[j3*xstr])) && */
-/*        !points_coincide(&(x[j3*xstr]), &(x[j0*xstr])) ) { */
-/*     tr[tstr*(*ntr) +  0] = j0 ; */
-/*     tr[tstr*(*ntr) + i0] = j2 ; */
-/*     tr[tstr*(*ntr) + i1] = j3 ; */
-/*     ttags[(*ntr)*ttstr] = id ; */
-/*     (*ntr) ++ ; */
-/*   } */
-  
-/*   return ; */
-/* } */
 
 /** 
  * Write the points of an ::agg_mesh_t to file
@@ -251,6 +220,11 @@ gint agg_body_mesh_grid(agg_body_t *b, agg_grid_t *g,
 
   g_assert(g != NULL) ;
   g_assert((p = agg_body_parser(b)) != NULL) ;
+
+  /* if ( g->init_func != NULL ) { */
+  /*   g->init_func(g, b, m, w) ; */
+  /* } */
+  
   np = agg_mesh_point_number(m) ;
   ntri = agg_mesh_triangle_number(m) ;
   xstr = 3 + 2 + m->ndat ;
@@ -262,9 +236,8 @@ gint agg_body_mesh_grid(agg_body_t *b, agg_grid_t *g,
     agg_mesh_distribution(m, i) = agg_body_distribution(b, i) ;
   agg_mesh_distribution_number(m) = agg_body_distribution_number(b) ;
 
-  idx = 0 ;
   x = &(agg_mesh_point_x(m,np)) ;
-  for ( i = 0 ; i < agg_grid_point_number(g) ; i ++ ) {
+  for ( i = idx = 0 ; i < agg_grid_point_number(g) ; i ++ ) {
     u = agg_grid_point_u(g,i) ;
     v = agg_grid_point_v(g,i) ;
 
@@ -281,7 +254,6 @@ gint agg_body_mesh_grid(agg_body_t *b, agg_grid_t *g,
   ttags = &(agg_mesh_triangle_distribution(m,ntri)) ;
   ttstr = agg_mesh_triangle_tag_number(m)+3+1 ;
 
-  /* ntri = 0 ; */
   for ( i = 0 ; i < agg_grid_triangle_number(g) ; i ++ ) {
     tg = agg_grid_triangle(g, i) ;
     tr[i*(tstr)+0] = tg[0] + np ;
@@ -291,10 +263,12 @@ gint agg_body_mesh_grid(agg_body_t *b, agg_grid_t *g,
     ntri ++ ;
   }
 
-  /* g_assert(ntri == agg_grid_triangle_number(g)) ; */
-
   agg_mesh_triangle_number(m) = ntri ;
   agg_mesh_grid(m) = g ;
+
+  /* if ( g->refine_func != NULL ) { */
+  /*   g->refine_func(g, b, m, w) ; */
+  /* }   */
   
   return 0 ;
 }

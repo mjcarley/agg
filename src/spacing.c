@@ -83,14 +83,14 @@ gdouble agg_spacing_eval(gdouble tmin, gdouble tmax, gint nt,
     return (tmin + (tmax-tmin)*i/(nt-1)) ;
   }
 
-  if ( s == AGG_SPACING_COSINE ) {
+  if ( s == AGG_SPACING_COSINE || AGG_SPACING_CIRCULAR ) {
     th0 = linear_to_angle_cosine(tmin) ;
     th1 = linear_to_angle_cosine(tmax) ;
     th = th0 + (th1-th0)*i/(nt-1) ;
     t = angle_to_linear_cosine(th) ;
     return t ;
   }
-
+  
   t = tmin + (tmax-tmin)*i/(nt-1) ;
   switch ( s ) {
   default: g_error("%s: unknown spacing type %u", __FUNCTION__, s) ;

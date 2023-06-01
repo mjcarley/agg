@@ -274,6 +274,7 @@ static void parser_test(void)
   agg_crowd_t c ;
   agg_distribution_t *d ;
   agg_workspace_t *w ;
+  agg_adaptive_grid_workspace_t *wg ;
   agg_mesh_t *m ;
   GScanner *scanner ;
   
@@ -289,10 +290,25 @@ static void parser_test(void)
 
   agg_parser_crowd_read(scanner, &c) ;
 
+  agg_crowd_list_bodies(stderr, &c) ;
+
+  wg = agg_adaptive_grid_workspace_alloc(32768, 8192, 32768) ;
+  
   fprintf(stderr, "%d bod%s in crowd\n",
 	  agg_crowd_body_number(&c),
 	  (agg_crowd_body_number(&c) == 1 ? "y" : "ies")) ;
-
+  for ( i = 0 ; i < agg_crowd_body_number(&c) ; i ++ ) {
+    b = agg_crowd_body(&c, i) ;
+    if ( agg_body_grid(b)->t == AGG_GRID_ADAPTIVE ) {
+      /* fprintf(stderr, "adaptive\n") ; */
+      for ( j = 0 ; j < agg_body_distribution_number(b) ; j ++ ) {
+	d = agg_body_distribution(b,j) ;
+	agg_distribution_interpolation_weights(d) ;
+      }
+      agg_adaptive_grid_make(c.b[i]->g, b, w, wg) ;
+    }
+  }
+  
   npts = ntri = 0 ;
   for ( i = 0 ; i < agg_crowd_body_number(&c) ; i ++ ) {
     if ( c.b[i]->g != NULL ) {
@@ -317,9 +333,6 @@ static void parser_test(void)
       agg_distribution_interpolation_weights(d) ;
     }
     if ( b->g != NULL ) agg_body_mesh_grid(b, b->g, m, w) ;
-
-    /* gdouble u, v ; */
-    /* agg_grid_element_interpolate(b->g, 62, 0.5, 0.5, &u, &v) ; */    
   }
   
   agg_mesh_points_write(stdout, m) ;

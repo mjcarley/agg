@@ -616,3 +616,17 @@ gint agg_shape_copy(agg_shape_t *dest, agg_shape_t *src)
   
   return 0 ;
 }
+
+gint agg_shape_parameter_limits(agg_shape_t *s, gdouble *tmin, gdouble *tmax)
+
+{
+  gint i ;
+
+  *tmin = G_MAXDOUBLE ; *tmax = -G_MAXDOUBLE ; 
+  for ( i = 0 ; i <= agg_shape_break_number(s) ; i ++ ) {
+    *tmin = MIN(*tmin, agg_shape_break_lower(s,i)) ;
+    *tmax = MAX(*tmax, agg_shape_break_upper(s,i)) ;
+  }
+  
+  return 0 ;
+}

@@ -315,3 +315,19 @@ gint agg_distribution_point_normal_eval(agg_distribution_t *d,
   
   return 0 ;
 }
+
+gint agg_distribution_parameter_limits(agg_distribution_t *d,
+				       gdouble *tmin, gdouble *tmax)
+
+{
+  gint i ;
+  gdouble tsmin, tsmax ;
+  
+  *tmin = G_MAXDOUBLE ; *tmax = -G_MAXDOUBLE ; 
+  for ( i = 0 ; i < agg_distribution_station_number(d) ; i ++ ) {
+    agg_shape_parameter_limits(agg_distribution_shape(d,i), &tsmin, &tsmax) ;
+    *tmin = MIN(*tmin, tsmin) ; *tmax = MAX(*tmax, tsmax) ;
+  }
+  
+  return 0 ;
+}
