@@ -12,10 +12,15 @@
 
 ## don't include intermediate data files
 *.dat
+*.msh
+*.geo
+*.nbi
 log
 
 ## scratch directory
 scratch
+references
+notes
 
 ## m4 cache
 autom4te.cache
