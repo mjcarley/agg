@@ -136,11 +136,9 @@ am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)" \
 	"$(DESTDIR)$(includedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libagg_la_LIBADD =
-am_libagg_la_OBJECTS = agg.lo binomials.lo naca.lo transform.lo \
-	distribution.lo mesh.lo spacing.lo tinyexpr.lo parser.lo \
-	body.lo shape.lo functions.lo grid.lo grid-sphere.lo \
-	grid-hemisphere.lo grid-adaptive.lo moller-tri.lo \
-	moller-raytri.lo triangle.lo
+am_libagg_la_OBJECTS = agg.lo bernstein.lo binomials.lo tinyexpr.lo \
+	section.lo transform.lo variables.lo surface.lo naca.lo \
+	intersection.lo hefsi.lo patch.lo moller-tri.lo wireframe.lo
 libagg_la_OBJECTS = $(am_libagg_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -165,16 +163,13 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/agg.Plo ./$(DEPDIR)/binomials.Plo \
-	./$(DEPDIR)/body.Plo ./$(DEPDIR)/distribution.Plo \
-	./$(DEPDIR)/functions.Plo ./$(DEPDIR)/grid-adaptive.Plo \
-	./$(DEPDIR)/grid-hemisphere.Plo ./$(DEPDIR)/grid-sphere.Plo \
-	./$(DEPDIR)/grid.Plo ./$(DEPDIR)/mesh.Plo \
-	./$(DEPDIR)/moller-raytri.Plo ./$(DEPDIR)/moller-tri.Plo \
-	./$(DEPDIR)/naca.Plo ./$(DEPDIR)/parser.Plo \
-	./$(DEPDIR)/shape.Plo ./$(DEPDIR)/spacing.Plo \
+am__depfiles_remade = ./$(DEPDIR)/agg.Plo ./$(DEPDIR)/bernstein.Plo \
+	./$(DEPDIR)/binomials.Plo ./$(DEPDIR)/hefsi.Plo \
+	./$(DEPDIR)/intersection.Plo ./$(DEPDIR)/moller-tri.Plo \
+	./$(DEPDIR)/naca.Plo ./$(DEPDIR)/patch.Plo \
+	./$(DEPDIR)/section.Plo ./$(DEPDIR)/surface.Plo \
 	./$(DEPDIR)/tinyexpr.Plo ./$(DEPDIR)/transform.Plo \
-	./$(DEPDIR)/triangle.Plo
+	./$(DEPDIR)/variables.Plo ./$(DEPDIR)/wireframe.Plo
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -376,28 +371,22 @@ libagg_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)\
 
 libagg_la_SOURCES = \
 	agg.c \
+	bernstein.c \
 	binomials.h \
 	binomials.c \
-	naca.c \
-	agg-private.h \
-	transform.c \
-	distribution.c \
-	mesh.c \
-	spacing.c \
 	tinyexpr.c \
 	tinyexpr.h \
-	parser.c \
-	body.c \
-	shape.c \
-	functions.c \
-	grid.c \
-	grid-sphere.c \
-	grid-hemisphere.c \
-	grid-adaptive.c \
+	section.c \
+	transform.c \
+	variables.c \
+	surface.c \
+	naca.c \
+	intersection.c \
+	hefsi.c \
+	hefsi.h \
+	patch.c \
 	moller-tri.c \
-	moller-raytri.c \
-	triangle.c \
-	triangle.h
+	wireframe.c
 
 include_HEADERS = \
 	agg.h
@@ -520,24 +509,19 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/agg.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/bernstein.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/binomials.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/body.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/distribution.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/functions.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/grid-adaptive.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/grid-hemisphere.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/grid-sphere.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/grid.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mesh.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moller-raytri.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hefsi.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/intersection.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moller-tri.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/naca.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parser.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/shape.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spacing.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/patch.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/section.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/surface.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tinyexpr.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/transform.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/triangle.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/variables.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wireframe.Plo@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -726,24 +710,19 @@ clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
 
 distclean: distclean-am
 		-rm -f ./$(DEPDIR)/agg.Plo
+	-rm -f ./$(DEPDIR)/bernstein.Plo
 	-rm -f ./$(DEPDIR)/binomials.Plo
-	-rm -f ./$(DEPDIR)/body.Plo
-	-rm -f ./$(DEPDIR)/distribution.Plo
-	-rm -f ./$(DEPDIR)/functions.Plo
-	-rm -f ./$(DEPDIR)/grid-adaptive.Plo
-	-rm -f ./$(DEPDIR)/grid-hemisphere.Plo
-	-rm -f ./$(DEPDIR)/grid-sphere.Plo
-	-rm -f ./$(DEPDIR)/grid.Plo
-	-rm -f ./$(DEPDIR)/mesh.Plo
-	-rm -f ./$(DEPDIR)/moller-raytri.Plo
+	-rm -f ./$(DEPDIR)/hefsi.Plo
+	-rm -f ./$(DEPDIR)/intersection.Plo
 	-rm -f ./$(DEPDIR)/moller-tri.Plo
 	-rm -f ./$(DEPDIR)/naca.Plo
-	-rm -f ./$(DEPDIR)/parser.Plo
-	-rm -f ./$(DEPDIR)/shape.Plo
-	-rm -f ./$(DEPDIR)/spacing.Plo
+	-rm -f ./$(DEPDIR)/patch.Plo
+	-rm -f ./$(DEPDIR)/section.Plo
+	-rm -f ./$(DEPDIR)/surface.Plo
 	-rm -f ./$(DEPDIR)/tinyexpr.Plo
 	-rm -f ./$(DEPDIR)/transform.Plo
-	-rm -f ./$(DEPDIR)/triangle.Plo
+	-rm -f ./$(DEPDIR)/variables.Plo
+	-rm -f ./$(DEPDIR)/wireframe.Plo
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -790,24 +769,19 @@ installcheck-am:
 
 maintainer-clean: maintainer-clean-am
 		-rm -f ./$(DEPDIR)/agg.Plo
+	-rm -f ./$(DEPDIR)/bernstein.Plo
 	-rm -f ./$(DEPDIR)/binomials.Plo
-	-rm -f ./$(DEPDIR)/body.Plo
-	-rm -f ./$(DEPDIR)/distribution.Plo
-	-rm -f ./$(DEPDIR)/functions.Plo
-	-rm -f ./$(DEPDIR)/grid-adaptive.Plo
-	-rm -f ./$(DEPDIR)/grid-hemisphere.Plo
-	-rm -f ./$(DEPDIR)/grid-sphere.Plo
-	-rm -f ./$(DEPDIR)/grid.Plo
-	-rm -f ./$(DEPDIR)/mesh.Plo
-	-rm -f ./$(DEPDIR)/moller-raytri.Plo
+	-rm -f ./$(DEPDIR)/hefsi.Plo
+	-rm -f ./$(DEPDIR)/intersection.Plo
 	-rm -f ./$(DEPDIR)/moller-tri.Plo
 	-rm -f ./$(DEPDIR)/naca.Plo
-	-rm -f ./$(DEPDIR)/parser.Plo
-	-rm -f ./$(DEPDIR)/shape.Plo
-	-rm -f ./$(DEPDIR)/spacing.Plo
+	-rm -f ./$(DEPDIR)/patch.Plo
+	-rm -f ./$(DEPDIR)/section.Plo
+	-rm -f ./$(DEPDIR)/surface.Plo
 	-rm -f ./$(DEPDIR)/tinyexpr.Plo
 	-rm -f ./$(DEPDIR)/transform.Plo
-	-rm -f ./$(DEPDIR)/triangle.Plo
+	-rm -f ./$(DEPDIR)/variables.Plo
+	-rm -f ./$(DEPDIR)/wireframe.Plo
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

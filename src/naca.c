@@ -29,6 +29,34 @@
  * for NACA Airfoils, NASA Technical Memorandum 4741, 1996.
  */
 
+/**
+ * @{
+ * @ingroup shapes
+ *
+ */
+
+/** 
+ * Evaluate NACA four digit aerofoil shape
+ * 
+ * Evaluate NACA four digit aerofoil shape using formulae of Ladson,
+ * Charles L., Brooks, Cuyler W., Jr., Hill, Acquilla S., Sproles,
+ * Darrell W., `Computer Program to Obtain Ordinates for NACA
+ * Airfoils', NASA-TM-4741, 1996
+ * 
+ * https://ntrs.nasa.gov/citations/19970008124
+ * 
+ * Resulting section is NACApmxx, e.g. NACA2312 would have
+ * \f$t=0.12\f$, \f$p=0.02\f$, \f$m=0.3\f$. 
+ * 
+ * @param t thickness to chord ratio;
+ * @param p maximum camber as fraction of chord;
+ * @param m location of maximum camber as fraction of chord;
+ * @param x ordinate \f$-1\leq x\leq1\f$.
+ * 
+ * @return abcissa \f$y(|x|)\f$, lower surface for \f$x<0\f$, upper
+ * surface otherwise.
+ */
+
 gdouble agg_naca_four(gdouble t, gdouble p, gdouble m, gdouble x)
   
 {
@@ -47,55 +75,16 @@ gdouble agg_naca_four(gdouble t, gdouble p, gdouble m, gdouble x)
   if ( p == 0.0 || m == 0.0 ) return y ;
   /*camber distribution*/
   if ( x <= m ) {
-    y += p/m/m*(2*m*x - x*x) ;
+    /* y += p/m/m*(2*m*x - x*x) ; */
+    y += p/m/m*(x*(2*m - x)) ;
   } else {
-    y += p/(1.0-m)/(1.0-m)*((1.0-2*m) + 2*m*x - x*x) ;
+    /* y += p/(1.0-m)/(1.0-m)*((1.0-2*m) + 2*m*x - x*x) ; */
+    y += p/(1.0-m)/(1.0-m)*((1.0-2*m) + x*(2*m - x)) ;
   }
   
   return y ;
 }
 
-gint agg_shape_fit_naca_four(agg_shape_t *s, gint n,
-			     gdouble th, gdouble p, gdouble m,
-			     gboolean sharp,
-			     gint nu, gint nl, gdouble *work)
-
-
-{
-  gdouble *xu, *yu, *xl, *yl, t, dy, y, xe ;
-  gint i ;
-  
-  xu = work ; yu = &(xu[nu]) ;
-  xl = &(yu[nu]) ; yl = &(xl[nl]) ;
-
-  /*trailing edge constants from NASA TM4741, for extended trailing edge*/
-  y = 0.002 ; dy = 0.234 ; xe = 1.0 + y/dy ;
-  
-  for ( i = 0 ; i < nu ; i ++ ) {
-    t = 0.5*M_PI - 0.5*M_PI*i/(nu-1) ;
-    xu[i] =  cos(t) ; yu[i] = agg_naca_four(th, p, m,  xu[i]) ;
-  }
-  if ( sharp ) {
-    xu[nu-1] = xe ; yu[nu-1] = 0.0 ;
-    for ( i = 0 ; i < nu ; i ++ ) {
-      xu[i] /= xe ;
-    }
-  }
-  
-  for ( i = 0 ; i < nl ; i ++ ) {
-    t = M_PI - 0.5*M_PI*i/(nl-1) ;
-    xl[i] = -cos(t) ; yl[i] = agg_naca_four(th, p, m, -xl[i]) ;
-  }
-  xl[nl-1] = 0 ; yl[i] = agg_naca_four(th, p, m, -xl[i]) ;
-  if ( sharp ) {
-    xl[0] = xe ; yl[0] = 0.0 ;
-    for ( i = 0 ; i < nl ; i ++ ) {
-      xl[i] /= xe ;
-    }
-  }
-
-  agg_shape_fit(s, xu, yu, nu, xl, yl, nl,
-		0.5, 1.0, yu[nu-1], n, TRUE, &(yl[nl])) ;
-
-  return 0 ;
-}
+/**
+ * @}
+ */

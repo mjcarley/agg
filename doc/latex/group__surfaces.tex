@@ -1,0 +1,177 @@
+\doxysection{Surfaces}
+\label{group__surfaces}\index{Surfaces@{Surfaces}}
+
+
+Surfaces composed of transformed sections.  
+
+
+\begin{DoxyCompactItemize}
+\item 
+\textbf{ agg\+\_\+surface\+\_\+t} $\ast$ \textbf{ agg\+\_\+surface\+\_\+new} (gint nsmax)
+\item 
+gint \textbf{ agg\+\_\+surface\+\_\+section\+\_\+add} (\textbf{ agg\+\_\+surface\+\_\+t} $\ast$S, \textbf{ agg\+\_\+section\+\_\+t} $\ast$s, gdouble u)
+\item 
+gint \textbf{ agg\+\_\+surface\+\_\+weights\+\_\+make} (\textbf{ agg\+\_\+surface\+\_\+t} $\ast$S)
+\item 
+gint \textbf{ agg\+\_\+surface\+\_\+section\+\_\+interp} (\textbf{ agg\+\_\+surface\+\_\+t} $\ast$S, gdouble u, \textbf{ agg\+\_\+section\+\_\+t} $\ast$s)
+\item 
+agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$ \textbf{ agg\+\_\+surface\+\_\+workspace\+\_\+new} (void)
+\item 
+gint \textbf{ agg\+\_\+surface\+\_\+point\+\_\+eval} (\textbf{ agg\+\_\+surface\+\_\+t} $\ast$S, gdouble u, gdouble v, gdouble $\ast$x, agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$w)
+\end{DoxyCompactItemize}
+\begin{DoxyCompactItemize}
+\item 
+typedef \textbf{ agg\+\_\+surface\+\_\+t}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Surfaces composed of transformed sections. 
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\label{group__surfaces_ga88a861a9c890e62d096a720b67a92797}} 
+\index{Surfaces@{Surfaces}!agg\_surface\_new@{agg\_surface\_new}}
+\index{agg\_surface\_new@{agg\_surface\_new}!Surfaces@{Surfaces}}
+\doxysubsubsection{agg\_surface\_new()}
+{\footnotesize\ttfamily \textbf{ agg\+\_\+surface\+\_\+t} $\ast$ agg\+\_\+surface\+\_\+new (\begin{DoxyParamCaption}\item[{gint}]{nsmax }\end{DoxyParamCaption})}
+
+Allocate a new \doxyref{agg\+\_\+surface\+\_\+t}{p.}{group__surfaces_ga1c502e562486827063a7169cd79b5cc0}
+
+
+\begin{DoxyParams}{Parameters}
+{\em nsmax} & maximum number of sections in surface.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+newly allocated surface. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+section\+\_\+t}, and \textbf{ agg\+\_\+surface\+\_\+t}.
+
+\mbox{\label{group__surfaces_gac7fd1a95c34d4b227e46b64fe642efae}} 
+\index{Surfaces@{Surfaces}!agg\_surface\_point\_eval@{agg\_surface\_point\_eval}}
+\index{agg\_surface\_point\_eval@{agg\_surface\_point\_eval}!Surfaces@{Surfaces}}
+\doxysubsubsection{agg\_surface\_point\_eval()}
+{\footnotesize\ttfamily gint agg\+\_\+surface\+\_\+point\+\_\+eval (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+surface\+\_\+t} $\ast$}]{S,  }\item[{gdouble}]{u,  }\item[{gdouble}]{v,  }\item[{gdouble $\ast$}]{x,  }\item[{agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$}]{w }\end{DoxyParamCaption})}
+
+Evaluate a point on a surface
+
+Evaluate a point on a surface. The surface must have been initialized with \doxyref{agg\+\_\+surface\+\_\+weights\+\_\+make}{p.}{group__surfaces_ga05f8b5b0febe31ce57337e7045c04903}, and its transform initialized with \doxyref{agg\+\_\+expression\+\_\+data\+\_\+compile}{p.}{group__variables_gac423c9a2a65b0b8e677576e9e4fbb1b6} and \doxyref{agg\+\_\+transform\+\_\+expressions\+\_\+compile}{p.}{group__transforms_ga015c632cb62cafdc579df29f44d8eab9}, to set up the internal variables and expressions used for point transformation. The section data for {\itshape S} are interpolated at $u$ and the point on the section evaluated at $v$. The point is then transformed using the surface transformation.
+
+
+\begin{DoxyParams}{Parameters}
+{\em S} & an \doxyref{agg\+\_\+surface\+\_\+t}{p.}{group__surfaces_ga1c502e562486827063a7169cd79b5cc0}; \\
+\hline
+{\em u} & surface parameter $u$; \\
+\hline
+{\em v} & surface parameter $v$; \\
+\hline
+{\em x} & on exit contains $\mathbf{x}(u,v)$; \\
+\hline
+{\em w} & workspace allocated using \doxyref{agg\+\_\+surface\+\_\+workspace\+\_\+new}{p.}{group__surfaces_ga024e7cbe995df9bc519a77525bf8b639}\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+section\+\_\+t}, \textbf{ agg\+\_\+transform\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+t}.
+
+\mbox{\label{group__surfaces_ga60be5dbdee4c909c663de55a86616da8}} 
+\index{Surfaces@{Surfaces}!agg\_surface\_section\_add@{agg\_surface\_section\_add}}
+\index{agg\_surface\_section\_add@{agg\_surface\_section\_add}!Surfaces@{Surfaces}}
+\doxysubsubsection{agg\_surface\_section\_add()}
+{\footnotesize\ttfamily gint agg\+\_\+surface\+\_\+section\+\_\+add (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+surface\+\_\+t} $\ast$}]{S,  }\item[{\textbf{ agg\+\_\+section\+\_\+t} $\ast$}]{s,  }\item[{gdouble}]{u }\end{DoxyParamCaption})}
+
+Add a section to a surface
+
+Add a section to a surface at a given value of parameter $u$. The section data are copied into the surface, so the section variable {\itshape s} can be reused afterwards.
+
+
+\begin{DoxyParams}{Parameters}
+{\em S} & an \doxyref{agg\+\_\+surface\+\_\+t}{p.}{group__surfaces_ga1c502e562486827063a7169cd79b5cc0}; \\
+\hline
+{\em s} & an \doxyref{agg\+\_\+section\+\_\+t}{p.}{agg_8h_a8cdd164643b93d05245e9b4976f3f0cb}; \\
+\hline
+{\em u} & parameter value where section is to be added.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+\mbox{\label{group__surfaces_gad41f8f60fa70483229ffb5c8b6db3e4f}} 
+\index{Surfaces@{Surfaces}!agg\_surface\_section\_interp@{agg\_surface\_section\_interp}}
+\index{agg\_surface\_section\_interp@{agg\_surface\_section\_interp}!Surfaces@{Surfaces}}
+\doxysubsubsection{agg\_surface\_section\_interp()}
+{\footnotesize\ttfamily gint agg\+\_\+surface\+\_\+section\+\_\+interp (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+surface\+\_\+t} $\ast$}]{S,  }\item[{gdouble}]{u,  }\item[{\textbf{ agg\+\_\+section\+\_\+t} $\ast$}]{s }\end{DoxyParamCaption})}
+
+Interpolate section data from a surface into a local section
+
+Interpolate section data from a surface into a local section, using Berrut and Trefethen\textquotesingle{}s barycentric Lagrangian interpolation, {\texttt{ https\+://dx.\+doi.\+org/10.\+1137/\+S0036144502417715}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em S} & an \doxyref{agg\+\_\+surface\+\_\+t}{p.}{group__surfaces_ga1c502e562486827063a7169cd79b5cc0} containing a number of sections; \\
+\hline
+{\em u} & parameter at which to interpolate section; \\
+\hline
+{\em s} & on exit, contains interpolated data for section at {\itshape u}.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, 1 if {\itshape S} is an empty surface. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+section\+\_\+t}.
+
+\mbox{\label{group__surfaces_ga05f8b5b0febe31ce57337e7045c04903}} 
+\index{Surfaces@{Surfaces}!agg\_surface\_weights\_make@{agg\_surface\_weights\_make}}
+\index{agg\_surface\_weights\_make@{agg\_surface\_weights\_make}!Surfaces@{Surfaces}}
+\doxysubsubsection{agg\_surface\_weights\_make()}
+{\footnotesize\ttfamily gint agg\+\_\+surface\+\_\+weights\+\_\+make (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+surface\+\_\+t} $\ast$}]{S }\end{DoxyParamCaption})}
+
+Generate interpolation weights for sections on a surface
+
+Generate interpolation weights for sections on a surface, the preprocessing stage for Berrut and Trefethen\textquotesingle{}s barycentric Lagrangian interpolation, {\texttt{ https\+://dx.\+doi.\+org/10.\+1137/\+S0036144502417715}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em S} & an \doxyref{agg\+\_\+surface\+\_\+t}{p.}{group__surfaces_ga1c502e562486827063a7169cd79b5cc0} containing a number of sections.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+\mbox{\label{group__surfaces_ga024e7cbe995df9bc519a77525bf8b639}} 
+\index{Surfaces@{Surfaces}!agg\_surface\_workspace\_new@{agg\_surface\_workspace\_new}}
+\index{agg\_surface\_workspace\_new@{agg\_surface\_workspace\_new}!Surfaces@{Surfaces}}
+\doxysubsubsection{agg\_surface\_workspace\_new()}
+{\footnotesize\ttfamily agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$ agg\+\_\+surface\+\_\+workspace\+\_\+new (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Allocate a workspace for evaluation of surfaces
+
+\begin{DoxyReturn}{Returns}
+newly allocated workspaces 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+section\+\_\+new()}.
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\label{group__surfaces_ga1c502e562486827063a7169cd79b5cc0}} 
+\index{Surfaces@{Surfaces}!agg\_surface\_t@{agg\_surface\_t}}
+\index{agg\_surface\_t@{agg\_surface\_t}!Surfaces@{Surfaces}}
+\doxysubsubsection{agg\_surface\_t}
+{\footnotesize\ttfamily agg\+\_\+surface\+\_\+t}
+
+Data structure to hold surfaces formed by transformation of sections 
+
+Referenced by \textbf{ agg\+\_\+surface\+\_\+new()}.
+

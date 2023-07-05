@@ -1,0 +1,40 @@
+\doxysection{Bernstein polynomials}
+\label{group__bernstein}\index{Bernstein polynomials@{Bernstein polynomials}}
+
+
+Evaluation of Bernstein polynomials.  
+
+
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+gdouble \textbf{ agg\+\_\+bernstein\+\_\+basis\+\_\+eval} (gint n, gint r, gdouble x)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Evaluation of Bernstein polynomials. 
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\label{group__bernstein_gaae616a79a473be6365e365bc2a17b02a}} 
+\index{Bernstein polynomials@{Bernstein polynomials}!agg\_bernstein\_basis\_eval@{agg\_bernstein\_basis\_eval}}
+\index{agg\_bernstein\_basis\_eval@{agg\_bernstein\_basis\_eval}!Bernstein polynomials@{Bernstein polynomials}}
+\doxysubsubsection{agg\_bernstein\_basis\_eval()}
+{\footnotesize\ttfamily gdouble agg\+\_\+bernstein\+\_\+basis\+\_\+eval (\begin{DoxyParamCaption}\item[{gint}]{n,  }\item[{gint}]{r,  }\item[{gdouble}]{x }\end{DoxyParamCaption})}
+
+Evaluate a Bernstein basis monomial, $B_{r}^{(n)}(x)=\binom{n}{r}x^{r}(1-x)^{n-r}$
+
+
+\begin{DoxyParams}{Parameters}
+{\em n} & degree of Bernstein basis; \\
+\hline
+{\em r} & mononomial from basis to evaluate; \\
+\hline
+{\em x} & argument of monomial\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+$B_{r}^{(n)}(x)$ 
+\end{DoxyReturn}

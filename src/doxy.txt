@@ -2,27 +2,72 @@
  * @mainpage AGG: a library for Aerodynamic Geometry Generation
  *
  * AGG is a library for generating "aerodynamic" geometries, based on
- * the CST method of Brenda Kulfan.
+ * the modified and extended version of the CST method of Brenda Kulfan.
+ *
+ */
+
+
+/**
+ * @defgroup bernstein Bernstein polynomials
+ *
+ * @brief Evaluation of Bernstein polynomials
  *
  */
 
 /**
- * @defgroup functions Functions
+ * @defgroup sections Section geometries
  *
- * @brief Built-in functions which can be used in generating geometries
- *
- */
-
-/**
- * @defgroup parser Parser
- *
- * @brief Parser for parametric geometry definitions
+ * @brief Evaluation of (cross-) sections such as ellipses and aerofoils
  *
  */
 
 /**
- * @defgroup types Data types and constants
+ * @defgroup transforms Transformations
  *
- * @brief Data types and constants for AGG calculations
+ * @brief Geometrical transformation of cross-section shapes
  *
  */
+
+/**
+ * @defgroup surfaces Surfaces
+ *
+ * @brief Surfaces composed of transformed sections
+ *
+ */
+
+/**
+ * @defgroup variables Variables and expressions
+ *
+ * @brief Symbolically defined variables and expressions
+ *
+ */
+
+/**
+ * @defgroup shapes Section shapes
+ *
+ * @brief Built-in and user-defined section shapes
+ *
+ */
+
+/**
+ * @defgroup patches Surface patches
+ *
+ * @brief Patches used to map parts of surfaces and generate meshes
+ *
+ */
+
+/**
+ * @defgroup intersections Surface intersections
+ *
+ * @brief Evaluation of surface intersections
+ *
+ */
+
+
+/**
+ * @defgroup wireframe Wireframe surfaces
+ *
+ * @brief Wireframe representation of surfaces for export
+ *
+ */
+

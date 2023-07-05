@@ -1,6 +1,6 @@
 /* This file is part of AGG, a library for Aerodynamic Geometry Generation
  *
- * Copyright (C) 2021 Michael Carley
+ * Copyright (C) 2023 Michael Carley
  *
  * AGG is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by
@@ -17,15 +17,6 @@
 #ifndef __AGG_PRIVATE_H_INCLUDED__
 #define __AGG_PRIVATE_H_INCLUDED__
 
-#define AGG_TRANSFORM_PARAMETER_SCALE             0 
-#define AGG_TRANSFORM_PARAMETER_XSCALE            1 
-#define AGG_TRANSFORM_PARAMETER_YSCALE            2 
-#define AGG_TRANSFORM_PARAMETER_SHIFT             3
-#define AGG_TRANSFORM_PARAMETER_PLANE_ROTATE      6
-#define AGG_TRANSFORM_PARAMETER_SHRINK            9
-#define AGG_TRANSFORM_PARAMETER_      13
-/* #define AGG_TRANSFORM_PARAMETER_ */
-/* #define AGG_TRANSFORM_PARAMETER_ */
 
 #define plural_character(_i)  ((_i) > 1 ? "s" : "")
 
@@ -115,43 +106,23 @@
    }							 \
   } while(0)
 
-gint agg_grid_interp_area_linear(agg_grid_t *g, gdouble *uv,
-				 gdouble s, gdouble t,
-				 gdouble *u, gdouble *v) ;
-gint agg_grid_interp_area_spherical(agg_grid_t *g, gdouble *uv,
-				    gdouble s, gdouble t,
-				    gdouble *u, gdouble *v) ;
-gint agg_grid_interp_line_spherical(agg_grid_t *g, gdouble *uv,
-				    gdouble s,
-				    gdouble *u, gdouble *v) ;
-gint agg_grid_interp_area_hemispherical(agg_grid_t *g, gdouble *uv,
-					gdouble s, gdouble t,
-					gdouble *u, gdouble *v) ;
-gint agg_grid_interp_area_tube(agg_grid_t *g, gdouble *uv,
-			       gdouble s, gdouble t,
-			       gdouble *u, gdouble *v) ;
-gint agg_grid_interp_area_adaptive(agg_grid_t *g, gdouble *uv,
-				   gdouble s, gdouble t,
-				   gdouble *u, gdouble *v) ;
-gint agg_grid_interp_line_adaptive(agg_grid_t *g, gdouble *uv,
-				   gdouble s,
-				   gdouble *u, gdouble *v) ;
-/* gint agg_grid_mesh_init_adaptive(agg_grid_t *g, agg_body_t *b, */
-/* 				 agg_mesh_t *m, agg_workspace_t *w) ; */
-/* gint agg_grid_mesh_refine_adaptive(agg_grid_t *g, agg_body_t *b, */
-/* 				   agg_mesh_t *m, agg_workspace_t *w) ; */
+/*
+ * inverse of general 2x2 matrix
+ *
+ * inv [a b; c d] = [d -b; -c a]/det
+ *
+ * det = a*d - b*c
+ *
+ * can be done in-place (Ai == A)
+ */
 
-int coplanar_tri_tri(double N[3],double V0[3],double V1[3],double V2[3],
-                     double U0[3],double U1[3],double U2[3]) ;
-int tri_tri_intersect(double V0[3],double V1[3],double V2[3],
-                      double U0[3],double U1[3],double U2[3]) ;
-int tri_tri_intersect_with_isectline(double V0[3],double V1[3],double V2[3],
-				     double U0[3],double U1[3],double U2[3],
-				     int *coplanar, double isectpt1[3],
-				     double isectpt2[3]) ;
-int NoDivTriTriIsect(double V0[3],double V1[3],double V2[3],
-                     double U0[3],double U1[3],double U2[3]) ;
-gint triunsuitable(gdouble *triorg, gdouble *tridest, gdouble *triapex,
-		   gdouble area, gpointer data) ;
+#define agg_invert2x2(_Ai,_A,_det)				\
+  do {								\
+  gdouble _a, _b, _c, _d ;					\
+  _a = (_A)[0] ; _b = (_A)[1] ; _c = (_A)[2] ; _d = (_A)[3] ;	\
+  (*(_det)) = _a*_d - _b*_c ;					\
+  (_Ai)[0] = _d/(*(_det)) ; (_Ai)[1] = -(_b)/(*(_det)) ;	\
+  (_Ai)[2] = -_c/(*(_det)) ; (_Ai)[3] = _a/(*(_det)) ;		\
+  } while (0)
 
 #endif /*__AGG_PRIVATE_H_INCLUDED__*/

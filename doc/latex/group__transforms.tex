@@ -1,0 +1,304 @@
+\doxysection{Transformations}
+\label{group__transforms}\index{Transformations@{Transformations}}
+
+
+Geometrical transformation of cross-\/section shapes.  
+
+
+\begin{DoxyCompactItemize}
+\item 
+\textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t} $\ast$ \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+new} (void)
+\item 
+\textbf{ agg\+\_\+transform\+\_\+t} $\ast$ \textbf{ agg\+\_\+transform\+\_\+new} (gint nopmax)
+\item 
+gint \textbf{ agg\+\_\+transform\+\_\+variable\+\_\+add} (\textbf{ agg\+\_\+transform\+\_\+t} $\ast$T, gchar $\ast$var, gchar $\ast$def, gdouble val)
+\item 
+gint \textbf{ agg\+\_\+transform\+\_\+add\+\_\+global\+\_\+variables} (\textbf{ agg\+\_\+transform\+\_\+t} $\ast$T, \textbf{ agg\+\_\+variable\+\_\+t} $\ast$global, gint nglobal)
+\item 
+gint \textbf{ agg\+\_\+transform\+\_\+expressions\+\_\+compile} (\textbf{ agg\+\_\+transform\+\_\+t} $\ast$T)
+\item 
+gint \textbf{ agg\+\_\+transform\+\_\+variables\+\_\+eval} (\textbf{ agg\+\_\+transform\+\_\+t} $\ast$T)
+\item 
+gint \textbf{ agg\+\_\+transform\+\_\+variables\+\_\+write} (FILE $\ast$f, \textbf{ agg\+\_\+transform\+\_\+t} $\ast$T, gboolean write\+\_\+defs)
+\item 
+gint \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+add} (\textbf{ agg\+\_\+transform\+\_\+t} $\ast$T, \textbf{ agg\+\_\+operation\+\_\+t} op, gdouble $\ast$p, gchar $\ast$$\ast$expr, gint np)
+\item 
+gint \textbf{ agg\+\_\+transform\+\_\+operators\+\_\+write} (FILE $\ast$f, \textbf{ agg\+\_\+transform\+\_\+t} $\ast$T)
+\item 
+gint \textbf{ agg\+\_\+transform\+\_\+apply} (\textbf{ agg\+\_\+transform\+\_\+t} $\ast$T, gdouble $\ast$xin, gdouble $\ast$xout)
+\end{DoxyCompactItemize}
+\begin{DoxyCompactItemize}
+\item 
+enum \textbf{ agg\+\_\+operation\+\_\+t} \{ \newline
+\textbf{ AGG\+\_\+\+TRANSFORM\+\_\+\+UNDEFINED} = 0
+, \textbf{ AGG\+\_\+\+TRANSFORM\+\_\+\+ROTATE} = 1
+, \textbf{ AGG\+\_\+\+TRANSFORM\+\_\+\+SHRINK} = 2
+, \textbf{ AGG\+\_\+\+TRANSFORM\+\_\+\+TRANSLATE} = 3
+, \newline
+\textbf{ AGG\+\_\+\+TRANSFORM\+\_\+\+SCALE} = 4
+ \}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Geometrical transformation of cross-\/section shapes. 
+
+
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\label{group__transforms_gae287f33d9a1988a16e6e8bfbcf8498f7}} 
+\index{Transformations@{Transformations}!agg\_operation\_t@{agg\_operation\_t}}
+\index{agg\_operation\_t@{agg\_operation\_t}!Transformations@{Transformations}}
+\doxysubsubsection{agg\_operation\_t}
+{\footnotesize\ttfamily enum \textbf{ agg\+\_\+operation\+\_\+t}}
+
+Basic transform operations \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AGG\_TRANSFORM\_UNDEFINED@{AGG\_TRANSFORM\_UNDEFINED}!Transformations@{Transformations}}\index{Transformations@{Transformations}!AGG\_TRANSFORM\_UNDEFINED@{AGG\_TRANSFORM\_UNDEFINED}}}\mbox{\label{group__transforms_gae287f33d9a1988a16e6e8bfbcf8498f7adaec27e2727ebb165f174cec8f5e8671}} 
+AGG\+\_\+\+TRANSFORM\+\_\+\+UNDEFINED&undefined transform \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AGG\_TRANSFORM\_ROTATE@{AGG\_TRANSFORM\_ROTATE}!Transformations@{Transformations}}\index{Transformations@{Transformations}!AGG\_TRANSFORM\_ROTATE@{AGG\_TRANSFORM\_ROTATE}}}\mbox{\label{group__transforms_gae287f33d9a1988a16e6e8bfbcf8498f7ab01058b6abfb8801d4b7bd228d041479}} 
+AGG\+\_\+\+TRANSFORM\+\_\+\+ROTATE&anti-\/clockwise rotation about a point \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AGG\_TRANSFORM\_SHRINK@{AGG\_TRANSFORM\_SHRINK}!Transformations@{Transformations}}\index{Transformations@{Transformations}!AGG\_TRANSFORM\_SHRINK@{AGG\_TRANSFORM\_SHRINK}}}\mbox{\label{group__transforms_gae287f33d9a1988a16e6e8bfbcf8498f7af5e71f4e8ed783031862fed0a7364ea7}} 
+AGG\+\_\+\+TRANSFORM\+\_\+\+SHRINK&scaling by contracting towards a point \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AGG\_TRANSFORM\_TRANSLATE@{AGG\_TRANSFORM\_TRANSLATE}!Transformations@{Transformations}}\index{Transformations@{Transformations}!AGG\_TRANSFORM\_TRANSLATE@{AGG\_TRANSFORM\_TRANSLATE}}}\mbox{\label{group__transforms_gae287f33d9a1988a16e6e8bfbcf8498f7a211adf38fea41db2b30ad0cca157b7c7}} 
+AGG\+\_\+\+TRANSFORM\+\_\+\+TRANSLATE&translation in three dimensions \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AGG\_TRANSFORM\_SCALE@{AGG\_TRANSFORM\_SCALE}!Transformations@{Transformations}}\index{Transformations@{Transformations}!AGG\_TRANSFORM\_SCALE@{AGG\_TRANSFORM\_SCALE}}}\mbox{\label{group__transforms_gae287f33d9a1988a16e6e8bfbcf8498f7ab55a99be4ba182c93dda782bfa0d5ee2}} 
+AGG\+\_\+\+TRANSFORM\+\_\+\+SCALE&scaling by multiplying a constant factor \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\label{group__transforms_ga162e7e767b148e09e0f98e9af91b32fe}} 
+\index{Transformations@{Transformations}!agg\_transform\_add\_global\_variables@{agg\_transform\_add\_global\_variables}}
+\index{agg\_transform\_add\_global\_variables@{agg\_transform\_add\_global\_variables}!Transformations@{Transformations}}
+\doxysubsubsection{agg\_transform\_add\_global\_variables()}
+{\footnotesize\ttfamily gint agg\+\_\+transform\+\_\+add\+\_\+global\+\_\+variables (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+transform\+\_\+t} $\ast$}]{T,  }\item[{\textbf{ agg\+\_\+variable\+\_\+t} $\ast$}]{global,  }\item[{gint}]{nglobal }\end{DoxyParamCaption})}
+
+Add a list of global variables to the variables of a transform
+
+
+\begin{DoxyParams}{Parameters}
+{\em T} & an \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} allocated with \doxyref{agg\+\_\+transform\+\_\+new}{p.}{group__transforms_gaf8e2e52219b0108f7df70bc4dd39031f}; \\
+\hline
+{\em global} & array of global variables; \\
+\hline
+{\em nglobal} & number of global variables.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+expression\+\_\+data\+\_\+t}.
+
+\mbox{\label{group__transforms_ga1d94218842c8aca6203ddba991b32a5f}} 
+\index{Transformations@{Transformations}!agg\_transform\_apply@{agg\_transform\_apply}}
+\index{agg\_transform\_apply@{agg\_transform\_apply}!Transformations@{Transformations}}
+\doxysubsubsection{agg\_transform\_apply()}
+{\footnotesize\ttfamily gint agg\+\_\+transform\+\_\+apply (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+transform\+\_\+t} $\ast$}]{T,  }\item[{gdouble $\ast$}]{xin,  }\item[{gdouble $\ast$}]{xout }\end{DoxyParamCaption})}
+
+Apply a transform to a point
+
+
+\begin{DoxyParams}{Parameters}
+{\em T} & an \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} containing the sequence of operations; \\
+\hline
+{\em xin} & input point; \\
+\hline
+{\em xout} & output point.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+\mbox{\label{group__transforms_ga015c632cb62cafdc579df29f44d8eab9}} 
+\index{Transformations@{Transformations}!agg\_transform\_expressions\_compile@{agg\_transform\_expressions\_compile}}
+\index{agg\_transform\_expressions\_compile@{agg\_transform\_expressions\_compile}!Transformations@{Transformations}}
+\doxysubsubsection{agg\_transform\_expressions\_compile()}
+{\footnotesize\ttfamily gint agg\+\_\+transform\+\_\+expressions\+\_\+compile (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+transform\+\_\+t} $\ast$}]{T }\end{DoxyParamCaption})}
+
+Compile expressions in a transform for future evaluation.
+
+
+\begin{DoxyParams}{Parameters}
+{\em T} & an \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} allocated with \doxyref{agg\+\_\+transform\+\_\+new}{p.}{group__transforms_gaf8e2e52219b0108f7df70bc4dd39031f};\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+expression\+\_\+data\+\_\+t}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+t}.
+
+\mbox{\label{group__transforms_gaf8e2e52219b0108f7df70bc4dd39031f}} 
+\index{Transformations@{Transformations}!agg\_transform\_new@{agg\_transform\_new}}
+\index{agg\_transform\_new@{agg\_transform\_new}!Transformations@{Transformations}}
+\doxysubsubsection{agg\_transform\_new()}
+{\footnotesize\ttfamily \textbf{ agg\+\_\+transform\+\_\+t} $\ast$ agg\+\_\+transform\+\_\+new (\begin{DoxyParamCaption}\item[{gint}]{nopmax }\end{DoxyParamCaption})}
+
+Allocate a new \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} for transformation of geometries
+
+
+\begin{DoxyParams}{Parameters}
+{\em nopmax} & maximum number of operations in transform\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+newly allocated \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, and \textbf{ agg\+\_\+transform\+\_\+t}.
+
+\mbox{\label{group__transforms_ga3469482e2c22920b5accefdc004297c4}} 
+\index{Transformations@{Transformations}!agg\_transform\_operator\_add@{agg\_transform\_operator\_add}}
+\index{agg\_transform\_operator\_add@{agg\_transform\_operator\_add}!Transformations@{Transformations}}
+\doxysubsubsection{agg\_transform\_operator\_add()}
+{\footnotesize\ttfamily gint agg\+\_\+transform\+\_\+operator\+\_\+add (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+transform\+\_\+t} $\ast$}]{T,  }\item[{\textbf{ agg\+\_\+operation\+\_\+t}}]{op,  }\item[{gdouble $\ast$}]{p,  }\item[{gchar $\ast$$\ast$}]{expr,  }\item[{gint}]{np }\end{DoxyParamCaption})}
+
+Add an operation to a transform
+
+
+\begin{DoxyParams}{Parameters}
+{\em T} & an \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} allocated with \doxyref{agg\+\_\+transform\+\_\+new}{p.}{group__transforms_gaf8e2e52219b0108f7df70bc4dd39031f}; \\
+\hline
+{\em op} & a basic transform operation of type \doxyref{agg\+\_\+operation\+\_\+t}{p.}{group__transforms_gae287f33d9a1988a16e6e8bfbcf8498f7}; \\
+\hline
+{\em p} & array of parameter values to pass to transform calculation; \\
+\hline
+{\em expr} & expressions to be used in evaluating transform parameters; \\
+\hline
+{\em np} & number of parameters to pass to transform.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+new()}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+t}.
+
+\mbox{\label{group__transforms_ga57e762424be00dc262795556c254934b}} 
+\index{Transformations@{Transformations}!agg\_transform\_operator\_new@{agg\_transform\_operator\_new}}
+\index{agg\_transform\_operator\_new@{agg\_transform\_operator\_new}!Transformations@{Transformations}}
+\doxysubsubsection{agg\_transform\_operator\_new()}
+{\footnotesize\ttfamily \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t} $\ast$ agg\+\_\+transform\+\_\+operator\+\_\+new (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Allocate a new \doxyref{agg\+\_\+transform\+\_\+operator\+\_\+t}{p.}{agg_8h_a9b3c7b4a183fc43a646fdc5cb1673993}
+
+This function is mainly called as part of setting up a new transform, via \doxyref{agg\+\_\+transform\+\_\+operator\+\_\+add}{p.}{group__transforms_ga3469482e2c22920b5accefdc004297c4}
+
+\begin{DoxyReturn}{Returns}
+a newly allocaed \doxyref{agg\+\_\+transform\+\_\+operator\+\_\+t}{p.}{agg_8h_a9b3c7b4a183fc43a646fdc5cb1673993} 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}.
+
+
+
+Referenced by \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+add()}.
+
+\mbox{\label{group__transforms_ga9647f98c5477495e98aa83eaed70c171}} 
+\index{Transformations@{Transformations}!agg\_transform\_operators\_write@{agg\_transform\_operators\_write}}
+\index{agg\_transform\_operators\_write@{agg\_transform\_operators\_write}!Transformations@{Transformations}}
+\doxysubsubsection{agg\_transform\_operators\_write()}
+{\footnotesize\ttfamily gint agg\+\_\+transform\+\_\+operators\+\_\+write (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f,  }\item[{\textbf{ agg\+\_\+transform\+\_\+t} $\ast$}]{T }\end{DoxyParamCaption})}
+
+Write a list of operators and parameters in a transform to file
+
+
+\begin{DoxyParams}{Parameters}
+{\em f} & file stream for output; \\
+\hline
+{\em T} & the \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} to write.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+t}.
+
+\mbox{\label{group__transforms_gaa9932f923e53ba6651b417913a88bd62}} 
+\index{Transformations@{Transformations}!agg\_transform\_variable\_add@{agg\_transform\_variable\_add}}
+\index{agg\_transform\_variable\_add@{agg\_transform\_variable\_add}!Transformations@{Transformations}}
+\doxysubsubsection{agg\_transform\_variable\_add()}
+{\footnotesize\ttfamily gint agg\+\_\+transform\+\_\+variable\+\_\+add (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+transform\+\_\+t} $\ast$}]{T,  }\item[{gchar $\ast$}]{var,  }\item[{gchar $\ast$}]{def,  }\item[{gdouble}]{val }\end{DoxyParamCaption})}
+
+Add a variable to a transform
+
+
+\begin{DoxyParams}{Parameters}
+{\em T} & an \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} allocated with \doxyref{agg\+\_\+transform\+\_\+new}{p.}{group__transforms_gaf8e2e52219b0108f7df70bc4dd39031f}; \\
+\hline
+{\em var} & variable name; \\
+\hline
+{\em def} & variable definition (may be NULL); \\
+\hline
+{\em val} & variable value (used to set variable constant if {\itshape def} is NULL).\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+variable\+\_\+t}.
+
+\mbox{\label{group__transforms_ga521307ad04c43f7912a72942271cb8e0}} 
+\index{Transformations@{Transformations}!agg\_transform\_variables\_eval@{agg\_transform\_variables\_eval}}
+\index{agg\_transform\_variables\_eval@{agg\_transform\_variables\_eval}!Transformations@{Transformations}}
+\doxysubsubsection{agg\_transform\_variables\_eval()}
+{\footnotesize\ttfamily gint agg\+\_\+transform\+\_\+variables\+\_\+eval (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+transform\+\_\+t} $\ast$}]{T }\end{DoxyParamCaption})}
+
+Evaluate variables in a transform. Expressions should have been compiled using \doxyref{agg\+\_\+transform\+\_\+expressions\+\_\+compile}{p.}{group__transforms_ga015c632cb62cafdc579df29f44d8eab9}
+
+
+\begin{DoxyParams}{Parameters}
+{\em T} & an \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} allocated with \doxyref{agg\+\_\+transform\+\_\+new}{p.}{group__transforms_gaf8e2e52219b0108f7df70bc4dd39031f};\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+t}.
+
+\mbox{\label{group__transforms_ga81f96f54e93e7d88b8bf40f446ac3341}} 
+\index{Transformations@{Transformations}!agg\_transform\_variables\_write@{agg\_transform\_variables\_write}}
+\index{agg\_transform\_variables\_write@{agg\_transform\_variables\_write}!Transformations@{Transformations}}
+\doxysubsubsection{agg\_transform\_variables\_write()}
+{\footnotesize\ttfamily gint agg\+\_\+transform\+\_\+variables\+\_\+write (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f,  }\item[{\textbf{ agg\+\_\+transform\+\_\+t} $\ast$}]{T,  }\item[{gboolean}]{write\+\_\+defs }\end{DoxyParamCaption})}
+
+Write list of variables and values for a transform to output
+
+
+\begin{DoxyParams}{Parameters}
+{\em f} & output file stream; \\
+\hline
+{\em T} & an \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} allocated with \doxyref{agg\+\_\+transform\+\_\+new}{p.}{group__transforms_gaf8e2e52219b0108f7df70bc4dd39031f}; \\
+\hline
+{\em write\+\_\+defs} & if TRUE, output variable definitions for variables that have them.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+variable\+\_\+t}.
+

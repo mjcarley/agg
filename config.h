@@ -36,6 +36,9 @@
 /* Define to 1 if you have the `m' library (-lm). */
 #define HAVE_LIBM 1
 
+/* Define to 1 if you have the `triangle-api' library (-ltriangle-api). */
+#define HAVE_LIBTRIANGLE_API 1
+
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1
 
@@ -56,6 +59,9 @@
 
 /* Define to 1 if you have the <sys/types.h> header file. */
 #define HAVE_SYS_TYPES_H 1
+
+/* Define to 1 if you have the <triangle_api.h> header file. */
+#define HAVE_TRIANGLE_API_H 1
 
 /* Define to 1 if you have the <unistd.h> header file. */
 #define HAVE_UNISTD_H 1

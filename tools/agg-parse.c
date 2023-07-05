@@ -27,7 +27,8 @@
 gint main(gint argc, gchar **argv)
 
 {
-  gint fid = 0, i, j, npts, ntri ;
+#if 0
+  gint fid = 0, i, j, k, npts, ntri ;
   agg_parser_t *p ;
   agg_body_t *b ;
   agg_crowd_t c ;
@@ -37,10 +38,8 @@ gint main(gint argc, gchar **argv)
   agg_mesh_t *m ;
   GScanner *scanner ;  
   gchar ch, *progname ;
-  gint test ;
 
   progname = g_strdup(g_path_get_basename(argv[0])) ;
-  test = -1 ;
   
   while ( (ch = getopt(argc, argv, "T:")) != EOF ) {
     switch (ch) {
@@ -48,7 +47,6 @@ gint main(gint argc, gchar **argv)
     /* case 'T': test = parse_test(optarg) ; break ; */
     }
   }
-
   w = agg_workspace_alloc(32) ;
   p = agg_parser_alloc() ;
   scanner = agg_scanner_alloc() ;
@@ -60,18 +58,19 @@ gint main(gint argc, gchar **argv)
 
   agg_crowd_list_bodies(stderr, &c) ;
 
-  wg = agg_adaptive_grid_workspace_alloc(32768, 8192, 32768) ;
-  
-  fprintf(stderr, "%d bod%s in crowd\n",
+  fprintf(stderr, "%s: %d bod%s in crowd\n",
+	  progname,
 	  agg_crowd_body_number(&c),
 	  (agg_crowd_body_number(&c) == 1 ? "y" : "ies")) ;
   for ( i = 0 ; i < agg_crowd_body_number(&c) ; i ++ ) {
     b = agg_crowd_body(&c, i) ;
+    fprintf(stderr, "%s: gridding body %d\n", progname, i) ;
     if ( agg_body_grid(b)->t == AGG_GRID_ADAPTIVE ) {
       for ( j = 0 ; j < agg_body_distribution_number(b) ; j ++ ) {
 	d = agg_body_distribution(b,j) ;
 	agg_distribution_interpolation_weights(d) ;
       }
+      wg = agg_adaptive_grid_workspace_alloc(32768, 8192, 32768) ;  
       agg_adaptive_grid_make(c.b[i]->g, b, w, wg) ;
     }
   }
@@ -91,19 +90,22 @@ gint main(gint argc, gchar **argv)
 
   agg_parser_expressions_evaluate(c.p) ;
   
-  m = agg_mesh_alloc(npts, ntri, 0, 0, 0) ;
+  m = agg_mesh_alloc(npts, ntri, 1, 0, 0) ;
   for ( i = 0 ; i < agg_crowd_body_number(&c) ; i ++ ) {
-    fprintf(stderr, "meshing body %d\n", i) ;
+    fprintf(stderr, "%s: meshing body %d\n", progname, i) ;
     b = agg_crowd_body(&c, i) ;
     for ( j = 0 ; j < agg_body_distribution_number(b) ; j ++ ) {
       d = agg_body_distribution(b,j) ;
       agg_distribution_interpolation_weights(d) ;
     }
-    if ( b->g != NULL ) agg_body_mesh_grid(b, b->g, m, w) ;
+    if ( b->g != NULL ) agg_body_mesh_grid(b, b->g, m, i, w) ;
   }
+
+  agg_mesh_trim(m, &c, w) ;
   
   agg_mesh_points_write(stdout, m) ;
   agg_mesh_tri_write(stdout, m) ;
+#endif
   
   return 0 ;
 }

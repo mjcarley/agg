@@ -622,7 +622,7 @@ int tri_tri_intersect_with_isectline(double V0[3],double V1[3],double V2[3],
   double vp0,vp1,vp2;
   double up0,up1,up2;
   double b,c,max;
-  double tmp,diff[3];
+  /* double tmp,diff[3]; */
   int smallest1,smallest2;
 
   /* compute plane equation of triangle(V0,V1,V2) */

@@ -1,28 +1,22 @@
-\form#0:$f(t)=1$
-\form#1:$t<t_{0}$
-\form#2:$f(t)=p(t-t_{0})(1-t)^{\eta}/(1-t_{0})^{\eta}$
-\form#3:$t\geq t_{0}$
-\form#4:$p(t-t_{0})$
-\form#5:$f(t)$
-\form#6:$C^{2}$
-\form#7:$\eta$
-\form#8:$t_{0}$
-\form#9:$t$
-\form#10:$\mathrm{sgn}(t)*(1-\cos(\pi t))/2$
-\form#11:$\mathrm{sgn}(t)*(1-\cos(\pi/2 t))$
-\form#12:$\sin \pi/2 t$
-\form#13:$\mathrm{sgn}(t)(1-\cos(\pi t))/2$
-\form#14:$\mathrm{sgn}(t)(1-\cos(\pi/2 t))$
-\form#15:$i$
-\form#16:$t_{\min}$
-\form#17:$\_{\max}$
-\form#18:$t_{\max}$
-\form#19:$t_{i}$
-\form#20:$(t_{\min},t_{\max})$
-\form#21:$\mathrm{sgn}(t)(1-\cos(t\pi))/2$
-\form#22:$\mathrm{sgn}(t)(1-\cos(t\pi/2))$
-\form#23:$\sin t\pi/2$
-\form#24:$\mathrm{sgn}(t)(1-\cos(\pi t/2))$
-\form#25:$\sin \pi t/2$
-\form#26:$\mathrm{sgn}(t)(1-\cos \pi t)/2$
-\form#27:$\mathrm{sgn}(t)(1-\cos \pi t/2)$
+\_form#0=145x19:$B_{r}^{(n)}(x)=\binom{n}{r}x^{r}(1-x)^{n-r}$
+\_form#1=40x18:$B_{r}^{(n)}(x)$
+\_form#2=61x11:$-1\leq x\leq 1$
+\_form#3=48x14:$y=f(x)$
+\_form#4=11x9:$\eta_{1}$
+\_form#5=31x9:$x=0$
+\_form#6=13x9:$\eta_{2}$
+\_form#7=30x9:$x=1$
+\_form#8=5x9:$i$
+\_form#9=9x6:$u$
+\_form#10=8x6:$v$
+\_form#11=36x14:$\mathbf{x}(u,v)$
+\_form#12=61x11:$-1\leq x\leq1$
+\_form#13=30x14:$y(|x|)$
+\_form#14=31x10:$x<0$
+\_form#15=44x9:$t=0.12$
+\_form#16=46x11:$p=0.02$
+\_form#17=45x9:$m=0.3$
+\_form#18=28x14:$(u,v)$
+\_form#19=29x10:$\partial\mathbf{x}\partial u$
+\_form#20=29x10:$\partial\mathbf{x}\partial v$
+\_form#21=25x14:$(s,t)$

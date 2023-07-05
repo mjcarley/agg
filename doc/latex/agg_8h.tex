@@ -1,766 +1,254 @@
-\section{agg.\+h File Reference}
-\label{agg_8h}\index{agg.\+h@{agg.\+h}}
-\subsection*{Data Structures}
+\doxysection{agg.\+h File Reference}
+\label{agg_8h}\index{agg.h@{agg.h}}
+\doxysubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-struct {\bf \+\_\+agg\+\_\+shape\+\_\+t}
+gdouble \textbf{ agg\+\_\+bernstein\+\_\+basis\+\_\+eval} (gint n, gint r, gdouble x)
 \item 
-struct {\bf \+\_\+agg\+\_\+expression\+\_\+t}
+\textbf{ agg\+\_\+section\+\_\+t} $\ast$ \textbf{ agg\+\_\+section\+\_\+new} (gint oumax, gint olmax)
 \item 
-struct {\bf \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t}
+gdouble \textbf{ agg\+\_\+section\+\_\+eval} (\textbf{ agg\+\_\+section\+\_\+t} $\ast$s, gdouble x)
 \item 
-struct {\bf \+\_\+agg\+\_\+distribution\+\_\+t}
+gint \textbf{ agg\+\_\+section\+\_\+copy} (\textbf{ agg\+\_\+section\+\_\+t} $\ast$dest, \textbf{ agg\+\_\+section\+\_\+t} $\ast$src)
 \item 
-struct {\bf \+\_\+agg\+\_\+body\+\_\+t}
+\textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t} $\ast$ \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+new} (void)
 \item 
-struct {\bf \+\_\+agg\+\_\+parser\+\_\+t}
+\textbf{ agg\+\_\+transform\+\_\+t} $\ast$ \textbf{ agg\+\_\+transform\+\_\+new} (gint nopmax)
 \item 
-struct {\bf \+\_\+agg\+\_\+function\+\_\+call\+\_\+t}
+gint \textbf{ agg\+\_\+transform\+\_\+variable\+\_\+add} (\textbf{ agg\+\_\+transform\+\_\+t} $\ast$T, gchar $\ast$var, gchar $\ast$def, gdouble val)
 \item 
-struct {\bf \+\_\+agg\+\_\+mapping\+\_\+t}
+gint \textbf{ agg\+\_\+transform\+\_\+add\+\_\+global\+\_\+variables} (\textbf{ agg\+\_\+transform\+\_\+t} $\ast$T, \textbf{ agg\+\_\+variable\+\_\+t} $\ast$global, gint nglobal)
 \item 
-struct {\bf \+\_\+agg\+\_\+shape\+\_\+interpolant\+\_\+t}
+gint \textbf{ agg\+\_\+transform\+\_\+expressions\+\_\+compile} (\textbf{ agg\+\_\+transform\+\_\+t} $\ast$T)
+\item 
+gint \textbf{ agg\+\_\+transform\+\_\+variables\+\_\+eval} (\textbf{ agg\+\_\+transform\+\_\+t} $\ast$T)
+\item 
+gint \textbf{ agg\+\_\+transform\+\_\+variables\+\_\+write} (FILE $\ast$f, \textbf{ agg\+\_\+transform\+\_\+t} $\ast$T, gboolean write\+\_\+defs)
+\item 
+gint \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+add} (\textbf{ agg\+\_\+transform\+\_\+t} $\ast$T, \textbf{ agg\+\_\+operation\+\_\+t} op, gdouble $\ast$p, gchar $\ast$$\ast$expr, gint np)
+\item 
+gint \textbf{ agg\+\_\+transform\+\_\+operators\+\_\+write} (FILE $\ast$f, \textbf{ agg\+\_\+transform\+\_\+t} $\ast$T)
+\item 
+gint \textbf{ agg\+\_\+transform\+\_\+apply} (\textbf{ agg\+\_\+transform\+\_\+t} $\ast$T, gdouble $\ast$xin, gdouble $\ast$xout)
+\item 
+gpointer \textbf{ agg\+\_\+expression\+\_\+compile} (gchar $\ast$e, \textbf{ agg\+\_\+expression\+\_\+data\+\_\+t} $\ast$d)
+\item 
+gdouble \textbf{ agg\+\_\+expression\+\_\+eval} (gpointer e)
+\item 
+gint \textbf{ agg\+\_\+expression\+\_\+data\+\_\+compile} (\textbf{ agg\+\_\+expression\+\_\+data\+\_\+t} $\ast$d)
+\item 
+\textbf{ agg\+\_\+surface\+\_\+t} $\ast$ \textbf{ agg\+\_\+surface\+\_\+new} (gint nsmax)
+\item 
+gint \textbf{ agg\+\_\+surface\+\_\+section\+\_\+add} (\textbf{ agg\+\_\+surface\+\_\+t} $\ast$S, \textbf{ agg\+\_\+section\+\_\+t} $\ast$s, gdouble u)
+\item 
+gint \textbf{ agg\+\_\+surface\+\_\+weights\+\_\+make} (\textbf{ agg\+\_\+surface\+\_\+t} $\ast$S)
+\item 
+gint \textbf{ agg\+\_\+surface\+\_\+section\+\_\+interp} (\textbf{ agg\+\_\+surface\+\_\+t} $\ast$S, gdouble u, \textbf{ agg\+\_\+section\+\_\+t} $\ast$s)
+\item 
+gint \textbf{ agg\+\_\+surface\+\_\+point\+\_\+eval} (\textbf{ agg\+\_\+surface\+\_\+t} $\ast$S, gdouble u, gdouble v, gdouble $\ast$x, agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$w)
+\item 
+agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$ \textbf{ agg\+\_\+surface\+\_\+workspace\+\_\+new} (void)
+\item 
+gdouble \textbf{ agg\+\_\+naca\+\_\+four} (gdouble t, gdouble p, gdouble m, gdouble x)
 \end{DoxyCompactItemize}
-\subsection*{Macros}
 \begin{DoxyCompactItemize}
 \item 
-\#define {\bf A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+G\+L\+O\+B\+A\+L}~G\+\_\+\+T\+O\+K\+E\+N\+\_\+\+L\+A\+S\+T + 1
-\item 
-\#define {\bf A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+D\+I\+S\+T\+R\+I\+B\+U\+T\+I\+O\+N}~G\+\_\+\+T\+O\+K\+E\+N\+\_\+\+L\+A\+S\+T + 2
-\item 
-\#define {\bf A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+T\+R\+A\+N\+S\+F\+O\+R\+M}~G\+\_\+\+T\+O\+K\+E\+N\+\_\+\+L\+A\+S\+T + 3
-\item 
-\#define {\bf A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+S\+H\+A\+P\+E}~G\+\_\+\+T\+O\+K\+E\+N\+\_\+\+L\+A\+S\+T + 4
-\item 
-\#define {\bf A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+A\+X\+E\+S}~G\+\_\+\+T\+O\+K\+E\+N\+\_\+\+L\+A\+S\+T + 5
-\item 
-\#define {\bf A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+M\+A\+X}~G\+\_\+\+T\+O\+K\+E\+N\+\_\+\+L\+A\+S\+T + 5
-\item 
-\#define {\bf agg\+\_\+shape\+\_\+break\+\_\+number}(\+\_\+s)~((\+\_\+s)-\/$>$nb)
-\item 
-\#define {\bf agg\+\_\+shape\+\_\+break\+\_\+lower}(\+\_\+s,  \+\_\+i)~((\+\_\+s)-\/$>$b[2$\ast$(\+\_\+i)+0])
-\item 
-\#define {\bf agg\+\_\+shape\+\_\+break\+\_\+upper}(\+\_\+s,  \+\_\+i)~((\+\_\+s)-\/$>$b[2$\ast$(\+\_\+i)+1])
-\item 
-\#define {\bf A\+G\+G\+\_\+\+E\+X\+P\+R\+E\+S\+S\+I\+O\+N\+\_\+\+L\+E\+N\+G\+T\+H\+\_\+\+M\+A\+X}~64
-\item 
-\#define {\bf A\+G\+G\+\_\+\+T\+R\+A\+N\+S\+F\+O\+R\+M\+\_\+\+F\+U\+N\+C\+T\+I\+O\+N\+\_\+\+N\+U\+M\+B\+E\+R}~16
-\item 
-\#define {\bf A\+G\+G\+\_\+\+T\+R\+A\+N\+S\+F\+O\+R\+M\+\_\+\+P\+A\+R\+A\+M\+E\+T\+E\+R\+\_\+\+N\+U\+M\+B\+E\+R}~128
-\item 
-\#define {\bf agg\+\_\+local\+\_\+transform\+\_\+parameter\+\_\+index}(\+\_\+t,  \+\_\+i,  \+\_\+j)~((\+\_\+t)-\/$>$p1[(\+\_\+i)] + (\+\_\+j))
-\item 
-\#define {\bf agg\+\_\+distribution\+\_\+shape}(\+\_\+d,  \+\_\+i)~((\+\_\+d)-\/$>$sh[(\+\_\+i)])
-\item 
-\#define {\bf agg\+\_\+distribution\+\_\+transform}(\+\_\+d,  \+\_\+i)~((\+\_\+d)-\/$>$T[(\+\_\+i)])
-\item 
-\#define {\bf agg\+\_\+distribution\+\_\+station\+\_\+number}(\+\_\+d)~((\+\_\+d)-\/$>$ns)
-\item 
-\#define {\bf A\+G\+G\+\_\+\+B\+O\+D\+Y\+\_\+\+D\+I\+S\+T\+R\+I\+B\+U\+T\+I\+O\+N\+\_\+\+N\+U\+M\+B\+E\+R\+\_\+\+M\+A\+X}~64
-\item 
-\#define {\bf agg\+\_\+body\+\_\+distribution\+\_\+number}(\+\_\+b)~((\+\_\+b)-\/$>$nd)
-\item 
-\#define {\bf agg\+\_\+body\+\_\+distribution}(\+\_\+b,  \+\_\+i)~(((\+\_\+b)-\/$>$d[(\+\_\+i)]))
-\item 
-\#define {\bf A\+G\+G\+\_\+\+P\+A\+R\+S\+E\+R\+\_\+\+P\+A\+R\+A\+M\+E\+T\+E\+R\+\_\+\+N\+U\+M\+B\+E\+R\+\_\+\+M\+A\+X}~128
-\item 
-\#define {\bf A\+G\+G\+\_\+\+P\+A\+R\+S\+E\+R\+\_\+\+P\+A\+R\+A\+M\+E\+T\+E\+R\+\_\+\+R\+E\+S\+E\+R\+V\+E\+D\+\_\+\+T}~0
-\item 
-\#define {\bf agg\+\_\+parser\+\_\+global\+\_\+set}(\+\_\+p)~((\+\_\+p)-\/$>$global\+\_\+set)
-\item 
-\#define {\bf agg\+\_\+mapping\+\_\+map}(\+\_\+m,  \+\_\+s,  \+\_\+t)
+typedef \textbf{ agg\+\_\+variable\+\_\+t}
 \end{DoxyCompactItemize}
-\subsection*{Typedefs}
 \begin{DoxyCompactItemize}
 \item 
-typedef struct {\bf \+\_\+agg\+\_\+shape\+\_\+t} {\bf agg\+\_\+shape\+\_\+t}
-\item 
-typedef struct {\bf \+\_\+agg\+\_\+expression\+\_\+t} {\bf agg\+\_\+expression\+\_\+t}
-\item 
-typedef gint($\ast$ {\bf agg\+\_\+local\+\_\+transform\+\_\+func\+\_\+t}) (gdouble $\ast$x, gdouble $\ast$p, gdouble $\ast$y)
-\item 
-typedef struct {\bf \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t} {\bf agg\+\_\+local\+\_\+transform\+\_\+t}
-\item 
-typedef struct {\bf \+\_\+agg\+\_\+distribution\+\_\+t} {\bf agg\+\_\+distribution\+\_\+t}
-\item 
-typedef struct {\bf \+\_\+agg\+\_\+body\+\_\+t} {\bf agg\+\_\+body\+\_\+t}
-\item 
-typedef struct {\bf \+\_\+agg\+\_\+parser\+\_\+t} {\bf agg\+\_\+parser\+\_\+t}
-\item 
-typedef struct {\bf \+\_\+agg\+\_\+function\+\_\+call\+\_\+t} {\bf agg\+\_\+function\+\_\+call\+\_\+t}
-\item 
-typedef struct {\bf \+\_\+agg\+\_\+mapping\+\_\+t} {\bf agg\+\_\+mapping\+\_\+t}
-\item 
-typedef struct {\bf \+\_\+agg\+\_\+shape\+\_\+interpolant\+\_\+t} {\bf agg\+\_\+shape\+\_\+interpolant\+\_\+t}
-\end{DoxyCompactItemize}
-\subsection*{Enumerations}
-\begin{DoxyCompactItemize}
-\item 
-enum {\bf agg\+\_\+shape\+\_\+type\+\_\+t} \{ {\bf A\+G\+G\+\_\+\+S\+H\+A\+P\+E\+\_\+\+A\+E\+R\+O\+F\+O\+I\+L} = 0, 
-{\bf A\+G\+G\+\_\+\+S\+H\+A\+P\+E\+\_\+\+E\+L\+L\+I\+P\+S\+E} = 1
+\mbox{\label{agg_8h_a77956769442ada427d64c740062b911a}} 
+\#define {\bfseries agg\+\_\+section\+\_\+type}(s)
+\begin{DoxyCompactList}\small\item\em A macro that returns the \doxyref{agg\+\_\+section\+\_\+type\+\_\+t}{p.}{group__sections_gaf4798d9cfc37c3818fc2f3a2208bfb82} of an \doxyref{agg\+\_\+section\+\_\+t}{p.}{agg_8h_a8cdd164643b93d05245e9b4976f3f0cb}. \end{DoxyCompactList}\item 
+\mbox{\label{agg_8h_a5378fa853984c8f6b4eab5447e1b89b7}} 
+\#define {\bfseries agg\+\_\+section\+\_\+close}(s)
+\begin{DoxyCompactList}\small\item\em TRUE if an \doxyref{agg\+\_\+section\+\_\+t}{p.}{agg_8h_a8cdd164643b93d05245e9b4976f3f0cb} needs to be closed. \end{DoxyCompactList}\item 
+\mbox{\label{agg_8h_ae30718f98a4e084775819bebfb7cdb01}} 
+\#define {\bfseries agg\+\_\+section\+\_\+eta\+\_\+left}(s)
+\begin{DoxyCompactList}\small\item\em value of $\eta_{1}$ controlling curvature around $x=0$ \end{DoxyCompactList}\item 
+\mbox{\label{agg_8h_af4e997cbe72578421773d629c6e7e28f}} 
+\#define {\bfseries agg\+\_\+section\+\_\+eta\+\_\+right}(s)
+\begin{DoxyCompactList}\small\item\em value of $\eta_{2}$ controlling curvature around $x=1$ \end{DoxyCompactList}\item 
+\mbox{\label{agg_8h_a1dd337d4464caea072bc3276765574b9}} 
+\#define {\bfseries agg\+\_\+section\+\_\+coefficient\+\_\+upper}(s,  i)
+\begin{DoxyCompactList}\small\item\em $i$th coefficient in Bernstein expansion of upper part of a section \end{DoxyCompactList}\item 
+\mbox{\label{agg_8h_a108622652317c5e32cc5b274dbd27074}} 
+\#define {\bfseries agg\+\_\+section\+\_\+coefficient\+\_\+lower}(s,  i)
+\begin{DoxyCompactList}\small\item\em $i$th coefficient in Bernstein expansion of lower part of a section \end{DoxyCompactList}\item 
+\mbox{\label{agg_8h_a0eac1de141f11cad7fdb472c92636318}} 
+\#define {\bfseries agg\+\_\+section\+\_\+order\+\_\+upper}(s)
+\begin{DoxyCompactList}\small\item\em order of Bernstein expansion in upper part of section \end{DoxyCompactList}\item 
+\mbox{\label{agg_8h_a91b05d5236f59b33c0523326b46c9740}} 
+\#define {\bfseries agg\+\_\+section\+\_\+order\+\_\+lower}(s)
+\begin{DoxyCompactList}\small\item\em order of Bernstein expansion in lower part of section \end{DoxyCompactList}\item 
+\mbox{\label{agg_8h_a132c33835221c2a5090e914fa3de337b}} 
+\#define {\bfseries agg\+\_\+section\+\_\+order\+\_\+upper\+\_\+max}(s)
+\begin{DoxyCompactList}\small\item\em maximum order of Bernstein expansion in upper part of section \end{DoxyCompactList}\item 
+\mbox{\label{agg_8h_a10ca46c7a9c33ca79281c319a73963ba}} 
+\#define {\bfseries agg\+\_\+section\+\_\+order\+\_\+lower\+\_\+max}(s)
+\begin{DoxyCompactList}\small\item\em maximum order of Bernstein expansion in lower part of section \end{DoxyCompactList}\item 
+\mbox{\label{agg_8h_a209c0c509b1864c497b13a064114582f}} 
+\#define {\bfseries agg\+\_\+section\+\_\+trailing\+\_\+edge\+\_\+upper}(s)
+\begin{DoxyCompactList}\small\item\em semi-\/thickness of upper part of trailing edge on aerofoil section \end{DoxyCompactList}\item 
+\mbox{\label{agg_8h_ad48b2ab0dbe46e279e115dd3d50294b2}} 
+\#define {\bfseries agg\+\_\+section\+\_\+trailing\+\_\+edge\+\_\+lower}(s)
+\begin{DoxyCompactList}\small\item\em semi-\/thickness of lower part of trailing edge on aerofoil section \end{DoxyCompactList}\item 
+enum \textbf{ agg\+\_\+section\+\_\+type\+\_\+t} \{ \textbf{ AGG\+\_\+\+SECTION\+\_\+\+UNDEFINED} = 0
+, \textbf{ AGG\+\_\+\+SECTION\+\_\+\+AEROFOIL} = 1
+, \textbf{ AGG\+\_\+\+SECTION\+\_\+\+ELLIPSE} = 2
  \}
 \item 
-enum {\bf agg\+\_\+spacing\+\_\+t} \{ {\bf A\+G\+G\+\_\+\+S\+P\+A\+C\+I\+N\+G\+\_\+\+L\+I\+N\+E\+A\+R} = 0, 
-{\bf A\+G\+G\+\_\+\+S\+P\+A\+C\+I\+N\+G\+\_\+\+C\+O\+S\+I\+N\+E} = 1, 
-{\bf A\+G\+G\+\_\+\+S\+P\+A\+C\+I\+N\+G\+\_\+\+H\+A\+L\+F\+C\+O\+S} = 2, 
-{\bf A\+G\+G\+\_\+\+S\+P\+A\+C\+I\+N\+G\+\_\+\+H\+A\+L\+F\+S\+I\+N} = 3
- \}
+typedef \textbf{ agg\+\_\+section\+\_\+t}
+\item 
+typedef \textbf{ agg\+\_\+expression\+\_\+data\+\_\+t}
 \end{DoxyCompactItemize}
-\subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-gdouble {\bf agg\+\_\+bernstein\+\_\+basis\+\_\+eval} (gint n, gint r, gdouble x)
+enum \textbf{ agg\+\_\+operation\+\_\+t} \{ \newline
+\textbf{ AGG\+\_\+\+TRANSFORM\+\_\+\+UNDEFINED} = 0
+, \textbf{ AGG\+\_\+\+TRANSFORM\+\_\+\+ROTATE} = 1
+, \textbf{ AGG\+\_\+\+TRANSFORM\+\_\+\+SHRINK} = 2
+, \textbf{ AGG\+\_\+\+TRANSFORM\+\_\+\+TRANSLATE} = 3
+, \newline
+\textbf{ AGG\+\_\+\+TRANSFORM\+\_\+\+SCALE} = 4
+ \}
 \item 
-gint {\bf agg\+\_\+bernstein\+\_\+basis} (gint n, gdouble x, gdouble $\ast$S, gdouble $\ast$d\+S)
+typedef \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}
 \item 
-gdouble {\bf agg\+\_\+shape\+\_\+eval} ({\bf agg\+\_\+shape\+\_\+t} $\ast${\bf s}, gdouble x, gint lim)
+typedef \textbf{ agg\+\_\+transform\+\_\+t}
+\end{DoxyCompactItemize}
+\begin{DoxyCompactItemize}
 \item 
-gdouble {\bf agg\+\_\+shape\+\_\+aerofoil\+\_\+eval} ({\bf agg\+\_\+shape\+\_\+t} $\ast${\bf s}, gdouble x)
+typedef \textbf{ agg\+\_\+surface\+\_\+t}
+\end{DoxyCompactItemize}
+\begin{DoxyCompactItemize}
 \item 
-gdouble {\bf agg\+\_\+shape\+\_\+ellipse\+\_\+eval} ({\bf agg\+\_\+shape\+\_\+t} $\ast${\bf s}, gdouble x, gint lim)
+typedef \textbf{ agg\+\_\+intersection\+\_\+t}
+\end{DoxyCompactItemize}
+\begin{DoxyCompactItemize}
 \item 
-{\bf agg\+\_\+shape\+\_\+t} $\ast$ {\bf agg\+\_\+shape\+\_\+alloc} (gint nsmax)
-\item 
-gint {\bf agg\+\_\+shape\+\_\+naca} ({\bf agg\+\_\+shape\+\_\+t} $\ast$c, gdouble t)
-\item 
-gint {\bf agg\+\_\+shape\+\_\+ellipse} ({\bf agg\+\_\+shape\+\_\+t} $\ast${\bf s})
-\item 
-gint {\bf agg\+\_\+shape\+\_\+fit} ({\bf agg\+\_\+shape\+\_\+t} $\ast$c, gdouble $\ast$xu, gdouble $\ast$yu, gint nu, gdouble $\ast$xl, gdouble $\ast$yl, gint nl, gdouble n1, gdouble n2, gdouble d, gint n, gboolean closed, gdouble $\ast$work)
-\item 
-gint {\bf agg\+\_\+shape\+\_\+interval\+\_\+add} ({\bf agg\+\_\+shape\+\_\+t} $\ast${\bf s}, gdouble x1, gdouble x2, gdouble $\ast$x, gdouble $\ast$y, gint {\bf np}, gboolean upper, gdouble n1, gdouble n2, gint n, gdouble $\ast$work)
-\item 
-gint {\bf agg\+\_\+shape\+\_\+root\+\_\+fit} ({\bf agg\+\_\+shape\+\_\+t} $\ast${\bf s}, gdouble n1, gdouble n2, gdouble hu, gdouble su, gdouble du, gdouble bu, gdouble hl, gdouble sl, gdouble dl, gdouble bl, gint n, gdouble $\ast$work)
-\item 
-gint {\bf agg\+\_\+shape\+\_\+fit\+\_\+naca\+\_\+four} ({\bf agg\+\_\+shape\+\_\+t} $\ast${\bf s}, gint n, gdouble th, gdouble p, gdouble m, gint nu, gint nl, gdouble $\ast$work)
-\item 
-gint {\bf agg\+\_\+shape\+\_\+parse} ({\bf agg\+\_\+shape\+\_\+t} $\ast${\bf s}, gchar $\ast$type, gdouble $\ast$p, gint {\bf np})
-\item 
-gint {\bf agg\+\_\+shape\+\_\+copy} ({\bf agg\+\_\+shape\+\_\+t} $\ast$dest, {\bf agg\+\_\+shape\+\_\+t} $\ast$src)
-\item 
-gdouble {\bf agg\+\_\+naca\+\_\+four} (gdouble t, gdouble p, gdouble m, gdouble x)
-\item 
-gint {\bf agg\+\_\+functions\+\_\+eval} ({\bf agg\+\_\+function\+\_\+call\+\_\+t} $\ast${\bf func}, {\bf agg\+\_\+parser\+\_\+t} $\ast$p)
-\item 
-{\bf agg\+\_\+distribution\+\_\+t} $\ast$ {\bf agg\+\_\+distribution\+\_\+alloc} (gint nsmax)
-\item 
-gint {\bf agg\+\_\+distribution\+\_\+add\+\_\+shape} ({\bf agg\+\_\+distribution\+\_\+t} $\ast$d, gdouble t, {\bf agg\+\_\+shape\+\_\+t} $\ast${\bf s})
-\item 
-gint {\bf agg\+\_\+distribution\+\_\+interpolation\+\_\+weights} ({\bf agg\+\_\+distribution\+\_\+t} $\ast$d)
-\item 
-gint {\bf agg\+\_\+distribution\+\_\+interpolate} ({\bf agg\+\_\+distribution\+\_\+t} $\ast$d, gdouble t, {\bf agg\+\_\+shape\+\_\+t} $\ast${\bf s}, {\bf agg\+\_\+local\+\_\+transform\+\_\+t} $\ast$T)
-\item 
-gint {\bf agg\+\_\+distribution\+\_\+axes\+\_\+parse} (gchar $\ast${\bf s}, gint $\ast${\bf a})
-\item 
-gint {\bf agg\+\_\+distribution\+\_\+write\+\_\+mesh} (F\+I\+L\+E $\ast$f, {\bf agg\+\_\+distribution\+\_\+t} $\ast$d, gdouble smin, gdouble smax, gint ns, {\bf agg\+\_\+spacing\+\_\+t} ss, gdouble tmin, gdouble tmax, gint nt, {\bf agg\+\_\+spacing\+\_\+t} st, {\bf agg\+\_\+shape\+\_\+t} $\ast$sh, {\bf agg\+\_\+local\+\_\+transform\+\_\+t} $\ast$T, {\bf agg\+\_\+parser\+\_\+t} $\ast$p)
-\item 
-gint {\bf agg\+\_\+distribution\+\_\+mesh} ({\bf agg\+\_\+distribution\+\_\+t} $\ast$d, gdouble smin, gdouble smax, gint ns, {\bf agg\+\_\+spacing\+\_\+t} ss, gdouble tmin, gdouble tmax, gint nt, {\bf agg\+\_\+spacing\+\_\+t} st, {\bf agg\+\_\+shape\+\_\+t} $\ast$sh, {\bf agg\+\_\+local\+\_\+transform\+\_\+t} $\ast$T, {\bf agg\+\_\+parser\+\_\+t} $\ast$p, gdouble $\ast$x, gint xstr, gint $\ast$tr, gint tstr, gint $\ast$idx0)
-\item 
-gint {\bf agg\+\_\+mesh\+\_\+tri\+\_\+write} (F\+I\+L\+E $\ast$f, gint $\ast$tr, gint str, gint n)
-\item 
-gint {\bf agg\+\_\+mesh\+\_\+points\+\_\+write} (F\+I\+L\+E $\ast$f, gdouble $\ast$x, gint str, gint n)
-\item 
-gdouble {\bf agg\+\_\+spacing\+\_\+eval} (gdouble tmin, gdouble tmax, gint nt, {\bf agg\+\_\+spacing\+\_\+t} {\bf s}, gint i)
-\item 
-{\bf agg\+\_\+parser\+\_\+t} $\ast$ {\bf agg\+\_\+parser\+\_\+alloc} (void)
-\item 
-gint {\bf agg\+\_\+parser\+\_\+declaration} ({\bf agg\+\_\+parser\+\_\+t} $\ast$p, gchar $\ast${\bf s})
-\item 
-gint {\bf agg\+\_\+parser\+\_\+declarations\+\_\+write} (F\+I\+L\+E $\ast$f, {\bf agg\+\_\+parser\+\_\+t} $\ast$p)
-\item 
-gint {\bf agg\+\_\+parser\+\_\+expressions\+\_\+evaluate} ({\bf agg\+\_\+parser\+\_\+t} $\ast$p)
-\item 
-gint {\bf agg\+\_\+parser\+\_\+variable\+\_\+add} ({\bf agg\+\_\+parser\+\_\+t} $\ast$p, gchar $\ast${\bf s}, gdouble x)
-\item 
-gint {\bf agg\+\_\+parser\+\_\+expression\+\_\+add} ({\bf agg\+\_\+parser\+\_\+t} $\ast$p, gchar $\ast$v, gchar $\ast$w)
-\item 
-gint {\bf agg\+\_\+parser\+\_\+function\+\_\+add} ({\bf agg\+\_\+parser\+\_\+t} $\ast$p, gchar $\ast$v, gpointer {\bf func}, gint na)
-\item 
-gint {\bf agg\+\_\+parser\+\_\+read\+\_\+header} (F\+I\+L\+E $\ast$f, {\bf agg\+\_\+parser\+\_\+t} $\ast$p)
-\item 
-G\+Scanner $\ast$ {\bf agg\+\_\+scanner\+\_\+alloc} (void)
-\item 
-gint {\bf agg\+\_\+parser\+\_\+body\+\_\+read} (gint fid, G\+Scanner $\ast$scanner, {\bf agg\+\_\+parser\+\_\+t} $\ast$p, {\bf agg\+\_\+body\+\_\+t} $\ast$b)
-\item 
-gint {\bf agg\+\_\+parser\+\_\+constant\+\_\+parse} (gchar $\ast${\bf s}, guint $\ast$v)
-\item 
-{\bf agg\+\_\+body\+\_\+t} $\ast$ {\bf agg\+\_\+body\+\_\+alloc} (void)
-\item 
-gint {\bf agg\+\_\+body\+\_\+distributions\+\_\+list} (F\+I\+L\+E $\ast$f, {\bf agg\+\_\+body\+\_\+t} $\ast$b)
-\item 
-gint {\bf agg\+\_\+body\+\_\+distribution\+\_\+add} ({\bf agg\+\_\+body\+\_\+t} $\ast$b, {\bf agg\+\_\+distribution\+\_\+t} $\ast$d, gchar $\ast${\bf name})
-\item 
-{\bf agg\+\_\+shape\+\_\+interpolant\+\_\+t} $\ast$ {\bf agg\+\_\+shape\+\_\+interpolant\+\_\+alloc} (gint nmax)
-\item 
-gint {\bf agg\+\_\+shape\+\_\+interpolant\+\_\+make} ({\bf agg\+\_\+shape\+\_\+interpolant\+\_\+t} $\ast${\bf a}, {\bf agg\+\_\+shape\+\_\+t} $\ast$sh, gint n)
-\item 
-gint {\bf agg\+\_\+shape\+\_\+interpolant\+\_\+step} ({\bf agg\+\_\+shape\+\_\+interpolant\+\_\+t} $\ast${\bf a}, gdouble $\ast${\bf s}, gdouble dl)
-\item 
-gint {\bf agg\+\_\+local\+\_\+transform\+\_\+init} ({\bf agg\+\_\+local\+\_\+transform\+\_\+t} $\ast$t)
-\item 
-{\bf agg\+\_\+local\+\_\+transform\+\_\+t} $\ast$ {\bf agg\+\_\+local\+\_\+transform\+\_\+alloc} (void)
-\item 
-gint {\bf agg\+\_\+local\+\_\+transform\+\_\+rotate} (gdouble $\ast$x, gdouble $\ast$p, gdouble $\ast$y)
-\item 
-gint {\bf agg\+\_\+local\+\_\+transform\+\_\+shift} (gdouble $\ast$x, gdouble $\ast$p, gdouble $\ast$y)
-\item 
-gint {\bf agg\+\_\+local\+\_\+transform\+\_\+shrink} (gdouble $\ast$x, gdouble $\ast$p, gdouble $\ast$y)
-\item 
-gint {\bf agg\+\_\+local\+\_\+transform\+\_\+scale} (gdouble $\ast$x, gdouble $\ast$p, gdouble $\ast$y)
-\item 
-gint {\bf agg\+\_\+local\+\_\+transform\+\_\+parse} ({\bf agg\+\_\+local\+\_\+transform\+\_\+t} $\ast$T, gchar $\ast$type, gdouble $\ast$p, gint {\bf np})
-\item 
-gint {\bf agg\+\_\+local\+\_\+transform\+\_\+apply} ({\bf agg\+\_\+local\+\_\+transform\+\_\+t} $\ast$T, gdouble $\ast$y)
-\item 
-gint {\bf agg\+\_\+local\+\_\+transform\+\_\+eval\+\_\+parameters} ({\bf agg\+\_\+local\+\_\+transform\+\_\+t} $\ast$t)
-\item 
-gint {\bf agg\+\_\+local\+\_\+transform\+\_\+set\+\_\+expression} ({\bf agg\+\_\+local\+\_\+transform\+\_\+t} $\ast$t, gint i, gchar $\ast$expr, {\bf agg\+\_\+parser\+\_\+t} $\ast$p)
-\item 
-gdouble {\bf agg\+\_\+function\+\_\+roundtip} (gdouble eta, gdouble t0, gdouble t)
+enum \textbf{ agg\+\_\+patch\+\_\+mapping\+\_\+t} \{ \textbf{ AGG\+\_\+\+PATCH\+\_\+\+BILINEAR} = 0
+, \textbf{ AGG\+\_\+\+PATCH\+\_\+\+SPHERICAL} = 1
+ \}
 \end{DoxyCompactItemize}
 
 
-\subsection{Macro Definition Documentation}
-\index{agg.\+h@{agg.\+h}!agg\+\_\+body\+\_\+distribution@{agg\+\_\+body\+\_\+distribution}}
-\index{agg\+\_\+body\+\_\+distribution@{agg\+\_\+body\+\_\+distribution}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+body\+\_\+distribution}]{\setlength{\rightskip}{0pt plus 5cm}\#define agg\+\_\+body\+\_\+distribution(
-\begin{DoxyParamCaption}
-\item[{}]{\+\_\+b, }
-\item[{}]{\+\_\+i}
-\end{DoxyParamCaption}
-)~(((\+\_\+b)-\/$>$d[(\+\_\+i)]))}\label{agg_8h_a9f543f4d3ac50133daedb02a0226adc9}
-\index{agg.\+h@{agg.\+h}!agg\+\_\+body\+\_\+distribution\+\_\+number@{agg\+\_\+body\+\_\+distribution\+\_\+number}}
-\index{agg\+\_\+body\+\_\+distribution\+\_\+number@{agg\+\_\+body\+\_\+distribution\+\_\+number}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+body\+\_\+distribution\+\_\+number}]{\setlength{\rightskip}{0pt plus 5cm}\#define agg\+\_\+body\+\_\+distribution\+\_\+number(
-\begin{DoxyParamCaption}
-\item[{}]{\+\_\+b}
-\end{DoxyParamCaption}
-)~((\+\_\+b)-\/$>$nd)}\label{agg_8h_aad84e65a815922c675254e6adf8c9f87}
-
-
-Referenced by agg\+\_\+body\+\_\+alloc(), agg\+\_\+body\+\_\+distribution\+\_\+add(), and agg\+\_\+body\+\_\+distributions\+\_\+list().
-
-\index{agg.\+h@{agg.\+h}!A\+G\+G\+\_\+\+B\+O\+D\+Y\+\_\+\+D\+I\+S\+T\+R\+I\+B\+U\+T\+I\+O\+N\+\_\+\+N\+U\+M\+B\+E\+R\+\_\+\+M\+A\+X@{A\+G\+G\+\_\+\+B\+O\+D\+Y\+\_\+\+D\+I\+S\+T\+R\+I\+B\+U\+T\+I\+O\+N\+\_\+\+N\+U\+M\+B\+E\+R\+\_\+\+M\+A\+X}}
-\index{A\+G\+G\+\_\+\+B\+O\+D\+Y\+\_\+\+D\+I\+S\+T\+R\+I\+B\+U\+T\+I\+O\+N\+\_\+\+N\+U\+M\+B\+E\+R\+\_\+\+M\+A\+X@{A\+G\+G\+\_\+\+B\+O\+D\+Y\+\_\+\+D\+I\+S\+T\+R\+I\+B\+U\+T\+I\+O\+N\+\_\+\+N\+U\+M\+B\+E\+R\+\_\+\+M\+A\+X}!agg.\+h@{agg.\+h}}
-\subsubsection[{A\+G\+G\+\_\+\+B\+O\+D\+Y\+\_\+\+D\+I\+S\+T\+R\+I\+B\+U\+T\+I\+O\+N\+\_\+\+N\+U\+M\+B\+E\+R\+\_\+\+M\+A\+X}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+G\+G\+\_\+\+B\+O\+D\+Y\+\_\+\+D\+I\+S\+T\+R\+I\+B\+U\+T\+I\+O\+N\+\_\+\+N\+U\+M\+B\+E\+R\+\_\+\+M\+A\+X~64}\label{agg_8h_abf3ec3c274607f566c15da0ef2e64e41}
-
-
-Referenced by agg\+\_\+body\+\_\+distribution\+\_\+add().
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+distribution\+\_\+shape@{agg\+\_\+distribution\+\_\+shape}}
-\index{agg\+\_\+distribution\+\_\+shape@{agg\+\_\+distribution\+\_\+shape}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+distribution\+\_\+shape}]{\setlength{\rightskip}{0pt plus 5cm}\#define agg\+\_\+distribution\+\_\+shape(
-\begin{DoxyParamCaption}
-\item[{}]{\+\_\+d, }
-\item[{}]{\+\_\+i}
-\end{DoxyParamCaption}
-)~((\+\_\+d)-\/$>$sh[(\+\_\+i)])}\label{agg_8h_a4ad3b5353874859c41d84253878f38cd}
-\index{agg.\+h@{agg.\+h}!agg\+\_\+distribution\+\_\+station\+\_\+number@{agg\+\_\+distribution\+\_\+station\+\_\+number}}
-\index{agg\+\_\+distribution\+\_\+station\+\_\+number@{agg\+\_\+distribution\+\_\+station\+\_\+number}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+distribution\+\_\+station\+\_\+number}]{\setlength{\rightskip}{0pt plus 5cm}\#define agg\+\_\+distribution\+\_\+station\+\_\+number(
-\begin{DoxyParamCaption}
-\item[{}]{\+\_\+d}
-\end{DoxyParamCaption}
-)~((\+\_\+d)-\/$>$ns)}\label{agg_8h_ac1ad1699b5ccaaeaaff03cff32b3d104}
-\index{agg.\+h@{agg.\+h}!agg\+\_\+distribution\+\_\+transform@{agg\+\_\+distribution\+\_\+transform}}
-\index{agg\+\_\+distribution\+\_\+transform@{agg\+\_\+distribution\+\_\+transform}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+distribution\+\_\+transform}]{\setlength{\rightskip}{0pt plus 5cm}\#define agg\+\_\+distribution\+\_\+transform(
-\begin{DoxyParamCaption}
-\item[{}]{\+\_\+d, }
-\item[{}]{\+\_\+i}
-\end{DoxyParamCaption}
-)~((\+\_\+d)-\/$>$T[(\+\_\+i)])}\label{agg_8h_ad1f240c62fb0848bafbfc6523de40b92}
-\index{agg.\+h@{agg.\+h}!A\+G\+G\+\_\+\+E\+X\+P\+R\+E\+S\+S\+I\+O\+N\+\_\+\+L\+E\+N\+G\+T\+H\+\_\+\+M\+A\+X@{A\+G\+G\+\_\+\+E\+X\+P\+R\+E\+S\+S\+I\+O\+N\+\_\+\+L\+E\+N\+G\+T\+H\+\_\+\+M\+A\+X}}
-\index{A\+G\+G\+\_\+\+E\+X\+P\+R\+E\+S\+S\+I\+O\+N\+\_\+\+L\+E\+N\+G\+T\+H\+\_\+\+M\+A\+X@{A\+G\+G\+\_\+\+E\+X\+P\+R\+E\+S\+S\+I\+O\+N\+\_\+\+L\+E\+N\+G\+T\+H\+\_\+\+M\+A\+X}!agg.\+h@{agg.\+h}}
-\subsubsection[{A\+G\+G\+\_\+\+E\+X\+P\+R\+E\+S\+S\+I\+O\+N\+\_\+\+L\+E\+N\+G\+T\+H\+\_\+\+M\+A\+X}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+G\+G\+\_\+\+E\+X\+P\+R\+E\+S\+S\+I\+O\+N\+\_\+\+L\+E\+N\+G\+T\+H\+\_\+\+M\+A\+X~64}\label{agg_8h_a1b69ddb7a8c57af7cd3c788b01679e9d}
-
-
-Referenced by agg\+\_\+local\+\_\+transform\+\_\+set\+\_\+expression().
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+local\+\_\+transform\+\_\+parameter\+\_\+index@{agg\+\_\+local\+\_\+transform\+\_\+parameter\+\_\+index}}
-\index{agg\+\_\+local\+\_\+transform\+\_\+parameter\+\_\+index@{agg\+\_\+local\+\_\+transform\+\_\+parameter\+\_\+index}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+local\+\_\+transform\+\_\+parameter\+\_\+index}]{\setlength{\rightskip}{0pt plus 5cm}\#define agg\+\_\+local\+\_\+transform\+\_\+parameter\+\_\+index(
-\begin{DoxyParamCaption}
-\item[{}]{\+\_\+t, }
-\item[{}]{\+\_\+i, }
-\item[{}]{\+\_\+j}
-\end{DoxyParamCaption}
-)~((\+\_\+t)-\/$>$p1[(\+\_\+i)] + (\+\_\+j))}\label{agg_8h_a8363a5c33a57cae99d9b231ec62f2108}
-\index{agg.\+h@{agg.\+h}!agg\+\_\+mapping\+\_\+map@{agg\+\_\+mapping\+\_\+map}}
-\index{agg\+\_\+mapping\+\_\+map@{agg\+\_\+mapping\+\_\+map}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+mapping\+\_\+map}]{\setlength{\rightskip}{0pt plus 5cm}\#define agg\+\_\+mapping\+\_\+map(
-\begin{DoxyParamCaption}
-\item[{}]{\+\_\+m, }
-\item[{}]{\+\_\+s, }
-\item[{}]{\+\_\+t}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a32da69b60108a372f44fac4f8c161f13}
-{\bfseries Value\+:}
-\begin{DoxyCode}
-\textcolor{keywordflow}{do} \{                                              \(\backslash\)
-  (\_t) = (\_m).tbar + ((\_s)-(\_m).sbar)/((\_m).ds) ; \(\backslash\)
-  \} \textcolor{keywordflow}{while} (0)
-\end{DoxyCode}
-\index{agg.\+h@{agg.\+h}!agg\+\_\+parser\+\_\+global\+\_\+set@{agg\+\_\+parser\+\_\+global\+\_\+set}}
-\index{agg\+\_\+parser\+\_\+global\+\_\+set@{agg\+\_\+parser\+\_\+global\+\_\+set}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+parser\+\_\+global\+\_\+set}]{\setlength{\rightskip}{0pt plus 5cm}\#define agg\+\_\+parser\+\_\+global\+\_\+set(
-\begin{DoxyParamCaption}
-\item[{}]{\+\_\+p}
-\end{DoxyParamCaption}
-)~((\+\_\+p)-\/$>$global\+\_\+set)}\label{agg_8h_a15d8adc7a438a01406a502c080a4e85d}
-\index{agg.\+h@{agg.\+h}!A\+G\+G\+\_\+\+P\+A\+R\+S\+E\+R\+\_\+\+P\+A\+R\+A\+M\+E\+T\+E\+R\+\_\+\+N\+U\+M\+B\+E\+R\+\_\+\+M\+A\+X@{A\+G\+G\+\_\+\+P\+A\+R\+S\+E\+R\+\_\+\+P\+A\+R\+A\+M\+E\+T\+E\+R\+\_\+\+N\+U\+M\+B\+E\+R\+\_\+\+M\+A\+X}}
-\index{A\+G\+G\+\_\+\+P\+A\+R\+S\+E\+R\+\_\+\+P\+A\+R\+A\+M\+E\+T\+E\+R\+\_\+\+N\+U\+M\+B\+E\+R\+\_\+\+M\+A\+X@{A\+G\+G\+\_\+\+P\+A\+R\+S\+E\+R\+\_\+\+P\+A\+R\+A\+M\+E\+T\+E\+R\+\_\+\+N\+U\+M\+B\+E\+R\+\_\+\+M\+A\+X}!agg.\+h@{agg.\+h}}
-\subsubsection[{A\+G\+G\+\_\+\+P\+A\+R\+S\+E\+R\+\_\+\+P\+A\+R\+A\+M\+E\+T\+E\+R\+\_\+\+N\+U\+M\+B\+E\+R\+\_\+\+M\+A\+X}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+G\+G\+\_\+\+P\+A\+R\+S\+E\+R\+\_\+\+P\+A\+R\+A\+M\+E\+T\+E\+R\+\_\+\+N\+U\+M\+B\+E\+R\+\_\+\+M\+A\+X~128}\label{agg_8h_ac44edf0f284350d169882e1a2970b1ba}
-
-
-Referenced by agg\+\_\+parser\+\_\+alloc(), agg\+\_\+parser\+\_\+declaration(), agg\+\_\+parser\+\_\+expression\+\_\+add(), agg\+\_\+parser\+\_\+function\+\_\+add(), and agg\+\_\+parser\+\_\+variable\+\_\+add().
-
-\index{agg.\+h@{agg.\+h}!A\+G\+G\+\_\+\+P\+A\+R\+S\+E\+R\+\_\+\+P\+A\+R\+A\+M\+E\+T\+E\+R\+\_\+\+R\+E\+S\+E\+R\+V\+E\+D\+\_\+\+T@{A\+G\+G\+\_\+\+P\+A\+R\+S\+E\+R\+\_\+\+P\+A\+R\+A\+M\+E\+T\+E\+R\+\_\+\+R\+E\+S\+E\+R\+V\+E\+D\+\_\+\+T}}
-\index{A\+G\+G\+\_\+\+P\+A\+R\+S\+E\+R\+\_\+\+P\+A\+R\+A\+M\+E\+T\+E\+R\+\_\+\+R\+E\+S\+E\+R\+V\+E\+D\+\_\+\+T@{A\+G\+G\+\_\+\+P\+A\+R\+S\+E\+R\+\_\+\+P\+A\+R\+A\+M\+E\+T\+E\+R\+\_\+\+R\+E\+S\+E\+R\+V\+E\+D\+\_\+\+T}!agg.\+h@{agg.\+h}}
-\subsubsection[{A\+G\+G\+\_\+\+P\+A\+R\+S\+E\+R\+\_\+\+P\+A\+R\+A\+M\+E\+T\+E\+R\+\_\+\+R\+E\+S\+E\+R\+V\+E\+D\+\_\+\+T}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+G\+G\+\_\+\+P\+A\+R\+S\+E\+R\+\_\+\+P\+A\+R\+A\+M\+E\+T\+E\+R\+\_\+\+R\+E\+S\+E\+R\+V\+E\+D\+\_\+\+T~0}\label{agg_8h_a2fe23b8b914bbf79d55da960d078d815}
-
-
-Referenced by agg\+\_\+distribution\+\_\+write\+\_\+mesh().
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+shape\+\_\+break\+\_\+lower@{agg\+\_\+shape\+\_\+break\+\_\+lower}}
-\index{agg\+\_\+shape\+\_\+break\+\_\+lower@{agg\+\_\+shape\+\_\+break\+\_\+lower}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+shape\+\_\+break\+\_\+lower}]{\setlength{\rightskip}{0pt plus 5cm}\#define agg\+\_\+shape\+\_\+break\+\_\+lower(
-\begin{DoxyParamCaption}
-\item[{}]{\+\_\+s, }
-\item[{}]{\+\_\+i}
-\end{DoxyParamCaption}
-)~((\+\_\+s)-\/$>$b[2$\ast$(\+\_\+i)+0])}\label{agg_8h_aa6a4f72c7f09867d5242e307f6fe56f7}
-
-
-Referenced by agg\+\_\+shape\+\_\+ellipse\+\_\+eval().
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+shape\+\_\+break\+\_\+number@{agg\+\_\+shape\+\_\+break\+\_\+number}}
-\index{agg\+\_\+shape\+\_\+break\+\_\+number@{agg\+\_\+shape\+\_\+break\+\_\+number}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+shape\+\_\+break\+\_\+number}]{\setlength{\rightskip}{0pt plus 5cm}\#define agg\+\_\+shape\+\_\+break\+\_\+number(
-\begin{DoxyParamCaption}
-\item[{}]{\+\_\+s}
-\end{DoxyParamCaption}
-)~((\+\_\+s)-\/$>$nb)}\label{agg_8h_afa410028238da232a879d29aba424420}
-
-
-Referenced by agg\+\_\+shape\+\_\+ellipse\+\_\+eval().
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+shape\+\_\+break\+\_\+upper@{agg\+\_\+shape\+\_\+break\+\_\+upper}}
-\index{agg\+\_\+shape\+\_\+break\+\_\+upper@{agg\+\_\+shape\+\_\+break\+\_\+upper}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+shape\+\_\+break\+\_\+upper}]{\setlength{\rightskip}{0pt plus 5cm}\#define agg\+\_\+shape\+\_\+break\+\_\+upper(
-\begin{DoxyParamCaption}
-\item[{}]{\+\_\+s, }
-\item[{}]{\+\_\+i}
-\end{DoxyParamCaption}
-)~((\+\_\+s)-\/$>$b[2$\ast$(\+\_\+i)+1])}\label{agg_8h_adf254eca713b5966f7f0b146072781a7}
-
-
-Referenced by agg\+\_\+shape\+\_\+ellipse\+\_\+eval().
-
-\index{agg.\+h@{agg.\+h}!A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+A\+X\+E\+S@{A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+A\+X\+E\+S}}
-\index{A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+A\+X\+E\+S@{A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+A\+X\+E\+S}!agg.\+h@{agg.\+h}}
-\subsubsection[{A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+A\+X\+E\+S}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+A\+X\+E\+S~G\+\_\+\+T\+O\+K\+E\+N\+\_\+\+L\+A\+S\+T + 5}\label{agg_8h_ab053c55af8c170ea30f27237ae668e4e}
-\index{agg.\+h@{agg.\+h}!A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+D\+I\+S\+T\+R\+I\+B\+U\+T\+I\+O\+N@{A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+D\+I\+S\+T\+R\+I\+B\+U\+T\+I\+O\+N}}
-\index{A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+D\+I\+S\+T\+R\+I\+B\+U\+T\+I\+O\+N@{A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+D\+I\+S\+T\+R\+I\+B\+U\+T\+I\+O\+N}!agg.\+h@{agg.\+h}}
-\subsubsection[{A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+D\+I\+S\+T\+R\+I\+B\+U\+T\+I\+O\+N}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+D\+I\+S\+T\+R\+I\+B\+U\+T\+I\+O\+N~G\+\_\+\+T\+O\+K\+E\+N\+\_\+\+L\+A\+S\+T + 2}\label{agg_8h_a7c9a9f74489b85a97a702eaf6199bc1b}
-
-
-Referenced by agg\+\_\+parser\+\_\+body\+\_\+read().
-
-\index{agg.\+h@{agg.\+h}!A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+G\+L\+O\+B\+A\+L@{A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+G\+L\+O\+B\+A\+L}}
-\index{A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+G\+L\+O\+B\+A\+L@{A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+G\+L\+O\+B\+A\+L}!agg.\+h@{agg.\+h}}
-\subsubsection[{A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+G\+L\+O\+B\+A\+L}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+G\+L\+O\+B\+A\+L~G\+\_\+\+T\+O\+K\+E\+N\+\_\+\+L\+A\+S\+T + 1}\label{agg_8h_a7e76a536d77277c4636cd9b12626d50e}
-
-
-Referenced by agg\+\_\+parser\+\_\+body\+\_\+read().
-
-\index{agg.\+h@{agg.\+h}!A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+M\+A\+X@{A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+M\+A\+X}}
-\index{A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+M\+A\+X@{A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+M\+A\+X}!agg.\+h@{agg.\+h}}
-\subsubsection[{A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+M\+A\+X}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+M\+A\+X~G\+\_\+\+T\+O\+K\+E\+N\+\_\+\+L\+A\+S\+T + 5}\label{agg_8h_a47e78faa6c4b6605542557250d09e778}
-
-
-Referenced by agg\+\_\+scanner\+\_\+alloc().
-
-\index{agg.\+h@{agg.\+h}!A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+S\+H\+A\+P\+E@{A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+S\+H\+A\+P\+E}}
-\index{A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+S\+H\+A\+P\+E@{A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+S\+H\+A\+P\+E}!agg.\+h@{agg.\+h}}
-\subsubsection[{A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+S\+H\+A\+P\+E}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+S\+H\+A\+P\+E~G\+\_\+\+T\+O\+K\+E\+N\+\_\+\+L\+A\+S\+T + 4}\label{agg_8h_acc3b205216d0a6367117339756dcd74b}
-\index{agg.\+h@{agg.\+h}!A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+T\+R\+A\+N\+S\+F\+O\+R\+M@{A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+T\+R\+A\+N\+S\+F\+O\+R\+M}}
-\index{A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+T\+R\+A\+N\+S\+F\+O\+R\+M@{A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+T\+R\+A\+N\+S\+F\+O\+R\+M}!agg.\+h@{agg.\+h}}
-\subsubsection[{A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+T\+R\+A\+N\+S\+F\+O\+R\+M}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+T\+R\+A\+N\+S\+F\+O\+R\+M~G\+\_\+\+T\+O\+K\+E\+N\+\_\+\+L\+A\+S\+T + 3}\label{agg_8h_a526beb05fa42d41936ac7950f2e68803}
-\index{agg.\+h@{agg.\+h}!A\+G\+G\+\_\+\+T\+R\+A\+N\+S\+F\+O\+R\+M\+\_\+\+F\+U\+N\+C\+T\+I\+O\+N\+\_\+\+N\+U\+M\+B\+E\+R@{A\+G\+G\+\_\+\+T\+R\+A\+N\+S\+F\+O\+R\+M\+\_\+\+F\+U\+N\+C\+T\+I\+O\+N\+\_\+\+N\+U\+M\+B\+E\+R}}
-\index{A\+G\+G\+\_\+\+T\+R\+A\+N\+S\+F\+O\+R\+M\+\_\+\+F\+U\+N\+C\+T\+I\+O\+N\+\_\+\+N\+U\+M\+B\+E\+R@{A\+G\+G\+\_\+\+T\+R\+A\+N\+S\+F\+O\+R\+M\+\_\+\+F\+U\+N\+C\+T\+I\+O\+N\+\_\+\+N\+U\+M\+B\+E\+R}!agg.\+h@{agg.\+h}}
-\subsubsection[{A\+G\+G\+\_\+\+T\+R\+A\+N\+S\+F\+O\+R\+M\+\_\+\+F\+U\+N\+C\+T\+I\+O\+N\+\_\+\+N\+U\+M\+B\+E\+R}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+G\+G\+\_\+\+T\+R\+A\+N\+S\+F\+O\+R\+M\+\_\+\+F\+U\+N\+C\+T\+I\+O\+N\+\_\+\+N\+U\+M\+B\+E\+R~16}\label{agg_8h_a4c9d1588891adb8f7c357fa36eaa02a0}
-\index{agg.\+h@{agg.\+h}!A\+G\+G\+\_\+\+T\+R\+A\+N\+S\+F\+O\+R\+M\+\_\+\+P\+A\+R\+A\+M\+E\+T\+E\+R\+\_\+\+N\+U\+M\+B\+E\+R@{A\+G\+G\+\_\+\+T\+R\+A\+N\+S\+F\+O\+R\+M\+\_\+\+P\+A\+R\+A\+M\+E\+T\+E\+R\+\_\+\+N\+U\+M\+B\+E\+R}}
-\index{A\+G\+G\+\_\+\+T\+R\+A\+N\+S\+F\+O\+R\+M\+\_\+\+P\+A\+R\+A\+M\+E\+T\+E\+R\+\_\+\+N\+U\+M\+B\+E\+R@{A\+G\+G\+\_\+\+T\+R\+A\+N\+S\+F\+O\+R\+M\+\_\+\+P\+A\+R\+A\+M\+E\+T\+E\+R\+\_\+\+N\+U\+M\+B\+E\+R}!agg.\+h@{agg.\+h}}
-\subsubsection[{A\+G\+G\+\_\+\+T\+R\+A\+N\+S\+F\+O\+R\+M\+\_\+\+P\+A\+R\+A\+M\+E\+T\+E\+R\+\_\+\+N\+U\+M\+B\+E\+R}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+G\+G\+\_\+\+T\+R\+A\+N\+S\+F\+O\+R\+M\+\_\+\+P\+A\+R\+A\+M\+E\+T\+E\+R\+\_\+\+N\+U\+M\+B\+E\+R~128}\label{agg_8h_aac4f33757d85edd08ad127417694ad65}
-
-
-Referenced by agg\+\_\+local\+\_\+transform\+\_\+init().
-
-
-
-\subsection{Typedef Documentation}
-\index{agg.\+h@{agg.\+h}!agg\+\_\+body\+\_\+t@{agg\+\_\+body\+\_\+t}}
-\index{agg\+\_\+body\+\_\+t@{agg\+\_\+body\+\_\+t}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+body\+\_\+t}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \+\_\+agg\+\_\+body\+\_\+t} {\bf agg\+\_\+body\+\_\+t}}\label{agg_8h_a525c7f2e534df2c37eb57c1f6d7e5655}
-\index{agg.\+h@{agg.\+h}!agg\+\_\+distribution\+\_\+t@{agg\+\_\+distribution\+\_\+t}}
-\index{agg\+\_\+distribution\+\_\+t@{agg\+\_\+distribution\+\_\+t}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+distribution\+\_\+t}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \+\_\+agg\+\_\+distribution\+\_\+t} {\bf agg\+\_\+distribution\+\_\+t}}\label{agg_8h_ae1a8dca2708658072b70f722ade80c45}
-\index{agg.\+h@{agg.\+h}!agg\+\_\+expression\+\_\+t@{agg\+\_\+expression\+\_\+t}}
-\index{agg\+\_\+expression\+\_\+t@{agg\+\_\+expression\+\_\+t}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+expression\+\_\+t}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \+\_\+agg\+\_\+expression\+\_\+t} {\bf agg\+\_\+expression\+\_\+t}}\label{agg_8h_a70d659c35cf0b305f4ec7464e78a4405}
-\index{agg.\+h@{agg.\+h}!agg\+\_\+function\+\_\+call\+\_\+t@{agg\+\_\+function\+\_\+call\+\_\+t}}
-\index{agg\+\_\+function\+\_\+call\+\_\+t@{agg\+\_\+function\+\_\+call\+\_\+t}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+function\+\_\+call\+\_\+t}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \+\_\+agg\+\_\+function\+\_\+call\+\_\+t} {\bf agg\+\_\+function\+\_\+call\+\_\+t}}\label{agg_8h_a46288f1965abf22b333b342d5e9dd9d4}
-\index{agg.\+h@{agg.\+h}!agg\+\_\+local\+\_\+transform\+\_\+func\+\_\+t@{agg\+\_\+local\+\_\+transform\+\_\+func\+\_\+t}}
-\index{agg\+\_\+local\+\_\+transform\+\_\+func\+\_\+t@{agg\+\_\+local\+\_\+transform\+\_\+func\+\_\+t}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+local\+\_\+transform\+\_\+func\+\_\+t}]{\setlength{\rightskip}{0pt plus 5cm}typedef gint($\ast$ agg\+\_\+local\+\_\+transform\+\_\+func\+\_\+t) (gdouble $\ast$x, gdouble $\ast$p, gdouble $\ast$y)}\label{agg_8h_aa6723f7ef422564382a766b454a9506d}
-\index{agg.\+h@{agg.\+h}!agg\+\_\+local\+\_\+transform\+\_\+t@{agg\+\_\+local\+\_\+transform\+\_\+t}}
-\index{agg\+\_\+local\+\_\+transform\+\_\+t@{agg\+\_\+local\+\_\+transform\+\_\+t}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+local\+\_\+transform\+\_\+t}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t} {\bf agg\+\_\+local\+\_\+transform\+\_\+t}}\label{agg_8h_ae1a76b9efda1b751200821cc8b09a989}
-\index{agg.\+h@{agg.\+h}!agg\+\_\+mapping\+\_\+t@{agg\+\_\+mapping\+\_\+t}}
-\index{agg\+\_\+mapping\+\_\+t@{agg\+\_\+mapping\+\_\+t}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+mapping\+\_\+t}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \+\_\+agg\+\_\+mapping\+\_\+t} {\bf agg\+\_\+mapping\+\_\+t}}\label{agg_8h_a298b9655d04d71eb252d0173d70f9181}
-\index{agg.\+h@{agg.\+h}!agg\+\_\+parser\+\_\+t@{agg\+\_\+parser\+\_\+t}}
-\index{agg\+\_\+parser\+\_\+t@{agg\+\_\+parser\+\_\+t}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+parser\+\_\+t}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \+\_\+agg\+\_\+parser\+\_\+t} {\bf agg\+\_\+parser\+\_\+t}}\label{agg_8h_a57cc95e5d8545d71e9ce99565a4a169b}
-\index{agg.\+h@{agg.\+h}!agg\+\_\+shape\+\_\+interpolant\+\_\+t@{agg\+\_\+shape\+\_\+interpolant\+\_\+t}}
-\index{agg\+\_\+shape\+\_\+interpolant\+\_\+t@{agg\+\_\+shape\+\_\+interpolant\+\_\+t}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+shape\+\_\+interpolant\+\_\+t}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \+\_\+agg\+\_\+shape\+\_\+interpolant\+\_\+t} {\bf agg\+\_\+shape\+\_\+interpolant\+\_\+t}}\label{agg_8h_ae2d6a306818c38fb63382dc907ca1529}
-\index{agg.\+h@{agg.\+h}!agg\+\_\+shape\+\_\+t@{agg\+\_\+shape\+\_\+t}}
-\index{agg\+\_\+shape\+\_\+t@{agg\+\_\+shape\+\_\+t}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+shape\+\_\+t}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \+\_\+agg\+\_\+shape\+\_\+t} {\bf agg\+\_\+shape\+\_\+t}}\label{agg_8h_aff14acbb686a286784cab348f2bd1b5a}
-
-
-\subsection{Enumeration Type Documentation}
-\index{agg.\+h@{agg.\+h}!agg\+\_\+shape\+\_\+type\+\_\+t@{agg\+\_\+shape\+\_\+type\+\_\+t}}
-\index{agg\+\_\+shape\+\_\+type\+\_\+t@{agg\+\_\+shape\+\_\+type\+\_\+t}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+shape\+\_\+type\+\_\+t}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf agg\+\_\+shape\+\_\+type\+\_\+t}}\label{agg_8h_a24b0292c290a307db1a9647a0eb2cfdb}
-\begin{Desc}
-\item[Enumerator]\par
-\begin{description}
-\index{A\+G\+G\+\_\+\+S\+H\+A\+P\+E\+\_\+\+A\+E\+R\+O\+F\+O\+I\+L@{A\+G\+G\+\_\+\+S\+H\+A\+P\+E\+\_\+\+A\+E\+R\+O\+F\+O\+I\+L}!agg.\+h@{agg.\+h}}\index{agg.\+h@{agg.\+h}!A\+G\+G\+\_\+\+S\+H\+A\+P\+E\+\_\+\+A\+E\+R\+O\+F\+O\+I\+L@{A\+G\+G\+\_\+\+S\+H\+A\+P\+E\+\_\+\+A\+E\+R\+O\+F\+O\+I\+L}}\item[{\em 
-A\+G\+G\+\_\+\+S\+H\+A\+P\+E\+\_\+\+A\+E\+R\+O\+F\+O\+I\+L\label{agg_8h_a24b0292c290a307db1a9647a0eb2cfdba90ce50fd5e8ba091a4e514f37617aa49}
-}]thickness distribution plus camber \index{A\+G\+G\+\_\+\+S\+H\+A\+P\+E\+\_\+\+E\+L\+L\+I\+P\+S\+E@{A\+G\+G\+\_\+\+S\+H\+A\+P\+E\+\_\+\+E\+L\+L\+I\+P\+S\+E}!agg.\+h@{agg.\+h}}\index{agg.\+h@{agg.\+h}!A\+G\+G\+\_\+\+S\+H\+A\+P\+E\+\_\+\+E\+L\+L\+I\+P\+S\+E@{A\+G\+G\+\_\+\+S\+H\+A\+P\+E\+\_\+\+E\+L\+L\+I\+P\+S\+E}}\item[{\em 
-A\+G\+G\+\_\+\+S\+H\+A\+P\+E\+\_\+\+E\+L\+L\+I\+P\+S\+E\label{agg_8h_a24b0292c290a307db1a9647a0eb2cfdba63245ad13fca86bdebb8cb089078faf3}
-}]generic closed curve \end{description}
-\end{Desc}
-\index{agg.\+h@{agg.\+h}!agg\+\_\+spacing\+\_\+t@{agg\+\_\+spacing\+\_\+t}}
-\index{agg\+\_\+spacing\+\_\+t@{agg\+\_\+spacing\+\_\+t}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+spacing\+\_\+t}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf agg\+\_\+spacing\+\_\+t}}\label{agg_8h_ab31317c10986a2204ae79e6eb8464c6b}
-\begin{Desc}
-\item[Enumerator]\par
-\begin{description}
-\index{A\+G\+G\+\_\+\+S\+P\+A\+C\+I\+N\+G\+\_\+\+L\+I\+N\+E\+A\+R@{A\+G\+G\+\_\+\+S\+P\+A\+C\+I\+N\+G\+\_\+\+L\+I\+N\+E\+A\+R}!agg.\+h@{agg.\+h}}\index{agg.\+h@{agg.\+h}!A\+G\+G\+\_\+\+S\+P\+A\+C\+I\+N\+G\+\_\+\+L\+I\+N\+E\+A\+R@{A\+G\+G\+\_\+\+S\+P\+A\+C\+I\+N\+G\+\_\+\+L\+I\+N\+E\+A\+R}}\item[{\em 
-A\+G\+G\+\_\+\+S\+P\+A\+C\+I\+N\+G\+\_\+\+L\+I\+N\+E\+A\+R\label{agg_8h_ab31317c10986a2204ae79e6eb8464c6bacc02245c2308954f528007630e739838}
-}]equal intervals over range \index{A\+G\+G\+\_\+\+S\+P\+A\+C\+I\+N\+G\+\_\+\+C\+O\+S\+I\+N\+E@{A\+G\+G\+\_\+\+S\+P\+A\+C\+I\+N\+G\+\_\+\+C\+O\+S\+I\+N\+E}!agg.\+h@{agg.\+h}}\index{agg.\+h@{agg.\+h}!A\+G\+G\+\_\+\+S\+P\+A\+C\+I\+N\+G\+\_\+\+C\+O\+S\+I\+N\+E@{A\+G\+G\+\_\+\+S\+P\+A\+C\+I\+N\+G\+\_\+\+C\+O\+S\+I\+N\+E}}\item[{\em 
-A\+G\+G\+\_\+\+S\+P\+A\+C\+I\+N\+G\+\_\+\+C\+O\+S\+I\+N\+E\label{agg_8h_ab31317c10986a2204ae79e6eb8464c6ba2ce2d7b5b24e8f20a4eefc1a7fe4c50c}
-}]$\mathrm{sgn}(t)*(1-\cos(\pi t))/2$ \index{A\+G\+G\+\_\+\+S\+P\+A\+C\+I\+N\+G\+\_\+\+H\+A\+L\+F\+C\+O\+S@{A\+G\+G\+\_\+\+S\+P\+A\+C\+I\+N\+G\+\_\+\+H\+A\+L\+F\+C\+O\+S}!agg.\+h@{agg.\+h}}\index{agg.\+h@{agg.\+h}!A\+G\+G\+\_\+\+S\+P\+A\+C\+I\+N\+G\+\_\+\+H\+A\+L\+F\+C\+O\+S@{A\+G\+G\+\_\+\+S\+P\+A\+C\+I\+N\+G\+\_\+\+H\+A\+L\+F\+C\+O\+S}}\item[{\em 
-A\+G\+G\+\_\+\+S\+P\+A\+C\+I\+N\+G\+\_\+\+H\+A\+L\+F\+C\+O\+S\label{agg_8h_ab31317c10986a2204ae79e6eb8464c6ba6a2bccaddb920fe05bedf570282cf64f}
-}]$\mathrm{sgn}(t)*(1-\cos(\pi/2 t))$ \index{A\+G\+G\+\_\+\+S\+P\+A\+C\+I\+N\+G\+\_\+\+H\+A\+L\+F\+S\+I\+N@{A\+G\+G\+\_\+\+S\+P\+A\+C\+I\+N\+G\+\_\+\+H\+A\+L\+F\+S\+I\+N}!agg.\+h@{agg.\+h}}\index{agg.\+h@{agg.\+h}!A\+G\+G\+\_\+\+S\+P\+A\+C\+I\+N\+G\+\_\+\+H\+A\+L\+F\+S\+I\+N@{A\+G\+G\+\_\+\+S\+P\+A\+C\+I\+N\+G\+\_\+\+H\+A\+L\+F\+S\+I\+N}}\item[{\em 
-A\+G\+G\+\_\+\+S\+P\+A\+C\+I\+N\+G\+\_\+\+H\+A\+L\+F\+S\+I\+N\label{agg_8h_ab31317c10986a2204ae79e6eb8464c6babd210be3f3e0a8b7a0a0827467a63aa3}
-}]$\sin \pi/2 t$ \end{description}
-\end{Desc}
-
-
-\subsection{Function Documentation}
-\index{agg.\+h@{agg.\+h}!agg\+\_\+bernstein\+\_\+basis@{agg\+\_\+bernstein\+\_\+basis}}
-\index{agg\+\_\+bernstein\+\_\+basis@{agg\+\_\+bernstein\+\_\+basis}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+bernstein\+\_\+basis}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+bernstein\+\_\+basis (
-\begin{DoxyParamCaption}
-\item[{gint}]{n, }
-\item[{gdouble}]{x, }
-\item[{gdouble $\ast$}]{S, }
-\item[{gdouble $\ast$}]{d\+S}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a93f118b57d68787a8c7aad192408464d}
-
-
-Referenced by agg\+\_\+shape\+\_\+aerofoil\+\_\+eval(), agg\+\_\+shape\+\_\+ellipse\+\_\+eval(), agg\+\_\+shape\+\_\+fit(), and agg\+\_\+shape\+\_\+interval\+\_\+add().
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+bernstein\+\_\+basis\+\_\+eval@{agg\+\_\+bernstein\+\_\+basis\+\_\+eval}}
-\index{agg\+\_\+bernstein\+\_\+basis\+\_\+eval@{agg\+\_\+bernstein\+\_\+basis\+\_\+eval}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+bernstein\+\_\+basis\+\_\+eval}]{\setlength{\rightskip}{0pt plus 5cm}gdouble agg\+\_\+bernstein\+\_\+basis\+\_\+eval (
-\begin{DoxyParamCaption}
-\item[{gint}]{n, }
-\item[{gint}]{r, }
-\item[{gdouble}]{x}
-\end{DoxyParamCaption}
-)}\label{agg_8h_aae616a79a473be6365e365bc2a17b02a}
-\index{agg.\+h@{agg.\+h}!agg\+\_\+body\+\_\+alloc@{agg\+\_\+body\+\_\+alloc}}
-\index{agg\+\_\+body\+\_\+alloc@{agg\+\_\+body\+\_\+alloc}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+body\+\_\+alloc}]{\setlength{\rightskip}{0pt plus 5cm}{\bf agg\+\_\+body\+\_\+t}$\ast$ agg\+\_\+body\+\_\+alloc (
-\begin{DoxyParamCaption}
-\item[{void}]{}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a952323e256ba0cdbf7472b65faec2cbe}
-
-
-References agg\+\_\+body\+\_\+distribution\+\_\+number.
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+body\+\_\+distribution\+\_\+add@{agg\+\_\+body\+\_\+distribution\+\_\+add}}
-\index{agg\+\_\+body\+\_\+distribution\+\_\+add@{agg\+\_\+body\+\_\+distribution\+\_\+add}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+body\+\_\+distribution\+\_\+add}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+body\+\_\+distribution\+\_\+add (
-\begin{DoxyParamCaption}
-\item[{{\bf agg\+\_\+body\+\_\+t} $\ast$}]{b, }
-\item[{{\bf agg\+\_\+distribution\+\_\+t} $\ast$}]{d, }
-\item[{gchar $\ast$}]{name}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a26a2a175e919a7293721a692cfa7e844}
-
-
-References agg\+\_\+body\+\_\+distribution\+\_\+number, A\+G\+G\+\_\+\+B\+O\+D\+Y\+\_\+\+D\+I\+S\+T\+R\+I\+B\+U\+T\+I\+O\+N\+\_\+\+N\+U\+M\+B\+E\+R\+\_\+\+M\+A\+X, \+\_\+agg\+\_\+body\+\_\+t\+::d, and \+\_\+agg\+\_\+body\+\_\+t\+::names.
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+body\+\_\+distributions\+\_\+list@{agg\+\_\+body\+\_\+distributions\+\_\+list}}
-\index{agg\+\_\+body\+\_\+distributions\+\_\+list@{agg\+\_\+body\+\_\+distributions\+\_\+list}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+body\+\_\+distributions\+\_\+list}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+body\+\_\+distributions\+\_\+list (
-\begin{DoxyParamCaption}
-\item[{F\+I\+L\+E $\ast$}]{f, }
-\item[{{\bf agg\+\_\+body\+\_\+t} $\ast$}]{b}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a7ca9447dd29b63b55d14b4010ef5d3e3}
-
-
-References agg\+\_\+body\+\_\+distribution\+\_\+number, and \+\_\+agg\+\_\+body\+\_\+t\+::names.
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+distribution\+\_\+add\+\_\+shape@{agg\+\_\+distribution\+\_\+add\+\_\+shape}}
-\index{agg\+\_\+distribution\+\_\+add\+\_\+shape@{agg\+\_\+distribution\+\_\+add\+\_\+shape}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+distribution\+\_\+add\+\_\+shape}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+distribution\+\_\+add\+\_\+shape (
-\begin{DoxyParamCaption}
-\item[{{\bf agg\+\_\+distribution\+\_\+t} $\ast$}]{d, }
-\item[{gdouble}]{t, }
-\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{s}
-\end{DoxyParamCaption}
-)}\label{agg_8h_ac1f4598613aff8f2be71b82d2a682920}
-
-
-References \+\_\+agg\+\_\+distribution\+\_\+t\+::ns, \+\_\+agg\+\_\+distribution\+\_\+t\+::nsmax, s, \+\_\+agg\+\_\+distribution\+\_\+t\+::sh, and \+\_\+agg\+\_\+distribution\+\_\+t\+::ts.
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+distribution\+\_\+alloc@{agg\+\_\+distribution\+\_\+alloc}}
-\index{agg\+\_\+distribution\+\_\+alloc@{agg\+\_\+distribution\+\_\+alloc}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+distribution\+\_\+alloc}]{\setlength{\rightskip}{0pt plus 5cm}{\bf agg\+\_\+distribution\+\_\+t}$\ast$ agg\+\_\+distribution\+\_\+alloc (
-\begin{DoxyParamCaption}
-\item[{gint}]{nsmax}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a093e05d6f655dd6931b5726057f3b5b3}
-
-
-References \+\_\+agg\+\_\+distribution\+\_\+t\+::axes, \+\_\+agg\+\_\+distribution\+\_\+t\+::ns, \+\_\+agg\+\_\+distribution\+\_\+t\+::nsmax, \+\_\+agg\+\_\+distribution\+\_\+t\+::sh, \+\_\+agg\+\_\+distribution\+\_\+t\+::t, \+\_\+agg\+\_\+distribution\+\_\+t\+::ts, and \+\_\+agg\+\_\+distribution\+\_\+t\+::w.
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+distribution\+\_\+axes\+\_\+parse@{agg\+\_\+distribution\+\_\+axes\+\_\+parse}}
-\index{agg\+\_\+distribution\+\_\+axes\+\_\+parse@{agg\+\_\+distribution\+\_\+axes\+\_\+parse}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+distribution\+\_\+axes\+\_\+parse}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+distribution\+\_\+axes\+\_\+parse (
-\begin{DoxyParamCaption}
-\item[{gchar $\ast$}]{s, }
-\item[{gint $\ast$}]{a}
-\end{DoxyParamCaption}
-)}\label{agg_8h_ad8021aa13306d295433113997aa32f0f}
-\index{agg.\+h@{agg.\+h}!agg\+\_\+distribution\+\_\+interpolate@{agg\+\_\+distribution\+\_\+interpolate}}
-\index{agg\+\_\+distribution\+\_\+interpolate@{agg\+\_\+distribution\+\_\+interpolate}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+distribution\+\_\+interpolate}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+distribution\+\_\+interpolate (
-\begin{DoxyParamCaption}
-\item[{{\bf agg\+\_\+distribution\+\_\+t} $\ast$}]{d, }
-\item[{gdouble}]{t, }
-\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{s, }
-\item[{{\bf agg\+\_\+local\+\_\+transform\+\_\+t} $\ast$}]{T}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a859853b4397de06c8445a3535ec62fa8}
-
-
-References A\+G\+G\+\_\+\+S\+H\+A\+P\+E\+\_\+\+A\+E\+R\+O\+F\+O\+I\+L, A\+G\+G\+\_\+\+S\+H\+A\+P\+E\+\_\+\+E\+L\+L\+I\+P\+S\+E, \+\_\+agg\+\_\+distribution\+\_\+t\+::sh, and \+\_\+agg\+\_\+shape\+\_\+t\+::type.
-
-
-
-Referenced by agg\+\_\+distribution\+\_\+write\+\_\+mesh().
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+distribution\+\_\+interpolation\+\_\+weights@{agg\+\_\+distribution\+\_\+interpolation\+\_\+weights}}
-\index{agg\+\_\+distribution\+\_\+interpolation\+\_\+weights@{agg\+\_\+distribution\+\_\+interpolation\+\_\+weights}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+distribution\+\_\+interpolation\+\_\+weights}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+distribution\+\_\+interpolation\+\_\+weights (
-\begin{DoxyParamCaption}
-\item[{{\bf agg\+\_\+distribution\+\_\+t} $\ast$}]{d}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a403c400a028399da09ba94e8c89030c3}
-
-
-References \+\_\+agg\+\_\+distribution\+\_\+t\+::ns, \+\_\+agg\+\_\+distribution\+\_\+t\+::ts, and \+\_\+agg\+\_\+distribution\+\_\+t\+::w.
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+distribution\+\_\+mesh@{agg\+\_\+distribution\+\_\+mesh}}
-\index{agg\+\_\+distribution\+\_\+mesh@{agg\+\_\+distribution\+\_\+mesh}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+distribution\+\_\+mesh}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+distribution\+\_\+mesh (
-\begin{DoxyParamCaption}
-\item[{{\bf agg\+\_\+distribution\+\_\+t} $\ast$}]{d, }
-\item[{gdouble}]{smin, }
-\item[{gdouble}]{smax, }
-\item[{gint}]{ns, }
-\item[{{\bf agg\+\_\+spacing\+\_\+t}}]{ss, }
-\item[{gdouble}]{tmin, }
-\item[{gdouble}]{tmax, }
-\item[{gint}]{nt, }
-\item[{{\bf agg\+\_\+spacing\+\_\+t}}]{st, }
-\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{sh, }
-\item[{{\bf agg\+\_\+local\+\_\+transform\+\_\+t} $\ast$}]{T, }
-\item[{{\bf agg\+\_\+parser\+\_\+t} $\ast$}]{p, }
-\item[{gdouble $\ast$}]{x, }
-\item[{gint}]{xstr, }
-\item[{gint $\ast$}]{tr, }
-\item[{gint}]{tstr, }
-\item[{gint $\ast$}]{idx0}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a2b97cc991d7fa8c9ab3a8bb63befb9bf}
-\index{agg.\+h@{agg.\+h}!agg\+\_\+distribution\+\_\+write\+\_\+mesh@{agg\+\_\+distribution\+\_\+write\+\_\+mesh}}
-\index{agg\+\_\+distribution\+\_\+write\+\_\+mesh@{agg\+\_\+distribution\+\_\+write\+\_\+mesh}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+distribution\+\_\+write\+\_\+mesh}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+distribution\+\_\+write\+\_\+mesh (
-\begin{DoxyParamCaption}
-\item[{F\+I\+L\+E $\ast$}]{f, }
-\item[{{\bf agg\+\_\+distribution\+\_\+t} $\ast$}]{d, }
-\item[{gdouble}]{smin, }
-\item[{gdouble}]{smax, }
-\item[{gint}]{ns, }
-\item[{{\bf agg\+\_\+spacing\+\_\+t}}]{ss, }
-\item[{gdouble}]{tmin, }
-\item[{gdouble}]{tmax, }
-\item[{gint}]{nt, }
-\item[{{\bf agg\+\_\+spacing\+\_\+t}}]{st, }
-\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{sh, }
-\item[{{\bf agg\+\_\+local\+\_\+transform\+\_\+t} $\ast$}]{T, }
-\item[{{\bf agg\+\_\+parser\+\_\+t} $\ast$}]{p}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a88702a2fc1a2f626a7e394ad7a0bc469}
-
-
-References agg\+\_\+distribution\+\_\+interpolate(), agg\+\_\+local\+\_\+transform\+\_\+apply(), agg\+\_\+local\+\_\+transform\+\_\+eval\+\_\+parameters(), A\+G\+G\+\_\+\+P\+A\+R\+S\+E\+R\+\_\+\+P\+A\+R\+A\+M\+E\+T\+E\+R\+\_\+\+R\+E\+S\+E\+R\+V\+E\+D\+\_\+\+T, agg\+\_\+shape\+\_\+eval(), agg\+\_\+spacing\+\_\+eval(), \+\_\+agg\+\_\+shape\+\_\+t\+::closed, s, \+\_\+agg\+\_\+distribution\+\_\+t\+::t, and \+\_\+agg\+\_\+parser\+\_\+t\+::values.
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+functions\+\_\+eval@{agg\+\_\+functions\+\_\+eval}}
-\index{agg\+\_\+functions\+\_\+eval@{agg\+\_\+functions\+\_\+eval}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+functions\+\_\+eval}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+functions\+\_\+eval (
-\begin{DoxyParamCaption}
-\item[{{\bf agg\+\_\+function\+\_\+call\+\_\+t} $\ast$}]{func, }
-\item[{{\bf agg\+\_\+parser\+\_\+t} $\ast$}]{p}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a24091dee5ce22ef7f87ebbbde69cf167}
-
-
-References \+\_\+agg\+\_\+function\+\_\+call\+\_\+t\+::expr, \+\_\+agg\+\_\+function\+\_\+call\+\_\+t\+::na, te\+\_\+eval(), and \+\_\+agg\+\_\+function\+\_\+call\+\_\+t\+::x.
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+local\+\_\+transform\+\_\+alloc@{agg\+\_\+local\+\_\+transform\+\_\+alloc}}
-\index{agg\+\_\+local\+\_\+transform\+\_\+alloc@{agg\+\_\+local\+\_\+transform\+\_\+alloc}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+local\+\_\+transform\+\_\+alloc}]{\setlength{\rightskip}{0pt plus 5cm}{\bf agg\+\_\+local\+\_\+transform\+\_\+t}$\ast$ agg\+\_\+local\+\_\+transform\+\_\+alloc (
-\begin{DoxyParamCaption}
-\item[{void}]{}
-\end{DoxyParamCaption}
-)}\label{agg_8h_acec1ef05dd74ae945a73e33dd46ce903}
-
-
-References agg\+\_\+local\+\_\+transform\+\_\+init().
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+local\+\_\+transform\+\_\+apply@{agg\+\_\+local\+\_\+transform\+\_\+apply}}
-\index{agg\+\_\+local\+\_\+transform\+\_\+apply@{agg\+\_\+local\+\_\+transform\+\_\+apply}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+local\+\_\+transform\+\_\+apply}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+local\+\_\+transform\+\_\+apply (
-\begin{DoxyParamCaption}
-\item[{{\bf agg\+\_\+local\+\_\+transform\+\_\+t} $\ast$}]{T, }
-\item[{gdouble $\ast$}]{y}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a2e097f8a55f0b9f924d15a33cb3b36fd}
-
-
-References \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t\+::func, \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t\+::nt, \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t\+::p, \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t\+::p1, and s.
-
-
-
-Referenced by agg\+\_\+distribution\+\_\+write\+\_\+mesh().
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+local\+\_\+transform\+\_\+eval\+\_\+parameters@{agg\+\_\+local\+\_\+transform\+\_\+eval\+\_\+parameters}}
-\index{agg\+\_\+local\+\_\+transform\+\_\+eval\+\_\+parameters@{agg\+\_\+local\+\_\+transform\+\_\+eval\+\_\+parameters}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+local\+\_\+transform\+\_\+eval\+\_\+parameters}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+local\+\_\+transform\+\_\+eval\+\_\+parameters (
-\begin{DoxyParamCaption}
-\item[{{\bf agg\+\_\+local\+\_\+transform\+\_\+t} $\ast$}]{t}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a961081181702834b91ddee2e5aae105f}
-Set the numerical value of parameters defined symbolically in a transform
+\doxysubsection{Function Documentation}
+\mbox{\label{agg_8h_a80416f24e969b55310b8a47b9f0100e9}} 
+\index{agg.h@{agg.h}!agg\_expression\_compile@{agg\_expression\_compile}}
+\index{agg\_expression\_compile@{agg\_expression\_compile}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_expression\_compile()}
+{\footnotesize\ttfamily gpointer agg\+\_\+expression\+\_\+compile (\begin{DoxyParamCaption}\item[{gchar $\ast$}]{e,  }\item[{\textbf{ agg\+\_\+expression\+\_\+data\+\_\+t} $\ast$}]{d }\end{DoxyParamCaption})}
+
+Compile a symbolically defined expression, for future evaluation
 
 
 \begin{DoxyParams}{Parameters}
-{\em t} & transform whose parameters are to be evaluted.\\
+{\em e} & the expression to be compiled; \\
+\hline
+{\em d} & structure holding variable data.\\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-0 on success 
+pointer to compiled expression. 
 \end{DoxyReturn}
+\mbox{\label{agg_8h_ac423c9a2a65b0b8e677576e9e4fbb1b6}} 
+\index{agg.h@{agg.h}!agg\_expression\_data\_compile@{agg\_expression\_data\_compile}}
+\index{agg\_expression\_data\_compile@{agg\_expression\_data\_compile}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_expression\_data\_compile()}
+{\footnotesize\ttfamily gint agg\+\_\+expression\+\_\+data\+\_\+compile (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+expression\+\_\+data\+\_\+t} $\ast$}]{d }\end{DoxyParamCaption})}
 
-
-References \+\_\+agg\+\_\+expression\+\_\+t\+::expr, \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t\+::expr, \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t\+::isexpr, \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t\+::nt, \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t\+::p, \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t\+::p1, and te\+\_\+eval().
-
-
-
-Referenced by agg\+\_\+distribution\+\_\+write\+\_\+mesh().
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+local\+\_\+transform\+\_\+init@{agg\+\_\+local\+\_\+transform\+\_\+init}}
-\index{agg\+\_\+local\+\_\+transform\+\_\+init@{agg\+\_\+local\+\_\+transform\+\_\+init}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+local\+\_\+transform\+\_\+init}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+local\+\_\+transform\+\_\+init (
-\begin{DoxyParamCaption}
-\item[{{\bf agg\+\_\+local\+\_\+transform\+\_\+t} $\ast$}]{t}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a1119480dfd29acceeecd5874a7d5ea05}
-
-
-References A\+G\+G\+\_\+\+T\+R\+A\+N\+S\+F\+O\+R\+M\+\_\+\+P\+A\+R\+A\+M\+E\+T\+E\+R\+\_\+\+N\+U\+M\+B\+E\+R, \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t\+::isexpr, \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t\+::nt, and \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t\+::p1.
-
-
-
-Referenced by agg\+\_\+local\+\_\+transform\+\_\+alloc().
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+local\+\_\+transform\+\_\+parse@{agg\+\_\+local\+\_\+transform\+\_\+parse}}
-\index{agg\+\_\+local\+\_\+transform\+\_\+parse@{agg\+\_\+local\+\_\+transform\+\_\+parse}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+local\+\_\+transform\+\_\+parse}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+local\+\_\+transform\+\_\+parse (
-\begin{DoxyParamCaption}
-\item[{{\bf agg\+\_\+local\+\_\+transform\+\_\+t} $\ast$}]{T, }
-\item[{gchar $\ast$}]{type, }
-\item[{gdouble $\ast$}]{p, }
-\item[{gint}]{np}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a63fa6c87eeef0599baa96faaaa737df7}
-
-
-References \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t\+::func, np, \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t\+::nt, \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t\+::p, \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t\+::p1, and transform.
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+local\+\_\+transform\+\_\+rotate@{agg\+\_\+local\+\_\+transform\+\_\+rotate}}
-\index{agg\+\_\+local\+\_\+transform\+\_\+rotate@{agg\+\_\+local\+\_\+transform\+\_\+rotate}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+local\+\_\+transform\+\_\+rotate}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+local\+\_\+transform\+\_\+rotate (
-\begin{DoxyParamCaption}
-\item[{gdouble $\ast$}]{x, }
-\item[{gdouble $\ast$}]{p, }
-\item[{gdouble $\ast$}]{y}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a1f2aa9a8f559428cd0c3ab22c199adfb}
-\index{agg.\+h@{agg.\+h}!agg\+\_\+local\+\_\+transform\+\_\+scale@{agg\+\_\+local\+\_\+transform\+\_\+scale}}
-\index{agg\+\_\+local\+\_\+transform\+\_\+scale@{agg\+\_\+local\+\_\+transform\+\_\+scale}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+local\+\_\+transform\+\_\+scale}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+local\+\_\+transform\+\_\+scale (
-\begin{DoxyParamCaption}
-\item[{gdouble $\ast$}]{x, }
-\item[{gdouble $\ast$}]{p, }
-\item[{gdouble $\ast$}]{y}
-\end{DoxyParamCaption}
-)}\label{agg_8h_af05f8f2ddac3c78508990a17e50d288d}
-\index{agg.\+h@{agg.\+h}!agg\+\_\+local\+\_\+transform\+\_\+set\+\_\+expression@{agg\+\_\+local\+\_\+transform\+\_\+set\+\_\+expression}}
-\index{agg\+\_\+local\+\_\+transform\+\_\+set\+\_\+expression@{agg\+\_\+local\+\_\+transform\+\_\+set\+\_\+expression}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+local\+\_\+transform\+\_\+set\+\_\+expression}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+local\+\_\+transform\+\_\+set\+\_\+expression (
-\begin{DoxyParamCaption}
-\item[{{\bf agg\+\_\+local\+\_\+transform\+\_\+t} $\ast$}]{t, }
-\item[{gint}]{i, }
-\item[{gchar $\ast$}]{def, }
-\item[{{\bf agg\+\_\+parser\+\_\+t} $\ast$}]{p}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a0971b131c7e73199b2298e67fa785b4e}
-Insert a symbolic expression for the evaluation of transform parameters
+Compile expressions in an expression data structure, for future evaluation
 
 
 \begin{DoxyParams}{Parameters}
-{\em t} & \doxyref{agg\+\_\+local\+\_\+transform\+\_\+t}{p.}{agg_8h_ae1a76b9efda1b751200821cc8b09a989} whose parameter is to be set; \\
+{\em d} & an \doxyref{agg\+\_\+expression\+\_\+data\+\_\+t}{p.}{agg_8h_a99192fd2067443a234e213a421f6f643}\\
 \hline
-{\em i} & index of parameter in {\itshape t}; \\
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+\mbox{\label{agg_8h_acc545aa8d109534c65f1c09e4ef4a61c}} 
+\index{agg.h@{agg.h}!agg\_expression\_eval@{agg\_expression\_eval}}
+\index{agg\_expression\_eval@{agg\_expression\_eval}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_expression\_eval()}
+{\footnotesize\ttfamily gdouble agg\+\_\+expression\+\_\+eval (\begin{DoxyParamCaption}\item[{gpointer}]{e }\end{DoxyParamCaption})}
+
+Evaluate a compiled expression
+
+
+\begin{DoxyParams}{Parameters}
+{\em e} & a pointer to a tinyexpr expression\\
 \hline
-{\em expr} & symbolic expression to add; \\
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the value of {\itshape e}. 
+\end{DoxyReturn}
+\mbox{\label{agg_8h_a1245fe64e54485282fb358081f20f2f4}} 
+\index{agg.h@{agg.h}!agg\_section\_copy@{agg\_section\_copy}}
+\index{agg\_section\_copy@{agg\_section\_copy}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_section\_copy()}
+{\footnotesize\ttfamily gint agg\+\_\+section\+\_\+copy (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+section\+\_\+t} $\ast$}]{dest,  }\item[{\textbf{ agg\+\_\+section\+\_\+t} $\ast$}]{src }\end{DoxyParamCaption})}
+
+Copy one surface section into another
+
+
+\begin{DoxyParams}{Parameters}
+{\em dest} & destination section; \\
 \hline
-{\em p} & \doxyref{agg\+\_\+parser\+\_\+t}{p.}{agg_8h_a57cc95e5d8545d71e9ce99565a4a169b} containing symbol definitions.\\
+{\em src} & source section.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, with {\itshape src} copied into {\itshape dest}. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+section\+\_\+close}, \textbf{ agg\+\_\+section\+\_\+coefficient\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+coefficient\+\_\+upper}, \textbf{ agg\+\_\+section\+\_\+eta\+\_\+left}, \textbf{ agg\+\_\+section\+\_\+eta\+\_\+right}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+lower\+\_\+max}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+upper}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+upper\+\_\+max}, \textbf{ agg\+\_\+section\+\_\+trailing\+\_\+edge\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+trailing\+\_\+edge\+\_\+upper}, and \textbf{ agg\+\_\+section\+\_\+type}.
+
+\mbox{\label{agg_8h_aa057ef58299424703a8cc0d8a16ebf03}} 
+\index{agg.h@{agg.h}!agg\_section\_eval@{agg\_section\_eval}}
+\index{agg\_section\_eval@{agg\_section\_eval}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_section\_eval()}
+{\footnotesize\ttfamily gdouble agg\+\_\+section\+\_\+eval (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+section\+\_\+t} $\ast$}]{s,  }\item[{gdouble}]{x }\end{DoxyParamCaption})}
+
+Evaluate a section geometry
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & a \doxyref{agg\+\_\+section\+\_\+t}{p.}{agg_8h_a8cdd164643b93d05245e9b4976f3f0cb} containing the section data; \\
+\hline
+{\em x} & evaluation point $-1\leq x\leq 1$.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+$y=f(x)$ on success. An error is reported and execution ceases if {\itshape x} is out of range or the section type is undefined. 
+\end{DoxyReturn}
+
+
+References \textbf{ AGG\+\_\+\+SECTION\+\_\+\+ELLIPSE}, \textbf{ agg\+\_\+section\+\_\+type}, and \textbf{ AGG\+\_\+\+SECTION\+\_\+\+UNDEFINED}.
+
+\mbox{\label{agg_8h_ac7fd1a95c34d4b227e46b64fe642efae}} 
+\index{agg.h@{agg.h}!agg\_surface\_point\_eval@{agg\_surface\_point\_eval}}
+\index{agg\_surface\_point\_eval@{agg\_surface\_point\_eval}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_surface\_point\_eval()}
+{\footnotesize\ttfamily gint agg\+\_\+surface\+\_\+point\+\_\+eval (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+surface\+\_\+t} $\ast$}]{S,  }\item[{gdouble}]{u,  }\item[{gdouble}]{v,  }\item[{gdouble $\ast$}]{x,  }\item[{agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$}]{w }\end{DoxyParamCaption})}
+
+Evaluate a point on a surface
+
+Evaluate a point on a surface. The surface must have been initialized with \doxyref{agg\+\_\+surface\+\_\+weights\+\_\+make}{p.}{group__surfaces_ga05f8b5b0febe31ce57337e7045c04903}, and its transform initialized with \doxyref{agg\+\_\+expression\+\_\+data\+\_\+compile}{p.}{group__variables_gac423c9a2a65b0b8e677576e9e4fbb1b6} and \doxyref{agg\+\_\+transform\+\_\+expressions\+\_\+compile}{p.}{group__transforms_ga015c632cb62cafdc579df29f44d8eab9}, to set up the internal variables and expressions used for point transformation. The section data for {\itshape S} are interpolated at $u$ and the point on the section evaluated at $v$. The point is then transformed using the surface transformation.
+
+
+\begin{DoxyParams}{Parameters}
+{\em S} & an \doxyref{agg\+\_\+surface\+\_\+t}{p.}{group__surfaces_ga1c502e562486827063a7169cd79b5cc0}; \\
+\hline
+{\em u} & surface parameter $u$; \\
+\hline
+{\em v} & surface parameter $v$; \\
+\hline
+{\em x} & on exit contains $\mathbf{x}(u,v)$; \\
+\hline
+{\em w} & workspace allocated using \doxyref{agg\+\_\+surface\+\_\+workspace\+\_\+new}{p.}{group__surfaces_ga024e7cbe995df9bc519a77525bf8b639}\\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
@@ -768,475 +256,333 @@ Insert a symbolic expression for the evaluation of transform parameters
 \end{DoxyReturn}
 
 
-References A\+G\+G\+\_\+\+E\+X\+P\+R\+E\+S\+S\+I\+O\+N\+\_\+\+L\+E\+N\+G\+T\+H\+\_\+\+M\+A\+X, \+\_\+agg\+\_\+expression\+\_\+t\+::def, \+\_\+agg\+\_\+expression\+\_\+t\+::expr, \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t\+::expr, \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t\+::isexpr, \+\_\+agg\+\_\+parser\+\_\+t\+::nvars, \+\_\+agg\+\_\+local\+\_\+transform\+\_\+t\+::p, te\+\_\+compile(), and \+\_\+agg\+\_\+parser\+\_\+t\+::vars.
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+local\+\_\+transform\+\_\+shift@{agg\+\_\+local\+\_\+transform\+\_\+shift}}
-\index{agg\+\_\+local\+\_\+transform\+\_\+shift@{agg\+\_\+local\+\_\+transform\+\_\+shift}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+local\+\_\+transform\+\_\+shift}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+local\+\_\+transform\+\_\+shift (
-\begin{DoxyParamCaption}
-\item[{gdouble $\ast$}]{x, }
-\item[{gdouble $\ast$}]{p, }
-\item[{gdouble $\ast$}]{y}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a3c584ee125a4c8295cc33a8c70374d32}
-\index{agg.\+h@{agg.\+h}!agg\+\_\+local\+\_\+transform\+\_\+shrink@{agg\+\_\+local\+\_\+transform\+\_\+shrink}}
-\index{agg\+\_\+local\+\_\+transform\+\_\+shrink@{agg\+\_\+local\+\_\+transform\+\_\+shrink}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+local\+\_\+transform\+\_\+shrink}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+local\+\_\+transform\+\_\+shrink (
-\begin{DoxyParamCaption}
-\item[{gdouble $\ast$}]{x, }
-\item[{gdouble $\ast$}]{p, }
-\item[{gdouble $\ast$}]{y}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a63218cdc8842785be4cb8a5e3d22d0bc}
-\index{agg.\+h@{agg.\+h}!agg\+\_\+mesh\+\_\+points\+\_\+write@{agg\+\_\+mesh\+\_\+points\+\_\+write}}
-\index{agg\+\_\+mesh\+\_\+points\+\_\+write@{agg\+\_\+mesh\+\_\+points\+\_\+write}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+mesh\+\_\+points\+\_\+write}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+mesh\+\_\+points\+\_\+write (
-\begin{DoxyParamCaption}
-\item[{F\+I\+L\+E $\ast$}]{f, }
-\item[{gdouble $\ast$}]{x, }
-\item[{gint}]{str, }
-\item[{gint}]{n}
-\end{DoxyParamCaption}
-)}\label{agg_8h_ac61866378b19df876ee933bfa46117fc}
-\index{agg.\+h@{agg.\+h}!agg\+\_\+mesh\+\_\+tri\+\_\+write@{agg\+\_\+mesh\+\_\+tri\+\_\+write}}
-\index{agg\+\_\+mesh\+\_\+tri\+\_\+write@{agg\+\_\+mesh\+\_\+tri\+\_\+write}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+mesh\+\_\+tri\+\_\+write}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+mesh\+\_\+tri\+\_\+write (
-\begin{DoxyParamCaption}
-\item[{F\+I\+L\+E $\ast$}]{f, }
-\item[{gint $\ast$}]{tr, }
-\item[{gint}]{str, }
-\item[{gint}]{n}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a6f7ea7b05b4a2a928727aecf53d36fa7}
-\index{agg.\+h@{agg.\+h}!agg\+\_\+naca\+\_\+four@{agg\+\_\+naca\+\_\+four}}
-\index{agg\+\_\+naca\+\_\+four@{agg\+\_\+naca\+\_\+four}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+naca\+\_\+four}]{\setlength{\rightskip}{0pt plus 5cm}gdouble agg\+\_\+naca\+\_\+four (
-\begin{DoxyParamCaption}
-\item[{gdouble}]{t, }
-\item[{gdouble}]{p, }
-\item[{gdouble}]{m, }
-\item[{gdouble}]{x}
-\end{DoxyParamCaption}
-)}\label{agg_8h_afca823d7e7356348d7beaba0d0ec7682}
-
-
-References a.
-
-
-
-Referenced by agg\+\_\+shape\+\_\+fit\+\_\+naca\+\_\+four().
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+parser\+\_\+alloc@{agg\+\_\+parser\+\_\+alloc}}
-\index{agg\+\_\+parser\+\_\+alloc@{agg\+\_\+parser\+\_\+alloc}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+parser\+\_\+alloc}]{\setlength{\rightskip}{0pt plus 5cm}{\bf agg\+\_\+parser\+\_\+t}$\ast$ agg\+\_\+parser\+\_\+alloc (
-\begin{DoxyParamCaption}
-\item[{void}]{}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a6c2f378d0fa585f7786be3cebec5e912}
-
-
-References agg\+\_\+function\+\_\+roundtip(), agg\+\_\+parser\+\_\+function\+\_\+add(), A\+G\+G\+\_\+\+P\+A\+R\+S\+E\+R\+\_\+\+P\+A\+R\+A\+M\+E\+T\+E\+R\+\_\+\+N\+U\+M\+B\+E\+R\+\_\+\+M\+A\+X, agg\+\_\+parser\+\_\+variable\+\_\+add(), \+\_\+agg\+\_\+parser\+\_\+t\+::expr, \+\_\+agg\+\_\+parser\+\_\+t\+::global\+\_\+set, \+\_\+agg\+\_\+parser\+\_\+t\+::nvars, and \+\_\+agg\+\_\+parser\+\_\+t\+::vars.
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+parser\+\_\+body\+\_\+read@{agg\+\_\+parser\+\_\+body\+\_\+read}}
-\index{agg\+\_\+parser\+\_\+body\+\_\+read@{agg\+\_\+parser\+\_\+body\+\_\+read}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+parser\+\_\+body\+\_\+read}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+parser\+\_\+body\+\_\+read (
-\begin{DoxyParamCaption}
-\item[{gint}]{fid, }
-\item[{G\+Scanner $\ast$}]{scanner, }
-\item[{{\bf agg\+\_\+parser\+\_\+t} $\ast$}]{p, }
-\item[{{\bf agg\+\_\+body\+\_\+t} $\ast$}]{b}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a8c5e79c2916fd33636309a169031f385}
-
-
-References A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+D\+I\+S\+T\+R\+I\+B\+U\+T\+I\+O\+N, and A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+G\+L\+O\+B\+A\+L.
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+parser\+\_\+constant\+\_\+parse@{agg\+\_\+parser\+\_\+constant\+\_\+parse}}
-\index{agg\+\_\+parser\+\_\+constant\+\_\+parse@{agg\+\_\+parser\+\_\+constant\+\_\+parse}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+parser\+\_\+constant\+\_\+parse}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+parser\+\_\+constant\+\_\+parse (
-\begin{DoxyParamCaption}
-\item[{gchar $\ast$}]{s, }
-\item[{guint $\ast$}]{v}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a5e4f86c10bded23504532a85a0c80040}
-
-
-References name.
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+parser\+\_\+declaration@{agg\+\_\+parser\+\_\+declaration}}
-\index{agg\+\_\+parser\+\_\+declaration@{agg\+\_\+parser\+\_\+declaration}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+parser\+\_\+declaration}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+parser\+\_\+declaration (
-\begin{DoxyParamCaption}
-\item[{{\bf agg\+\_\+parser\+\_\+t} $\ast$}]{p, }
-\item[{gchar $\ast$}]{s}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a8bc126a61a0d16649f906ecee505659c}
+References \textbf{ agg\+\_\+section\+\_\+t}, \textbf{ agg\+\_\+transform\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+t}.
+
+\mbox{\label{agg_8h_a60be5dbdee4c909c663de55a86616da8}} 
+\index{agg.h@{agg.h}!agg\_surface\_section\_add@{agg\_surface\_section\_add}}
+\index{agg\_surface\_section\_add@{agg\_surface\_section\_add}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_surface\_section\_add()}
+{\footnotesize\ttfamily gint agg\+\_\+surface\+\_\+section\+\_\+add (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+surface\+\_\+t} $\ast$}]{S,  }\item[{\textbf{ agg\+\_\+section\+\_\+t} $\ast$}]{s,  }\item[{gdouble}]{u }\end{DoxyParamCaption})}
 
+Add a section to a surface
+
+Add a section to a surface at a given value of parameter $u$. The section data are copied into the surface, so the section variable {\itshape s} can be reused afterwards.
+
+
+\begin{DoxyParams}{Parameters}
+{\em S} & an \doxyref{agg\+\_\+surface\+\_\+t}{p.}{group__surfaces_ga1c502e562486827063a7169cd79b5cc0}; \\
+\hline
+{\em s} & an \doxyref{agg\+\_\+section\+\_\+t}{p.}{agg_8h_a8cdd164643b93d05245e9b4976f3f0cb}; \\
+\hline
+{\em u} & parameter value where section is to be added.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+\mbox{\label{agg_8h_ad41f8f60fa70483229ffb5c8b6db3e4f}} 
+\index{agg.h@{agg.h}!agg\_surface\_section\_interp@{agg\_surface\_section\_interp}}
+\index{agg\_surface\_section\_interp@{agg\_surface\_section\_interp}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_surface\_section\_interp()}
+{\footnotesize\ttfamily gint agg\+\_\+surface\+\_\+section\+\_\+interp (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+surface\+\_\+t} $\ast$}]{S,  }\item[{gdouble}]{u,  }\item[{\textbf{ agg\+\_\+section\+\_\+t} $\ast$}]{s }\end{DoxyParamCaption})}
+
+Interpolate section data from a surface into a local section
+
+Interpolate section data from a surface into a local section, using Berrut and Trefethen\textquotesingle{}s barycentric Lagrangian interpolation, {\texttt{ https\+://dx.\+doi.\+org/10.\+1137/\+S0036144502417715}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em S} & an \doxyref{agg\+\_\+surface\+\_\+t}{p.}{group__surfaces_ga1c502e562486827063a7169cd79b5cc0} containing a number of sections; \\
+\hline
+{\em u} & parameter at which to interpolate section; \\
+\hline
+{\em s} & on exit, contains interpolated data for section at {\itshape u}.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, 1 if {\itshape S} is an empty surface. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+section\+\_\+t}.
+
+\mbox{\label{agg_8h_a05f8b5b0febe31ce57337e7045c04903}} 
+\index{agg.h@{agg.h}!agg\_surface\_weights\_make@{agg\_surface\_weights\_make}}
+\index{agg\_surface\_weights\_make@{agg\_surface\_weights\_make}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_surface\_weights\_make()}
+{\footnotesize\ttfamily gint agg\+\_\+surface\+\_\+weights\+\_\+make (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+surface\+\_\+t} $\ast$}]{S }\end{DoxyParamCaption})}
+
+Generate interpolation weights for sections on a surface
+
+Generate interpolation weights for sections on a surface, the preprocessing stage for Berrut and Trefethen\textquotesingle{}s barycentric Lagrangian interpolation, {\texttt{ https\+://dx.\+doi.\+org/10.\+1137/\+S0036144502417715}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em S} & an \doxyref{agg\+\_\+surface\+\_\+t}{p.}{group__surfaces_ga1c502e562486827063a7169cd79b5cc0} containing a number of sections.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+\mbox{\label{agg_8h_a024e7cbe995df9bc519a77525bf8b639}} 
+\index{agg.h@{agg.h}!agg\_surface\_workspace\_new@{agg\_surface\_workspace\_new}}
+\index{agg\_surface\_workspace\_new@{agg\_surface\_workspace\_new}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_surface\_workspace\_new()}
+{\footnotesize\ttfamily agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$ agg\+\_\+surface\+\_\+workspace\+\_\+new (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Allocate a workspace for evaluation of surfaces
 
-References A\+G\+G\+\_\+\+P\+A\+R\+S\+E\+R\+\_\+\+P\+A\+R\+A\+M\+E\+T\+E\+R\+\_\+\+N\+U\+M\+B\+E\+R\+\_\+\+M\+A\+X, \+\_\+agg\+\_\+parser\+\_\+t\+::expr, \+\_\+agg\+\_\+parser\+\_\+t\+::isexpr, \+\_\+agg\+\_\+parser\+\_\+t\+::nvars, te\+\_\+compile(), \+\_\+agg\+\_\+parser\+\_\+t\+::values, and \+\_\+agg\+\_\+parser\+\_\+t\+::vars.
+\begin{DoxyReturn}{Returns}
+newly allocated workspaces 
+\end{DoxyReturn}
 
 
+References \textbf{ agg\+\_\+section\+\_\+new()}.
+
+\mbox{\label{agg_8h_a162e7e767b148e09e0f98e9af91b32fe}} 
+\index{agg.h@{agg.h}!agg\_transform\_add\_global\_variables@{agg\_transform\_add\_global\_variables}}
+\index{agg\_transform\_add\_global\_variables@{agg\_transform\_add\_global\_variables}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_transform\_add\_global\_variables()}
+{\footnotesize\ttfamily gint agg\+\_\+transform\+\_\+add\+\_\+global\+\_\+variables (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+transform\+\_\+t} $\ast$}]{T,  }\item[{\textbf{ agg\+\_\+variable\+\_\+t} $\ast$}]{global,  }\item[{gint}]{nglobal }\end{DoxyParamCaption})}
+
+Add a list of global variables to the variables of a transform
+
+
+\begin{DoxyParams}{Parameters}
+{\em T} & an \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} allocated with \doxyref{agg\+\_\+transform\+\_\+new}{p.}{group__transforms_gaf8e2e52219b0108f7df70bc4dd39031f}; \\
+\hline
+{\em global} & array of global variables; \\
+\hline
+{\em nglobal} & number of global variables.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
 
-Referenced by agg\+\_\+parser\+\_\+read\+\_\+header().
 
-\index{agg.\+h@{agg.\+h}!agg\+\_\+parser\+\_\+declarations\+\_\+write@{agg\+\_\+parser\+\_\+declarations\+\_\+write}}
-\index{agg\+\_\+parser\+\_\+declarations\+\_\+write@{agg\+\_\+parser\+\_\+declarations\+\_\+write}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+parser\+\_\+declarations\+\_\+write}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+parser\+\_\+declarations\+\_\+write (
-\begin{DoxyParamCaption}
-\item[{F\+I\+L\+E $\ast$}]{f, }
-\item[{{\bf agg\+\_\+parser\+\_\+t} $\ast$}]{p}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a46c55bf47885a7d109ec912a9dbd2e3f}
+References \textbf{ agg\+\_\+expression\+\_\+data\+\_\+t}.
 
+\mbox{\label{agg_8h_a1d94218842c8aca6203ddba991b32a5f}} 
+\index{agg.h@{agg.h}!agg\_transform\_apply@{agg\_transform\_apply}}
+\index{agg\_transform\_apply@{agg\_transform\_apply}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_transform\_apply()}
+{\footnotesize\ttfamily gint agg\+\_\+transform\+\_\+apply (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+transform\+\_\+t} $\ast$}]{T,  }\item[{gdouble $\ast$}]{xin,  }\item[{gdouble $\ast$}]{xout }\end{DoxyParamCaption})}
+
+Apply a transform to a point
+
 
-References name, \+\_\+agg\+\_\+parser\+\_\+t\+::nvars, and \+\_\+agg\+\_\+parser\+\_\+t\+::vars.
+\begin{DoxyParams}{Parameters}
+{\em T} & an \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} containing the sequence of operations; \\
+\hline
+{\em xin} & input point; \\
+\hline
+{\em xout} & output point.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+\mbox{\label{agg_8h_a015c632cb62cafdc579df29f44d8eab9}} 
+\index{agg.h@{agg.h}!agg\_transform\_expressions\_compile@{agg\_transform\_expressions\_compile}}
+\index{agg\_transform\_expressions\_compile@{agg\_transform\_expressions\_compile}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_transform\_expressions\_compile()}
+{\footnotesize\ttfamily gint agg\+\_\+transform\+\_\+expressions\+\_\+compile (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+transform\+\_\+t} $\ast$}]{T }\end{DoxyParamCaption})}
 
-\index{agg.\+h@{agg.\+h}!agg\+\_\+parser\+\_\+expression\+\_\+add@{agg\+\_\+parser\+\_\+expression\+\_\+add}}
-\index{agg\+\_\+parser\+\_\+expression\+\_\+add@{agg\+\_\+parser\+\_\+expression\+\_\+add}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+parser\+\_\+expression\+\_\+add}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+parser\+\_\+expression\+\_\+add (
-\begin{DoxyParamCaption}
-\item[{{\bf agg\+\_\+parser\+\_\+t} $\ast$}]{p, }
-\item[{gchar $\ast$}]{v, }
-\item[{gchar $\ast$}]{w}
-\end{DoxyParamCaption}
-)}\label{agg_8h_aff3a31e4477441fcfe8b818ce10c3e30}
+Compile expressions in a transform for future evaluation.
+
+
+\begin{DoxyParams}{Parameters}
+{\em T} & an \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} allocated with \doxyref{agg\+\_\+transform\+\_\+new}{p.}{group__transforms_gaf8e2e52219b0108f7df70bc4dd39031f};\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
 
 
-References A\+G\+G\+\_\+\+P\+A\+R\+S\+E\+R\+\_\+\+P\+A\+R\+A\+M\+E\+T\+E\+R\+\_\+\+N\+U\+M\+B\+E\+R\+\_\+\+M\+A\+X, \+\_\+agg\+\_\+parser\+\_\+t\+::expr, \+\_\+agg\+\_\+parser\+\_\+t\+::isexpr, name, \+\_\+agg\+\_\+parser\+\_\+t\+::nvars, te\+\_\+compile(), \+\_\+agg\+\_\+parser\+\_\+t\+::values, and \+\_\+agg\+\_\+parser\+\_\+t\+::vars.
+References \textbf{ agg\+\_\+expression\+\_\+data\+\_\+t}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+t}.
+
+\mbox{\label{agg_8h_af8e2e52219b0108f7df70bc4dd39031f}} 
+\index{agg.h@{agg.h}!agg\_transform\_new@{agg\_transform\_new}}
+\index{agg\_transform\_new@{agg\_transform\_new}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_transform\_new()}
+{\footnotesize\ttfamily \textbf{ agg\+\_\+transform\+\_\+t} $\ast$ agg\+\_\+transform\+\_\+new (\begin{DoxyParamCaption}\item[{gint}]{nopmax }\end{DoxyParamCaption})}
 
-\index{agg.\+h@{agg.\+h}!agg\+\_\+parser\+\_\+expressions\+\_\+evaluate@{agg\+\_\+parser\+\_\+expressions\+\_\+evaluate}}
-\index{agg\+\_\+parser\+\_\+expressions\+\_\+evaluate@{agg\+\_\+parser\+\_\+expressions\+\_\+evaluate}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+parser\+\_\+expressions\+\_\+evaluate}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+parser\+\_\+expressions\+\_\+evaluate (
-\begin{DoxyParamCaption}
-\item[{{\bf agg\+\_\+parser\+\_\+t} $\ast$}]{p}
-\end{DoxyParamCaption}
-)}\label{agg_8h_ac8218403a50d6a47dafbc04a22e9cda6}
+Allocate a new \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} for transformation of geometries
 
 
-References \+\_\+agg\+\_\+parser\+\_\+t\+::expr, \+\_\+agg\+\_\+parser\+\_\+t\+::isexpr, \+\_\+agg\+\_\+parser\+\_\+t\+::nvars, te\+\_\+eval(), and \+\_\+agg\+\_\+parser\+\_\+t\+::values.
+\begin{DoxyParams}{Parameters}
+{\em nopmax} & maximum number of operations in transform\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+newly allocated \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} 
+\end{DoxyReturn}
 
-\index{agg.\+h@{agg.\+h}!agg\+\_\+parser\+\_\+function\+\_\+add@{agg\+\_\+parser\+\_\+function\+\_\+add}}
-\index{agg\+\_\+parser\+\_\+function\+\_\+add@{agg\+\_\+parser\+\_\+function\+\_\+add}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+parser\+\_\+function\+\_\+add}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+parser\+\_\+function\+\_\+add (
-\begin{DoxyParamCaption}
-\item[{{\bf agg\+\_\+parser\+\_\+t} $\ast$}]{p, }
-\item[{gchar $\ast$}]{v, }
-\item[{gpointer}]{func, }
-\item[{gint}]{na}
-\end{DoxyParamCaption}
-)}\label{agg_8h_ae9fb064c79fe69246e0ea947e2b8e50f}
 
+References \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, and \textbf{ agg\+\_\+transform\+\_\+t}.
 
-References A\+G\+G\+\_\+\+P\+A\+R\+S\+E\+R\+\_\+\+P\+A\+R\+A\+M\+E\+T\+E\+R\+\_\+\+N\+U\+M\+B\+E\+R\+\_\+\+M\+A\+X, func, name, \+\_\+agg\+\_\+parser\+\_\+t\+::nvars, and \+\_\+agg\+\_\+parser\+\_\+t\+::vars.
+\mbox{\label{agg_8h_a3469482e2c22920b5accefdc004297c4}} 
+\index{agg.h@{agg.h}!agg\_transform\_operator\_add@{agg\_transform\_operator\_add}}
+\index{agg\_transform\_operator\_add@{agg\_transform\_operator\_add}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_transform\_operator\_add()}
+{\footnotesize\ttfamily gint agg\+\_\+transform\+\_\+operator\+\_\+add (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+transform\+\_\+t} $\ast$}]{T,  }\item[{\textbf{ agg\+\_\+operation\+\_\+t}}]{op,  }\item[{gdouble $\ast$}]{p,  }\item[{gchar $\ast$$\ast$}]{expr,  }\item[{gint}]{np }\end{DoxyParamCaption})}
 
+Add an operation to a transform
 
 
-Referenced by agg\+\_\+parser\+\_\+alloc().
+\begin{DoxyParams}{Parameters}
+{\em T} & an \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} allocated with \doxyref{agg\+\_\+transform\+\_\+new}{p.}{group__transforms_gaf8e2e52219b0108f7df70bc4dd39031f}; \\
+\hline
+{\em op} & a basic transform operation of type \doxyref{agg\+\_\+operation\+\_\+t}{p.}{group__transforms_gae287f33d9a1988a16e6e8bfbcf8498f7}; \\
+\hline
+{\em p} & array of parameter values to pass to transform calculation; \\
+\hline
+{\em expr} & expressions to be used in evaluating transform parameters; \\
+\hline
+{\em np} & number of parameters to pass to transform.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success 
+\end{DoxyReturn}
 
-\index{agg.\+h@{agg.\+h}!agg\+\_\+parser\+\_\+read\+\_\+header@{agg\+\_\+parser\+\_\+read\+\_\+header}}
-\index{agg\+\_\+parser\+\_\+read\+\_\+header@{agg\+\_\+parser\+\_\+read\+\_\+header}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+parser\+\_\+read\+\_\+header}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+parser\+\_\+read\+\_\+header (
-\begin{DoxyParamCaption}
-\item[{F\+I\+L\+E $\ast$}]{f, }
-\item[{{\bf agg\+\_\+parser\+\_\+t} $\ast$}]{p}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a1f13eb6167974bb0a3209250f7644a9a}
 
+References \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+new()}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+t}.
 
-References agg\+\_\+parser\+\_\+declaration(), and s.
+\mbox{\label{agg_8h_a9647f98c5477495e98aa83eaed70c171}} 
+\index{agg.h@{agg.h}!agg\_transform\_operators\_write@{agg\_transform\_operators\_write}}
+\index{agg\_transform\_operators\_write@{agg\_transform\_operators\_write}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_transform\_operators\_write()}
+{\footnotesize\ttfamily gint agg\+\_\+transform\+\_\+operators\+\_\+write (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f,  }\item[{\textbf{ agg\+\_\+transform\+\_\+t} $\ast$}]{T }\end{DoxyParamCaption})}
 
-\index{agg.\+h@{agg.\+h}!agg\+\_\+parser\+\_\+variable\+\_\+add@{agg\+\_\+parser\+\_\+variable\+\_\+add}}
-\index{agg\+\_\+parser\+\_\+variable\+\_\+add@{agg\+\_\+parser\+\_\+variable\+\_\+add}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+parser\+\_\+variable\+\_\+add}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+parser\+\_\+variable\+\_\+add (
-\begin{DoxyParamCaption}
-\item[{{\bf agg\+\_\+parser\+\_\+t} $\ast$}]{p, }
-\item[{gchar $\ast$}]{s, }
-\item[{gdouble}]{x}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a19170a540b2e9f604dfb95d563c5b3e3}
+Write a list of operators and parameters in a transform to file
 
 
-References A\+G\+G\+\_\+\+P\+A\+R\+S\+E\+R\+\_\+\+P\+A\+R\+A\+M\+E\+T\+E\+R\+\_\+\+N\+U\+M\+B\+E\+R\+\_\+\+M\+A\+X, \+\_\+agg\+\_\+parser\+\_\+t\+::isexpr, name, \+\_\+agg\+\_\+parser\+\_\+t\+::nvars, \+\_\+agg\+\_\+parser\+\_\+t\+::values, and \+\_\+agg\+\_\+parser\+\_\+t\+::vars.
+\begin{DoxyParams}{Parameters}
+{\em f} & file stream for output; \\
+\hline
+{\em T} & the \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} to write.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
 
 
+References \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+t}.
 
-Referenced by agg\+\_\+parser\+\_\+alloc().
+\mbox{\label{agg_8h_aa9932f923e53ba6651b417913a88bd62}} 
+\index{agg.h@{agg.h}!agg\_transform\_variable\_add@{agg\_transform\_variable\_add}}
+\index{agg\_transform\_variable\_add@{agg\_transform\_variable\_add}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_transform\_variable\_add()}
+{\footnotesize\ttfamily gint agg\+\_\+transform\+\_\+variable\+\_\+add (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+transform\+\_\+t} $\ast$}]{T,  }\item[{gchar $\ast$}]{var,  }\item[{gchar $\ast$}]{def,  }\item[{gdouble}]{val }\end{DoxyParamCaption})}
 
-\index{agg.\+h@{agg.\+h}!agg\+\_\+scanner\+\_\+alloc@{agg\+\_\+scanner\+\_\+alloc}}
-\index{agg\+\_\+scanner\+\_\+alloc@{agg\+\_\+scanner\+\_\+alloc}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+scanner\+\_\+alloc}]{\setlength{\rightskip}{0pt plus 5cm}G\+Scanner$\ast$ agg\+\_\+scanner\+\_\+alloc (
-\begin{DoxyParamCaption}
-\item[{void}]{}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a6bc2998406820c8da6dac030aea08bbb}
+Add a variable to a transform
 
 
-References A\+G\+G\+\_\+\+S\+Y\+M\+B\+O\+L\+\_\+\+M\+A\+X, name, s, and symbol.
+\begin{DoxyParams}{Parameters}
+{\em T} & an \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} allocated with \doxyref{agg\+\_\+transform\+\_\+new}{p.}{group__transforms_gaf8e2e52219b0108f7df70bc4dd39031f}; \\
+\hline
+{\em var} & variable name; \\
+\hline
+{\em def} & variable definition (may be NULL); \\
+\hline
+{\em val} & variable value (used to set variable constant if {\itshape def} is NULL).\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success 
+\end{DoxyReturn}
 
-\index{agg.\+h@{agg.\+h}!agg\+\_\+shape\+\_\+aerofoil\+\_\+eval@{agg\+\_\+shape\+\_\+aerofoil\+\_\+eval}}
-\index{agg\+\_\+shape\+\_\+aerofoil\+\_\+eval@{agg\+\_\+shape\+\_\+aerofoil\+\_\+eval}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+shape\+\_\+aerofoil\+\_\+eval}]{\setlength{\rightskip}{0pt plus 5cm}gdouble agg\+\_\+shape\+\_\+aerofoil\+\_\+eval (
-\begin{DoxyParamCaption}
-\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{s, }
-\item[{gdouble}]{x}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a00f8a869bb22345871c95dbdd23a7985}
 
+References \textbf{ agg\+\_\+variable\+\_\+t}.
 
-References agg\+\_\+bernstein\+\_\+basis(), \+\_\+agg\+\_\+shape\+\_\+t\+::i, \+\_\+agg\+\_\+shape\+\_\+t\+::n1, \+\_\+agg\+\_\+shape\+\_\+t\+::n2, \+\_\+agg\+\_\+shape\+\_\+t\+::nb, and \+\_\+agg\+\_\+shape\+\_\+t\+::s.
+\mbox{\label{agg_8h_a521307ad04c43f7912a72942271cb8e0}} 
+\index{agg.h@{agg.h}!agg\_transform\_variables\_eval@{agg\_transform\_variables\_eval}}
+\index{agg\_transform\_variables\_eval@{agg\_transform\_variables\_eval}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_transform\_variables\_eval()}
+{\footnotesize\ttfamily gint agg\+\_\+transform\+\_\+variables\+\_\+eval (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+transform\+\_\+t} $\ast$}]{T }\end{DoxyParamCaption})}
 
+Evaluate variables in a transform. Expressions should have been compiled using \doxyref{agg\+\_\+transform\+\_\+expressions\+\_\+compile}{p.}{group__transforms_ga015c632cb62cafdc579df29f44d8eab9}
 
 
-Referenced by agg\+\_\+shape\+\_\+eval().
+\begin{DoxyParams}{Parameters}
+{\em T} & an \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} allocated with \doxyref{agg\+\_\+transform\+\_\+new}{p.}{group__transforms_gaf8e2e52219b0108f7df70bc4dd39031f};\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
 
-\index{agg.\+h@{agg.\+h}!agg\+\_\+shape\+\_\+alloc@{agg\+\_\+shape\+\_\+alloc}}
-\index{agg\+\_\+shape\+\_\+alloc@{agg\+\_\+shape\+\_\+alloc}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+shape\+\_\+alloc}]{\setlength{\rightskip}{0pt plus 5cm}{\bf agg\+\_\+shape\+\_\+t}$\ast$ agg\+\_\+shape\+\_\+alloc (
-\begin{DoxyParamCaption}
-\item[{gint}]{nsmax}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a88eca975534de23d191efe7306adf540}
 
+References \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+t}.
 
-References \+\_\+agg\+\_\+shape\+\_\+t\+::b, \+\_\+agg\+\_\+shape\+\_\+t\+::nsmax, s, and \+\_\+agg\+\_\+shape\+\_\+t\+::s.
+\mbox{\label{agg_8h_a81f96f54e93e7d88b8bf40f446ac3341}} 
+\index{agg.h@{agg.h}!agg\_transform\_variables\_write@{agg\_transform\_variables\_write}}
+\index{agg\_transform\_variables\_write@{agg\_transform\_variables\_write}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_transform\_variables\_write()}
+{\footnotesize\ttfamily gint agg\+\_\+transform\+\_\+variables\+\_\+write (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f,  }\item[{\textbf{ agg\+\_\+transform\+\_\+t} $\ast$}]{T,  }\item[{gboolean}]{write\+\_\+defs }\end{DoxyParamCaption})}
 
-\index{agg.\+h@{agg.\+h}!agg\+\_\+shape\+\_\+copy@{agg\+\_\+shape\+\_\+copy}}
-\index{agg\+\_\+shape\+\_\+copy@{agg\+\_\+shape\+\_\+copy}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+shape\+\_\+copy}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+shape\+\_\+copy (
-\begin{DoxyParamCaption}
-\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{dest, }
-\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{src}
-\end{DoxyParamCaption}
-)}\label{agg_8h_af3e3da3fe2d1da2e37b3aff4ccf950aa}
+Write list of variables and values for a transform to output
 
 
-References \+\_\+agg\+\_\+shape\+\_\+t\+::b, \+\_\+agg\+\_\+shape\+\_\+t\+::closed, \+\_\+agg\+\_\+shape\+\_\+t\+::i, \+\_\+agg\+\_\+shape\+\_\+t\+::n1, \+\_\+agg\+\_\+shape\+\_\+t\+::n2, \+\_\+agg\+\_\+shape\+\_\+t\+::nb, \+\_\+agg\+\_\+shape\+\_\+t\+::nsmax, \+\_\+agg\+\_\+shape\+\_\+t\+::s, and \+\_\+agg\+\_\+shape\+\_\+t\+::type.
+\begin{DoxyParams}{Parameters}
+{\em f} & output file stream; \\
+\hline
+{\em T} & an \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} allocated with \doxyref{agg\+\_\+transform\+\_\+new}{p.}{group__transforms_gaf8e2e52219b0108f7df70bc4dd39031f}; \\
+\hline
+{\em write\+\_\+defs} & if TRUE, output variable definitions for variables that have them.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
 
-\index{agg.\+h@{agg.\+h}!agg\+\_\+shape\+\_\+ellipse@{agg\+\_\+shape\+\_\+ellipse}}
-\index{agg\+\_\+shape\+\_\+ellipse@{agg\+\_\+shape\+\_\+ellipse}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+shape\+\_\+ellipse}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+shape\+\_\+ellipse (
-\begin{DoxyParamCaption}
-\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{s}
-\end{DoxyParamCaption}
-)}\label{agg_8h_ab7bb01be79b88693aef8a2eb468175e1}
 
+References \textbf{ agg\+\_\+variable\+\_\+t}.
 
-References A\+G\+G\+\_\+\+S\+H\+A\+P\+E\+\_\+\+E\+L\+L\+I\+P\+S\+E, \+\_\+agg\+\_\+shape\+\_\+t\+::b, \+\_\+agg\+\_\+shape\+\_\+t\+::closed, \+\_\+agg\+\_\+shape\+\_\+t\+::i, \+\_\+agg\+\_\+shape\+\_\+t\+::n1, \+\_\+agg\+\_\+shape\+\_\+t\+::n2, \+\_\+agg\+\_\+shape\+\_\+t\+::nb, \+\_\+agg\+\_\+shape\+\_\+t\+::s, and \+\_\+agg\+\_\+shape\+\_\+t\+::type.
 
 
+\doxysubsection{Variable Documentation}
+\mbox{\label{agg_8h_a99192fd2067443a234e213a421f6f643}} 
+\index{agg.h@{agg.h}!agg\_expression\_data\_t@{agg\_expression\_data\_t}}
+\index{agg\_expression\_data\_t@{agg\_expression\_data\_t}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_expression\_data\_t}
+{\footnotesize\ttfamily agg\+\_\+expression\+\_\+data\+\_\+t}
 
-Referenced by agg\+\_\+shape\+\_\+parse().
+Data structure holding internal information for evaluation of expressions 
 
-\index{agg.\+h@{agg.\+h}!agg\+\_\+shape\+\_\+ellipse\+\_\+eval@{agg\+\_\+shape\+\_\+ellipse\+\_\+eval}}
-\index{agg\+\_\+shape\+\_\+ellipse\+\_\+eval@{agg\+\_\+shape\+\_\+ellipse\+\_\+eval}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+shape\+\_\+ellipse\+\_\+eval}]{\setlength{\rightskip}{0pt plus 5cm}gdouble agg\+\_\+shape\+\_\+ellipse\+\_\+eval (
-\begin{DoxyParamCaption}
-\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{s, }
-\item[{gdouble}]{x, }
-\item[{gint}]{lim}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a79c67acc6df95304861058b1096a5398}
+Referenced by \textbf{ agg\+\_\+transform\+\_\+add\+\_\+global\+\_\+variables()}, and \textbf{ agg\+\_\+transform\+\_\+expressions\+\_\+compile()}.
 
+\mbox{\label{agg_8h_a8cdd164643b93d05245e9b4976f3f0cb}} 
+\index{agg.h@{agg.h}!agg\_section\_t@{agg\_section\_t}}
+\index{agg\_section\_t@{agg\_section\_t}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_section\_t}
+{\footnotesize\ttfamily agg\+\_\+section\+\_\+t}
 
-References agg\+\_\+bernstein\+\_\+basis(), agg\+\_\+shape\+\_\+break\+\_\+lower, agg\+\_\+shape\+\_\+break\+\_\+number, agg\+\_\+shape\+\_\+break\+\_\+upper, \+\_\+agg\+\_\+shape\+\_\+t\+::i, \+\_\+agg\+\_\+shape\+\_\+t\+::n1, \+\_\+agg\+\_\+shape\+\_\+t\+::n2, and \+\_\+agg\+\_\+shape\+\_\+t\+::s.
+Data structure holding information for evaluation of a section 
 
+Referenced by \textbf{ agg\+\_\+section\+\_\+new()}, \textbf{ agg\+\_\+surface\+\_\+new()}, \textbf{ agg\+\_\+surface\+\_\+point\+\_\+eval()}, and \textbf{ agg\+\_\+surface\+\_\+section\+\_\+interp()}.
 
+\mbox{\label{agg_8h_a9b3c7b4a183fc43a646fdc5cb1673993}} 
+\index{agg.h@{agg.h}!agg\_transform\_operator\_t@{agg\_transform\_operator\_t}}
+\index{agg\_transform\_operator\_t@{agg\_transform\_operator\_t}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_transform\_operator\_t}
+{\footnotesize\ttfamily agg\+\_\+transform\+\_\+operator\+\_\+t}
 
-Referenced by agg\+\_\+shape\+\_\+eval().
+Data structure for basic transform operations 
 
-\index{agg.\+h@{agg.\+h}!agg\+\_\+shape\+\_\+eval@{agg\+\_\+shape\+\_\+eval}}
-\index{agg\+\_\+shape\+\_\+eval@{agg\+\_\+shape\+\_\+eval}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+shape\+\_\+eval}]{\setlength{\rightskip}{0pt plus 5cm}gdouble agg\+\_\+shape\+\_\+eval (
-\begin{DoxyParamCaption}
-\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{s, }
-\item[{gdouble}]{x, }
-\item[{gint}]{lim}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a179d688c562ad6af2ba598941ee3dfa9}
+Referenced by \textbf{ agg\+\_\+transform\+\_\+expressions\+\_\+compile()}, \textbf{ agg\+\_\+transform\+\_\+new()}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+add()}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+new()}, \textbf{ agg\+\_\+transform\+\_\+operators\+\_\+write()}, and \textbf{ agg\+\_\+transform\+\_\+variables\+\_\+eval()}.
 
+\mbox{\label{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da}} 
+\index{agg.h@{agg.h}!agg\_transform\_t@{agg\_transform\_t}}
+\index{agg\_transform\_t@{agg\_transform\_t}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_transform\_t}
+{\footnotesize\ttfamily agg\+\_\+transform\+\_\+t}
 
-References A\+G\+G\+\_\+\+S\+H\+A\+P\+E\+\_\+\+A\+E\+R\+O\+F\+O\+I\+L, agg\+\_\+shape\+\_\+aerofoil\+\_\+eval(), A\+G\+G\+\_\+\+S\+H\+A\+P\+E\+\_\+\+E\+L\+L\+I\+P\+S\+E, agg\+\_\+shape\+\_\+ellipse\+\_\+eval(), and \+\_\+agg\+\_\+shape\+\_\+t\+::type.
+Data structure for transformations converting sections into surfaces 
 
-
-
-Referenced by agg\+\_\+distribution\+\_\+write\+\_\+mesh(), and agg\+\_\+shape\+\_\+interpolant\+\_\+make().
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+shape\+\_\+fit@{agg\+\_\+shape\+\_\+fit}}
-\index{agg\+\_\+shape\+\_\+fit@{agg\+\_\+shape\+\_\+fit}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+shape\+\_\+fit}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+shape\+\_\+fit (
-\begin{DoxyParamCaption}
-\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{c, }
-\item[{gdouble $\ast$}]{xu, }
-\item[{gdouble $\ast$}]{yu, }
-\item[{gint}]{nu, }
-\item[{gdouble $\ast$}]{xl, }
-\item[{gdouble $\ast$}]{yl, }
-\item[{gint}]{nl, }
-\item[{gdouble}]{n1, }
-\item[{gdouble}]{n2, }
-\item[{gdouble}]{d, }
-\item[{gint}]{n, }
-\item[{gboolean}]{closed, }
-\item[{gdouble $\ast$}]{work}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a3244c5228d78ba338aa1ef2e82f6414f}
-
-
-References agg\+\_\+bernstein\+\_\+basis(), \+\_\+agg\+\_\+shape\+\_\+t\+::closed, \+\_\+agg\+\_\+shape\+\_\+t\+::i, \+\_\+agg\+\_\+shape\+\_\+t\+::n1, \+\_\+agg\+\_\+shape\+\_\+t\+::n2, \+\_\+agg\+\_\+shape\+\_\+t\+::nsmax, and \+\_\+agg\+\_\+shape\+\_\+t\+::s.
-
-
-
-Referenced by agg\+\_\+shape\+\_\+fit\+\_\+naca\+\_\+four().
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+shape\+\_\+fit\+\_\+naca\+\_\+four@{agg\+\_\+shape\+\_\+fit\+\_\+naca\+\_\+four}}
-\index{agg\+\_\+shape\+\_\+fit\+\_\+naca\+\_\+four@{agg\+\_\+shape\+\_\+fit\+\_\+naca\+\_\+four}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+shape\+\_\+fit\+\_\+naca\+\_\+four}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+shape\+\_\+fit\+\_\+naca\+\_\+four (
-\begin{DoxyParamCaption}
-\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{s, }
-\item[{gint}]{n, }
-\item[{gdouble}]{th, }
-\item[{gdouble}]{p, }
-\item[{gdouble}]{m, }
-\item[{gint}]{nu, }
-\item[{gint}]{nl, }
-\item[{gdouble $\ast$}]{work}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a78e8afbc14e38924c4f58333d81fa04d}
-
-
-References agg\+\_\+naca\+\_\+four(), and agg\+\_\+shape\+\_\+fit().
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+shape\+\_\+interpolant\+\_\+alloc@{agg\+\_\+shape\+\_\+interpolant\+\_\+alloc}}
-\index{agg\+\_\+shape\+\_\+interpolant\+\_\+alloc@{agg\+\_\+shape\+\_\+interpolant\+\_\+alloc}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+shape\+\_\+interpolant\+\_\+alloc}]{\setlength{\rightskip}{0pt plus 5cm}{\bf agg\+\_\+shape\+\_\+interpolant\+\_\+t}$\ast$ agg\+\_\+shape\+\_\+interpolant\+\_\+alloc (
-\begin{DoxyParamCaption}
-\item[{gint}]{nmax}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a16b5860196983d54f3f75d40509399fd}
-
-
-References a, \+\_\+agg\+\_\+shape\+\_\+interpolant\+\_\+t\+::i, and \+\_\+agg\+\_\+shape\+\_\+interpolant\+\_\+t\+::nmax.
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+shape\+\_\+interpolant\+\_\+make@{agg\+\_\+shape\+\_\+interpolant\+\_\+make}}
-\index{agg\+\_\+shape\+\_\+interpolant\+\_\+make@{agg\+\_\+shape\+\_\+interpolant\+\_\+make}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+shape\+\_\+interpolant\+\_\+make}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+shape\+\_\+interpolant\+\_\+make (
-\begin{DoxyParamCaption}
-\item[{{\bf agg\+\_\+shape\+\_\+interpolant\+\_\+t} $\ast$}]{a, }
-\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{sh, }
-\item[{gint}]{n}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a366ebe74fea51dcdcd4f52a7ee85ebaf}
-
-
-References agg\+\_\+shape\+\_\+eval(), agg\+\_\+spacing\+\_\+eval(), A\+G\+G\+\_\+\+S\+P\+A\+C\+I\+N\+G\+\_\+\+L\+I\+N\+E\+A\+R, \+\_\+agg\+\_\+shape\+\_\+interpolant\+\_\+t\+::i, \+\_\+agg\+\_\+shape\+\_\+interpolant\+\_\+t\+::n, and s.
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+shape\+\_\+interpolant\+\_\+step@{agg\+\_\+shape\+\_\+interpolant\+\_\+step}}
-\index{agg\+\_\+shape\+\_\+interpolant\+\_\+step@{agg\+\_\+shape\+\_\+interpolant\+\_\+step}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+shape\+\_\+interpolant\+\_\+step}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+shape\+\_\+interpolant\+\_\+step (
-\begin{DoxyParamCaption}
-\item[{{\bf agg\+\_\+shape\+\_\+interpolant\+\_\+t} $\ast$}]{a, }
-\item[{gdouble $\ast$}]{s, }
-\item[{gdouble}]{dl}
-\end{DoxyParamCaption}
-)}\label{agg_8h_a53c806d18234e2b8ca3b6578705cdbf9}
-
-
-References \+\_\+agg\+\_\+shape\+\_\+interpolant\+\_\+t\+::i, and \+\_\+agg\+\_\+shape\+\_\+interpolant\+\_\+t\+::n.
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+shape\+\_\+interval\+\_\+add@{agg\+\_\+shape\+\_\+interval\+\_\+add}}
-\index{agg\+\_\+shape\+\_\+interval\+\_\+add@{agg\+\_\+shape\+\_\+interval\+\_\+add}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+shape\+\_\+interval\+\_\+add}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+shape\+\_\+interval\+\_\+add (
-\begin{DoxyParamCaption}
-\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{s, }
-\item[{gdouble}]{x1, }
-\item[{gdouble}]{x2, }
-\item[{gdouble $\ast$}]{x, }
-\item[{gdouble $\ast$}]{y, }
-\item[{gint}]{np, }
-\item[{gboolean}]{upper, }
-\item[{gdouble}]{n1, }
-\item[{gdouble}]{n2, }
-\item[{gint}]{n, }
-\item[{gdouble $\ast$}]{work}
-\end{DoxyParamCaption}
-)}\label{agg_8h_aff88a12ff9f749b4b8978b3580918e0d}
-
-
-References agg\+\_\+bernstein\+\_\+basis(), \+\_\+agg\+\_\+shape\+\_\+t\+::b, \+\_\+agg\+\_\+shape\+\_\+t\+::i, \+\_\+agg\+\_\+shape\+\_\+t\+::n1, \+\_\+agg\+\_\+shape\+\_\+t\+::n2, \+\_\+agg\+\_\+shape\+\_\+t\+::nb, np, and \+\_\+agg\+\_\+shape\+\_\+t\+::s.
-
-
-
-Referenced by agg\+\_\+shape\+\_\+root\+\_\+fit().
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+shape\+\_\+naca@{agg\+\_\+shape\+\_\+naca}}
-\index{agg\+\_\+shape\+\_\+naca@{agg\+\_\+shape\+\_\+naca}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+shape\+\_\+naca}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+shape\+\_\+naca (
-\begin{DoxyParamCaption}
-\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{c, }
-\item[{gdouble}]{t}
-\end{DoxyParamCaption}
-)}\label{agg_8h_ad3b1035d57313f88aee55d0d6413b17c}
-
-
-References A\+G\+G\+\_\+\+S\+H\+A\+P\+E\+\_\+\+A\+E\+R\+O\+F\+O\+I\+L, \+\_\+agg\+\_\+shape\+\_\+t\+::b, \+\_\+agg\+\_\+shape\+\_\+t\+::closed, \+\_\+agg\+\_\+shape\+\_\+t\+::i, \+\_\+agg\+\_\+shape\+\_\+t\+::n1, \+\_\+agg\+\_\+shape\+\_\+t\+::n2, \+\_\+agg\+\_\+shape\+\_\+t\+::nb, \+\_\+agg\+\_\+shape\+\_\+t\+::s, and \+\_\+agg\+\_\+shape\+\_\+t\+::type.
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+shape\+\_\+parse@{agg\+\_\+shape\+\_\+parse}}
-\index{agg\+\_\+shape\+\_\+parse@{agg\+\_\+shape\+\_\+parse}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+shape\+\_\+parse}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+shape\+\_\+parse (
-\begin{DoxyParamCaption}
-\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{s, }
-\item[{gchar $\ast$}]{type, }
-\item[{gdouble $\ast$}]{p, }
-\item[{gint}]{np}
-\end{DoxyParamCaption}
-)}\label{agg_8h_aeb109eb2fb21c3dc442d822beab7bbc0}
-
-
-References agg\+\_\+shape\+\_\+ellipse(), agg\+\_\+shape\+\_\+root\+\_\+fit(), defaults, \+\_\+agg\+\_\+shape\+\_\+t\+::n1, \+\_\+agg\+\_\+shape\+\_\+t\+::n2, \+\_\+agg\+\_\+shape\+\_\+t\+::s, and shape.
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+shape\+\_\+root\+\_\+fit@{agg\+\_\+shape\+\_\+root\+\_\+fit}}
-\index{agg\+\_\+shape\+\_\+root\+\_\+fit@{agg\+\_\+shape\+\_\+root\+\_\+fit}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+shape\+\_\+root\+\_\+fit}]{\setlength{\rightskip}{0pt plus 5cm}gint agg\+\_\+shape\+\_\+root\+\_\+fit (
-\begin{DoxyParamCaption}
-\item[{{\bf agg\+\_\+shape\+\_\+t} $\ast$}]{s, }
-\item[{gdouble}]{n1, }
-\item[{gdouble}]{n2, }
-\item[{gdouble}]{hu, }
-\item[{gdouble}]{su, }
-\item[{gdouble}]{du, }
-\item[{gdouble}]{bu, }
-\item[{gdouble}]{hl, }
-\item[{gdouble}]{sl, }
-\item[{gdouble}]{dl, }
-\item[{gdouble}]{bl, }
-\item[{gint}]{n, }
-\item[{gdouble $\ast$}]{work}
-\end{DoxyParamCaption}
-)}\label{agg_8h_adcabb63b632d7866ac0fb092b0b111e7}
-
-
-References A\+G\+G\+\_\+\+S\+H\+A\+P\+E\+\_\+\+E\+L\+L\+I\+P\+S\+E, agg\+\_\+shape\+\_\+interval\+\_\+add(), \+\_\+agg\+\_\+shape\+\_\+t\+::b, \+\_\+agg\+\_\+shape\+\_\+t\+::closed, \+\_\+agg\+\_\+shape\+\_\+t\+::i, \+\_\+agg\+\_\+shape\+\_\+t\+::nb, np, and \+\_\+agg\+\_\+shape\+\_\+t\+::type.
-
-
-
-Referenced by agg\+\_\+shape\+\_\+parse().
-
-\index{agg.\+h@{agg.\+h}!agg\+\_\+spacing\+\_\+eval@{agg\+\_\+spacing\+\_\+eval}}
-\index{agg\+\_\+spacing\+\_\+eval@{agg\+\_\+spacing\+\_\+eval}!agg.\+h@{agg.\+h}}
-\subsubsection[{agg\+\_\+spacing\+\_\+eval}]{\setlength{\rightskip}{0pt plus 5cm}gdouble agg\+\_\+spacing\+\_\+eval (
-\begin{DoxyParamCaption}
-\item[{gdouble}]{tmin, }
-\item[{gdouble}]{tmax, }
-\item[{gint}]{nt, }
-\item[{{\bf agg\+\_\+spacing\+\_\+t}}]{s, }
-\item[{gint}]{i}
-\end{DoxyParamCaption}
-)}\label{agg_8h_aacd2e0d1f327d96a4c9adf3de1e9ace7}
-
-
-References A\+G\+G\+\_\+\+S\+P\+A\+C\+I\+N\+G\+\_\+\+C\+O\+S\+I\+N\+E, A\+G\+G\+\_\+\+S\+P\+A\+C\+I\+N\+G\+\_\+\+H\+A\+L\+F\+C\+O\+S, A\+G\+G\+\_\+\+S\+P\+A\+C\+I\+N\+G\+\_\+\+H\+A\+L\+F\+S\+I\+N, and A\+G\+G\+\_\+\+S\+P\+A\+C\+I\+N\+G\+\_\+\+L\+I\+N\+E\+A\+R.
-
-
-
-Referenced by agg\+\_\+distribution\+\_\+write\+\_\+mesh(), and agg\+\_\+shape\+\_\+interpolant\+\_\+make().
+Referenced by \textbf{ agg\+\_\+surface\+\_\+point\+\_\+eval()}, and \textbf{ agg\+\_\+transform\+\_\+new()}.
 

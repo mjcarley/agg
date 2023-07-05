@@ -1,0 +1,90 @@
+\doxysection{Variables and expressions}
+\label{group__variables}\index{Variables and expressions@{Variables and expressions}}
+
+
+Symbolically defined variables and expressions.  
+
+
+\begin{DoxyCompactItemize}
+\item 
+gpointer \textbf{ agg\+\_\+expression\+\_\+compile} (gchar $\ast$e, \textbf{ agg\+\_\+expression\+\_\+data\+\_\+t} $\ast$d)
+\item 
+gdouble \textbf{ agg\+\_\+expression\+\_\+eval} (gpointer e)
+\item 
+gint \textbf{ agg\+\_\+expression\+\_\+data\+\_\+compile} (\textbf{ agg\+\_\+expression\+\_\+data\+\_\+t} $\ast$d)
+\end{DoxyCompactItemize}
+\begin{DoxyCompactItemize}
+\item 
+typedef \textbf{ agg\+\_\+variable\+\_\+t}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Symbolically defined variables and expressions. 
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\label{group__variables_ga80416f24e969b55310b8a47b9f0100e9}} 
+\index{Variables and expressions@{Variables and expressions}!agg\_expression\_compile@{agg\_expression\_compile}}
+\index{agg\_expression\_compile@{agg\_expression\_compile}!Variables and expressions@{Variables and expressions}}
+\doxysubsubsection{agg\_expression\_compile()}
+{\footnotesize\ttfamily gpointer agg\+\_\+expression\+\_\+compile (\begin{DoxyParamCaption}\item[{gchar $\ast$}]{e,  }\item[{\textbf{ agg\+\_\+expression\+\_\+data\+\_\+t} $\ast$}]{d }\end{DoxyParamCaption})}
+
+Compile a symbolically defined expression, for future evaluation
+
+
+\begin{DoxyParams}{Parameters}
+{\em e} & the expression to be compiled; \\
+\hline
+{\em d} & structure holding variable data.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+pointer to compiled expression. 
+\end{DoxyReturn}
+\mbox{\label{group__variables_gac423c9a2a65b0b8e677576e9e4fbb1b6}} 
+\index{Variables and expressions@{Variables and expressions}!agg\_expression\_data\_compile@{agg\_expression\_data\_compile}}
+\index{agg\_expression\_data\_compile@{agg\_expression\_data\_compile}!Variables and expressions@{Variables and expressions}}
+\doxysubsubsection{agg\_expression\_data\_compile()}
+{\footnotesize\ttfamily gint agg\+\_\+expression\+\_\+data\+\_\+compile (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+expression\+\_\+data\+\_\+t} $\ast$}]{d }\end{DoxyParamCaption})}
+
+Compile expressions in an expression data structure, for future evaluation
+
+
+\begin{DoxyParams}{Parameters}
+{\em d} & an \doxyref{agg\+\_\+expression\+\_\+data\+\_\+t}{p.}{agg_8h_a99192fd2067443a234e213a421f6f643}\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+\mbox{\label{group__variables_gacc545aa8d109534c65f1c09e4ef4a61c}} 
+\index{Variables and expressions@{Variables and expressions}!agg\_expression\_eval@{agg\_expression\_eval}}
+\index{agg\_expression\_eval@{agg\_expression\_eval}!Variables and expressions@{Variables and expressions}}
+\doxysubsubsection{agg\_expression\_eval()}
+{\footnotesize\ttfamily gdouble agg\+\_\+expression\+\_\+eval (\begin{DoxyParamCaption}\item[{gpointer}]{e }\end{DoxyParamCaption})}
+
+Evaluate a compiled expression
+
+
+\begin{DoxyParams}{Parameters}
+{\em e} & a pointer to a tinyexpr expression\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the value of {\itshape e}. 
+\end{DoxyReturn}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\label{group__variables_gaf99a18818caf06b7a2cdc10dde859f47}} 
+\index{Variables and expressions@{Variables and expressions}!agg\_variable\_t@{agg\_variable\_t}}
+\index{agg\_variable\_t@{agg\_variable\_t}!Variables and expressions@{Variables and expressions}}
+\doxysubsubsection{agg\_variable\_t}
+{\footnotesize\ttfamily agg\+\_\+variable\+\_\+t}
+
+Data structure holding variable names, values, and symbolic definitions 
+
+Referenced by \textbf{ agg\+\_\+surface\+\_\+point\+\_\+eval()}, \textbf{ agg\+\_\+transform\+\_\+expressions\+\_\+compile()}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+add()}, \textbf{ agg\+\_\+transform\+\_\+operators\+\_\+write()}, \textbf{ agg\+\_\+transform\+\_\+variable\+\_\+add()}, \textbf{ agg\+\_\+transform\+\_\+variables\+\_\+eval()}, and \textbf{ agg\+\_\+transform\+\_\+variables\+\_\+write()}.
+

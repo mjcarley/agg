@@ -40,8 +40,8 @@ grid(16384, 32768)
 
 {
   invert()
-  ##hemispherical(3)
-  adaptive(0.0, 0.01, 0.05, 0.2, 30)
+  hemispherical(3)
+  ##adaptive(0.0, 0.01, 0.05, 0.2, 30)
 }
 
 distribution("wing", 0.0, 1.0, 24, "cosine")

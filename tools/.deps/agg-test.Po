@@ -138,7 +138,8 @@ agg-test.o: agg-test.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/bits/types/struct_sched_param.h /usr/include/bits/cpu-set.h \
  /usr/include/bits/setjmp.h \
  /usr/include/bits/types/struct___jmp_buf_tag.h \
- /usr/include/glib-2.0/glib/glib-autocleanups.h ../src/agg.h
+ /usr/include/glib-2.0/glib/glib-autocleanups.h ../src/agg.h \
+ ../src/hefsi.h
 /usr/include/stdc-predef.h:
 /usr/include/stdio.h:
 /usr/include/bits/libc-header-start.h:
@@ -351,3 +352,4 @@ agg-test.o: agg-test.c /usr/include/stdc-predef.h /usr/include/stdio.h \
 /usr/include/bits/types/struct___jmp_buf_tag.h:
 /usr/include/glib-2.0/glib/glib-autocleanups.h:
 ../src/agg.h:
+../src/hefsi.h:

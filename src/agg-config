@@ -104,11 +104,11 @@ if test "$echo_cflags" = "yes"; then
     echo $agg_cppflags $agg_cflags $glib_cflags
 fi
 if test "$echo_libs" = "yes"; then
-    glib_libs="-L${exec_prefix}/lib $lib_wmpi  -lglib-2.0 -lblas -L/home/michael/Codes/lib -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../.. -lgfortran -lquadmath -lm -lglib-2.0    -lstdc++  $glib_libs -lm"
+    glib_libs="-L${exec_prefix}/lib $lib_wmpi -L/home/michael/Codes/lib -lglib-2.0 -lblas -L/home/michael/Codes/lib -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../.. -lgfortran -lquadmath -lm -lglib-2.0 -lstdc++  $glib_libs -lm"
     glib_libs=`uniquify "$glib_libs"`
 
-    #agg_libs="-L${exec_prefix}/lib -lagg  -lglib-2.0 -lblas -L/home/michael/Codes/lib -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../.. -lgfortran -lquadmath -lm -lglib-2.0    -lstdc++ -lm $agg_libs"
-    agg_libs="-L${exec_prefix}/lib -lagg -lglib-2.0 -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../.. -lgfortran -lm -lquadmath"
+    #agg_libs="-L${exec_prefix}/lib -lagg -L/home/michael/Codes/lib -lglib-2.0 -lblas -L/home/michael/Codes/lib -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../.. -lgfortran -lquadmath -lm -lglib-2.0 -lstdc++ -lm $agg_libs"
+    agg_libs="-L${exec_prefix}/lib -lagg -lglib-2.0 -ltriangle-api -lm   -L/home/michael/Codes/lib -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../.. -ltriangle-api -lgfortran -lm -lquadmath"
     agg_libs=`uniquify "$agg_libs"`
     echo ${agg_libs}
 fi

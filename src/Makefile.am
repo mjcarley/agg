@@ -15,28 +15,22 @@ libagg_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)\
 
 libagg_la_SOURCES = \
 	agg.c \
+	bernstein.c \
 	binomials.h \
 	binomials.c \
-	naca.c \
-	agg-private.h \
-	transform.c \
-	distribution.c \
-	mesh.c \
-	spacing.c \
 	tinyexpr.c \
 	tinyexpr.h \
-	parser.c \
-	body.c \
-	shape.c \
-	functions.c \
-	grid.c \
-	grid-sphere.c \
-	grid-hemisphere.c \
-	grid-adaptive.c \
+	section.c \
+	transform.c \
+	variables.c \
+	surface.c \
+	naca.c \
+	intersection.c \
+	hefsi.c \
+	hefsi.h \
+	patch.c \
 	moller-tri.c \
-	moller-raytri.c \
-	triangle.c \
-	triangle.h
+	wireframe.c
 
 include_HEADERS = \
 	agg.h

@@ -138,6 +138,7 @@ else
 fi
 
 # Checks for header files.
+AC_CHECK_HEADERS([triangle_api.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AX_GCC_X86_CPU_SUPPORTS(avx, hasavx=yes) 
@@ -155,6 +156,7 @@ if test x$hasfma = xyes; then
 fi
 
 AC_CHECK_LIB(m, cos)
+AC_CHECK_LIB(triangle-api, triangle_mesh_create)
 
 AC_CONFIG_MACRO_DIR([m4])
 
@@ -166,7 +168,7 @@ AC_F77_DUMMY_MAIN
 AC_F77_WRAPPERS
 
 CFLAGS="$CFLAGS $OPENMP_CFLAGS $SIMD_FLAGS $glib_cflags $blaswrap_cflags"
-LDFLAGS="$LDFLAGS $blaswrap_libs $glib_libs $gqr_libs $mop_libs $gtv_libs -lstdc++"
+LDFLAGS="$LDFLAGS $blaswrap_libs $glib_libs -lstdc++"
 
 AC_SUBST(CFLAGS)
 AC_SUBST(LDFLAGS)
