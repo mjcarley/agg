@@ -381,95 +381,6 @@ static void surface_test(void)
   
   return ;
 }
-  
-/* static void write_patch_grid(FILE *f, agg_patch_t *P, gint ns, gint nt) */
-
-/* { */
-/*   gint i, j, e1, e2 ; */
-/*   gdouble s, t ; */
-
-/*   for ( i = 0 ; i < ns ; i ++ ) { */
-/*     for ( j = 0 ; j < nt ; j ++ ) { */
-/*       agg_patch_sample(P, (gdouble)i/(ns-1), (gdouble)j/(nt-1), &s, &t) ; */
-/*       fprintf(stdout, "%lg %lg\n", s, t) ; */
-/*     } */
-/*   } */
-
-/*   return ; */
-  
-/*   e1 = 0 ; e2 = 2 ; */
-
-/*   /\* for ( i = 0 ; i < ns ; i ++ ) { *\/ */
-/*   /\*   patch_edge_interp(P, e1, (gdouble)i/(ns-1), &s, &t) ; *\/ */
-/*   /\*   fprintf(f, "%lg %lg ", s, t) ; *\/ */
-/*   /\*   patch_edge_interp(P, e2, 1.0 - (gdouble)i/(ns-1), &s, &t) ; *\/ */
-/*   /\*   fprintf(f, "%lg %lg\n", s, t) ; *\/ */
-/*   /\* } *\/ */
-
-/*   e1 = 1 ; e2 = 3 ; */
-
-/*   for ( i = 0 ; i < nt ; i ++ ) { */
-/*     agg_patch_edge_interp(P, e1, (gdouble)i/(nt-1), &s, &t) ; */
-/*     fprintf(f, "%lg %lg ", s, t) ; */
-/*     agg_patch_edge_interp(P, e2, 1.0 - (gdouble)i/(nt-1), &s, &t) ; */
-/*     fprintf(f, "%lg %lg\n", s, t) ; */
-/*   } */
-  
-/*   return ; */
-/* } */
-
-/* static void write_patch_gmsh(FILE *f, agg_patch_t *P, agg_surface_t *S, */
-/* 			     agg_surface_workspace_t *w) */
-
-/* { */
-/*   gint pps, i ; */
-/*   gdouble x[3], u, v ; */
-
-/*   for ( i = 0 ; i < agg_patch_point_number(P) ; i ++ ) { */
-/*     /\* agg_patch_sample(P1, (gdouble)i/(nu-1), (gdouble)j/(nv-1), &u, &v) ; *\/ */
-/*     u = agg_patch_point_s(P, i) ; */
-/*     v = agg_patch_point_t(P, i) ; */
-/*     agg_patch_map(P, u, v, &u, &v) ; */
-/*     agg_surface_point_eval(S, u, v, x, w) ; */
-/*     fprintf(f, "Point(%d) = {%e, %e, %e, lc} ;\n", i, x[0], x[1], x[2]) ; */
-/*   } */
-
-/*   for ( i = 0 ; i < agg_patch_point_number(P) - 1 ; i ++ ) { */
-/*     fprintf(f, "Line(%d) = {%d, %d} ;\n", i, i, i+1) ; */
-/*   }     */
-  
-/*   return ; */
-/* } */
-
-/* static void write_intersection_gmsh(FILE *f, agg_intersection_t *inter, */
-/* 				    gint nsp, gint pps, */
-/* 				    agg_surface_workspace_t *w) */
-
-/* { */
-/*   agg_patch_t *P ; */
-/*   agg_surface_t *S ; */
-/*   gint i, j ; */
-/*   gdouble *x, u, v ; */
-     
-/*   for ( i = 0 ; i < agg_intersection_point_number(inter) ; i ++ ) { */
-/*     x = agg_intersection_point(inter,i) ; */
-/*     fprintf(f, "Point(%d) = {%e, %e, %e, lc} ;\n", i, x[0], x[1], x[2]) ; */
-/*   } */
-
-/*   for ( i = 0 ; i < nsp ; i ++ ) { */
-/*     fprintf(f, "Spline(%d) = {", i) ; */
-/*     for ( j = 0 ; j < pps-1 ; j ++ ) { */
-/*       fprintf(f, "%d, ", i*(pps-1) + j) ; */
-/*     } */
-/*     fprintf(f, "%d} ;\n", i*(pps-1) + pps-1) ; */
-/*   } */
-  
-/*   /\* for ( i = 0 ; i < agg_intersection_point_number(inter) - 1 ; i ++ ) { *\/ */
-/*   /\*   fprintf(f, "Line(%d) = {%d, %d} ;\n", i, i, i+1) ; *\/ */
-/*   /\* } *\/ */
-  
-/*   return ; */
-/* } */
 
 static void body_test(void)
 
@@ -479,7 +390,7 @@ static void body_test(void)
   gdouble yf, zf, chf, spf, tpf, swf, dhf ;
   agg_surface_t **S ; 
   agg_surface_workspace_t *w ;
-  agg_wireframe_t *wf ;
+  agg_mesh_t *wf ;
   agg_intersection_t **inter, **resample ;
   agg_section_t *sc, *sw ;
   agg_patch_t **P ;
@@ -535,7 +446,7 @@ static void body_test(void)
     sgn = -sgn ;
   }
 
-  wf = agg_wireframe_new(65536, 65536, 65536) ;
+  wf = agg_mesh_new(65536, 65536, 65536) ;
   nsec = 8 ; nseg = 65 ; pps = 2 ;
   offp = offsp = offs = 1 ;
   /*wing intersection with body calculated in different order for each
@@ -551,17 +462,17 @@ static void body_test(void)
 	    agg_patch_point_number(inter[i])) ;
     agg_intersection_resample(inter[i], nseg, pps, resample[i], w) ;
     agg_intersection_bbox_set(resample[i]) ;
-    agg_wireframe_intersection_add(wf, resample[i], nseg, pps, w) ;
+    agg_mesh_intersection_add(wf, resample[i], nseg, pps, w) ;
   }
 
   for ( i = 0 ; i < 5 ; i ++ ) {
     fprintf(stderr, "adding surface %d\n", i) ;
-    agg_wireframe_surface_add(wf, S[i], P[i], nsec, nseg, pps, w) ;
+    agg_mesh_surface_add(wf, S[i], P[i], nsec, nseg, pps, w) ;
   }
 
   output = fopen("surface1.geo", "w") ;
   fprintf(output, "lc = 0.1 ;\n") ;
-  agg_wireframe_write_gmsh(output, wf, "lc", offp, offsp, offs, FALSE) ;
+  agg_mesh_write_gmsh(output, wf, "lc", offp, offsp, offs, FALSE) ;
   fclose(output) ;
 
   return ;

@@ -138,7 +138,7 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 libagg_la_LIBADD =
 am_libagg_la_OBJECTS = agg.lo bernstein.lo binomials.lo tinyexpr.lo \
 	section.lo transform.lo variables.lo surface.lo naca.lo \
-	intersection.lo hefsi.lo patch.lo moller-tri.lo wireframe.lo
+	intersection.lo hefsi.lo patch.lo moller-tri.lo mesh.lo
 libagg_la_OBJECTS = $(am_libagg_la_OBJECTS)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
@@ -165,11 +165,11 @@ depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/agg.Plo ./$(DEPDIR)/bernstein.Plo \
 	./$(DEPDIR)/binomials.Plo ./$(DEPDIR)/hefsi.Plo \
-	./$(DEPDIR)/intersection.Plo ./$(DEPDIR)/moller-tri.Plo \
-	./$(DEPDIR)/naca.Plo ./$(DEPDIR)/patch.Plo \
-	./$(DEPDIR)/section.Plo ./$(DEPDIR)/surface.Plo \
-	./$(DEPDIR)/tinyexpr.Plo ./$(DEPDIR)/transform.Plo \
-	./$(DEPDIR)/variables.Plo ./$(DEPDIR)/wireframe.Plo
+	./$(DEPDIR)/intersection.Plo ./$(DEPDIR)/mesh.Plo \
+	./$(DEPDIR)/moller-tri.Plo ./$(DEPDIR)/naca.Plo \
+	./$(DEPDIR)/patch.Plo ./$(DEPDIR)/section.Plo \
+	./$(DEPDIR)/surface.Plo ./$(DEPDIR)/tinyexpr.Plo \
+	./$(DEPDIR)/transform.Plo ./$(DEPDIR)/variables.Plo
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -386,7 +386,7 @@ libagg_la_SOURCES = \
 	hefsi.h \
 	patch.c \
 	moller-tri.c \
-	wireframe.c
+	mesh.c
 
 include_HEADERS = \
 	agg.h
@@ -513,6 +513,7 @@ include ./$(DEPDIR)/bernstein.Plo # am--include-marker
 include ./$(DEPDIR)/binomials.Plo # am--include-marker
 include ./$(DEPDIR)/hefsi.Plo # am--include-marker
 include ./$(DEPDIR)/intersection.Plo # am--include-marker
+include ./$(DEPDIR)/mesh.Plo # am--include-marker
 include ./$(DEPDIR)/moller-tri.Plo # am--include-marker
 include ./$(DEPDIR)/naca.Plo # am--include-marker
 include ./$(DEPDIR)/patch.Plo # am--include-marker
@@ -521,7 +522,6 @@ include ./$(DEPDIR)/surface.Plo # am--include-marker
 include ./$(DEPDIR)/tinyexpr.Plo # am--include-marker
 include ./$(DEPDIR)/transform.Plo # am--include-marker
 include ./$(DEPDIR)/variables.Plo # am--include-marker
-include ./$(DEPDIR)/wireframe.Plo # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -714,6 +714,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/binomials.Plo
 	-rm -f ./$(DEPDIR)/hefsi.Plo
 	-rm -f ./$(DEPDIR)/intersection.Plo
+	-rm -f ./$(DEPDIR)/mesh.Plo
 	-rm -f ./$(DEPDIR)/moller-tri.Plo
 	-rm -f ./$(DEPDIR)/naca.Plo
 	-rm -f ./$(DEPDIR)/patch.Plo
@@ -722,7 +723,6 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/tinyexpr.Plo
 	-rm -f ./$(DEPDIR)/transform.Plo
 	-rm -f ./$(DEPDIR)/variables.Plo
-	-rm -f ./$(DEPDIR)/wireframe.Plo
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -773,6 +773,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/binomials.Plo
 	-rm -f ./$(DEPDIR)/hefsi.Plo
 	-rm -f ./$(DEPDIR)/intersection.Plo
+	-rm -f ./$(DEPDIR)/mesh.Plo
 	-rm -f ./$(DEPDIR)/moller-tri.Plo
 	-rm -f ./$(DEPDIR)/naca.Plo
 	-rm -f ./$(DEPDIR)/patch.Plo
@@ -781,7 +782,6 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/tinyexpr.Plo
 	-rm -f ./$(DEPDIR)/transform.Plo
 	-rm -f ./$(DEPDIR)/variables.Plo
-	-rm -f ./$(DEPDIR)/wireframe.Plo
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

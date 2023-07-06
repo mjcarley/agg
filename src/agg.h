@@ -417,22 +417,22 @@ struct _agg_intersection_t {
 /**
  * @{
  * 
- * @ingroup wireframe
+ * @ingroup mesh
  */
 
-#define AGG_WIREFRAME_POINT_SIZE   5
-#define AGG_WIREFRAME_ELEMENT_SIZE 5
+#define AGG_MESH_POINT_SIZE   5
+#define AGG_MESH_ELEMENT_SIZE 5
 
 #ifdef DOXYGEN
-/** @typedef agg_wireframe_t
+/** @typedef agg_mesh_t
  *
- * Data structure to hold wireframe (patch) representation of surfaces
+ * Data structure to hold mesh (patch) representation of surfaces
  */
-typedef agg_wireframe_t ;
+typedef agg_mesh_t ;
 #else /*DOXYGEN*/
-typedef struct _agg_wireframe_t agg_wireframe_t ;
+typedef struct _agg_mesh_t agg_mesh_t ;
 
-struct _agg_wireframe_t {
+struct _agg_mesh_t {
   agg_surface_t *S[32] ;
   agg_patch_t *P[32] ;
   gdouble *p ;
@@ -442,36 +442,36 @@ struct _agg_wireframe_t {
 } ;
 #endif /*DOXYGEN*/
 
-#define agg_wireframe_point(_w,_i)  (&((_w)->p[AGG_WIREFRAME_POINT_SIZE*(_i)]))
-#define agg_wireframe_point_s(_w,_i)  ((_w)->p[AGG_WIREFRAME_POINT_SIZE*(_i)+3])
-#define agg_wireframe_point_t(_w,_i)  ((_w)->p[AGG_WIREFRAME_POINT_SIZE*(_i)+4])
-#define agg_wireframe_point_tag(_w,_i) ((_w)->ptags[(_i)])
-#define agg_wireframe_point_number(_w)  ((_w)->np)
-#define agg_wireframe_point_number_max(_w)  ((_w)->npmax)
-#define agg_wireframe_element(_w,_i)		\
-  &((_w)->e[AGG_WIREFRAME_ELEMENT_SIZE*(_i)])
-#define agg_wireframe_element_number(_w)  ((_w)->ne)
-#define agg_wireframe_element_number_max(_w)  ((_w)->nemax)
-#define agg_wireframe_spline_number(_w)  ((_w)->nsp)
-#define agg_wireframe_spline_number_max(_w)  ((_w)->nspmax)
-#define agg_wireframe_spline(_w,_i)  &((_w)->sp[(_w)->isp[(_i)]])
-#define agg_wireframe_spline_length(_w,_i)	\
+#define agg_mesh_point(_w,_i)  (&((_w)->p[AGG_MESH_POINT_SIZE*(_i)]))
+#define agg_mesh_point_s(_w,_i)  ((_w)->p[AGG_MESH_POINT_SIZE*(_i)+3])
+#define agg_mesh_point_t(_w,_i)  ((_w)->p[AGG_MESH_POINT_SIZE*(_i)+4])
+#define agg_mesh_point_tag(_w,_i) ((_w)->ptags[(_i)])
+#define agg_mesh_point_number(_w)  ((_w)->np)
+#define agg_mesh_point_number_max(_w)  ((_w)->npmax)
+#define agg_mesh_element(_w,_i)		\
+  &((_w)->e[AGG_MESH_ELEMENT_SIZE*(_i)])
+#define agg_mesh_element_number(_w)  ((_w)->ne)
+#define agg_mesh_element_number_max(_w)  ((_w)->nemax)
+#define agg_mesh_spline_number(_w)  ((_w)->nsp)
+#define agg_mesh_spline_number_max(_w)  ((_w)->nspmax)
+#define agg_mesh_spline(_w,_i)  &((_w)->sp[(_w)->isp[(_i)]])
+#define agg_mesh_spline_length(_w,_i)	\
   ((_w)->isp[(_i)+1]-(_w)->isp[(_i)])
-#define agg_wireframe_patch(_w,_i)       ((_w)->P[(_i)])
-#define agg_wireframe_surface(_w,_i)     ((_w)->S[(_i)])
-#define agg_wireframe_surface_number(_w) ((_w)->ns)
-#define agg_wireframe_element_size(_e)			\
+#define agg_mesh_patch(_w,_i)       ((_w)->P[(_i)])
+#define agg_mesh_surface(_w,_i)     ((_w)->S[(_i)])
+#define agg_mesh_surface_number(_w) ((_w)->ns)
+#define agg_mesh_element_size(_e)			\
   ( ((_e)[4] != 0) ? 5 :				\
     (((_e)[3] != 0) ? 4 : 3) )
-#define agg_wireframe_intersection(_w,_i)     ((_w)->inter[(_i)])
-#define agg_wireframe_intersection_number(_w) ((_w)->ni)
-#define agg_wireframe_intersection_points_start(_w,_i) \
+#define agg_mesh_intersection(_w,_i)     ((_w)->inter[(_i)])
+#define agg_mesh_intersection_number(_w) ((_w)->ni)
+#define agg_mesh_intersection_points_start(_w,_i) \
   ((_w)->isect[2*(_i)+0])
-#define agg_wireframe_intersection_points_end(_w,_i)	\
+#define agg_mesh_intersection_points_end(_w,_i)	\
   ((_w)->isect[2*(_i)+1])
-#define agg_wireframe_intersection_points_per_spline(_w,_i)	\
+#define agg_mesh_intersection_points_per_spline(_w,_i)	\
   ((_w)->ipps[(_i)])
-#define agg_wireframe_intersection_spline_number(_w,_i)	\
+#define agg_mesh_intersection_spline_number(_w,_i)	\
   ((_w)->insp[(_i)])
 
 /**
@@ -570,35 +570,35 @@ gint agg_intersection_resample(agg_intersection_t *inter,
 			       agg_intersection_t *resample,
 			       agg_surface_workspace_t *w) ;
 
-agg_wireframe_t *agg_wireframe_new(gint npmax, gint nspmax, gint nemax) ;
-gint agg_wireframe_surface_make(agg_wireframe_t *w,
+agg_mesh_t *agg_mesh_new(gint npmax, gint nspmax, gint nemax) ;
+gint agg_mesh_surface_make(agg_mesh_t *w,
 				agg_surface_t *S, agg_patch_t *P,
 				agg_intersection_t *inter,
 				gint nsec, gint nseg, gint pps,
 				agg_surface_workspace_t *ws) ;
-gint agg_wireframe_write_gmsh(FILE *f, agg_wireframe_t *w,
+gint agg_mesh_write_gmsh(FILE *f, agg_mesh_t *w,
 			      gchar *len, gint offp, gint offsp, gint offs,
 			      gboolean opencascade) ;
-gint agg_wireframe_spline_ends(agg_wireframe_t *w, gint s, gint *p0, gint *p1) ;
-gint agg_wireframe_spline_interp_points(agg_wireframe_t *w, gint s,
+gint agg_mesh_spline_ends(agg_mesh_t *w, gint s, gint *p0, gint *p1) ;
+gint agg_mesh_spline_interp_points(agg_mesh_t *w, gint s,
 					gint p0, gint p1, gint pps,
 					agg_surface_workspace_t *ws) ;
-gboolean agg_wireframe_splines_connected(agg_wireframe_t *w,
+gboolean agg_mesh_splines_connected(agg_mesh_t *w,
 					 gint i0, gint i1, gint *p) ;
-gint agg_wireframe_element_add(agg_wireframe_t *w,
+gint agg_mesh_element_add(agg_mesh_t *w,
 			       gint s0, gint s1, gint s2, gint s3) ;
-gboolean agg_wireframe_spline_degenerate(agg_wireframe_t *w, gint s) ;
-gint agg_wireframe_intersection_add(agg_wireframe_t *w,
+gboolean agg_mesh_spline_degenerate(agg_mesh_t *w, gint s) ;
+gint agg_mesh_intersection_add(agg_mesh_t *w,
 				    agg_intersection_t *inter,
 				    gint nsp, gint pps,
 				    agg_surface_workspace_t *ws) ;
-gint agg_wireframe_surface_add(agg_wireframe_t *w,
+gint agg_mesh_surface_add(agg_mesh_t *w,
 			       agg_surface_t *S, agg_patch_t *P,
 			       gint nsec, gint nseg, gint pps,
 			       agg_surface_workspace_t *ws) ;
-gint agg_wireframe_spline_from_endpoints(agg_wireframe_t *w,
+gint agg_mesh_spline_from_endpoints(agg_mesh_t *w,
 					 gint p0, gint p1) ;
-gint agg_wireframe_surface_point_add(agg_wireframe_t *w, gint surf,
+gint agg_mesh_surface_point_add(agg_mesh_t *w, gint surf,
 				     gdouble s, gdouble t,
 				     agg_surface_workspace_t *ws) ;
 

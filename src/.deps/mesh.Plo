@@ -135,7 +135,12 @@ mesh.lo: mesh.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/bits/setjmp.h \
  /usr/include/bits/types/struct___jmp_buf_tag.h \
  /usr/include/glib-2.0/glib/glib-autocleanups.h \
- /home/michael/Codes/include/blaswrap.h agg.h agg-private.h
+ /home/michael/Codes/include/blaswrap.h agg.h agg-private.h ../config.h \
+ /home/michael/Codes/include/triangle.h \
+ /home/michael/Codes/include/triangle_config.h \
+ /home/michael/Codes/include/triangle_api.h \
+ /home/michael/Codes/include/triangle_export.h \
+ /home/michael/Codes/include/triangle_version.h
 /usr/include/stdc-predef.h:
 /usr/include/stdio.h:
 /usr/include/bits/libc-header-start.h:
@@ -343,3 +348,9 @@ mesh.lo: mesh.c /usr/include/stdc-predef.h /usr/include/stdio.h \
 /home/michael/Codes/include/blaswrap.h:
 agg.h:
 agg-private.h:
+../config.h:
+/home/michael/Codes/include/triangle.h:
+/home/michael/Codes/include/triangle_config.h:
+/home/michael/Codes/include/triangle_api.h:
+/home/michael/Codes/include/triangle_export.h:
+/home/michael/Codes/include/triangle_version.h:
