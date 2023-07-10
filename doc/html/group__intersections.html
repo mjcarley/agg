@@ -46,11 +46,284 @@ $(function() {
 <p>Evaluation of surface intersections.  
 <a href="#details">More...</a></p>
 <table class="memberdecls">
+<tr class="memitem:gaf036658709a83e5b51edace0ff5343e4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__intersections.html#gaf036658709a83e5b51edace0ff5343e4">agg_intersection_new</a> (gint nstmax)</td></tr>
+<tr class="separator:gaf036658709a83e5b51edace0ff5343e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8c3d4ec240c81bdb3f551d4411837589"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__intersections.html#ga8c3d4ec240c81bdb3f551d4411837589">agg_surface_patch_intersection</a> (<a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a> *inter, <a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *S1, <a class="el" href="group__patches.html#gabdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *P1, <a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *S2, <a class="el" href="group__patches.html#gabdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *P2, agg_surface_workspace_t *w)</td></tr>
+<tr class="separator:ga8c3d4ec240c81bdb3f551d4411837589"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaef5bb8411ab89014c772d4b30de27fb3"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__intersections.html#gaef5bb8411ab89014c772d4b30de27fb3">agg_intersection_curve_write</a> (FILE *f, <a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a> *inter, agg_surface_workspace_t *w)</td></tr>
+<tr class="separator:gaef5bb8411ab89014c772d4b30de27fb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6e0ed58f3d6f8f9e1bbf89706966b282"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__intersections.html#ga6e0ed58f3d6f8f9e1bbf89706966b282">agg_patch_st_correct</a> (<a class="el" href="group__patches.html#gabdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *P, gdouble *st)</td></tr>
+<tr class="separator:ga6e0ed58f3d6f8f9e1bbf89706966b282"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5877e43cbd72aac1ca6092ed6fbe6796"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__intersections.html#ga5877e43cbd72aac1ca6092ed6fbe6796">agg_intersection_bbox_set</a> (<a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a> *inter)</td></tr>
+<tr class="separator:ga5877e43cbd72aac1ca6092ed6fbe6796"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4c81c3ff9bc52ff3e9e950cf9e84c4ce"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__intersections.html#ga4c81c3ff9bc52ff3e9e950cf9e84c4ce">agg_intersection_resample</a> (<a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a> *inter, gint nsp, gint pps, <a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a> *resample, agg_surface_workspace_t *w)</td></tr>
+<tr class="separator:ga4c81c3ff9bc52ff3e9e950cf9e84c4ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga1c54fee67bb03551fa5e663cbc61e3be"><td class="memItemLeft" align="right" valign="top">typedef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a></td></tr>
 <tr class="separator:ga1c54fee67bb03551fa5e663cbc61e3be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p >Evaluation of surface intersections. </p>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="ga5877e43cbd72aac1ca6092ed6fbe6796" name="ga5877e43cbd72aac1ca6092ed6fbe6796"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga5877e43cbd72aac1ca6092ed6fbe6796">&#9670;&nbsp;</a></span>agg_intersection_bbox_set()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_intersection_bbox_set </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a> *&#160;</td>
+          <td class="paramname"><em>inter</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Calculate the bounding box of an intersection curve in the two surface patch mappings.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">inter</td><td>intersection curve whose bounding boxes are to be set.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+</div>
+</div>
+<a id="gaef5bb8411ab89014c772d4b30de27fb3" name="gaef5bb8411ab89014c772d4b30de27fb3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaef5bb8411ab89014c772d4b30de27fb3">&#9670;&nbsp;</a></span>agg_intersection_curve_write()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_intersection_curve_write </td>
+          <td>(</td>
+          <td class="paramtype">FILE *&#160;</td>
+          <td class="paramname"><em>f</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a> *&#160;</td>
+          <td class="paramname"><em>inter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">agg_surface_workspace_t *&#160;</td>
+          <td class="paramname"><em>w</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Write an intersection curve to file in the form</p>
+<p >[ <img class="formulaInl" alt="$x$" src="form_14.png" width="8" height="6"/> <img class="formulaInl" alt="$y$" src="form_15.png" width="8" height="9"/> <img class="formulaInl" alt="$z$" src="form_16.png" width="6" height="6"/> <img class="formulaInl" alt="$s_{1}$" src="form_17.png" width="10" height="9"/> <img class="formulaInl" alt="$t_{1}$" src="form_18.png" width="10" height="11"/> <img class="formulaInl" alt="$s_{2}$" src="form_19.png" width="10" height="9"/> <img class="formulaInl" alt="$t_{2}$" src="form_20.png" width="10" height="11"/>]</p>
+<p >where <img class="formulaInl" alt="$(x,y,z)$" src="form_21.png" width="40" height="14"/> are physical coordinates and <img class="formulaInl" alt="$(s_{i},t_{i})$" src="form_22.png" width="33" height="14"/> are parametric coordinates on the respective surface patches (not the surfaces proper)</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">f</td><td>output file stream; </td></tr>
+    <tr><td class="paramname">inter</td><td>intersection curve to write; </td></tr>
+    <tr><td class="paramname">w</td><td>workspace for surface evaluation.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+</div>
+</div>
+<a id="gaf036658709a83e5b51edace0ff5343e4" name="gaf036658709a83e5b51edace0ff5343e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaf036658709a83e5b51edace0ff5343e4">&#9670;&nbsp;</a></span>agg_intersection_new()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a> * agg_intersection_new </td>
+          <td>(</td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>nstmax</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Allocate a new surface intersection structure.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nstmax</td><td>maximum number of points on intersection curve.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>newly allocated <a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a>. </dd></dl>
+
+<p class="reference">References <a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a>.</p>
+
+</div>
+</div>
+<a id="ga4c81c3ff9bc52ff3e9e950cf9e84c4ce" name="ga4c81c3ff9bc52ff3e9e950cf9e84c4ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga4c81c3ff9bc52ff3e9e950cf9e84c4ce">&#9670;&nbsp;</a></span>agg_intersection_resample()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_intersection_resample </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a> *&#160;</td>
+          <td class="paramname"><em>inter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>nsp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>pps</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a> *&#160;</td>
+          <td class="paramname"><em>resample</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">agg_surface_workspace_t *&#160;</td>
+          <td class="paramname"><em>w</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Resample an intersection curve to (approximately) evenly spaced points in the mapping patch.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">inter</td><td>an intersection curve; </td></tr>
+    <tr><td class="paramname">nsp</td><td>number of splines in the resampled curve; </td></tr>
+    <tr><td class="paramname">pps</td><td>number of points per spline in the resampled curve; </td></tr>
+    <tr><td class="paramname">resample</td><td>on output contains the resampled intersection data; </td></tr>
+    <tr><td class="paramname">w</td><td>workspace for surface evaluation.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+</div>
+</div>
+<a id="ga6e0ed58f3d6f8f9e1bbf89706966b282" name="ga6e0ed58f3d6f8f9e1bbf89706966b282"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga6e0ed58f3d6f8f9e1bbf89706966b282">&#9670;&nbsp;</a></span>agg_patch_st_correct()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_patch_st_correct </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__patches.html#gabdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *&#160;</td>
+          <td class="paramname"><em>P</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gdouble *&#160;</td>
+          <td class="paramname"><em>st</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Correct out of range values of <img class="formulaInl" alt="$(s,t)$" src="form_5.png" width="25" height="14"/> to lie in the range <img class="formulaInl" alt="$(0,1)\times(0,1)$" src="form_23.png" width="70" height="14"/> where coordinate wrapping is permitted</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">P</td><td>an <a class="el" href="group__patches.html#gabdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a>; </td></tr>
+    <tr><td class="paramname">st</td><td>an <img class="formulaInl" alt="$(s,t)$" src="form_5.png" width="25" height="14"/> parameter pair on patch <em>P</em>.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+</div>
+</div>
+<a id="ga8c3d4ec240c81bdb3f551d4411837589" name="ga8c3d4ec240c81bdb3f551d4411837589"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga8c3d4ec240c81bdb3f551d4411837589">&#9670;&nbsp;</a></span>agg_surface_patch_intersection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_surface_patch_intersection </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a> *&#160;</td>
+          <td class="paramname"><em>inter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *&#160;</td>
+          <td class="paramname"><em>S1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__patches.html#gabdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *&#160;</td>
+          <td class="paramname"><em>P1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *&#160;</td>
+          <td class="paramname"><em>S2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__patches.html#gabdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *&#160;</td>
+          <td class="paramname"><em>P2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">agg_surface_workspace_t *&#160;</td>
+          <td class="paramname"><em>w</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Calculate the intersection of two parametric surfaces.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">inter</td><td>on exit contains the intersection curve data; </td></tr>
+    <tr><td class="paramname">S1</td><td>first surface; </td></tr>
+    <tr><td class="paramname">P1</td><td>mapping patch for first surface; </td></tr>
+    <tr><td class="paramname">S2</td><td>second surface; </td></tr>
+    <tr><td class="paramname">P2</td><td>mapping patch for second surface; </td></tr>
+    <tr><td class="paramname">w</td><td>workspace for surface evaluation.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+</div>
+</div>
 <h2 class="groupheader">Variable Documentation</h2>
 <a id="ga1c54fee67bb03551fa5e663cbc61e3be" name="ga1c54fee67bb03551fa5e663cbc61e3be"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga1c54fee67bb03551fa5e663cbc61e3be">&#9670;&nbsp;</a></span>agg_intersection_t</h2>
@@ -65,12 +338,14 @@ $(function() {
 </div><div class="memdoc">
 <p >Data structure to hold intersections of surfaces </p>
 
+<p class="reference">Referenced by <a class="el" href="agg_8h.html#af036658709a83e5b51edace0ff5343e4">agg_intersection_new()</a>.</p>
+
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jun 7 2023 17:54:46 for AGG by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Mon Jul 10 2023 17:58:17 for AGG by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

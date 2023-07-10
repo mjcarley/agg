@@ -21,13 +21,44 @@ gint \textbf{ agg\+\_\+surface\+\_\+point\+\_\+eval} (\textbf{ agg\+\_\+surface\
 \end{DoxyCompactItemize}
 \begin{DoxyCompactItemize}
 \item 
-typedef \textbf{ agg\+\_\+surface\+\_\+t}
+enum \textbf{ agg\+\_\+axes\+\_\+t} \{  \}
 \end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
 Surfaces composed of transformed sections. 
 
+
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\label{group__surfaces_ga9d96b462257229695d4a34527697d492}} 
+\index{Surfaces@{Surfaces}!agg\_axes\_t@{agg\_axes\_t}}
+\index{agg\_axes\_t@{agg\_axes\_t}!Surfaces@{Surfaces}}
+\doxysubsubsection{agg\_axes\_t}
+{\footnotesize\ttfamily enum \textbf{ agg\+\_\+axes\+\_\+t}}
+
+Transformation between different coordinate systems by reassignment of axes \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AGG\_AXES\_PX\_PY\_PZ@{AGG\_AXES\_PX\_PY\_PZ}!Surfaces@{Surfaces}}\index{Surfaces@{Surfaces}!AGG\_AXES\_PX\_PY\_PZ@{AGG\_AXES\_PX\_PY\_PZ}}}\mbox{\label{group__surfaces_ga9d96b462257229695d4a34527697d492a98db150ad34df3857f9b834e984f2d21}} 
+AGG\+\_\+\+AXES\+\_\+\+PX\+\_\+\+PY\+\_\+\+PZ&standard, untransformed orientation \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AGG\_AXES\_PY\_PZ\_PX@{AGG\_AXES\_PY\_PZ\_PX}!Surfaces@{Surfaces}}\index{Surfaces@{Surfaces}!AGG\_AXES\_PY\_PZ\_PX@{AGG\_AXES\_PY\_PZ\_PX}}}\mbox{\label{group__surfaces_ga9d96b462257229695d4a34527697d492aa831b37d2d1da05c5d7127db7847f912}} 
+AGG\+\_\+\+AXES\+\_\+\+PY\+\_\+\+PZ\+\_\+\+PX&(x,y,z) -\/$>$ (y, z, x) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AGG\_AXES\_PZ\_PX\_PY@{AGG\_AXES\_PZ\_PX\_PY}!Surfaces@{Surfaces}}\index{Surfaces@{Surfaces}!AGG\_AXES\_PZ\_PX\_PY@{AGG\_AXES\_PZ\_PX\_PY}}}\mbox{\label{group__surfaces_ga9d96b462257229695d4a34527697d492aab7e8954312e7981efb2ae7b55f91ae4}} 
+AGG\+\_\+\+AXES\+\_\+\+PZ\+\_\+\+PX\+\_\+\+PY&(x,y,z) -\/$>$ (z, x, y) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AGG\_AXES\_PZ\_PY\_PX@{AGG\_AXES\_PZ\_PY\_PX}!Surfaces@{Surfaces}}\index{Surfaces@{Surfaces}!AGG\_AXES\_PZ\_PY\_PX@{AGG\_AXES\_PZ\_PY\_PX}}}\mbox{\label{group__surfaces_ga9d96b462257229695d4a34527697d492ac97f02ff667be417fe6fbb1c540df3da}} 
+AGG\+\_\+\+AXES\+\_\+\+PZ\+\_\+\+PY\+\_\+\+PX&(x,y,z) -\/$>$ (z, y, x) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AGG\_AXES\_PX\_PY\_MZ@{AGG\_AXES\_PX\_PY\_MZ}!Surfaces@{Surfaces}}\index{Surfaces@{Surfaces}!AGG\_AXES\_PX\_PY\_MZ@{AGG\_AXES\_PX\_PY\_MZ}}}\mbox{\label{group__surfaces_ga9d96b462257229695d4a34527697d492aaefa87f8e684f3285c397d4184700837}} 
+AGG\+\_\+\+AXES\+\_\+\+PX\+\_\+\+PY\+\_\+\+MZ&(x,y,z) -\/$>$ (x, y,-\/z) (reflection in x-\/y) \\
+\hline
+
+\end{DoxyEnumFields}
 
 
 \doxysubsection{Function Documentation}
@@ -37,7 +68,7 @@ Surfaces composed of transformed sections.
 \doxysubsubsection{agg\_surface\_new()}
 {\footnotesize\ttfamily \textbf{ agg\+\_\+surface\+\_\+t} $\ast$ agg\+\_\+surface\+\_\+new (\begin{DoxyParamCaption}\item[{gint}]{nsmax }\end{DoxyParamCaption})}
 
-Allocate a new \doxyref{agg\+\_\+surface\+\_\+t}{p.}{group__surfaces_ga1c502e562486827063a7169cd79b5cc0}
+Allocate a new \doxyref{agg\+\_\+surface\+\_\+t}{p.}{agg_8h_a1c502e562486827063a7169cd79b5cc0}
 
 
 \begin{DoxyParams}{Parameters}
@@ -63,7 +94,7 @@ Evaluate a point on a surface. The surface must have been initialized with \doxy
 
 
 \begin{DoxyParams}{Parameters}
-{\em S} & an \doxyref{agg\+\_\+surface\+\_\+t}{p.}{group__surfaces_ga1c502e562486827063a7169cd79b5cc0}; \\
+{\em S} & an \doxyref{agg\+\_\+surface\+\_\+t}{p.}{agg_8h_a1c502e562486827063a7169cd79b5cc0}; \\
 \hline
 {\em u} & surface parameter $u$; \\
 \hline
@@ -93,7 +124,7 @@ Add a section to a surface at a given value of parameter $u$. The section data a
 
 
 \begin{DoxyParams}{Parameters}
-{\em S} & an \doxyref{agg\+\_\+surface\+\_\+t}{p.}{group__surfaces_ga1c502e562486827063a7169cd79b5cc0}; \\
+{\em S} & an \doxyref{agg\+\_\+surface\+\_\+t}{p.}{agg_8h_a1c502e562486827063a7169cd79b5cc0}; \\
 \hline
 {\em s} & an \doxyref{agg\+\_\+section\+\_\+t}{p.}{agg_8h_a8cdd164643b93d05245e9b4976f3f0cb}; \\
 \hline
@@ -115,7 +146,7 @@ Interpolate section data from a surface into a local section, using Berrut and T
 
 
 \begin{DoxyParams}{Parameters}
-{\em S} & an \doxyref{agg\+\_\+surface\+\_\+t}{p.}{group__surfaces_ga1c502e562486827063a7169cd79b5cc0} containing a number of sections; \\
+{\em S} & an \doxyref{agg\+\_\+surface\+\_\+t}{p.}{agg_8h_a1c502e562486827063a7169cd79b5cc0} containing a number of sections; \\
 \hline
 {\em u} & parameter at which to interpolate section; \\
 \hline
@@ -141,7 +172,7 @@ Generate interpolation weights for sections on a surface, the preprocessing stag
 
 
 \begin{DoxyParams}{Parameters}
-{\em S} & an \doxyref{agg\+\_\+surface\+\_\+t}{p.}{group__surfaces_ga1c502e562486827063a7169cd79b5cc0} containing a number of sections.\\
+{\em S} & an \doxyref{agg\+\_\+surface\+\_\+t}{p.}{agg_8h_a1c502e562486827063a7169cd79b5cc0} containing a number of sections.\\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
@@ -161,17 +192,4 @@ newly allocated workspaces
 
 
 References \textbf{ agg\+\_\+section\+\_\+new()}.
-
-
-
-\doxysubsection{Variable Documentation}
-\mbox{\label{group__surfaces_ga1c502e562486827063a7169cd79b5cc0}} 
-\index{Surfaces@{Surfaces}!agg\_surface\_t@{agg\_surface\_t}}
-\index{agg\_surface\_t@{agg\_surface\_t}!Surfaces@{Surfaces}}
-\doxysubsubsection{agg\_surface\_t}
-{\footnotesize\ttfamily agg\+\_\+surface\+\_\+t}
-
-Data structure to hold surfaces formed by transformation of sections 
-
-Referenced by \textbf{ agg\+\_\+surface\+\_\+new()}.
 

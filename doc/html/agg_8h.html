@@ -59,6 +59,14 @@ Functions</h2></td></tr>
 <tr class="separator:aa057ef58299424703a8cc0d8a16ebf03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1245fe64e54485282fb358081f20f2f4"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a1245fe64e54485282fb358081f20f2f4">agg_section_copy</a> (<a class="el" href="agg_8h.html#a8cdd164643b93d05245e9b4976f3f0cb">agg_section_t</a> *dest, <a class="el" href="agg_8h.html#a8cdd164643b93d05245e9b4976f3f0cb">agg_section_t</a> *src)</td></tr>
 <tr class="separator:a1245fe64e54485282fb358081f20f2f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af083c3db44dc8c3d3666e8ade6f0e9ef"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#af083c3db44dc8c3d3666e8ade6f0e9ef">agg_section_set_circle</a> (<a class="el" href="agg_8h.html#a8cdd164643b93d05245e9b4976f3f0cb">agg_section_t</a> *s)</td></tr>
+<tr class="separator:af083c3db44dc8c3d3666e8ade6f0e9ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac848ab5ddc58009fde33f7c728fb7ecf"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#ac848ab5ddc58009fde33f7c728fb7ecf">agg_section_set_aerofoil</a> (<a class="el" href="agg_8h.html#a8cdd164643b93d05245e9b4976f3f0cb">agg_section_t</a> *s, gdouble eta, gdouble th, gdouble yte)</td></tr>
+<tr class="separator:ac848ab5ddc58009fde33f7c728fb7ecf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2116c909ff8359c7c5f449180c710cd5"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a2116c909ff8359c7c5f449180c710cd5">agg_section_parse</a> (<a class="el" href="agg_8h.html#a8cdd164643b93d05245e9b4976f3f0cb">agg_section_t</a> *s, gchar *name, <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a> *p, gint np)</td></tr>
+<tr class="separator:a2116c909ff8359c7c5f449180c710cd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c28eb8d25611f3cba1f9fe1ac66659f"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a6c28eb8d25611f3cba1f9fe1ac66659f">agg_sections_list</a> (FILE *f)</td></tr>
+<tr class="separator:a6c28eb8d25611f3cba1f9fe1ac66659f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga57e762424be00dc262795556c254934b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="agg_8h.html#a9b3c7b4a183fc43a646fdc5cb1673993">agg_transform_operator_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__transforms.html#ga57e762424be00dc262795556c254934b">agg_transform_operator_new</a> (void)</td></tr>
 <tr class="separator:ga57e762424be00dc262795556c254934b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af8e2e52219b0108f7df70bc4dd39031f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="agg_8h.html#ab26de2509de1b8f9b7bc6523852dc6da">agg_transform_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#af8e2e52219b0108f7df70bc4dd39031f">agg_transform_new</a> (gint nopmax)</td></tr>
@@ -79,31 +87,117 @@ Functions</h2></td></tr>
 <tr class="separator:a9647f98c5477495e98aa83eaed70c171"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d94218842c8aca6203ddba991b32a5f"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a1d94218842c8aca6203ddba991b32a5f">agg_transform_apply</a> (<a class="el" href="agg_8h.html#ab26de2509de1b8f9b7bc6523852dc6da">agg_transform_t</a> *T, gdouble *xin, gdouble *xout)</td></tr>
 <tr class="separator:a1d94218842c8aca6203ddba991b32a5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e985891f93fe4b64a177ac841672909"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a7e985891f93fe4b64a177ac841672909">agg_transform_operator_apply</a> (<a class="el" href="agg_8h.html#a9b3c7b4a183fc43a646fdc5cb1673993">agg_transform_operator_t</a> *op, gdouble *xin, gdouble *xout)</td></tr>
+<tr class="separator:a7e985891f93fe4b64a177ac841672909"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff5f7e15c699e9e6b874df084150f08a"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#aff5f7e15c699e9e6b874df084150f08a">agg_transform_axes</a> (<a class="el" href="group__surfaces.html#ga9d96b462257229695d4a34527697d492">agg_axes_t</a> axes, gdouble *xin, gdouble *xout)</td></tr>
+<tr class="separator:aff5f7e15c699e9e6b874df084150f08a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77479169572fa74999fded7d30af2453"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a77479169572fa74999fded7d30af2453">agg_transform_parse</a> (<a class="el" href="agg_8h.html#ab26de2509de1b8f9b7bc6523852dc6da">agg_transform_t</a> *T, gchar *name, <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a> *p, gint np)</td></tr>
+<tr class="separator:a77479169572fa74999fded7d30af2453"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1745f8aa9febea5a00f7d5892ea15c6e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__surfaces.html#ga9d96b462257229695d4a34527697d492">agg_axes_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a1745f8aa9febea5a00f7d5892ea15c6e">agg_axes_parse</a> (gchar *str)</td></tr>
+<tr class="separator:a1745f8aa9febea5a00f7d5892ea15c6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35d59f3797c818fcb381a128169b7a5a"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a35d59f3797c818fcb381a128169b7a5a">agg_variable_write</a> (FILE *f, <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a> *v)</td></tr>
+<tr class="separator:a35d59f3797c818fcb381a128169b7a5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb65910d9a68ec640fb31a05ead4b6dd"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#adb65910d9a68ec640fb31a05ead4b6dd">agg_expression_data_variable_add</a> (<a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a> *d, <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a> *v)</td></tr>
+<tr class="separator:adb65910d9a68ec640fb31a05ead4b6dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80416f24e969b55310b8a47b9f0100e9"><td class="memItemLeft" align="right" valign="top">gpointer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a80416f24e969b55310b8a47b9f0100e9">agg_expression_compile</a> (gchar *e, <a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a> *d)</td></tr>
 <tr class="separator:a80416f24e969b55310b8a47b9f0100e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc545aa8d109534c65f1c09e4ef4a61c"><td class="memItemLeft" align="right" valign="top">gdouble&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#acc545aa8d109534c65f1c09e4ef4a61c">agg_expression_eval</a> (gpointer e)</td></tr>
 <tr class="separator:acc545aa8d109534c65f1c09e4ef4a61c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac423c9a2a65b0b8e677576e9e4fbb1b6"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#ac423c9a2a65b0b8e677576e9e4fbb1b6">agg_expression_data_compile</a> (<a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a> *d)</td></tr>
 <tr class="separator:ac423c9a2a65b0b8e677576e9e4fbb1b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga88a861a9c890e62d096a720b67a92797"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__surfaces.html#ga1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__surfaces.html#ga88a861a9c890e62d096a720b67a92797">agg_surface_new</a> (gint nsmax)</td></tr>
+<tr class="memitem:afb742b448d0a4702a43ccc2642a30a74"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#afb742b448d0a4702a43ccc2642a30a74">agg_expression_data_eval</a> (<a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a> *d)</td></tr>
+<tr class="separator:afb742b448d0a4702a43ccc2642a30a74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga88a861a9c890e62d096a720b67a92797"><td class="memItemLeft" align="right" valign="top"><a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__surfaces.html#ga88a861a9c890e62d096a720b67a92797">agg_surface_new</a> (gint nsmax)</td></tr>
 <tr class="separator:ga88a861a9c890e62d096a720b67a92797"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a60be5dbdee4c909c663de55a86616da8"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a60be5dbdee4c909c663de55a86616da8">agg_surface_section_add</a> (<a class="el" href="group__surfaces.html#ga1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *S, <a class="el" href="agg_8h.html#a8cdd164643b93d05245e9b4976f3f0cb">agg_section_t</a> *s, gdouble u)</td></tr>
+<tr class="memitem:a60be5dbdee4c909c663de55a86616da8"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a60be5dbdee4c909c663de55a86616da8">agg_surface_section_add</a> (<a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *S, <a class="el" href="agg_8h.html#a8cdd164643b93d05245e9b4976f3f0cb">agg_section_t</a> *s, gdouble u)</td></tr>
 <tr class="separator:a60be5dbdee4c909c663de55a86616da8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05f8b5b0febe31ce57337e7045c04903"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a05f8b5b0febe31ce57337e7045c04903">agg_surface_weights_make</a> (<a class="el" href="group__surfaces.html#ga1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *S)</td></tr>
+<tr class="memitem:a05f8b5b0febe31ce57337e7045c04903"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a05f8b5b0febe31ce57337e7045c04903">agg_surface_weights_make</a> (<a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *S)</td></tr>
 <tr class="separator:a05f8b5b0febe31ce57337e7045c04903"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad41f8f60fa70483229ffb5c8b6db3e4f"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#ad41f8f60fa70483229ffb5c8b6db3e4f">agg_surface_section_interp</a> (<a class="el" href="group__surfaces.html#ga1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *S, gdouble u, <a class="el" href="agg_8h.html#a8cdd164643b93d05245e9b4976f3f0cb">agg_section_t</a> *s)</td></tr>
+<tr class="memitem:ad41f8f60fa70483229ffb5c8b6db3e4f"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#ad41f8f60fa70483229ffb5c8b6db3e4f">agg_surface_section_interp</a> (<a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *S, gdouble u, <a class="el" href="agg_8h.html#a8cdd164643b93d05245e9b4976f3f0cb">agg_section_t</a> *s)</td></tr>
 <tr class="separator:ad41f8f60fa70483229ffb5c8b6db3e4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7fd1a95c34d4b227e46b64fe642efae"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#ac7fd1a95c34d4b227e46b64fe642efae">agg_surface_point_eval</a> (<a class="el" href="group__surfaces.html#ga1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *S, gdouble u, gdouble v, gdouble *x, agg_surface_workspace_t *w)</td></tr>
+<tr class="memitem:ac7fd1a95c34d4b227e46b64fe642efae"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#ac7fd1a95c34d4b227e46b64fe642efae">agg_surface_point_eval</a> (<a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *S, gdouble u, gdouble v, gdouble *x, agg_surface_workspace_t *w)</td></tr>
 <tr class="separator:ac7fd1a95c34d4b227e46b64fe642efae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a024e7cbe995df9bc519a77525bf8b639"><td class="memItemLeft" align="right" valign="top">agg_surface_workspace_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a024e7cbe995df9bc519a77525bf8b639">agg_surface_workspace_new</a> (void)</td></tr>
 <tr class="separator:a024e7cbe995df9bc519a77525bf8b639"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gafca823d7e7356348d7beaba0d0ec7682"><td class="memItemLeft" align="right" valign="top">gdouble&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__shapes.html#gafca823d7e7356348d7beaba0d0ec7682">agg_naca_four</a> (gdouble t, gdouble p, gdouble m, gdouble x)</td></tr>
 <tr class="separator:gafca823d7e7356348d7beaba0d0ec7682"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91915491c1aed07991188269140680ce"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a91915491c1aed07991188269140680ce">agg_patch_map</a> (<a class="el" href="group__patches.html#gabdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *p, gdouble s, gdouble t, gdouble *u, gdouble *v)</td></tr>
+<tr class="separator:a91915491c1aed07991188269140680ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e0ed58f3d6f8f9e1bbf89706966b282"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a6e0ed58f3d6f8f9e1bbf89706966b282">agg_patch_st_correct</a> (<a class="el" href="group__patches.html#gabdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *P, gdouble *st)</td></tr>
+<tr class="separator:a6e0ed58f3d6f8f9e1bbf89706966b282"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9bbbda35c5b3b3b8a5da05a50cc3da24"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a9bbbda35c5b3b3b8a5da05a50cc3da24">agg_patch_parse</a> (<a class="el" href="group__patches.html#gabdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *P, <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a> *p, gint np)</td></tr>
+<tr class="separator:a9bbbda35c5b3b3b8a5da05a50cc3da24"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af036658709a83e5b51edace0ff5343e4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#af036658709a83e5b51edace0ff5343e4">agg_intersection_new</a> (gint nstmax)</td></tr>
+<tr class="separator:af036658709a83e5b51edace0ff5343e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c3d4ec240c81bdb3f551d4411837589"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a8c3d4ec240c81bdb3f551d4411837589">agg_surface_patch_intersection</a> (<a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a> *inter, <a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *S1, <a class="el" href="group__patches.html#gabdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *P1, <a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *S2, <a class="el" href="group__patches.html#gabdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *P2, agg_surface_workspace_t *w)</td></tr>
+<tr class="separator:a8c3d4ec240c81bdb3f551d4411837589"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef5bb8411ab89014c772d4b30de27fb3"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#aef5bb8411ab89014c772d4b30de27fb3">agg_intersection_curve_write</a> (FILE *f, <a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a> *inter, agg_surface_workspace_t *w)</td></tr>
+<tr class="separator:aef5bb8411ab89014c772d4b30de27fb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5877e43cbd72aac1ca6092ed6fbe6796"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a5877e43cbd72aac1ca6092ed6fbe6796">agg_intersection_bbox_set</a> (<a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a> *inter)</td></tr>
+<tr class="separator:a5877e43cbd72aac1ca6092ed6fbe6796"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c81c3ff9bc52ff3e9e950cf9e84c4ce"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a4c81c3ff9bc52ff3e9e950cf9e84c4ce">agg_intersection_resample</a> (<a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a> *inter, gint nsp, gint pps, <a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a> *resample, agg_surface_workspace_t *w)</td></tr>
+<tr class="separator:a4c81c3ff9bc52ff3e9e950cf9e84c4ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab323f98c36c34c341b09d1e3570239f1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__mesh.html#ga77887f8535b8d608674eb369d758c1cf">agg_mesh_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mesh.html#gab323f98c36c34c341b09d1e3570239f1">agg_mesh_new</a> (gint npmax, gint nspmax, gint nemax)</td></tr>
+<tr class="separator:gab323f98c36c34c341b09d1e3570239f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20041984f55a7eff78c69f3c6fd0dcb6"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a20041984f55a7eff78c69f3c6fd0dcb6">agg_mesh_write_gmsh</a> (FILE *f, <a class="el" href="group__mesh.html#ga77887f8535b8d608674eb369d758c1cf">agg_mesh_t</a> *w, gchar *len, gint offp, gint offsp, gint offs, gboolean opencascade)</td></tr>
+<tr class="separator:a20041984f55a7eff78c69f3c6fd0dcb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a936696d95ab7733b3e76f9114eed748d"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a936696d95ab7733b3e76f9114eed748d">agg_mesh_spline_ends</a> (<a class="el" href="group__mesh.html#ga77887f8535b8d608674eb369d758c1cf">agg_mesh_t</a> *w, gint s, gint *p0, gint *p1)</td></tr>
+<tr class="separator:a936696d95ab7733b3e76f9114eed748d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d9c603ee3ba5f0cf2972b275ba30cf9"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a9d9c603ee3ba5f0cf2972b275ba30cf9">agg_mesh_spline_interp_points</a> (<a class="el" href="group__mesh.html#ga77887f8535b8d608674eb369d758c1cf">agg_mesh_t</a> *w, gint s, gint p0, gint p1, gint pps, agg_surface_workspace_t *ws)</td></tr>
+<tr class="separator:a9d9c603ee3ba5f0cf2972b275ba30cf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa895204dc42fc97a80b81bebe044507f"><td class="memItemLeft" align="right" valign="top">gboolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#aa895204dc42fc97a80b81bebe044507f">agg_mesh_splines_connected</a> (<a class="el" href="group__mesh.html#ga77887f8535b8d608674eb369d758c1cf">agg_mesh_t</a> *w, gint i0, gint i1, gint *p)</td></tr>
+<tr class="separator:aa895204dc42fc97a80b81bebe044507f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44e88712ac2493041ca76186483eee1f"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a44e88712ac2493041ca76186483eee1f">agg_mesh_element_add</a> (<a class="el" href="group__mesh.html#ga77887f8535b8d608674eb369d758c1cf">agg_mesh_t</a> *w, gint s0, gint s1, gint s2, gint s3)</td></tr>
+<tr class="separator:a44e88712ac2493041ca76186483eee1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e5a1d7c4f04b84f56fc206d1240ee51"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a4e5a1d7c4f04b84f56fc206d1240ee51">agg_mesh_intersection_add</a> (<a class="el" href="group__mesh.html#ga77887f8535b8d608674eb369d758c1cf">agg_mesh_t</a> *w, <a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a> *inter, gint nsp, gint pps)</td></tr>
+<tr class="separator:a4e5a1d7c4f04b84f56fc206d1240ee51"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e31a15c453c3da1871250632427b656"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a2e31a15c453c3da1871250632427b656">agg_mesh_surface_add</a> (<a class="el" href="group__mesh.html#ga77887f8535b8d608674eb369d758c1cf">agg_mesh_t</a> *w, <a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *S, <a class="el" href="group__patches.html#gabdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *P, gint nsec, gint nseg, gint pps, agg_surface_workspace_t *ws)</td></tr>
+<tr class="separator:a2e31a15c453c3da1871250632427b656"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a802f8fe2b7bb1ac25bee26e62a89b8ef"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a802f8fe2b7bb1ac25bee26e62a89b8ef">agg_mesh_spline_from_endpoints</a> (<a class="el" href="group__mesh.html#ga77887f8535b8d608674eb369d758c1cf">agg_mesh_t</a> *w, gint p0, gint p1)</td></tr>
+<tr class="separator:a802f8fe2b7bb1ac25bee26e62a89b8ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8337a8e05e56227d9f42ab84d0d89fd4"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a8337a8e05e56227d9f42ab84d0d89fd4">agg_mesh_surface_point_add</a> (<a class="el" href="group__mesh.html#ga77887f8535b8d608674eb369d758c1cf">agg_mesh_t</a> *w, gint surf, gdouble s, gdouble t, agg_surface_workspace_t *ws)</td></tr>
+<tr class="separator:a8337a8e05e56227d9f42ab84d0d89fd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga04a251df56d2d37e276d047231bdda35"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__body.html#gab1ba060d2b8a159e268a27c8d01b0a44">agg_body_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__body.html#ga04a251df56d2d37e276d047231bdda35">agg_body_new</a> (gint ngmax, gint nsmax)</td></tr>
+<tr class="separator:ga04a251df56d2d37e276d047231bdda35"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a480c67842eb4dd8b22463f41d29ad6e2"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a480c67842eb4dd8b22463f41d29ad6e2">agg_body_global_add</a> (<a class="el" href="group__body.html#gab1ba060d2b8a159e268a27c8d01b0a44">agg_body_t</a> *b, gchar *var, gchar *def, gdouble val)</td></tr>
+<tr class="separator:a480c67842eb4dd8b22463f41d29ad6e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1fd42e298c7ef34b4dc521af8a3094a"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#ad1fd42e298c7ef34b4dc521af8a3094a">agg_body_globals_write</a> (FILE *f, <a class="el" href="group__body.html#gab1ba060d2b8a159e268a27c8d01b0a44">agg_body_t</a> *b)</td></tr>
+<tr class="separator:ad1fd42e298c7ef34b4dc521af8a3094a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12809abb981ee0379ad7f887bdce9222"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a12809abb981ee0379ad7f887bdce9222">agg_body_globals_compile</a> (<a class="el" href="group__body.html#gab1ba060d2b8a159e268a27c8d01b0a44">agg_body_t</a> *b)</td></tr>
+<tr class="separator:a12809abb981ee0379ad7f887bdce9222"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a64862bcc9c834e015451285e8812db"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a8a64862bcc9c834e015451285e8812db">agg_body_globals_eval</a> (<a class="el" href="group__body.html#gab1ba060d2b8a159e268a27c8d01b0a44">agg_body_t</a> *b)</td></tr>
+<tr class="separator:a8a64862bcc9c834e015451285e8812db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a672b47160f046ee778113a960bf50354"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a672b47160f046ee778113a960bf50354">agg_body_read</a> (<a class="el" href="group__body.html#gab1ba060d2b8a159e268a27c8d01b0a44">agg_body_t</a> *b, gchar *file, gboolean echo)</td></tr>
+<tr class="separator:a672b47160f046ee778113a960bf50354"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23e541d03af5bc371eef1321a2746d6d"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a23e541d03af5bc371eef1321a2746d6d">agg_body_surfaces_list</a> (FILE *f, <a class="el" href="group__body.html#gab1ba060d2b8a159e268a27c8d01b0a44">agg_body_t</a> *b)</td></tr>
+<tr class="separator:a23e541d03af5bc371eef1321a2746d6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
+<tr class="memitem:gab1ba060d2b8a159e268a27c8d01b0a44"><td class="memItemLeft" align="right" valign="top">typedef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__body.html#gab1ba060d2b8a159e268a27c8d01b0a44">agg_body_t</a></td></tr>
+<tr class="separator:gab1ba060d2b8a159e268a27c8d01b0a44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a507e1c39c279ca276de83410336a5c06"><td class="memItemLeft" align="right" valign="top"><a id="a507e1c39c279ca276de83410336a5c06" name="a507e1c39c279ca276de83410336a5c06"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>agg_variable_name</b>(v)</td></tr>
+<tr class="memdesc:a507e1c39c279ca276de83410336a5c06"><td class="mdescLeft">&#160;</td><td class="mdescRight">name of an <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a> <br /></td></tr>
+<tr class="separator:a507e1c39c279ca276de83410336a5c06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1eb3e5fc0db91ca383c2f478300127b"><td class="memItemLeft" align="right" valign="top"><a id="ab1eb3e5fc0db91ca383c2f478300127b" name="ab1eb3e5fc0db91ca383c2f478300127b"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>agg_variable_definition</b>(v)</td></tr>
+<tr class="memdesc:ab1eb3e5fc0db91ca383c2f478300127b"><td class="mdescLeft">&#160;</td><td class="mdescRight">definition of an <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>, as as string, or NULL for numerical constants <br /></td></tr>
+<tr class="separator:ab1eb3e5fc0db91ca383c2f478300127b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a972736a8d33ed2be9f47e84631599d5b"><td class="memItemLeft" align="right" valign="top"><a id="a972736a8d33ed2be9f47e84631599d5b" name="a972736a8d33ed2be9f47e84631599d5b"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>agg_variable_evaluator</b>(v)</td></tr>
+<tr class="memdesc:a972736a8d33ed2be9f47e84631599d5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">evaluator for the compiled expression for the variable, or NULL for numerical constants <br /></td></tr>
+<tr class="separator:a972736a8d33ed2be9f47e84631599d5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d32a3c48e22b7d630e4fbc4e02c71a0"><td class="memItemLeft" align="right" valign="top"><a id="a9d32a3c48e22b7d630e4fbc4e02c71a0" name="a9d32a3c48e22b7d630e4fbc4e02c71a0"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>agg_variable_value</b>(v)</td></tr>
+<tr class="memdesc:a9d32a3c48e22b7d630e4fbc4e02c71a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">numerical value of the variable (which may change on upon reevaluation of the expression) <br /></td></tr>
+<tr class="separator:a9d32a3c48e22b7d630e4fbc4e02c71a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaf99a18818caf06b7a2cdc10dde859f47"><td class="memItemLeft" align="right" valign="top">typedef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a></td></tr>
 <tr class="separator:gaf99a18818caf06b7a2cdc10dde859f47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a77956769442ada427d64c740062b911a"><td class="memItemLeft" align="right" valign="top"><a id="a77956769442ada427d64c740062b911a" name="a77956769442ada427d64c740062b911a"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>agg_section_type</b>(s)</td></tr>
-<tr class="memdesc:a77956769442ada427d64c740062b911a"><td class="mdescLeft">&#160;</td><td class="mdescRight">A macro that returns the <a class="el" href="group__sections.html#gaf4798d9cfc37c3818fc2f3a2208bfb82">agg_section_type_t</a> of an <a class="el" href="agg_8h.html#a8cdd164643b93d05245e9b4976f3f0cb">agg_section_t</a>. <br /></td></tr>
+<tr class="memdesc:a77956769442ada427d64c740062b911a"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="group__sections.html#gaf4798d9cfc37c3818fc2f3a2208bfb82">agg_section_type_t</a> of an <a class="el" href="agg_8h.html#a8cdd164643b93d05245e9b4976f3f0cb">agg_section_t</a> <br /></td></tr>
 <tr class="separator:a77956769442ada427d64c740062b911a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5378fa853984c8f6b4eab5447e1b89b7"><td class="memItemLeft" align="right" valign="top"><a id="a5378fa853984c8f6b4eab5447e1b89b7" name="a5378fa853984c8f6b4eab5447e1b89b7"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>agg_section_close</b>(s)</td></tr>
@@ -111,19 +205,19 @@ Functions</h2></td></tr>
 <tr class="separator:a5378fa853984c8f6b4eab5447e1b89b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae30718f98a4e084775819bebfb7cdb01"><td class="memItemLeft" align="right" valign="top"><a id="ae30718f98a4e084775819bebfb7cdb01" name="ae30718f98a4e084775819bebfb7cdb01"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>agg_section_eta_left</b>(s)</td></tr>
-<tr class="memdesc:ae30718f98a4e084775819bebfb7cdb01"><td class="mdescLeft">&#160;</td><td class="mdescRight">value of <img class="formulaInl" alt="$\eta_{1}$" src="form_4.png" width="11" height="9"/> controlling curvature around <img class="formulaInl" alt="$x=0$" src="form_5.png" width="31" height="9"/> <br /></td></tr>
+<tr class="memdesc:ae30718f98a4e084775819bebfb7cdb01"><td class="mdescLeft">&#160;</td><td class="mdescRight">value of <img class="formulaInl" alt="$\eta_{1}$" src="form_0.png" width="11" height="9"/> controlling curvature around <img class="formulaInl" alt="$x=0$" src="form_1.png" width="31" height="9"/> <br /></td></tr>
 <tr class="separator:ae30718f98a4e084775819bebfb7cdb01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af4e997cbe72578421773d629c6e7e28f"><td class="memItemLeft" align="right" valign="top"><a id="af4e997cbe72578421773d629c6e7e28f" name="af4e997cbe72578421773d629c6e7e28f"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>agg_section_eta_right</b>(s)</td></tr>
-<tr class="memdesc:af4e997cbe72578421773d629c6e7e28f"><td class="mdescLeft">&#160;</td><td class="mdescRight">value of <img class="formulaInl" alt="$\eta_{2}$" src="form_6.png" width="13" height="9"/> controlling curvature around <img class="formulaInl" alt="$x=1$" src="form_7.png" width="30" height="9"/> <br /></td></tr>
+<tr class="memdesc:af4e997cbe72578421773d629c6e7e28f"><td class="mdescLeft">&#160;</td><td class="mdescRight">value of <img class="formulaInl" alt="$\eta_{2}$" src="form_2.png" width="13" height="9"/> controlling curvature around <img class="formulaInl" alt="$x=1$" src="form_3.png" width="30" height="9"/> <br /></td></tr>
 <tr class="separator:af4e997cbe72578421773d629c6e7e28f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1dd337d4464caea072bc3276765574b9"><td class="memItemLeft" align="right" valign="top"><a id="a1dd337d4464caea072bc3276765574b9" name="a1dd337d4464caea072bc3276765574b9"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>agg_section_coefficient_upper</b>(s,  i)</td></tr>
-<tr class="memdesc:a1dd337d4464caea072bc3276765574b9"><td class="mdescLeft">&#160;</td><td class="mdescRight"><img class="formulaInl" alt="$i$" src="form_8.png" width="5" height="9"/>th coefficient in Bernstein expansion of upper part of a section <br /></td></tr>
+<tr class="memdesc:a1dd337d4464caea072bc3276765574b9"><td class="mdescLeft">&#160;</td><td class="mdescRight"><img class="formulaInl" alt="$i$" src="form_4.png" width="5" height="9"/>th coefficient in Bernstein expansion of upper part of a section <br /></td></tr>
 <tr class="separator:a1dd337d4464caea072bc3276765574b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a108622652317c5e32cc5b274dbd27074"><td class="memItemLeft" align="right" valign="top"><a id="a108622652317c5e32cc5b274dbd27074" name="a108622652317c5e32cc5b274dbd27074"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>agg_section_coefficient_lower</b>(s,  i)</td></tr>
-<tr class="memdesc:a108622652317c5e32cc5b274dbd27074"><td class="mdescLeft">&#160;</td><td class="mdescRight"><img class="formulaInl" alt="$i$" src="form_8.png" width="5" height="9"/>th coefficient in Bernstein expansion of lower part of a section <br /></td></tr>
+<tr class="memdesc:a108622652317c5e32cc5b274dbd27074"><td class="mdescLeft">&#160;</td><td class="mdescRight"><img class="formulaInl" alt="$i$" src="form_4.png" width="5" height="9"/>th coefficient in Bernstein expansion of lower part of a section <br /></td></tr>
 <tr class="separator:a108622652317c5e32cc5b274dbd27074"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0eac1de141f11cad7fdb472c92636318"><td class="memItemLeft" align="right" valign="top"><a id="a0eac1de141f11cad7fdb472c92636318" name="a0eac1de141f11cad7fdb472c92636318"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>agg_section_order_upper</b>(s)</td></tr>
@@ -158,6 +252,46 @@ Functions</h2></td></tr>
 <tr class="separator:a8cdd164643b93d05245e9b4976f3f0cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a99192fd2067443a234e213a421f6f643"><td class="memItemLeft" align="right" valign="top">typedef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a></td></tr>
 <tr class="separator:a99192fd2067443a234e213a421f6f643"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d90d1260ef01edfa55395a8ef258901"><td class="memItemLeft" align="right" valign="top"><a id="a9d90d1260ef01edfa55395a8ef258901" name="a9d90d1260ef01edfa55395a8ef258901"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>agg_transform_operator_operation</b>(op)</td></tr>
+<tr class="memdesc:a9d90d1260ef01edfa55395a8ef258901"><td class="mdescLeft">&#160;</td><td class="mdescRight">operation performed by an <a class="el" href="agg_8h.html#a9b3c7b4a183fc43a646fdc5cb1673993">agg_transform_operator_t</a> <br /></td></tr>
+<tr class="separator:a9d90d1260ef01edfa55395a8ef258901"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5013ee19c62662c2c6a5c56a9d28359"><td class="memItemLeft" align="right" valign="top"><a id="ad5013ee19c62662c2c6a5c56a9d28359" name="ad5013ee19c62662c2c6a5c56a9d28359"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>agg_transform_operator_parameters</b>(op)</td></tr>
+<tr class="memdesc:ad5013ee19c62662c2c6a5c56a9d28359"><td class="mdescLeft">&#160;</td><td class="mdescRight">parameters of <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a> for an <a class="el" href="agg_8h.html#a9b3c7b4a183fc43a646fdc5cb1673993">agg_transform_operator_t</a> <br /></td></tr>
+<tr class="separator:ad5013ee19c62662c2c6a5c56a9d28359"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb2f9f990c5c855f19ff3f801ad6d55a"><td class="memItemLeft" align="right" valign="top"><a id="abb2f9f990c5c855f19ff3f801ad6d55a" name="abb2f9f990c5c855f19ff3f801ad6d55a"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>agg_transform_operator_parameter</b>(op,  i)</td></tr>
+<tr class="memdesc:abb2f9f990c5c855f19ff3f801ad6d55a"><td class="mdescLeft">&#160;</td><td class="mdescRight"><img class="formulaInl" alt="$i$" src="form_4.png" width="5" height="9"/>th parameter for <a class="el" href="agg_8h.html#a9b3c7b4a183fc43a646fdc5cb1673993">agg_transform_operator_t</a> <br /></td></tr>
+<tr class="separator:abb2f9f990c5c855f19ff3f801ad6d55a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08c68d2085b1b5439357c8197655bafc"><td class="memItemLeft" align="right" valign="top"><a id="a08c68d2085b1b5439357c8197655bafc" name="a08c68d2085b1b5439357c8197655bafc"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>agg_transform_operator_parameter_number</b>(op)</td></tr>
+<tr class="memdesc:a08c68d2085b1b5439357c8197655bafc"><td class="mdescLeft">&#160;</td><td class="mdescRight">number of parameters for the <a class="el" href="agg_8h.html#a9b3c7b4a183fc43a646fdc5cb1673993">agg_transform_operator_t</a> <br /></td></tr>
+<tr class="separator:a08c68d2085b1b5439357c8197655bafc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ab79d88ba68d2d57369777f1309ddb5"><td class="memItemLeft" align="right" valign="top"><a id="a6ab79d88ba68d2d57369777f1309ddb5" name="a6ab79d88ba68d2d57369777f1309ddb5"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>agg_transform_operator_func</b>(op)</td></tr>
+<tr class="memdesc:a6ab79d88ba68d2d57369777f1309ddb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">function called to execute the transform operation <br /></td></tr>
+<tr class="separator:a6ab79d88ba68d2d57369777f1309ddb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f2e2adcf62dbb3a21505fa1cd070e76"><td class="memItemLeft" align="right" valign="top"><a id="a8f2e2adcf62dbb3a21505fa1cd070e76" name="a8f2e2adcf62dbb3a21505fa1cd070e76"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>agg_transform_operator</b>(T,  i)</td></tr>
+<tr class="memdesc:a8f2e2adcf62dbb3a21505fa1cd070e76"><td class="mdescLeft">&#160;</td><td class="mdescRight"><img class="formulaInl" alt="$i$" src="form_4.png" width="5" height="9"/>th operation of an <a class="el" href="agg_8h.html#ab26de2509de1b8f9b7bc6523852dc6da">agg_transform_t</a> <br /></td></tr>
+<tr class="separator:a8f2e2adcf62dbb3a21505fa1cd070e76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a427b4f4d329639cb65beaea740174178"><td class="memItemLeft" align="right" valign="top"><a id="a427b4f4d329639cb65beaea740174178" name="a427b4f4d329639cb65beaea740174178"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>agg_transform_operator_number</b>(T)</td></tr>
+<tr class="memdesc:a427b4f4d329639cb65beaea740174178"><td class="mdescLeft">&#160;</td><td class="mdescRight">number of operations in an <a class="el" href="agg_8h.html#ab26de2509de1b8f9b7bc6523852dc6da">agg_transform_t</a> <br /></td></tr>
+<tr class="separator:a427b4f4d329639cb65beaea740174178"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af78d0f70b4637f268c6768aa183cd5ae"><td class="memItemLeft" align="right" valign="top"><a id="af78d0f70b4637f268c6768aa183cd5ae" name="af78d0f70b4637f268c6768aa183cd5ae"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>agg_transform_operator_number_max</b>(T)</td></tr>
+<tr class="memdesc:af78d0f70b4637f268c6768aa183cd5ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">maximum number of operations in an <a class="el" href="agg_8h.html#ab26de2509de1b8f9b7bc6523852dc6da">agg_transform_t</a> <br /></td></tr>
+<tr class="separator:af78d0f70b4637f268c6768aa183cd5ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56809318765396e4ffffd4c8ca479034"><td class="memItemLeft" align="right" valign="top"><a id="a56809318765396e4ffffd4c8ca479034" name="a56809318765396e4ffffd4c8ca479034"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>agg_transform_variable</b>(T,  i)</td></tr>
+<tr class="memdesc:a56809318765396e4ffffd4c8ca479034"><td class="mdescLeft">&#160;</td><td class="mdescRight"><img class="formulaInl" alt="$i$" src="form_4.png" width="5" height="9"/>th variable in an <a class="el" href="agg_8h.html#ab26de2509de1b8f9b7bc6523852dc6da">agg_transform_t</a> <br /></td></tr>
+<tr class="separator:a56809318765396e4ffffd4c8ca479034"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d4fc7c50d8919ccc839d4a334fac643"><td class="memItemLeft" align="right" valign="top"><a id="a9d4fc7c50d8919ccc839d4a334fac643" name="a9d4fc7c50d8919ccc839d4a334fac643"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>agg_transform_variable_number</b>(T)</td></tr>
+<tr class="memdesc:a9d4fc7c50d8919ccc839d4a334fac643"><td class="mdescLeft">&#160;</td><td class="mdescRight">number of variables in an <a class="el" href="agg_8h.html#ab26de2509de1b8f9b7bc6523852dc6da">agg_transform_t</a> <br /></td></tr>
+<tr class="separator:a9d4fc7c50d8919ccc839d4a334fac643"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gae287f33d9a1988a16e6e8bfbcf8498f7"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__transforms.html#gae287f33d9a1988a16e6e8bfbcf8498f7">agg_operation_t</a> { <br />
 &#160;&#160;<a class="el" href="group__transforms.html#gae287f33d9a1988a16e6e8bfbcf8498f7adaec27e2727ebb165f174cec8f5e8671">AGG_TRANSFORM_UNDEFINED</a> = 0
 , <a class="el" href="group__transforms.html#gae287f33d9a1988a16e6e8bfbcf8498f7ab01058b6abfb8801d4b7bd228d041479">AGG_TRANSFORM_ROTATE</a> = 1
@@ -172,16 +306,281 @@ Functions</h2></td></tr>
 <tr class="separator:a9b3c7b4a183fc43a646fdc5cb1673993"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab26de2509de1b8f9b7bc6523852dc6da"><td class="memItemLeft" align="right" valign="top">typedef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#ab26de2509de1b8f9b7bc6523852dc6da">agg_transform_t</a></td></tr>
 <tr class="separator:ab26de2509de1b8f9b7bc6523852dc6da"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga1c502e562486827063a7169cd79b5cc0"><td class="memItemLeft" align="right" valign="top">typedef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__surfaces.html#ga1c502e562486827063a7169cd79b5cc0">agg_surface_t</a></td></tr>
-<tr class="separator:ga1c502e562486827063a7169cd79b5cc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga1c54fee67bb03551fa5e663cbc61e3be"><td class="memItemLeft" align="right" valign="top">typedef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a></td></tr>
-<tr class="separator:ga1c54fee67bb03551fa5e663cbc61e3be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9d96b462257229695d4a34527697d492"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__surfaces.html#ga9d96b462257229695d4a34527697d492">agg_axes_t</a> { <br />
+ }</td></tr>
+<tr class="separator:ga9d96b462257229695d4a34527697d492"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c502e562486827063a7169cd79b5cc0"><td class="memItemLeft" align="right" valign="top">typedef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a></td></tr>
+<tr class="separator:a1c502e562486827063a7169cd79b5cc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gab2dada3ec7e3ef50c701a16f93701ebc"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__patches.html#gab2dada3ec7e3ef50c701a16f93701ebc">agg_patch_mapping_t</a> { <a class="el" href="group__patches.html#gab2dada3ec7e3ef50c701a16f93701ebca3b4f4c2395e1148d13e7d4b1f8320e49">AGG_PATCH_BILINEAR</a> = 0
 , <a class="el" href="group__patches.html#gab2dada3ec7e3ef50c701a16f93701ebcaec086ca8c9ffd8890a01b667bb032794">AGG_PATCH_SPHERICAL</a> = 1
+, <a class="el" href="group__patches.html#gab2dada3ec7e3ef50c701a16f93701ebca78d8b116b0cd3172683582fd297fdc49">AGG_PATCH_TUBULAR</a> = 2
  }</td></tr>
 <tr class="separator:gab2dada3ec7e3ef50c701a16f93701ebc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gabdb5fa64575d1f09fb1e68a13a103777"><td class="memItemLeft" align="right" valign="top">typedef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__patches.html#gabdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a></td></tr>
+<tr class="separator:gabdb5fa64575d1f09fb1e68a13a103777"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1c54fee67bb03551fa5e663cbc61e3be"><td class="memItemLeft" align="right" valign="top">typedef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a></td></tr>
+<tr class="separator:ga1c54fee67bb03551fa5e663cbc61e3be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga77887f8535b8d608674eb369d758c1cf"><td class="memItemLeft" align="right" valign="top">typedef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mesh.html#ga77887f8535b8d608674eb369d758c1cf">agg_mesh_t</a></td></tr>
+<tr class="separator:ga77887f8535b8d608674eb369d758c1cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="a1745f8aa9febea5a00f7d5892ea15c6e" name="a1745f8aa9febea5a00f7d5892ea15c6e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1745f8aa9febea5a00f7d5892ea15c6e">&#9670;&nbsp;</a></span>agg_axes_parse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group__surfaces.html#ga9d96b462257229695d4a34527697d492">agg_axes_t</a> agg_axes_parse </td>
+          <td>(</td>
+          <td class="paramtype">gchar *&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Parse a string specifying an axis change on a surface.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>axis string to parse</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="group__surfaces.html#ga9d96b462257229695d4a34527697d492">agg_axes_t</a> corresponding to <em>str</em>, or AGG_AXES_UNDEFINED. </dd></dl>
+
+</div>
+</div>
+<a id="a480c67842eb4dd8b22463f41d29ad6e2" name="a480c67842eb4dd8b22463f41d29ad6e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a480c67842eb4dd8b22463f41d29ad6e2">&#9670;&nbsp;</a></span>agg_body_global_add()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_body_global_add </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__body.html#gab1ba060d2b8a159e268a27c8d01b0a44">agg_body_t</a> *&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&#160;</td>
+          <td class="paramname"><em>var</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&#160;</td>
+          <td class="paramname"><em>def</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gdouble&#160;</td>
+          <td class="paramname"><em>val</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Add a global variable to an <a class="el" href="group__body.html#gab1ba060d2b8a159e268a27c8d01b0a44">agg_body_t</a></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">b</td><td>body to which variable should be added; </td></tr>
+    <tr><td class="paramname">var</td><td>name of variable; </td></tr>
+    <tr><td class="paramname">def</td><td>string expression defining variable (can be NULL); </td></tr>
+    <tr><td class="paramname">val</td><td>value of variable (set constant if <em>expr</em> is NULL).</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+<p class="reference">References <a class="el" href="agg_8h.html#ab1eb3e5fc0db91ca383c2f478300127b">agg_variable_definition</a>, <a class="el" href="agg_8h.html#a507e1c39c279ca276de83410336a5c06">agg_variable_name</a>, <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>, and <a class="el" href="agg_8h.html#a9d32a3c48e22b7d630e4fbc4e02c71a0">agg_variable_value</a>.</p>
+
+</div>
+</div>
+<a id="a12809abb981ee0379ad7f887bdce9222" name="a12809abb981ee0379ad7f887bdce9222"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12809abb981ee0379ad7f887bdce9222">&#9670;&nbsp;</a></span>agg_body_globals_compile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_body_globals_compile </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__body.html#gab1ba060d2b8a159e268a27c8d01b0a44">agg_body_t</a> *&#160;</td>
+          <td class="paramname"><em>b</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Compile expressions for global variables in an <a class="el" href="group__body.html#gab1ba060d2b8a159e268a27c8d01b0a44">agg_body_t</a>. This function should be called before evaluating any variables in the body or its surfaces.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">b</td><td>an <a class="el" href="group__body.html#gab1ba060d2b8a159e268a27c8d01b0a44">agg_body_t</a> containing definitions of global variables.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+<p class="reference">References <a class="el" href="agg_8h.html#a80416f24e969b55310b8a47b9f0100e9">agg_expression_compile()</a>, <a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a>, <a class="el" href="agg_8h.html#adb65910d9a68ec640fb31a05ead4b6dd">agg_expression_data_variable_add()</a>, <a class="el" href="agg_8h.html#ab1eb3e5fc0db91ca383c2f478300127b">agg_variable_definition</a>, <a class="el" href="agg_8h.html#a972736a8d33ed2be9f47e84631599d5b">agg_variable_evaluator</a>, and <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>.</p>
+
+</div>
+</div>
+<a id="a8a64862bcc9c834e015451285e8812db" name="a8a64862bcc9c834e015451285e8812db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a64862bcc9c834e015451285e8812db">&#9670;&nbsp;</a></span>agg_body_globals_eval()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_body_globals_eval </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__body.html#gab1ba060d2b8a159e268a27c8d01b0a44">agg_body_t</a> *&#160;</td>
+          <td class="paramname"><em>b</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Evaluate global variables defined in an <a class="el" href="group__body.html#gab1ba060d2b8a159e268a27c8d01b0a44">agg_body_t</a>. This function should be called before evaluating points on the surfaces which make up the body.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">b</td><td>an <a class="el" href="group__body.html#gab1ba060d2b8a159e268a27c8d01b0a44">agg_body_t</a> containing global variables.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+<p class="reference">References <a class="el" href="agg_8h.html#afb742b448d0a4702a43ccc2642a30a74">agg_expression_data_eval()</a>, <a class="el" href="agg_8h.html#acc545aa8d109534c65f1c09e4ef4a61c">agg_expression_eval()</a>, <a class="el" href="agg_8h.html#ab1eb3e5fc0db91ca383c2f478300127b">agg_variable_definition</a>, <a class="el" href="agg_8h.html#a972736a8d33ed2be9f47e84631599d5b">agg_variable_evaluator</a>, <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>, and <a class="el" href="agg_8h.html#a9d32a3c48e22b7d630e4fbc4e02c71a0">agg_variable_value</a>.</p>
+
+</div>
+</div>
+<a id="ad1fd42e298c7ef34b4dc521af8a3094a" name="ad1fd42e298c7ef34b4dc521af8a3094a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1fd42e298c7ef34b4dc521af8a3094a">&#9670;&nbsp;</a></span>agg_body_globals_write()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_body_globals_write </td>
+          <td>(</td>
+          <td class="paramtype">FILE *&#160;</td>
+          <td class="paramname"><em>f</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__body.html#gab1ba060d2b8a159e268a27c8d01b0a44">agg_body_t</a> *&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Write a body's global variables, their definitions (if given), and values to file</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">f</td><td>output file; </td></tr>
+    <tr><td class="paramname">b</td><td><a class="el" href="group__body.html#gab1ba060d2b8a159e268a27c8d01b0a44">agg_body_t</a> whose global variables are to be written</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+<p class="reference">References <a class="el" href="agg_8h.html#ab1eb3e5fc0db91ca383c2f478300127b">agg_variable_definition</a>, <a class="el" href="agg_8h.html#a507e1c39c279ca276de83410336a5c06">agg_variable_name</a>, <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>, and <a class="el" href="agg_8h.html#a9d32a3c48e22b7d630e4fbc4e02c71a0">agg_variable_value</a>.</p>
+
+</div>
+</div>
+<a id="a672b47160f046ee778113a960bf50354" name="a672b47160f046ee778113a960bf50354"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a672b47160f046ee778113a960bf50354">&#9670;&nbsp;</a></span>agg_body_read()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_body_read </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__body.html#gab1ba060d2b8a159e268a27c8d01b0a44">agg_body_t</a> *&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&#160;</td>
+          <td class="paramname"><em>file</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gboolean&#160;</td>
+          <td class="paramname"><em>echo</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Read an <a class="el" href="group__body.html#gab1ba060d2b8a159e268a27c8d01b0a44">agg_body_t</a> from file</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">b</td><td>body to which data in file are to be added; </td></tr>
+    <tr><td class="paramname">file</td><td>name of file in .agg format; </td></tr>
+    <tr><td class="paramname">echo</td><td>if TRUE, echo progress to stderr.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+<p class="reference">References <a class="el" href="group__sections.html#ga105f0353bff693485509f3cf9bb6ae46">agg_section_new()</a>.</p>
+
+</div>
+</div>
+<a id="a23e541d03af5bc371eef1321a2746d6d" name="a23e541d03af5bc371eef1321a2746d6d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23e541d03af5bc371eef1321a2746d6d">&#9670;&nbsp;</a></span>agg_body_surfaces_list()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_body_surfaces_list </td>
+          <td>(</td>
+          <td class="paramtype">FILE *&#160;</td>
+          <td class="paramname"><em>f</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__body.html#gab1ba060d2b8a159e268a27c8d01b0a44">agg_body_t</a> *&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Write the names of a body's surfaces to file</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">f</td><td>output file stream; </td></tr>
+    <tr><td class="paramname">b</td><td>an <a class="el" href="group__body.html#gab1ba060d2b8a159e268a27c8d01b0a44">agg_body_t</a> whose surfaces are to be listed.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+</div>
+</div>
 <a id="a80416f24e969b55310b8a47b9f0100e9" name="a80416f24e969b55310b8a47b9f0100e9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a80416f24e969b55310b8a47b9f0100e9">&#9670;&nbsp;</a></span>agg_expression_compile()</h2>
 
@@ -217,6 +616,8 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>pointer to compiled expression. </dd></dl>
 
+<p class="reference">Referenced by <a class="el" href="agg_8h.html#a12809abb981ee0379ad7f887bdce9222">agg_body_globals_compile()</a>, and <a class="el" href="agg_8h.html#a015c632cb62cafdc579df29f44d8eab9">agg_transform_expressions_compile()</a>.</p>
+
 </div>
 </div>
 <a id="ac423c9a2a65b0b8e677576e9e4fbb1b6" name="ac423c9a2a65b0b8e677576e9e4fbb1b6"></a>
@@ -245,6 +646,75 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="afb742b448d0a4702a43ccc2642a30a74" name="afb742b448d0a4702a43ccc2642a30a74"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb742b448d0a4702a43ccc2642a30a74">&#9670;&nbsp;</a></span>agg_expression_data_eval()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_expression_data_eval </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a> *&#160;</td>
+          <td class="paramname"><em>d</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Evaluate expressions in an expression data structure, making the values available for other calculations.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">d</td><td>an <a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a> whose expressions are to be evaluated.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="agg_8h.html#a8a64862bcc9c834e015451285e8812db">agg_body_globals_eval()</a>, and <a class="el" href="agg_8h.html#a521307ad04c43f7912a72942271cb8e0">agg_transform_variables_eval()</a>.</p>
+
+</div>
+</div>
+<a id="adb65910d9a68ec640fb31a05ead4b6dd" name="adb65910d9a68ec640fb31a05ead4b6dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb65910d9a68ec640fb31a05ead4b6dd">&#9670;&nbsp;</a></span>agg_expression_data_variable_add()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_expression_data_variable_add </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a> *&#160;</td>
+          <td class="paramname"><em>d</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a> *&#160;</td>
+          <td class="paramname"><em>v</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Add a variable to an <a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">d</td><td><a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a> to have variable added; </td></tr>
+    <tr><td class="paramname">v</td><td>a variable to be added to <em>d</em>; this may depend on variables already in <em>d</em>, but not on variables yet to be added.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+<p class="reference">References <a class="el" href="agg_8h.html#ab1eb3e5fc0db91ca383c2f478300127b">agg_variable_definition</a>, <a class="el" href="agg_8h.html#a507e1c39c279ca276de83410336a5c06">agg_variable_name</a>, and <a class="el" href="agg_8h.html#a9d32a3c48e22b7d630e4fbc4e02c71a0">agg_variable_value</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="agg_8h.html#a12809abb981ee0379ad7f887bdce9222">agg_body_globals_compile()</a>, <a class="el" href="agg_8h.html#a162e7e767b148e09e0f98e9af91b32fe">agg_transform_add_global_variables()</a>, and <a class="el" href="agg_8h.html#a015c632cb62cafdc579df29f44d8eab9">agg_transform_expressions_compile()</a>.</p>
+
+</div>
+</div>
 <a id="acc545aa8d109534c65f1c09e4ef4a61c" name="acc545aa8d109534c65f1c09e4ef4a61c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acc545aa8d109534c65f1c09e4ef4a61c">&#9670;&nbsp;</a></span>agg_expression_eval()</h2>
 
@@ -268,6 +738,835 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the value of <em>e</em>. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="agg_8h.html#a8a64862bcc9c834e015451285e8812db">agg_body_globals_eval()</a>, and <a class="el" href="agg_8h.html#a521307ad04c43f7912a72942271cb8e0">agg_transform_variables_eval()</a>.</p>
+
+</div>
+</div>
+<a id="a5877e43cbd72aac1ca6092ed6fbe6796" name="a5877e43cbd72aac1ca6092ed6fbe6796"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5877e43cbd72aac1ca6092ed6fbe6796">&#9670;&nbsp;</a></span>agg_intersection_bbox_set()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_intersection_bbox_set </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a> *&#160;</td>
+          <td class="paramname"><em>inter</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Calculate the bounding box of an intersection curve in the two surface patch mappings.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">inter</td><td>intersection curve whose bounding boxes are to be set.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+</div>
+</div>
+<a id="aef5bb8411ab89014c772d4b30de27fb3" name="aef5bb8411ab89014c772d4b30de27fb3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef5bb8411ab89014c772d4b30de27fb3">&#9670;&nbsp;</a></span>agg_intersection_curve_write()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_intersection_curve_write </td>
+          <td>(</td>
+          <td class="paramtype">FILE *&#160;</td>
+          <td class="paramname"><em>f</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a> *&#160;</td>
+          <td class="paramname"><em>inter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">agg_surface_workspace_t *&#160;</td>
+          <td class="paramname"><em>w</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Write an intersection curve to file in the form</p>
+<p >[ <img class="formulaInl" alt="$x$" src="form_14.png" width="8" height="6"/> <img class="formulaInl" alt="$y$" src="form_15.png" width="8" height="9"/> <img class="formulaInl" alt="$z$" src="form_16.png" width="6" height="6"/> <img class="formulaInl" alt="$s_{1}$" src="form_17.png" width="10" height="9"/> <img class="formulaInl" alt="$t_{1}$" src="form_18.png" width="10" height="11"/> <img class="formulaInl" alt="$s_{2}$" src="form_19.png" width="10" height="9"/> <img class="formulaInl" alt="$t_{2}$" src="form_20.png" width="10" height="11"/>]</p>
+<p >where <img class="formulaInl" alt="$(x,y,z)$" src="form_21.png" width="40" height="14"/> are physical coordinates and <img class="formulaInl" alt="$(s_{i},t_{i})$" src="form_22.png" width="33" height="14"/> are parametric coordinates on the respective surface patches (not the surfaces proper)</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">f</td><td>output file stream; </td></tr>
+    <tr><td class="paramname">inter</td><td>intersection curve to write; </td></tr>
+    <tr><td class="paramname">w</td><td>workspace for surface evaluation.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+</div>
+</div>
+<a id="af036658709a83e5b51edace0ff5343e4" name="af036658709a83e5b51edace0ff5343e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af036658709a83e5b51edace0ff5343e4">&#9670;&nbsp;</a></span>agg_intersection_new()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a> * agg_intersection_new </td>
+          <td>(</td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>nstmax</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Allocate a new surface intersection structure.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nstmax</td><td>maximum number of points on intersection curve.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>newly allocated <a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a>. </dd></dl>
+
+<p class="reference">References <a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a>.</p>
+
+</div>
+</div>
+<a id="a4c81c3ff9bc52ff3e9e950cf9e84c4ce" name="a4c81c3ff9bc52ff3e9e950cf9e84c4ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c81c3ff9bc52ff3e9e950cf9e84c4ce">&#9670;&nbsp;</a></span>agg_intersection_resample()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_intersection_resample </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a> *&#160;</td>
+          <td class="paramname"><em>inter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>nsp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>pps</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a> *&#160;</td>
+          <td class="paramname"><em>resample</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">agg_surface_workspace_t *&#160;</td>
+          <td class="paramname"><em>w</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Resample an intersection curve to (approximately) evenly spaced points in the mapping patch.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">inter</td><td>an intersection curve; </td></tr>
+    <tr><td class="paramname">nsp</td><td>number of splines in the resampled curve; </td></tr>
+    <tr><td class="paramname">pps</td><td>number of points per spline in the resampled curve; </td></tr>
+    <tr><td class="paramname">resample</td><td>on output contains the resampled intersection data; </td></tr>
+    <tr><td class="paramname">w</td><td>workspace for surface evaluation.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+</div>
+</div>
+<a id="a44e88712ac2493041ca76186483eee1f" name="a44e88712ac2493041ca76186483eee1f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44e88712ac2493041ca76186483eee1f">&#9670;&nbsp;</a></span>agg_mesh_element_add()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_mesh_element_add </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__mesh.html#ga77887f8535b8d608674eb369d758c1cf">agg_mesh_t</a> *&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>s0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>s1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>s2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>s3</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Add an element to a mesh.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">m</td><td>an <a class="el" href="group__mesh.html#ga77887f8535b8d608674eb369d758c1cf">agg_mesh_t</a> to have an element added. </td></tr>
+    <tr><td class="paramname">s0</td><td>index of first spline of element; </td></tr>
+    <tr><td class="paramname">s1</td><td>index of second spline of element; </td></tr>
+    <tr><td class="paramname">s2</td><td>index of third spline of element; </td></tr>
+    <tr><td class="paramname">s3</td><td>index of fourth spline of element (if zero, a three-sided element is added)</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+</div>
+</div>
+<a id="a4e5a1d7c4f04b84f56fc206d1240ee51" name="a4e5a1d7c4f04b84f56fc206d1240ee51"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e5a1d7c4f04b84f56fc206d1240ee51">&#9670;&nbsp;</a></span>agg_mesh_intersection_add()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_mesh_intersection_add </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__mesh.html#ga77887f8535b8d608674eb369d758c1cf">agg_mesh_t</a> *&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a> *&#160;</td>
+          <td class="paramname"><em>inter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>nsp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>pps</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Add an intersection to a mesh. This should be done before adding surfaces, so that they can be cut if necessary.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">m</td><td>an <a class="el" href="group__mesh.html#ga77887f8535b8d608674eb369d758c1cf">agg_mesh_t</a>; </td></tr>
+    <tr><td class="paramname">inter</td><td>a surface-surface intersection; </td></tr>
+    <tr><td class="paramname">nsp</td><td>number of splines in <em>inter</em>; </td></tr>
+    <tr><td class="paramname">pps</td><td>number of points on each spline in <em>inter</em>;</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+</div>
+</div>
+<a id="a936696d95ab7733b3e76f9114eed748d" name="a936696d95ab7733b3e76f9114eed748d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a936696d95ab7733b3e76f9114eed748d">&#9670;&nbsp;</a></span>agg_mesh_spline_ends()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_mesh_spline_ends </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__mesh.html#ga77887f8535b8d608674eb369d758c1cf">agg_mesh_t</a> *&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint *&#160;</td>
+          <td class="paramname"><em>p0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint *&#160;</td>
+          <td class="paramname"><em>p1</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Find the indices of the end points of a spline in a mesh</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">m</td><td>mesh containing the splines; </td></tr>
+    <tr><td class="paramname">s</td><td>index of spline; </td></tr>
+    <tr><td class="paramname">p0</td><td>on exit, index of one end point of spline <em>s</em>; </td></tr>
+    <tr><td class="paramname">p1</td><td>on exit, index of other end point of spline <em>s</em>.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="agg_8h.html#aa895204dc42fc97a80b81bebe044507f">agg_mesh_splines_connected()</a>.</p>
+
+</div>
+</div>
+<a id="a802f8fe2b7bb1ac25bee26e62a89b8ef" name="a802f8fe2b7bb1ac25bee26e62a89b8ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a802f8fe2b7bb1ac25bee26e62a89b8ef">&#9670;&nbsp;</a></span>agg_mesh_spline_from_endpoints()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_mesh_spline_from_endpoints </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__mesh.html#ga77887f8535b8d608674eb369d758c1cf">agg_mesh_t</a> *&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>p0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>p1</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Find a spline from its endpoints</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">m</td><td>a mesh containing a set of splines; </td></tr>
+    <tr><td class="paramname">p0</td><td>index of a point of <em>m</em>; </td></tr>
+    <tr><td class="paramname">p1</td><td>index of another point of <em>m</em>.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>index of a spline which has endpoints <em>p0</em> and <em>p1</em>, or 0 if there is no such spline. </dd></dl>
+
+</div>
+</div>
+<a id="a9d9c603ee3ba5f0cf2972b275ba30cf9" name="a9d9c603ee3ba5f0cf2972b275ba30cf9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d9c603ee3ba5f0cf2972b275ba30cf9">&#9670;&nbsp;</a></span>agg_mesh_spline_interp_points()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_mesh_spline_interp_points </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__mesh.html#ga77887f8535b8d608674eb369d758c1cf">agg_mesh_t</a> *&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>p0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>p1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>pps</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">agg_surface_workspace_t *&#160;</td>
+          <td class="paramname"><em>w</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Generate a spline by interpolating mapping between two existing points.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">m</td><td>an <a class="el" href="group__mesh.html#ga77887f8535b8d608674eb369d758c1cf">agg_mesh_t</a>; </td></tr>
+    <tr><td class="paramname">s</td><td>index in <em>m</em> of surface to use for interpolation; </td></tr>
+    <tr><td class="paramname">p0</td><td>index of first point of new spline; </td></tr>
+    <tr><td class="paramname">p1</td><td>index of end point of new spline; </td></tr>
+    <tr><td class="paramname">pps</td><td>total number of points on new spline; </td></tr>
+    <tr><td class="paramname">w</td><td>workspace for surface evaluation.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+</div>
+</div>
+<a id="aa895204dc42fc97a80b81bebe044507f" name="aa895204dc42fc97a80b81bebe044507f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa895204dc42fc97a80b81bebe044507f">&#9670;&nbsp;</a></span>agg_mesh_splines_connected()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gboolean agg_mesh_splines_connected </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__mesh.html#ga77887f8535b8d608674eb369d758c1cf">agg_mesh_t</a> *&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>i0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>i1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint *&#160;</td>
+          <td class="paramname"><em>p</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Check if two splines in an <a class="el" href="group__mesh.html#ga77887f8535b8d608674eb369d758c1cf">agg_mesh_t</a> are connected.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">m</td><td>an <a class="el" href="group__mesh.html#ga77887f8535b8d608674eb369d758c1cf">agg_mesh_t</a>; </td></tr>
+    <tr><td class="paramname">i0</td><td>index of first spline to check; </td></tr>
+    <tr><td class="paramname">i1</td><td>index of second spline to check; </td></tr>
+    <tr><td class="paramname">p</td><td>on exit, set to index of common point of splines <em>i0</em> and <em>i1</em>.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>TRUE if splines have an end point in common. </dd></dl>
+
+<p class="reference">References <a class="el" href="group__mesh.html#gabd43b7d08bedb44cd2737b4838000ab4">agg_mesh_spline_ends()</a>.</p>
+
+</div>
+</div>
+<a id="a2e31a15c453c3da1871250632427b656" name="a2e31a15c453c3da1871250632427b656"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e31a15c453c3da1871250632427b656">&#9670;&nbsp;</a></span>agg_mesh_surface_add()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_mesh_surface_add </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__mesh.html#ga77887f8535b8d608674eb369d758c1cf">agg_mesh_t</a> *&#160;</td>
+          <td class="paramname"><em>msh</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *&#160;</td>
+          <td class="paramname"><em>S</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__patches.html#gabdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *&#160;</td>
+          <td class="paramname"><em>P</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>nsec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>nseg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>pps</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">agg_surface_workspace_t *&#160;</td>
+          <td class="paramname"><em>w</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Add a parametric surface to a mesh, cutting on intersections if necessary. This requires that any intersections be added in advance, using <a class="el" href="group__mesh.html#ga36e43036ba3bc99c967c4d25a4c6b50c">agg_mesh_intersection_add</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">msh</td><td>a mesh to have a surface added; </td></tr>
+    <tr><td class="paramname">S</td><td>the surface to add; </td></tr>
+    <tr><td class="paramname">P</td><td>the patch mapping <em>S</em>; </td></tr>
+    <tr><td class="paramname">nsec</td><td>number of sections to compute; </td></tr>
+    <tr><td class="paramname">nseg</td><td>number of segments on each section; </td></tr>
+    <tr><td class="paramname">pps</td><td>number of points on each segment. </td></tr>
+    <tr><td class="paramname">w</td><td>workspace for surface evaluation.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+</div>
+</div>
+<a id="a8337a8e05e56227d9f42ab84d0d89fd4" name="a8337a8e05e56227d9f42ab84d0d89fd4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8337a8e05e56227d9f42ab84d0d89fd4">&#9670;&nbsp;</a></span>agg_mesh_surface_point_add()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_mesh_surface_point_add </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__mesh.html#ga77887f8535b8d608674eb369d758c1cf">agg_mesh_t</a> *&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>surf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gdouble&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gdouble&#160;</td>
+          <td class="paramname"><em>t</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">agg_surface_workspace_t *&#160;</td>
+          <td class="paramname"><em>w</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Add a point to a mesh</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">m</td><td>mesh to have point added; </td></tr>
+    <tr><td class="paramname">surf</td><td>index in <em>m</em> of surface on which to evaluate point; </td></tr>
+    <tr><td class="paramname">s</td><td>coordinate on patch for surface <em>surf</em>; </td></tr>
+    <tr><td class="paramname">t</td><td>coordinate on patch for surface <em>surf</em>; </td></tr>
+    <tr><td class="paramname">w</td><td>workspace for surface evaluation.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>index of newly added point. </dd></dl>
+
+<p class="reference">References <a class="el" href="group__patches.html#gabdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a>, and <a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a>.</p>
+
+</div>
+</div>
+<a id="a20041984f55a7eff78c69f3c6fd0dcb6" name="a20041984f55a7eff78c69f3c6fd0dcb6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20041984f55a7eff78c69f3c6fd0dcb6">&#9670;&nbsp;</a></span>agg_mesh_write_gmsh()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_mesh_write_gmsh </td>
+          <td>(</td>
+          <td class="paramtype">FILE *&#160;</td>
+          <td class="paramname"><em>f</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__mesh.html#ga77887f8535b8d608674eb369d758c1cf">agg_mesh_t</a> *&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&#160;</td>
+          <td class="paramname"><em>len</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>offp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>offsp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>offs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gboolean&#160;</td>
+          <td class="paramname"><em>opencascade</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Write a <a class="el" href="group__mesh.html#ga77887f8535b8d608674eb369d758c1cf">agg_mesh_t</a> to file in GMSH .geo format.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">f</td><td>output file stream; </td></tr>
+    <tr><td class="paramname">m</td><td>mesh to write to file; </td></tr>
+    <tr><td class="paramname">len</td><td>string to include point definitions for local length scale; </td></tr>
+    <tr><td class="paramname">offp</td><td>point index offset (added to point indices); </td></tr>
+    <tr><td class="paramname">offsp</td><td>spline index offset (added to spline indices); </td></tr>
+    <tr><td class="paramname">offs</td><td>surface index offset (added to GMSH surface indices); </td></tr>
+    <tr><td class="paramname">opencascade</td><td>if TRUE, assume OpenCascade engine is being used.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+</div>
+</div>
+<a id="a91915491c1aed07991188269140680ce" name="a91915491c1aed07991188269140680ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a91915491c1aed07991188269140680ce">&#9670;&nbsp;</a></span>agg_patch_map()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_patch_map </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__patches.html#gabdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *&#160;</td>
+          <td class="paramname"><em>P</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gdouble&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gdouble&#160;</td>
+          <td class="paramname"><em>t</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gdouble *&#160;</td>
+          <td class="paramname"><em>u</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gdouble *&#160;</td>
+          <td class="paramname"><em>v</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Apply mapping in a patch to find parametric variables on surface.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">P</td><td>patch whose mapping is to be applied; </td></tr>
+    <tr><td class="paramname">s</td><td>variable on <em>P</em>, <img class="formulaInl" alt="$0\leq s \leq 1$" src="form_30.png" width="53" height="11"/>; </td></tr>
+    <tr><td class="paramname">t</td><td>variable on <em>P</em>, <img class="formulaInl" alt="$0\leq t \leq 1$" src="form_31.png" width="50" height="11"/>; </td></tr>
+    <tr><td class="paramname">u</td><td>surface parametric variable; </td></tr>
+    <tr><td class="paramname">v</td><td>surface parametric variable.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+<p class="reference">References <a class="el" href="agg_8h.html#gab2dada3ec7e3ef50c701a16f93701ebca3b4f4c2395e1148d13e7d4b1f8320e49">AGG_PATCH_BILINEAR</a>.</p>
+
+</div>
+</div>
+<a id="a9bbbda35c5b3b3b8a5da05a50cc3da24" name="a9bbbda35c5b3b3b8a5da05a50cc3da24"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9bbbda35c5b3b3b8a5da05a50cc3da24">&#9670;&nbsp;</a></span>agg_patch_parse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_patch_parse </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__patches.html#gabdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *&#160;</td>
+          <td class="paramname"><em>P</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a> *&#160;</td>
+          <td class="paramname"><em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>np</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Parse string data for an <a class="el" href="group__patches.html#gabdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">P</td><td>on exit, is set according to input variables; </td></tr>
+    <tr><td class="paramname">p</td><td>array of variables for parameters setting <em>P</em>; </td></tr>
+    <tr><td class="paramname">np</td><td>number of variables in <em>p</em>.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+</div>
+</div>
+<a id="a6e0ed58f3d6f8f9e1bbf89706966b282" name="a6e0ed58f3d6f8f9e1bbf89706966b282"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e0ed58f3d6f8f9e1bbf89706966b282">&#9670;&nbsp;</a></span>agg_patch_st_correct()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_patch_st_correct </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__patches.html#gabdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *&#160;</td>
+          <td class="paramname"><em>P</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gdouble *&#160;</td>
+          <td class="paramname"><em>st</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Correct out of range values of <img class="formulaInl" alt="$(s,t)$" src="form_5.png" width="25" height="14"/> to lie in the range <img class="formulaInl" alt="$(0,1)\times(0,1)$" src="form_23.png" width="70" height="14"/> where coordinate wrapping is permitted</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">P</td><td>an <a class="el" href="group__patches.html#gabdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a>; </td></tr>
+    <tr><td class="paramname">st</td><td>an <img class="formulaInl" alt="$(s,t)$" src="form_5.png" width="25" height="14"/> parameter pair on patch <em>P</em>.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
 
 </div>
 </div>
@@ -339,13 +1638,236 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">s</td><td>a <a class="el" href="agg_8h.html#a8cdd164643b93d05245e9b4976f3f0cb">agg_section_t</a> containing the section data; </td></tr>
-    <tr><td class="paramname">x</td><td>evaluation point <img class="formulaInl" alt="$-1\leq x\leq 1$" src="form_2.png" width="61" height="11"/>.</td></tr>
+    <tr><td class="paramname">x</td><td>evaluation point <img class="formulaInl" alt="$-1\leq x\leq 1$" src="form_32.png" width="61" height="11"/>.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><img class="formulaInl" alt="$y=f(x)$" src="form_3.png" width="48" height="14"/> on success. An error is reported and execution ceases if <em>x</em> is out of range or the section type is undefined. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><img class="formulaInl" alt="$y=f(x)$" src="form_33.png" width="48" height="14"/> on success. An error is reported and execution ceases if <em>x</em> is out of range or the section type is undefined. </dd></dl>
 
-<p class="reference">References <a class="el" href="agg_8h.html#gaf4798d9cfc37c3818fc2f3a2208bfb82a1f2658f00e6fa1163027b28209a40cc1">AGG_SECTION_ELLIPSE</a>, <a class="el" href="agg_8h.html#a77956769442ada427d64c740062b911a">agg_section_type</a>, and <a class="el" href="agg_8h.html#gaf4798d9cfc37c3818fc2f3a2208bfb82af1bfd785432453c479b9859537467b0e">AGG_SECTION_UNDEFINED</a>.</p>
+<p class="reference">References <a class="el" href="agg_8h.html#gaf4798d9cfc37c3818fc2f3a2208bfb82a6cb226964b1603cd710ae92956340cf5">AGG_SECTION_AEROFOIL</a>, <a class="el" href="agg_8h.html#gaf4798d9cfc37c3818fc2f3a2208bfb82a1f2658f00e6fa1163027b28209a40cc1">AGG_SECTION_ELLIPSE</a>, <a class="el" href="agg_8h.html#a77956769442ada427d64c740062b911a">agg_section_type</a>, and <a class="el" href="agg_8h.html#gaf4798d9cfc37c3818fc2f3a2208bfb82af1bfd785432453c479b9859537467b0e">AGG_SECTION_UNDEFINED</a>.</p>
+
+</div>
+</div>
+<a id="a2116c909ff8359c7c5f449180c710cd5" name="a2116c909ff8359c7c5f449180c710cd5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2116c909ff8359c7c5f449180c710cd5">&#9670;&nbsp;</a></span>agg_section_parse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_section_parse </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="agg_8h.html#a8cdd164643b93d05245e9b4976f3f0cb">agg_section_t</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a> *&#160;</td>
+          <td class="paramname"><em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>np</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Parse an <a class="el" href="agg_8h.html#a8cdd164643b93d05245e9b4976f3f0cb">agg_section_t</a> description given as a name and list of variable parameters</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td><a class="el" href="agg_8h.html#a8cdd164643b93d05245e9b4976f3f0cb">agg_section_t</a> to set; </td></tr>
+    <tr><td class="paramname">name</td><td>name of section; </td></tr>
+    <tr><td class="paramname">p</td><td>array of <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a> containing parameters for section; </td></tr>
+    <tr><td class="paramname">np</td><td>number of entries in <em>p</em>.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+</div>
+</div>
+<a id="ac848ab5ddc58009fde33f7c728fb7ecf" name="ac848ab5ddc58009fde33f7c728fb7ecf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac848ab5ddc58009fde33f7c728fb7ecf">&#9670;&nbsp;</a></span>agg_section_set_aerofoil()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_section_set_aerofoil </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="agg_8h.html#a8cdd164643b93d05245e9b4976f3f0cb">agg_section_t</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gdouble&#160;</td>
+          <td class="paramname"><em>eta</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gdouble&#160;</td>
+          <td class="paramname"><em>th</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gdouble&#160;</td>
+          <td class="paramname"><em>yte</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Set a section to a simple aerofoil shape of specified leading edge exponent, maximum thickness, and trailing edge displacement, as in Kulfan, B. (2010). Recent extensions and applications of the &lsquo;CST&rsquo; universal parametric geometry representation method. The Aeronautical Journal, 114(1153), 157-176 <a href="https://doi.org/10.1017/S0001924000003614">https://doi.org/10.1017/S0001924000003614</a></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td><a class="el" href="agg_8h.html#a8cdd164643b93d05245e9b4976f3f0cb">agg_section_t</a> to be initialized; </td></tr>
+    <tr><td class="paramname">eta</td><td>leading edge exponent <img class="formulaInl" alt="$\eta_{1}$" src="form_0.png" width="11" height="9"/>; </td></tr>
+    <tr><td class="paramname">th</td><td>aerofoil thickness; </td></tr>
+    <tr><td class="paramname">yte</td><td>trailing edge displacement (half trailing edge thickness).</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+<p class="reference">References <a class="el" href="agg_8h.html#gaf4798d9cfc37c3818fc2f3a2208bfb82a6cb226964b1603cd710ae92956340cf5">AGG_SECTION_AEROFOIL</a>, <a class="el" href="agg_8h.html#a5378fa853984c8f6b4eab5447e1b89b7">agg_section_close</a>, <a class="el" href="agg_8h.html#a108622652317c5e32cc5b274dbd27074">agg_section_coefficient_lower</a>, <a class="el" href="agg_8h.html#a1dd337d4464caea072bc3276765574b9">agg_section_coefficient_upper</a>, <a class="el" href="agg_8h.html#ae30718f98a4e084775819bebfb7cdb01">agg_section_eta_left</a>, <a class="el" href="agg_8h.html#af4e997cbe72578421773d629c6e7e28f">agg_section_eta_right</a>, <a class="el" href="agg_8h.html#a91b05d5236f59b33c0523326b46c9740">agg_section_order_lower</a>, <a class="el" href="agg_8h.html#a0eac1de141f11cad7fdb472c92636318">agg_section_order_upper</a>, <a class="el" href="agg_8h.html#ad48b2ab0dbe46e279e115dd3d50294b2">agg_section_trailing_edge_lower</a>, <a class="el" href="agg_8h.html#a209c0c509b1864c497b13a064114582f">agg_section_trailing_edge_upper</a>, and <a class="el" href="agg_8h.html#a77956769442ada427d64c740062b911a">agg_section_type</a>.</p>
+
+</div>
+</div>
+<a id="af083c3db44dc8c3d3666e8ade6f0e9ef" name="af083c3db44dc8c3d3666e8ade6f0e9ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af083c3db44dc8c3d3666e8ade6f0e9ef">&#9670;&nbsp;</a></span>agg_section_set_circle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_section_set_circle </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="agg_8h.html#a8cdd164643b93d05245e9b4976f3f0cb">agg_section_t</a> *&#160;</td>
+          <td class="paramname"><em>s</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Set a section to a circle of radius 1/2 centred at <img class="formulaInl" alt="$(0,1/2)$" src="form_34.png" width="39" height="14"/>, as in Kulfan, B. (2010). Recent extensions and applications of the &lsquo;CST&rsquo; universal parametric geometry representation method. The Aeronautical Journal, 114(1153), 157-176 <a href="https://doi.org/10.1017/S0001924000003614">https://doi.org/10.1017/S0001924000003614</a></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td><a class="el" href="agg_8h.html#a8cdd164643b93d05245e9b4976f3f0cb">agg_section_t</a> to be initialized;</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+<p class="reference">References <a class="el" href="agg_8h.html#a108622652317c5e32cc5b274dbd27074">agg_section_coefficient_lower</a>, <a class="el" href="agg_8h.html#a1dd337d4464caea072bc3276765574b9">agg_section_coefficient_upper</a>, <a class="el" href="agg_8h.html#gaf4798d9cfc37c3818fc2f3a2208bfb82a1f2658f00e6fa1163027b28209a40cc1">AGG_SECTION_ELLIPSE</a>, <a class="el" href="agg_8h.html#ae30718f98a4e084775819bebfb7cdb01">agg_section_eta_left</a>, <a class="el" href="agg_8h.html#af4e997cbe72578421773d629c6e7e28f">agg_section_eta_right</a>, <a class="el" href="agg_8h.html#a91b05d5236f59b33c0523326b46c9740">agg_section_order_lower</a>, <a class="el" href="agg_8h.html#a0eac1de141f11cad7fdb472c92636318">agg_section_order_upper</a>, and <a class="el" href="agg_8h.html#a77956769442ada427d64c740062b911a">agg_section_type</a>.</p>
+
+</div>
+</div>
+<a id="a6c28eb8d25611f3cba1f9fe1ac66659f" name="a6c28eb8d25611f3cba1f9fe1ac66659f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c28eb8d25611f3cba1f9fe1ac66659f">&#9670;&nbsp;</a></span>agg_sections_list()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_sections_list </td>
+          <td>(</td>
+          <td class="paramtype">FILE *&#160;</td>
+          <td class="paramname"><em>f</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Write a list of available section types to output</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">f</td><td>output file stream.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+</div>
+</div>
+<a id="a8c3d4ec240c81bdb3f551d4411837589" name="a8c3d4ec240c81bdb3f551d4411837589"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c3d4ec240c81bdb3f551d4411837589">&#9670;&nbsp;</a></span>agg_surface_patch_intersection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_surface_patch_intersection </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a> *&#160;</td>
+          <td class="paramname"><em>inter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *&#160;</td>
+          <td class="paramname"><em>S1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__patches.html#gabdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *&#160;</td>
+          <td class="paramname"><em>P1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *&#160;</td>
+          <td class="paramname"><em>S2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__patches.html#gabdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *&#160;</td>
+          <td class="paramname"><em>P2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">agg_surface_workspace_t *&#160;</td>
+          <td class="paramname"><em>w</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Calculate the intersection of two parametric surfaces.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">inter</td><td>on exit contains the intersection curve data; </td></tr>
+    <tr><td class="paramname">S1</td><td>first surface; </td></tr>
+    <tr><td class="paramname">P1</td><td>mapping patch for first surface; </td></tr>
+    <tr><td class="paramname">S2</td><td>second surface; </td></tr>
+    <tr><td class="paramname">P2</td><td>mapping patch for second surface; </td></tr>
+    <tr><td class="paramname">w</td><td>workspace for surface evaluation.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
 
 </div>
 </div>
@@ -358,7 +1880,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">gint agg_surface_point_eval </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="group__surfaces.html#ga1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *&#160;</td>
           <td class="paramname"><em>S</em>, </td>
         </tr>
         <tr>
@@ -396,7 +1918,7 @@ Functions</h2></td></tr>
 <p >Evaluate a point on a surface. The surface must have been initialized with <a class="el" href="group__surfaces.html#ga05f8b5b0febe31ce57337e7045c04903">agg_surface_weights_make</a>, and its transform initialized with <a class="el" href="group__variables.html#gac423c9a2a65b0b8e677576e9e4fbb1b6">agg_expression_data_compile</a> and <a class="el" href="group__transforms.html#ga015c632cb62cafdc579df29f44d8eab9">agg_transform_expressions_compile</a>, to set up the internal variables and expressions used for point transformation. The section data for <em>S</em> are interpolated at <img class="formulaInl" alt="$u$" src="form_9.png" width="9" height="6"/> and the point on the section evaluated at <img class="formulaInl" alt="$v$" src="form_10.png" width="8" height="6"/>. The point is then transformed using the surface transformation.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">S</td><td>an <a class="el" href="group__surfaces.html#ga1c502e562486827063a7169cd79b5cc0">agg_surface_t</a>; </td></tr>
+    <tr><td class="paramname">S</td><td>an <a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a>; </td></tr>
     <tr><td class="paramname">u</td><td>surface parameter <img class="formulaInl" alt="$u$" src="form_9.png" width="9" height="6"/>; </td></tr>
     <tr><td class="paramname">v</td><td>surface parameter <img class="formulaInl" alt="$v$" src="form_10.png" width="8" height="6"/>; </td></tr>
     <tr><td class="paramname">x</td><td>on exit contains <img class="formulaInl" alt="$\mathbf{x}(u,v)$" src="form_11.png" width="36" height="14"/>; </td></tr>
@@ -419,7 +1941,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">gint agg_surface_section_add </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="group__surfaces.html#ga1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *&#160;</td>
           <td class="paramname"><em>S</em>, </td>
         </tr>
         <tr>
@@ -445,7 +1967,7 @@ Functions</h2></td></tr>
 <p >Add a section to a surface at a given value of parameter <img class="formulaInl" alt="$u$" src="form_9.png" width="9" height="6"/>. The section data are copied into the surface, so the section variable <em>s</em> can be reused afterwards.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">S</td><td>an <a class="el" href="group__surfaces.html#ga1c502e562486827063a7169cd79b5cc0">agg_surface_t</a>; </td></tr>
+    <tr><td class="paramname">S</td><td>an <a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a>; </td></tr>
     <tr><td class="paramname">s</td><td>an <a class="el" href="agg_8h.html#a8cdd164643b93d05245e9b4976f3f0cb">agg_section_t</a>; </td></tr>
     <tr><td class="paramname">u</td><td>parameter value where section is to be added.</td></tr>
   </table>
@@ -464,7 +1986,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">gint agg_surface_section_interp </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="group__surfaces.html#ga1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *&#160;</td>
           <td class="paramname"><em>S</em>, </td>
         </tr>
         <tr>
@@ -490,7 +2012,7 @@ Functions</h2></td></tr>
 <p >Interpolate section data from a surface into a local section, using Berrut and Trefethen's barycentric Lagrangian interpolation, <a href="https://dx.doi.org/10.1137/S0036144502417715">https://dx.doi.org/10.1137/S0036144502417715</a></p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">S</td><td>an <a class="el" href="group__surfaces.html#ga1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> containing a number of sections; </td></tr>
+    <tr><td class="paramname">S</td><td>an <a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> containing a number of sections; </td></tr>
     <tr><td class="paramname">u</td><td>parameter at which to interpolate section; </td></tr>
     <tr><td class="paramname">s</td><td>on exit, contains interpolated data for section at <em>u</em>.</td></tr>
   </table>
@@ -511,7 +2033,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">gint agg_surface_weights_make </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="group__surfaces.html#ga1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *&#160;</td>
           <td class="paramname"><em>S</em></td><td>)</td>
           <td></td>
         </tr>
@@ -521,7 +2043,7 @@ Functions</h2></td></tr>
 <p >Generate interpolation weights for sections on a surface, the preprocessing stage for Berrut and Trefethen's barycentric Lagrangian interpolation, <a href="https://dx.doi.org/10.1137/S0036144502417715">https://dx.doi.org/10.1137/S0036144502417715</a></p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">S</td><td>an <a class="el" href="group__surfaces.html#ga1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> containing a number of sections.</td></tr>
+    <tr><td class="paramname">S</td><td>an <a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> containing a number of sections.</td></tr>
   </table>
   </dd>
 </dl>
@@ -593,7 +2115,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
 
-<p class="reference">References <a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a>.</p>
+<p class="reference">References <a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a>, and <a class="el" href="agg_8h.html#adb65910d9a68ec640fb31a05ead4b6dd">agg_expression_data_variable_add()</a>.</p>
 
 </div>
 </div>
@@ -632,12 +2154,60 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">T</td><td>an <a class="el" href="agg_8h.html#ab26de2509de1b8f9b7bc6523852dc6da">agg_transform_t</a> containing the sequence of operations; </td></tr>
-    <tr><td class="paramname">xin</td><td>input point; </td></tr>
-    <tr><td class="paramname">xout</td><td>output point.</td></tr>
+    <tr><td class="paramname">xin</td><td>input point (can be the same as <em>xout</em>); </td></tr>
+    <tr><td class="paramname">xout</td><td>on exit contains transformed version of <em>xin</em>.</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+<p class="reference">References <a class="el" href="agg_8h.html#a8f2e2adcf62dbb3a21505fa1cd070e76">agg_transform_operator</a>, <a class="el" href="group__transforms.html#ga7e985891f93fe4b64a177ac841672909">agg_transform_operator_apply()</a>, and <a class="el" href="agg_8h.html#a427b4f4d329639cb65beaea740174178">agg_transform_operator_number</a>.</p>
+
+</div>
+</div>
+<a id="aff5f7e15c699e9e6b874df084150f08a" name="aff5f7e15c699e9e6b874df084150f08a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff5f7e15c699e9e6b874df084150f08a">&#9670;&nbsp;</a></span>agg_transform_axes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_transform_axes </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__surfaces.html#ga9d96b462257229695d4a34527697d492">agg_axes_t</a>&#160;</td>
+          <td class="paramname"><em>axes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gdouble *&#160;</td>
+          <td class="paramname"><em>xin</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gdouble *&#160;</td>
+          <td class="paramname"><em>xout</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Apply an axis transform (swap) to a point</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">axes</td><td>an <a class="el" href="group__surfaces.html#ga9d96b462257229695d4a34527697d492">agg_axes_t</a> for the required axis transformation; </td></tr>
+    <tr><td class="paramname">xin</td><td>input point (can be equal to <em>xout</em>); </td></tr>
+    <tr><td class="paramname">xout</td><td>on exit contains transformed point data.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+<p class="reference">References <a class="el" href="agg_8h.html#ga9d96b462257229695d4a34527697d492aaefa87f8e684f3285c397d4184700837">AGG_AXES_PX_PY_MZ</a>, <a class="el" href="agg_8h.html#ga9d96b462257229695d4a34527697d492a98db150ad34df3857f9b834e984f2d21">AGG_AXES_PX_PY_PZ</a>, <a class="el" href="agg_8h.html#ga9d96b462257229695d4a34527697d492aa831b37d2d1da05c5d7127db7847f912">AGG_AXES_PY_PZ_PX</a>, <a class="el" href="agg_8h.html#ga9d96b462257229695d4a34527697d492aab7e8954312e7981efb2ae7b55f91ae4">AGG_AXES_PZ_PX_PY</a>, and <a class="el" href="agg_8h.html#ga9d96b462257229695d4a34527697d492ac97f02ff667be417fe6fbb1c540df3da">AGG_AXES_PZ_PY_PX</a>.</p>
 
 </div>
 </div>
@@ -665,7 +2235,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
 
-<p class="reference">References <a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a>, <a class="el" href="agg_8h.html#a9b3c7b4a183fc43a646fdc5cb1673993">agg_transform_operator_t</a>, and <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>.</p>
+<p class="reference">References <a class="el" href="agg_8h.html#a80416f24e969b55310b8a47b9f0100e9">agg_expression_compile()</a>, <a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a>, <a class="el" href="agg_8h.html#adb65910d9a68ec640fb31a05ead4b6dd">agg_expression_data_variable_add()</a>, <a class="el" href="agg_8h.html#a8f2e2adcf62dbb3a21505fa1cd070e76">agg_transform_operator</a>, <a class="el" href="agg_8h.html#a427b4f4d329639cb65beaea740174178">agg_transform_operator_number</a>, <a class="el" href="agg_8h.html#abb2f9f990c5c855f19ff3f801ad6d55a">agg_transform_operator_parameter</a>, <a class="el" href="agg_8h.html#a08c68d2085b1b5439357c8197655bafc">agg_transform_operator_parameter_number</a>, <a class="el" href="agg_8h.html#a9b3c7b4a183fc43a646fdc5cb1673993">agg_transform_operator_t</a>, <a class="el" href="agg_8h.html#a56809318765396e4ffffd4c8ca479034">agg_transform_variable</a>, <a class="el" href="agg_8h.html#a9d4fc7c50d8919ccc839d4a334fac643">agg_transform_variable_number</a>, <a class="el" href="agg_8h.html#ab1eb3e5fc0db91ca383c2f478300127b">agg_variable_definition</a>, <a class="el" href="agg_8h.html#a972736a8d33ed2be9f47e84631599d5b">agg_variable_evaluator</a>, and <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>.</p>
 
 </div>
 </div>
@@ -693,7 +2263,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>newly allocated <a class="el" href="agg_8h.html#ab26de2509de1b8f9b7bc6523852dc6da">agg_transform_t</a> </dd></dl>
 
-<p class="reference">References <a class="el" href="agg_8h.html#a9b3c7b4a183fc43a646fdc5cb1673993">agg_transform_operator_t</a>, and <a class="el" href="agg_8h.html#ab26de2509de1b8f9b7bc6523852dc6da">agg_transform_t</a>.</p>
+<p class="reference">References <a class="el" href="agg_8h.html#a427b4f4d329639cb65beaea740174178">agg_transform_operator_number</a>, <a class="el" href="agg_8h.html#af78d0f70b4637f268c6768aa183cd5ae">agg_transform_operator_number_max</a>, <a class="el" href="agg_8h.html#a9b3c7b4a183fc43a646fdc5cb1673993">agg_transform_operator_t</a>, <a class="el" href="agg_8h.html#ab26de2509de1b8f9b7bc6523852dc6da">agg_transform_t</a>, and <a class="el" href="agg_8h.html#a9d4fc7c50d8919ccc839d4a334fac643">agg_transform_variable_number</a>.</p>
 
 </div>
 </div>
@@ -753,7 +2323,55 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success </dd></dl>
 
-<p class="reference">References <a class="el" href="group__transforms.html#ga57e762424be00dc262795556c254934b">agg_transform_operator_new()</a>, <a class="el" href="agg_8h.html#a9b3c7b4a183fc43a646fdc5cb1673993">agg_transform_operator_t</a>, and <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>.</p>
+<p class="reference">References <a class="el" href="agg_8h.html#a8f2e2adcf62dbb3a21505fa1cd070e76">agg_transform_operator</a>, <a class="el" href="agg_8h.html#a6ab79d88ba68d2d57369777f1309ddb5">agg_transform_operator_func</a>, <a class="el" href="group__transforms.html#ga57e762424be00dc262795556c254934b">agg_transform_operator_new()</a>, <a class="el" href="agg_8h.html#a427b4f4d329639cb65beaea740174178">agg_transform_operator_number</a>, <a class="el" href="agg_8h.html#a9d90d1260ef01edfa55395a8ef258901">agg_transform_operator_operation</a>, <a class="el" href="agg_8h.html#abb2f9f990c5c855f19ff3f801ad6d55a">agg_transform_operator_parameter</a>, <a class="el" href="agg_8h.html#a08c68d2085b1b5439357c8197655bafc">agg_transform_operator_parameter_number</a>, <a class="el" href="agg_8h.html#a9b3c7b4a183fc43a646fdc5cb1673993">agg_transform_operator_t</a>, <a class="el" href="agg_8h.html#ab1eb3e5fc0db91ca383c2f478300127b">agg_variable_definition</a>, <a class="el" href="agg_8h.html#a507e1c39c279ca276de83410336a5c06">agg_variable_name</a>, <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>, and <a class="el" href="agg_8h.html#a9d32a3c48e22b7d630e4fbc4e02c71a0">agg_variable_value</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="agg_8h.html#a77479169572fa74999fded7d30af2453">agg_transform_parse()</a>.</p>
+
+</div>
+</div>
+<a id="a7e985891f93fe4b64a177ac841672909" name="a7e985891f93fe4b64a177ac841672909"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e985891f93fe4b64a177ac841672909">&#9670;&nbsp;</a></span>agg_transform_operator_apply()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_transform_operator_apply </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="agg_8h.html#a9b3c7b4a183fc43a646fdc5cb1673993">agg_transform_operator_t</a> *&#160;</td>
+          <td class="paramname"><em>op</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gdouble *&#160;</td>
+          <td class="paramname"><em>xin</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gdouble *&#160;</td>
+          <td class="paramname"><em>xout</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Apply a transform operation to a point.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">op</td><td>transform operation (usually part of an <a class="el" href="agg_8h.html#ab26de2509de1b8f9b7bc6523852dc6da">agg_transform_t</a>); </td></tr>
+    <tr><td class="paramname">xin</td><td>input point; </td></tr>
+    <tr><td class="paramname">xout</td><td>on exit contains transformed version of <em>xin</em>.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="agg_8h.html#a1d94218842c8aca6203ddba991b32a5f">agg_transform_apply()</a>.</p>
 
 </div>
 </div>
@@ -792,7 +2410,60 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
 
-<p class="reference">References <a class="el" href="agg_8h.html#a9b3c7b4a183fc43a646fdc5cb1673993">agg_transform_operator_t</a>, and <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>.</p>
+<p class="reference">References <a class="el" href="agg_8h.html#a8f2e2adcf62dbb3a21505fa1cd070e76">agg_transform_operator</a>, <a class="el" href="agg_8h.html#a427b4f4d329639cb65beaea740174178">agg_transform_operator_number</a>, <a class="el" href="agg_8h.html#a9d90d1260ef01edfa55395a8ef258901">agg_transform_operator_operation</a>, <a class="el" href="agg_8h.html#abb2f9f990c5c855f19ff3f801ad6d55a">agg_transform_operator_parameter</a>, <a class="el" href="agg_8h.html#a08c68d2085b1b5439357c8197655bafc">agg_transform_operator_parameter_number</a>, <a class="el" href="agg_8h.html#a9b3c7b4a183fc43a646fdc5cb1673993">agg_transform_operator_t</a>, and <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>.</p>
+
+</div>
+</div>
+<a id="a77479169572fa74999fded7d30af2453" name="a77479169572fa74999fded7d30af2453"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a77479169572fa74999fded7d30af2453">&#9670;&nbsp;</a></span>agg_transform_parse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_transform_parse </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="agg_8h.html#ab26de2509de1b8f9b7bc6523852dc6da">agg_transform_t</a> *&#160;</td>
+          <td class="paramname"><em>T</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a> *&#160;</td>
+          <td class="paramname"><em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>np</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Parse a transform operation described by a string and add it to an <a class="el" href="agg_8h.html#ab26de2509de1b8f9b7bc6523852dc6da">agg_transform_t</a></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">T</td><td><a class="el" href="agg_8h.html#ab26de2509de1b8f9b7bc6523852dc6da">agg_transform_t</a> to have an operation added; </td></tr>
+    <tr><td class="paramname">name</td><td>name of transform operation (see <a class="el" href="group__transforms.html#ga9647f98c5477495e98aa83eaed70c171">agg_transform_operators_write</a>); </td></tr>
+    <tr><td class="paramname">p</td><td>array of <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a> holding parameters of transform; </td></tr>
+    <tr><td class="paramname">np</td><td>number of entries in <em>p</em>.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+<p class="reference">References <a class="el" href="group__transforms.html#ga3469482e2c22920b5accefdc004297c4">agg_transform_operator_add()</a>, <a class="el" href="agg_8h.html#ab1eb3e5fc0db91ca383c2f478300127b">agg_variable_definition</a>, and <a class="el" href="agg_8h.html#a9d32a3c48e22b7d630e4fbc4e02c71a0">agg_variable_value</a>.</p>
 
 </div>
 </div>
@@ -845,7 +2516,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success </dd></dl>
 
-<p class="reference">References <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>.</p>
+<p class="reference">References <a class="el" href="agg_8h.html#a9d4fc7c50d8919ccc839d4a334fac643">agg_transform_variable_number</a>, and <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>.</p>
 
 </div>
 </div>
@@ -873,7 +2544,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
 
-<p class="reference">References <a class="el" href="agg_8h.html#a9b3c7b4a183fc43a646fdc5cb1673993">agg_transform_operator_t</a>, and <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>.</p>
+<p class="reference">References <a class="el" href="agg_8h.html#afb742b448d0a4702a43ccc2642a30a74">agg_expression_data_eval()</a>, <a class="el" href="agg_8h.html#acc545aa8d109534c65f1c09e4ef4a61c">agg_expression_eval()</a>, <a class="el" href="agg_8h.html#a8f2e2adcf62dbb3a21505fa1cd070e76">agg_transform_operator</a>, <a class="el" href="agg_8h.html#a427b4f4d329639cb65beaea740174178">agg_transform_operator_number</a>, <a class="el" href="agg_8h.html#abb2f9f990c5c855f19ff3f801ad6d55a">agg_transform_operator_parameter</a>, <a class="el" href="agg_8h.html#a08c68d2085b1b5439357c8197655bafc">agg_transform_operator_parameter_number</a>, <a class="el" href="agg_8h.html#a9b3c7b4a183fc43a646fdc5cb1673993">agg_transform_operator_t</a>, <a class="el" href="agg_8h.html#a56809318765396e4ffffd4c8ca479034">agg_transform_variable</a>, <a class="el" href="agg_8h.html#a9d4fc7c50d8919ccc839d4a334fac643">agg_transform_variable_number</a>, <a class="el" href="agg_8h.html#ab1eb3e5fc0db91ca383c2f478300127b">agg_variable_definition</a>, <a class="el" href="agg_8h.html#a972736a8d33ed2be9f47e84631599d5b">agg_variable_evaluator</a>, <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>, and <a class="el" href="agg_8h.html#a9d32a3c48e22b7d630e4fbc4e02c71a0">agg_variable_value</a>.</p>
 
 </div>
 </div>
@@ -919,7 +2590,46 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
 
-<p class="reference">References <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>.</p>
+<p class="reference">References <a class="el" href="agg_8h.html#a56809318765396e4ffffd4c8ca479034">agg_transform_variable</a>, <a class="el" href="agg_8h.html#a9d4fc7c50d8919ccc839d4a334fac643">agg_transform_variable_number</a>, <a class="el" href="agg_8h.html#ab1eb3e5fc0db91ca383c2f478300127b">agg_variable_definition</a>, <a class="el" href="agg_8h.html#a507e1c39c279ca276de83410336a5c06">agg_variable_name</a>, <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>, and <a class="el" href="agg_8h.html#a9d32a3c48e22b7d630e4fbc4e02c71a0">agg_variable_value</a>.</p>
+
+</div>
+</div>
+<a id="a35d59f3797c818fcb381a128169b7a5a" name="a35d59f3797c818fcb381a128169b7a5a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35d59f3797c818fcb381a128169b7a5a">&#9670;&nbsp;</a></span>agg_variable_write()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_variable_write </td>
+          <td>(</td>
+          <td class="paramtype">FILE *&#160;</td>
+          <td class="paramname"><em>f</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a> *&#160;</td>
+          <td class="paramname"><em>v</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Write a variable definition to file. If the variable is defined using a string expression, this is written, otherwise the constant numerical value is output.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">f</td><td>output file stream; </td></tr>
+    <tr><td class="paramname">v</td><td>variable to write.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+<p class="reference">References <a class="el" href="agg_8h.html#ab1eb3e5fc0db91ca383c2f478300127b">agg_variable_definition</a>, <a class="el" href="agg_8h.html#a507e1c39c279ca276de83410336a5c06">agg_variable_name</a>, and <a class="el" href="agg_8h.html#a9d32a3c48e22b7d630e4fbc4e02c71a0">agg_variable_value</a>.</p>
 
 </div>
 </div>
@@ -937,7 +2647,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p >Data structure holding internal information for evaluation of expressions </p>
 
-<p class="reference">Referenced by <a class="el" href="agg_8h.html#a162e7e767b148e09e0f98e9af91b32fe">agg_transform_add_global_variables()</a>, and <a class="el" href="agg_8h.html#a015c632cb62cafdc579df29f44d8eab9">agg_transform_expressions_compile()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="agg_8h.html#a12809abb981ee0379ad7f887bdce9222">agg_body_globals_compile()</a>, <a class="el" href="agg_8h.html#a162e7e767b148e09e0f98e9af91b32fe">agg_transform_add_global_variables()</a>, and <a class="el" href="agg_8h.html#a015c632cb62cafdc579df29f44d8eab9">agg_transform_expressions_compile()</a>.</p>
 
 </div>
 </div>
@@ -955,6 +2665,23 @@ Functions</h2></td></tr>
 <p >Data structure holding information for evaluation of a section </p>
 
 <p class="reference">Referenced by <a class="el" href="group__sections.html#ga105f0353bff693485509f3cf9bb6ae46">agg_section_new()</a>, <a class="el" href="group__surfaces.html#ga88a861a9c890e62d096a720b67a92797">agg_surface_new()</a>, <a class="el" href="agg_8h.html#ac7fd1a95c34d4b227e46b64fe642efae">agg_surface_point_eval()</a>, and <a class="el" href="agg_8h.html#ad41f8f60fa70483229ffb5c8b6db3e4f">agg_surface_section_interp()</a>.</p>
+
+</div>
+</div>
+<a id="a1c502e562486827063a7169cd79b5cc0" name="a1c502e562486827063a7169cd79b5cc0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c502e562486827063a7169cd79b5cc0">&#9670;&nbsp;</a></span>agg_surface_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">agg_surface_t</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Data structure to hold surfaces formed by transformation of sections </p>
+
+<p class="reference">Referenced by <a class="el" href="group__body.html#ga04a251df56d2d37e276d047231bdda35">agg_body_new()</a>, <a class="el" href="agg_8h.html#a8337a8e05e56227d9f42ab84d0d89fd4">agg_mesh_surface_point_add()</a>, and <a class="el" href="group__surfaces.html#ga88a861a9c890e62d096a720b67a92797">agg_surface_new()</a>.</p>
 
 </div>
 </div>
@@ -995,7 +2722,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jun 7 2023 17:54:46 for AGG by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Mon Jul 10 2023 17:58:17 for AGG by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

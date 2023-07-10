@@ -25,7 +25,15 @@ gint \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+add} (\textbf{ agg\+\_\+tran
 \item 
 gint \textbf{ agg\+\_\+transform\+\_\+operators\+\_\+write} (FILE $\ast$f, \textbf{ agg\+\_\+transform\+\_\+t} $\ast$T)
 \item 
+gint \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+apply} (\textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t} $\ast$op, gdouble $\ast$xin, gdouble $\ast$xout)
+\item 
 gint \textbf{ agg\+\_\+transform\+\_\+apply} (\textbf{ agg\+\_\+transform\+\_\+t} $\ast$T, gdouble $\ast$xin, gdouble $\ast$xout)
+\item 
+gint \textbf{ agg\+\_\+transform\+\_\+axes} (\textbf{ agg\+\_\+axes\+\_\+t} axes, gdouble $\ast$xin, gdouble $\ast$xout)
+\item 
+\textbf{ agg\+\_\+axes\+\_\+t} \textbf{ agg\+\_\+axes\+\_\+parse} (gchar $\ast$str)
+\item 
+gint \textbf{ agg\+\_\+transform\+\_\+parse} (\textbf{ agg\+\_\+transform\+\_\+t} $\ast$T, gchar $\ast$name, \textbf{ agg\+\_\+variable\+\_\+t} $\ast$p, gint np)
 \end{DoxyCompactItemize}
 \begin{DoxyCompactItemize}
 \item 
@@ -77,6 +85,22 @@ AGG\+\_\+\+TRANSFORM\+\_\+\+SCALE&scaling by multiplying a constant factor \\
 
 
 \doxysubsection{Function Documentation}
+\mbox{\label{group__transforms_ga1745f8aa9febea5a00f7d5892ea15c6e}} 
+\index{Transformations@{Transformations}!agg\_axes\_parse@{agg\_axes\_parse}}
+\index{agg\_axes\_parse@{agg\_axes\_parse}!Transformations@{Transformations}}
+\doxysubsubsection{agg\_axes\_parse()}
+{\footnotesize\ttfamily \textbf{ agg\+\_\+axes\+\_\+t} agg\+\_\+axes\+\_\+parse (\begin{DoxyParamCaption}\item[{gchar $\ast$}]{str }\end{DoxyParamCaption})}
+
+Parse a string specifying an axis change on a surface.
+
+
+\begin{DoxyParams}{Parameters}
+{\em str} & axis string to parse\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\doxyref{agg\+\_\+axes\+\_\+t}{p.}{group__surfaces_ga9d96b462257229695d4a34527697d492} corresponding to {\itshape str}, or AGG\+\_\+\+AXES\+\_\+\+UNDEFINED. 
+\end{DoxyReturn}
 \mbox{\label{group__transforms_ga162e7e767b148e09e0f98e9af91b32fe}} 
 \index{Transformations@{Transformations}!agg\_transform\_add\_global\_variables@{agg\_transform\_add\_global\_variables}}
 \index{agg\_transform\_add\_global\_variables@{agg\_transform\_add\_global\_variables}!Transformations@{Transformations}}
@@ -99,7 +123,7 @@ Add a list of global variables to the variables of a transform
 \end{DoxyReturn}
 
 
-References \textbf{ agg\+\_\+expression\+\_\+data\+\_\+t}.
+References \textbf{ agg\+\_\+expression\+\_\+data\+\_\+t}, and \textbf{ agg\+\_\+expression\+\_\+data\+\_\+variable\+\_\+add()}.
 
 \mbox{\label{group__transforms_ga1d94218842c8aca6203ddba991b32a5f}} 
 \index{Transformations@{Transformations}!agg\_transform\_apply@{agg\_transform\_apply}}
@@ -113,14 +137,42 @@ Apply a transform to a point
 \begin{DoxyParams}{Parameters}
 {\em T} & an \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} containing the sequence of operations; \\
 \hline
-{\em xin} & input point; \\
+{\em xin} & input point (can be the same as {\itshape xout}); \\
 \hline
-{\em xout} & output point.\\
+{\em xout} & on exit contains transformed version of {\itshape xin}.\\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
 0 on success. 
 \end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+transform\+\_\+operator}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+apply()}, and \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+number}.
+
+\mbox{\label{group__transforms_gaff5f7e15c699e9e6b874df084150f08a}} 
+\index{Transformations@{Transformations}!agg\_transform\_axes@{agg\_transform\_axes}}
+\index{agg\_transform\_axes@{agg\_transform\_axes}!Transformations@{Transformations}}
+\doxysubsubsection{agg\_transform\_axes()}
+{\footnotesize\ttfamily gint agg\+\_\+transform\+\_\+axes (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+axes\+\_\+t}}]{axes,  }\item[{gdouble $\ast$}]{xin,  }\item[{gdouble $\ast$}]{xout }\end{DoxyParamCaption})}
+
+Apply an axis transform (swap) to a point
+
+
+\begin{DoxyParams}{Parameters}
+{\em axes} & an \doxyref{agg\+\_\+axes\+\_\+t}{p.}{group__surfaces_ga9d96b462257229695d4a34527697d492} for the required axis transformation; \\
+\hline
+{\em xin} & input point (can be equal to {\itshape xout}); \\
+\hline
+{\em xout} & on exit contains transformed point data.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ AGG\+\_\+\+AXES\+\_\+\+PX\+\_\+\+PY\+\_\+\+MZ}, \textbf{ AGG\+\_\+\+AXES\+\_\+\+PX\+\_\+\+PY\+\_\+\+PZ}, \textbf{ AGG\+\_\+\+AXES\+\_\+\+PY\+\_\+\+PZ\+\_\+\+PX}, \textbf{ AGG\+\_\+\+AXES\+\_\+\+PZ\+\_\+\+PX\+\_\+\+PY}, and \textbf{ AGG\+\_\+\+AXES\+\_\+\+PZ\+\_\+\+PY\+\_\+\+PX}.
+
 \mbox{\label{group__transforms_ga015c632cb62cafdc579df29f44d8eab9}} 
 \index{Transformations@{Transformations}!agg\_transform\_expressions\_compile@{agg\_transform\_expressions\_compile}}
 \index{agg\_transform\_expressions\_compile@{agg\_transform\_expressions\_compile}!Transformations@{Transformations}}
@@ -139,7 +191,7 @@ Compile expressions in a transform for future evaluation.
 \end{DoxyReturn}
 
 
-References \textbf{ agg\+\_\+expression\+\_\+data\+\_\+t}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+t}.
+References \textbf{ agg\+\_\+expression\+\_\+compile()}, \textbf{ agg\+\_\+expression\+\_\+data\+\_\+t}, \textbf{ agg\+\_\+expression\+\_\+data\+\_\+variable\+\_\+add()}, \textbf{ agg\+\_\+transform\+\_\+operator}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+number}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+parameter}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+parameter\+\_\+number}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, \textbf{ agg\+\_\+transform\+\_\+variable}, \textbf{ agg\+\_\+transform\+\_\+variable\+\_\+number}, \textbf{ agg\+\_\+variable\+\_\+definition}, \textbf{ agg\+\_\+variable\+\_\+evaluator}, and \textbf{ agg\+\_\+variable\+\_\+t}.
 
 \mbox{\label{group__transforms_gaf8e2e52219b0108f7df70bc4dd39031f}} 
 \index{Transformations@{Transformations}!agg\_transform\_new@{agg\_transform\_new}}
@@ -159,7 +211,7 @@ newly allocated \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9
 \end{DoxyReturn}
 
 
-References \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, and \textbf{ agg\+\_\+transform\+\_\+t}.
+References \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+number}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+number\+\_\+max}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, \textbf{ agg\+\_\+transform\+\_\+t}, and \textbf{ agg\+\_\+transform\+\_\+variable\+\_\+number}.
 
 \mbox{\label{group__transforms_ga3469482e2c22920b5accefdc004297c4}} 
 \index{Transformations@{Transformations}!agg\_transform\_operator\_add@{agg\_transform\_operator\_add}}
@@ -187,7 +239,35 @@ Add an operation to a transform
 \end{DoxyReturn}
 
 
-References \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+new()}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+t}.
+References \textbf{ agg\+\_\+transform\+\_\+operator}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+func}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+new()}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+number}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+operation}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+parameter}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+parameter\+\_\+number}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, \textbf{ agg\+\_\+variable\+\_\+definition}, \textbf{ agg\+\_\+variable\+\_\+name}, \textbf{ agg\+\_\+variable\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+value}.
+
+
+
+Referenced by \textbf{ agg\+\_\+transform\+\_\+parse()}.
+
+\mbox{\label{group__transforms_ga7e985891f93fe4b64a177ac841672909}} 
+\index{Transformations@{Transformations}!agg\_transform\_operator\_apply@{agg\_transform\_operator\_apply}}
+\index{agg\_transform\_operator\_apply@{agg\_transform\_operator\_apply}!Transformations@{Transformations}}
+\doxysubsubsection{agg\_transform\_operator\_apply()}
+{\footnotesize\ttfamily gint agg\+\_\+transform\+\_\+operator\+\_\+apply (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t} $\ast$}]{op,  }\item[{gdouble $\ast$}]{xin,  }\item[{gdouble $\ast$}]{xout }\end{DoxyParamCaption})}
+
+Apply a transform operation to a point.
+
+
+\begin{DoxyParams}{Parameters}
+{\em op} & transform operation (usually part of an \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da}); \\
+\hline
+{\em xin} & input point; \\
+\hline
+{\em xout} & on exit contains transformed version of {\itshape xin}.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+Referenced by \textbf{ agg\+\_\+transform\+\_\+apply()}.
 
 \mbox{\label{group__transforms_ga57e762424be00dc262795556c254934b}} 
 \index{Transformations@{Transformations}!agg\_transform\_operator\_new@{agg\_transform\_operator\_new}}
@@ -230,7 +310,33 @@ Write a list of operators and parameters in a transform to file
 \end{DoxyReturn}
 
 
-References \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+t}.
+References \textbf{ agg\+\_\+transform\+\_\+operator}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+number}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+operation}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+parameter}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+parameter\+\_\+number}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+t}.
+
+\mbox{\label{group__transforms_ga77479169572fa74999fded7d30af2453}} 
+\index{Transformations@{Transformations}!agg\_transform\_parse@{agg\_transform\_parse}}
+\index{agg\_transform\_parse@{agg\_transform\_parse}!Transformations@{Transformations}}
+\doxysubsubsection{agg\_transform\_parse()}
+{\footnotesize\ttfamily gint agg\+\_\+transform\+\_\+parse (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+transform\+\_\+t} $\ast$}]{T,  }\item[{gchar $\ast$}]{name,  }\item[{\textbf{ agg\+\_\+variable\+\_\+t} $\ast$}]{p,  }\item[{gint}]{np }\end{DoxyParamCaption})}
+
+Parse a transform operation described by a string and add it to an \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da}
+
+
+\begin{DoxyParams}{Parameters}
+{\em T} & \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} to have an operation added; \\
+\hline
+{\em name} & name of transform operation (see \doxyref{agg\+\_\+transform\+\_\+operators\+\_\+write}{p.}{group__transforms_ga9647f98c5477495e98aa83eaed70c171}); \\
+\hline
+{\em p} & array of \doxyref{agg\+\_\+variable\+\_\+t}{p.}{group__variables_gaf99a18818caf06b7a2cdc10dde859f47} holding parameters of transform; \\
+\hline
+{\em np} & number of entries in {\itshape p}.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+add()}, \textbf{ agg\+\_\+variable\+\_\+definition}, and \textbf{ agg\+\_\+variable\+\_\+value}.
 
 \mbox{\label{group__transforms_gaa9932f923e53ba6651b417913a88bd62}} 
 \index{Transformations@{Transformations}!agg\_transform\_variable\_add@{agg\_transform\_variable\_add}}
@@ -256,7 +362,7 @@ Add a variable to a transform
 \end{DoxyReturn}
 
 
-References \textbf{ agg\+\_\+variable\+\_\+t}.
+References \textbf{ agg\+\_\+transform\+\_\+variable\+\_\+number}, and \textbf{ agg\+\_\+variable\+\_\+t}.
 
 \mbox{\label{group__transforms_ga521307ad04c43f7912a72942271cb8e0}} 
 \index{Transformations@{Transformations}!agg\_transform\_variables\_eval@{agg\_transform\_variables\_eval}}
@@ -276,7 +382,7 @@ Evaluate variables in a transform. Expressions should have been compiled using \
 \end{DoxyReturn}
 
 
-References \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+t}.
+References \textbf{ agg\+\_\+expression\+\_\+data\+\_\+eval()}, \textbf{ agg\+\_\+expression\+\_\+eval()}, \textbf{ agg\+\_\+transform\+\_\+operator}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+number}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+parameter}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+parameter\+\_\+number}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, \textbf{ agg\+\_\+transform\+\_\+variable}, \textbf{ agg\+\_\+transform\+\_\+variable\+\_\+number}, \textbf{ agg\+\_\+variable\+\_\+definition}, \textbf{ agg\+\_\+variable\+\_\+evaluator}, \textbf{ agg\+\_\+variable\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+value}.
 
 \mbox{\label{group__transforms_ga81f96f54e93e7d88b8bf40f446ac3341}} 
 \index{Transformations@{Transformations}!agg\_transform\_variables\_write@{agg\_transform\_variables\_write}}
@@ -300,5 +406,5 @@ Write list of variables and values for a transform to output
 \end{DoxyReturn}
 
 
-References \textbf{ agg\+\_\+variable\+\_\+t}.
+References \textbf{ agg\+\_\+transform\+\_\+variable}, \textbf{ agg\+\_\+transform\+\_\+variable\+\_\+number}, \textbf{ agg\+\_\+variable\+\_\+definition}, \textbf{ agg\+\_\+variable\+\_\+name}, \textbf{ agg\+\_\+variable\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+value}.
 

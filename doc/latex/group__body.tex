@@ -1,0 +1,200 @@
+\doxysection{General bodies}
+\label{group__body}\index{General bodies@{General bodies}}
+
+
+Bodies are made up of collections of elementary surfaces.  
+
+
+\begin{DoxyCompactItemize}
+\item 
+\textbf{ agg\+\_\+body\+\_\+t} $\ast$ \textbf{ agg\+\_\+body\+\_\+new} (gint ngmax, gint nsmax)
+\item 
+gint \textbf{ agg\+\_\+body\+\_\+global\+\_\+add} (\textbf{ agg\+\_\+body\+\_\+t} $\ast$b, gchar $\ast$var, gchar $\ast$def, gdouble val)
+\item 
+gint \textbf{ agg\+\_\+body\+\_\+globals\+\_\+write} (FILE $\ast$f, \textbf{ agg\+\_\+body\+\_\+t} $\ast$b)
+\item 
+gint \textbf{ agg\+\_\+body\+\_\+globals\+\_\+compile} (\textbf{ agg\+\_\+body\+\_\+t} $\ast$b)
+\item 
+gint \textbf{ agg\+\_\+body\+\_\+globals\+\_\+eval} (\textbf{ agg\+\_\+body\+\_\+t} $\ast$b)
+\item 
+gint \textbf{ agg\+\_\+body\+\_\+read} (\textbf{ agg\+\_\+body\+\_\+t} $\ast$b, gchar $\ast$file, gboolean echo)
+\item 
+gint \textbf{ agg\+\_\+body\+\_\+surfaces\+\_\+list} (FILE $\ast$f, \textbf{ agg\+\_\+body\+\_\+t} $\ast$b)
+\end{DoxyCompactItemize}
+\begin{DoxyCompactItemize}
+\item 
+typedef \textbf{ agg\+\_\+body\+\_\+t}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Bodies are made up of collections of elementary surfaces. 
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\label{group__body_ga480c67842eb4dd8b22463f41d29ad6e2}} 
+\index{General bodies@{General bodies}!agg\_body\_global\_add@{agg\_body\_global\_add}}
+\index{agg\_body\_global\_add@{agg\_body\_global\_add}!General bodies@{General bodies}}
+\doxysubsubsection{agg\_body\_global\_add()}
+{\footnotesize\ttfamily gint agg\+\_\+body\+\_\+global\+\_\+add (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+body\+\_\+t} $\ast$}]{b,  }\item[{gchar $\ast$}]{var,  }\item[{gchar $\ast$}]{def,  }\item[{gdouble}]{val }\end{DoxyParamCaption})}
+
+Add a global variable to an \doxyref{agg\+\_\+body\+\_\+t}{p.}{group__body_gab1ba060d2b8a159e268a27c8d01b0a44}
+
+
+\begin{DoxyParams}{Parameters}
+{\em b} & body to which variable should be added; \\
+\hline
+{\em var} & name of variable; \\
+\hline
+{\em def} & string expression defining variable (can be NULL); \\
+\hline
+{\em val} & value of variable (set constant if {\itshape expr} is NULL).\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+variable\+\_\+definition}, \textbf{ agg\+\_\+variable\+\_\+name}, \textbf{ agg\+\_\+variable\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+value}.
+
+\mbox{\label{group__body_ga12809abb981ee0379ad7f887bdce9222}} 
+\index{General bodies@{General bodies}!agg\_body\_globals\_compile@{agg\_body\_globals\_compile}}
+\index{agg\_body\_globals\_compile@{agg\_body\_globals\_compile}!General bodies@{General bodies}}
+\doxysubsubsection{agg\_body\_globals\_compile()}
+{\footnotesize\ttfamily gint agg\+\_\+body\+\_\+globals\+\_\+compile (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+body\+\_\+t} $\ast$}]{b }\end{DoxyParamCaption})}
+
+Compile expressions for global variables in an \doxyref{agg\+\_\+body\+\_\+t}{p.}{group__body_gab1ba060d2b8a159e268a27c8d01b0a44}. This function should be called before evaluating any variables in the body or its surfaces.
+
+
+\begin{DoxyParams}{Parameters}
+{\em b} & an \doxyref{agg\+\_\+body\+\_\+t}{p.}{group__body_gab1ba060d2b8a159e268a27c8d01b0a44} containing definitions of global variables.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+expression\+\_\+compile()}, \textbf{ agg\+\_\+expression\+\_\+data\+\_\+t}, \textbf{ agg\+\_\+expression\+\_\+data\+\_\+variable\+\_\+add()}, \textbf{ agg\+\_\+variable\+\_\+definition}, \textbf{ agg\+\_\+variable\+\_\+evaluator}, and \textbf{ agg\+\_\+variable\+\_\+t}.
+
+\mbox{\label{group__body_ga8a64862bcc9c834e015451285e8812db}} 
+\index{General bodies@{General bodies}!agg\_body\_globals\_eval@{agg\_body\_globals\_eval}}
+\index{agg\_body\_globals\_eval@{agg\_body\_globals\_eval}!General bodies@{General bodies}}
+\doxysubsubsection{agg\_body\_globals\_eval()}
+{\footnotesize\ttfamily gint agg\+\_\+body\+\_\+globals\+\_\+eval (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+body\+\_\+t} $\ast$}]{b }\end{DoxyParamCaption})}
+
+Evaluate global variables defined in an \doxyref{agg\+\_\+body\+\_\+t}{p.}{group__body_gab1ba060d2b8a159e268a27c8d01b0a44}. This function should be called before evaluating points on the surfaces which make up the body.
+
+
+\begin{DoxyParams}{Parameters}
+{\em b} & an \doxyref{agg\+\_\+body\+\_\+t}{p.}{group__body_gab1ba060d2b8a159e268a27c8d01b0a44} containing global variables.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+expression\+\_\+data\+\_\+eval()}, \textbf{ agg\+\_\+expression\+\_\+eval()}, \textbf{ agg\+\_\+variable\+\_\+definition}, \textbf{ agg\+\_\+variable\+\_\+evaluator}, \textbf{ agg\+\_\+variable\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+value}.
+
+\mbox{\label{group__body_gad1fd42e298c7ef34b4dc521af8a3094a}} 
+\index{General bodies@{General bodies}!agg\_body\_globals\_write@{agg\_body\_globals\_write}}
+\index{agg\_body\_globals\_write@{agg\_body\_globals\_write}!General bodies@{General bodies}}
+\doxysubsubsection{agg\_body\_globals\_write()}
+{\footnotesize\ttfamily gint agg\+\_\+body\+\_\+globals\+\_\+write (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f,  }\item[{\textbf{ agg\+\_\+body\+\_\+t} $\ast$}]{b }\end{DoxyParamCaption})}
+
+Write a body\textquotesingle{}s global variables, their definitions (if given), and values to file
+
+
+\begin{DoxyParams}{Parameters}
+{\em f} & output file; \\
+\hline
+{\em b} & \doxyref{agg\+\_\+body\+\_\+t}{p.}{group__body_gab1ba060d2b8a159e268a27c8d01b0a44} whose global variables are to be written\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+variable\+\_\+definition}, \textbf{ agg\+\_\+variable\+\_\+name}, \textbf{ agg\+\_\+variable\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+value}.
+
+\mbox{\label{group__body_ga04a251df56d2d37e276d047231bdda35}} 
+\index{General bodies@{General bodies}!agg\_body\_new@{agg\_body\_new}}
+\index{agg\_body\_new@{agg\_body\_new}!General bodies@{General bodies}}
+\doxysubsubsection{agg\_body\_new()}
+{\footnotesize\ttfamily \textbf{ agg\+\_\+body\+\_\+t} $\ast$ agg\+\_\+body\+\_\+new (\begin{DoxyParamCaption}\item[{gint}]{ngmax,  }\item[{gint}]{nsmax }\end{DoxyParamCaption})}
+
+Allocate and initialize a new \doxyref{agg\+\_\+body\+\_\+t}{p.}{group__body_gab1ba060d2b8a159e268a27c8d01b0a44}
+
+
+\begin{DoxyParams}{Parameters}
+{\em ngmax} & maximum number of global variables in body; \\
+\hline
+{\em nsmax} & maximum number of surfaces in body.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+newly allocated \doxyref{agg\+\_\+body\+\_\+t}{p.}{group__body_gab1ba060d2b8a159e268a27c8d01b0a44} 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+body\+\_\+t}, \textbf{ agg\+\_\+patch\+\_\+t}, \textbf{ agg\+\_\+surface\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+t}.
+
+\mbox{\label{group__body_ga672b47160f046ee778113a960bf50354}} 
+\index{General bodies@{General bodies}!agg\_body\_read@{agg\_body\_read}}
+\index{agg\_body\_read@{agg\_body\_read}!General bodies@{General bodies}}
+\doxysubsubsection{agg\_body\_read()}
+{\footnotesize\ttfamily gint agg\+\_\+body\+\_\+read (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+body\+\_\+t} $\ast$}]{b,  }\item[{gchar $\ast$}]{file,  }\item[{gboolean}]{echo }\end{DoxyParamCaption})}
+
+Read an \doxyref{agg\+\_\+body\+\_\+t}{p.}{group__body_gab1ba060d2b8a159e268a27c8d01b0a44} from file
+
+
+\begin{DoxyParams}{Parameters}
+{\em b} & body to which data in file are to be added; \\
+\hline
+{\em file} & name of file in .agg format; \\
+\hline
+{\em echo} & if TRUE, echo progress to stderr.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+section\+\_\+new()}.
+
+\mbox{\label{group__body_ga23e541d03af5bc371eef1321a2746d6d}} 
+\index{General bodies@{General bodies}!agg\_body\_surfaces\_list@{agg\_body\_surfaces\_list}}
+\index{agg\_body\_surfaces\_list@{agg\_body\_surfaces\_list}!General bodies@{General bodies}}
+\doxysubsubsection{agg\_body\_surfaces\_list()}
+{\footnotesize\ttfamily gint agg\+\_\+body\+\_\+surfaces\+\_\+list (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f,  }\item[{\textbf{ agg\+\_\+body\+\_\+t} $\ast$}]{b }\end{DoxyParamCaption})}
+
+Write the names of a body\textquotesingle{}s surfaces to file
+
+
+\begin{DoxyParams}{Parameters}
+{\em f} & output file stream; \\
+\hline
+{\em b} & an \doxyref{agg\+\_\+body\+\_\+t}{p.}{group__body_gab1ba060d2b8a159e268a27c8d01b0a44} whose surfaces are to be listed.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\label{group__body_gab1ba060d2b8a159e268a27c8d01b0a44}} 
+\index{General bodies@{General bodies}!agg\_body\_t@{agg\_body\_t}}
+\index{agg\_body\_t@{agg\_body\_t}!General bodies@{General bodies}}
+\doxysubsubsection{agg\_body\_t}
+{\footnotesize\ttfamily agg\+\_\+body\+\_\+t}
+
+Data structure for bodies made up of collections of surfaces 
+
+Referenced by \textbf{ agg\+\_\+body\+\_\+new()}.
+

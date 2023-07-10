@@ -7,9 +7,18 @@ Patches used to map parts of surfaces and generate meshes.
 
 \begin{DoxyCompactItemize}
 \item 
+gint \textbf{ agg\+\_\+patch\+\_\+map} (\textbf{ agg\+\_\+patch\+\_\+t} $\ast$P, gdouble s, gdouble t, gdouble $\ast$u, gdouble $\ast$v)
+\item 
+gint \textbf{ agg\+\_\+patch\+\_\+parse} (\textbf{ agg\+\_\+patch\+\_\+t} $\ast$P, \textbf{ agg\+\_\+variable\+\_\+t} $\ast$p, gint np)
+\end{DoxyCompactItemize}
+\begin{DoxyCompactItemize}
+\item 
 enum \textbf{ agg\+\_\+patch\+\_\+mapping\+\_\+t} \{ \textbf{ AGG\+\_\+\+PATCH\+\_\+\+BILINEAR} = 0
 , \textbf{ AGG\+\_\+\+PATCH\+\_\+\+SPHERICAL} = 1
+, \textbf{ AGG\+\_\+\+PATCH\+\_\+\+TUBULAR} = 2
  \}
+\item 
+typedef \textbf{ agg\+\_\+patch\+\_\+t}
 \end{DoxyCompactItemize}
 
 
@@ -34,4 +43,72 @@ AGG\+\_\+\+PATCH\+\_\+\+BILINEAR&bilinear mapping between corners \\
 AGG\+\_\+\+PATCH\+\_\+\+SPHERICAL&mapping to surface of sphere \\
 \hline
 
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AGG\_PATCH\_TUBULAR@{AGG\_PATCH\_TUBULAR}!Surface patches@{Surface patches}}\index{Surface patches@{Surface patches}!AGG\_PATCH\_TUBULAR@{AGG\_PATCH\_TUBULAR}}}\mbox{\label{group__patches_gab2dada3ec7e3ef50c701a16f93701ebca78d8b116b0cd3172683582fd297fdc49}} 
+AGG\+\_\+\+PATCH\+\_\+\+TUBULAR&mapping to surface of open cylinder \\
+\hline
+
 \end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\label{group__patches_gaa07e6a7a89baf7a5a9acd8f2de6ad111}} 
+\index{Surface patches@{Surface patches}!agg\_patch\_map@{agg\_patch\_map}}
+\index{agg\_patch\_map@{agg\_patch\_map}!Surface patches@{Surface patches}}
+\doxysubsubsection{agg\_patch\_map()}
+{\footnotesize\ttfamily gint agg\+\_\+patch\+\_\+map (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+patch\+\_\+t} $\ast$}]{P,  }\item[{gdouble}]{s,  }\item[{gdouble}]{t,  }\item[{gdouble $\ast$}]{u,  }\item[{gdouble $\ast$}]{v }\end{DoxyParamCaption})}
+
+Apply mapping in a patch to find parametric variables on surface.
+
+
+\begin{DoxyParams}{Parameters}
+{\em P} & patch whose mapping is to be applied; \\
+\hline
+{\em s} & variable on {\itshape P}, $0\leq s \leq 1$; \\
+\hline
+{\em t} & variable on {\itshape P}, $0\leq t \leq 1$; \\
+\hline
+{\em u} & surface parametric variable; \\
+\hline
+{\em v} & surface parametric variable.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ AGG\+\_\+\+PATCH\+\_\+\+BILINEAR}.
+
+\mbox{\label{group__patches_ga9bbbda35c5b3b3b8a5da05a50cc3da24}} 
+\index{Surface patches@{Surface patches}!agg\_patch\_parse@{agg\_patch\_parse}}
+\index{agg\_patch\_parse@{agg\_patch\_parse}!Surface patches@{Surface patches}}
+\doxysubsubsection{agg\_patch\_parse()}
+{\footnotesize\ttfamily gint agg\+\_\+patch\+\_\+parse (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+patch\+\_\+t} $\ast$}]{P,  }\item[{\textbf{ agg\+\_\+variable\+\_\+t} $\ast$}]{p,  }\item[{gint}]{np }\end{DoxyParamCaption})}
+
+Parse string data for an \doxyref{agg\+\_\+patch\+\_\+t}{p.}{group__patches_gabdb5fa64575d1f09fb1e68a13a103777}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em P} & on exit, is set according to input variables; \\
+\hline
+{\em p} & array of variables for parameters setting {\itshape P}; \\
+\hline
+{\em np} & number of variables in {\itshape p}.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\label{group__patches_gabdb5fa64575d1f09fb1e68a13a103777}} 
+\index{Surface patches@{Surface patches}!agg\_patch\_t@{agg\_patch\_t}}
+\index{agg\_patch\_t@{agg\_patch\_t}!Surface patches@{Surface patches}}
+\doxysubsubsection{agg\_patch\_t}
+{\footnotesize\ttfamily agg\+\_\+patch\+\_\+t}
+
+Data structure for mapping of surfaces 
+
+Referenced by \textbf{ agg\+\_\+body\+\_\+new()}, and \textbf{ agg\+\_\+mesh\+\_\+surface\+\_\+point\+\_\+add()}.
+

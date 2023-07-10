@@ -42,6 +42,22 @@ int plus1mod3[3] = {1, 2, 0};
 int minus1mod3[3] = {2, 0, 1};
 #endif /*HAVE_TRIANGLE_API_H*/
 
+/** 
+ * @{ 
+ *
+ * @ingroup mesh
+ */
+
+/** 
+ * Allocate a new ::agg_mesh_t
+ * 
+ * @param npmax maximum number of points in mesh;
+ * @param nspmax maximum number of splines in mesh;
+ * @param nemax maximum number of elements in mesh.
+ * 
+ * @return pointer to newly allocated ::agg_mesh_t.
+ */
+
 agg_mesh_t *agg_mesh_new(gint npmax, gint nspmax, gint nemax)
 
 {
@@ -114,7 +130,21 @@ static void write_element_gmsh_occ(FILE *f, gint *e, gint i,
   return ;
 }
 
-gint agg_mesh_write_gmsh(FILE *f, agg_mesh_t *w,
+/** 
+ * Write a ::agg_mesh_t to file in GMSH .geo format.
+ * 
+ * @param f output file stream;
+ * @param m mesh to write to file;
+ * @param len string to include point definitions for local length scale;
+ * @param offp point index offset (added to point indices);
+ * @param offsp spline index offset (added to spline indices);
+ * @param offs surface index offset (added to GMSH surface indices);
+ * @param opencascade if TRUE, assume OpenCascade engine is being used.
+ * 
+ * @return 0 on success.
+ */
+
+gint agg_mesh_write_gmsh(FILE *f, agg_mesh_t *m,
 			      gchar *len, gint offp, gint offsp, gint offs,
 			      gboolean opencascade)
 
@@ -123,16 +153,16 @@ gint agg_mesh_write_gmsh(FILE *f, agg_mesh_t *w,
   gdouble *p ;
   
   /*write points*/
-  for ( i = 0 ; i < agg_mesh_point_number(w) ; i ++ ) {
-    p = agg_mesh_point(w, i) ;
+  for ( i = 0 ; i < agg_mesh_point_number(m) ; i ++ ) {
+    p = agg_mesh_point(m, i) ;
     fprintf(f, "Point(%d) = {%lg, %lg, %lg, %s} ;\n",
 	    offp + i, p[0], p[1], p[2], len) ;
   }
 
   /*write splines*/
-  for ( i = 1 ; i < agg_mesh_spline_number(w) ; i ++ ) {
-    sp = agg_mesh_spline(w, i) ;
-    n = agg_mesh_spline_length(w, i) ;
+  for ( i = 1 ; i < agg_mesh_spline_number(m) ; i ++ ) {
+    sp = agg_mesh_spline(m, i) ;
+    n = agg_mesh_spline_length(m, i) ;
     if ( n == 2 ) {
       fprintf(f, "Line(%d) = {%d, %d} ;\n",
 	      offsp+i, offp + sp[0], offp + sp[1]) ;
@@ -147,77 +177,112 @@ gint agg_mesh_write_gmsh(FILE *f, agg_mesh_t *w,
 
   /*write elements*/
   if ( opencascade ) {
-    for ( i = 0 ; i < agg_mesh_element_number(w) ; i ++ ) {
-      write_element_gmsh_occ(f, agg_mesh_element(w,i), i, offsp, offs) ;
+    for ( i = 0 ; i < agg_mesh_element_number(m) ; i ++ ) {
+      write_element_gmsh_occ(f, agg_mesh_element(m,i), i, offsp, offs) ;
     }
   } else {
-    for ( i = 0 ; i < agg_mesh_element_number(w) ; i ++ ) {
-      write_element_gmsh(f, agg_mesh_element(w,i), i, offsp, offs) ;
+    for ( i = 0 ; i < agg_mesh_element_number(m) ; i ++ ) {
+      write_element_gmsh(f, agg_mesh_element(m,i), i, offsp, offs) ;
     }
   }
   
   return 0 ;
 }
 
-gint agg_mesh_spline_ends(agg_mesh_t *w, gint s, gint *p0, gint *p1)
+/** 
+ * Find the indices of the end points of a spline in a mesh
+ * 
+ * @param m mesh containing the splines;
+ * @param s index of spline;
+ * @param p0 on exit, index of one end point of spline \a s;
+ * @param p1 on exit, index of other end point of spline \a s.
+ * 
+ * @return 0 on success
+ */
+
+gint agg_mesh_spline_ends(agg_mesh_t *m, gint s, gint *p0, gint *p1)
 
 {
   gint *sp, n ;
 
-  g_assert(s < agg_mesh_spline_number(w)) ;
+  g_assert(s < agg_mesh_spline_number(m)) ;
   g_assert(s >= 0) ;
-  sp = agg_mesh_spline(w, s) ;
-  n =  agg_mesh_spline_length(w, s) ;
+  sp = agg_mesh_spline(m, s) ;
+  n =  agg_mesh_spline_length(m, s) ;
 
   *p0 = sp[0] ; *p1 = sp[n-1] ;
   
   return 0 ;
 }
-  
-gint agg_mesh_spline_interp_points(agg_mesh_t *w, gint s,
-					gint p0, gint p1, gint pps,
-					agg_surface_workspace_t *ws)
 
+/** 
+ * Generate a spline by interpolating mapping between two existing points. 
+ * 
+ * @param m an ::agg_mesh_t;
+ * @param s index in \a m of surface to use for interpolation;
+ * @param p0 index of first point of new spline;
+ * @param p1 index of end point of new spline;
+ * @param pps total number of points on new spline;
+ * @param w workspace for surface evaluation.
+ * 
+ * @return 0 on success.
+ */
+
+gint agg_mesh_spline_interp_points(agg_mesh_t *m, gint s,
+				   gint p0, gint p1, gint pps,
+				   agg_surface_workspace_t *w)
+  
 {
   gint i, *sp, nsp, np ;
   gdouble s1, t1, s0, t0 ;
 
-  g_assert(s < agg_mesh_surface_number(w)) ;
-  g_assert(agg_mesh_patch(w,s) != NULL) ;
-  g_assert(agg_mesh_surface(w,s) != NULL) ;
+  g_assert(s < agg_mesh_surface_number(m)) ;
+  g_assert(agg_mesh_patch(m,s) != NULL) ;
+  g_assert(agg_mesh_surface(m,s) != NULL) ;
 
-  nsp = agg_mesh_spline_number(w) ;
-  sp = agg_mesh_spline(w, nsp) ;
+  nsp = agg_mesh_spline_number(m) ;
+  sp = agg_mesh_spline(m, nsp) ;
 
   sp[0] = p0 ; sp[pps-1] = p1 ;
 
-  s0 = agg_mesh_point_s(w, p0) ;
-  t0 = agg_mesh_point_t(w, p0) ;
-  s1 = agg_mesh_point_s(w, p1) ;
-  t1 = agg_mesh_point_t(w, p1) ;
+  s0 = agg_mesh_point_s(m, p0) ;
+  t0 = agg_mesh_point_t(m, p0) ;
+  s1 = agg_mesh_point_s(m, p1) ;
+  t1 = agg_mesh_point_t(m, p1) ;
   
   for ( i = 1 ; i < pps-1 ; i ++ ) {
-    np = agg_mesh_surface_point_add(w, s,
-					 s0 + (s1 - s0)*i/(pps-1),
-					 t0 + (t1 - t0)*i/(pps-1), ws) ;
+    np = agg_mesh_surface_point_add(m, s,
+				    s0 + (s1 - s0)*i/(pps-1),
+				    t0 + (t1 - t0)*i/(pps-1), w) ;
     sp[i] = np ;
-    agg_mesh_point_tag(w,np) = s ;
+    agg_mesh_point_tag(m,np) = s ;
   }
 
-  agg_mesh_spline_number(w) ++ ;
-  w->isp[nsp+1] = w->isp[nsp] + pps ;
+  agg_mesh_spline_number(m) ++ ;
+  m->isp[nsp+1] = m->isp[nsp] + pps ;
   
   return 0 ;
 }
 
-gboolean agg_mesh_splines_connected(agg_mesh_t *w,
-					 gint i0, gint i1, gint *p)
+/** 
+ * Check if two splines in an ::agg_mesh_t are connected.
+ * 
+ * @param m an ::agg_mesh_t;
+ * @param i0 index of first spline to check;
+ * @param i1 index of second spline to check;
+ * @param p on exit, set to index of common point of splines \a i0 and \a i1. 
+ * 
+ * @return TRUE if splines have an end point in common. 
+ */
+
+gboolean agg_mesh_splines_connected(agg_mesh_t *m,
+				    gint i0, gint i1, gint *p)
 
 {
   gint i0p0, i0p1, i1p0, i1p1 ;
 
-  agg_mesh_spline_ends(w, i0, &i0p0, &i0p1) ;  
-  agg_mesh_spline_ends(w, i1, &i1p0, &i1p1) ;  
+  agg_mesh_spline_ends(m, i0, &i0p0, &i0p1) ;  
+  agg_mesh_spline_ends(m, i1, &i1p0, &i1p1) ;  
 
   if ( i0p0 == i1p0 ) { *p = i0p0 ; return TRUE ; }
   if ( i0p0 == i1p1 ) { *p = i0p0 ; return TRUE ; }
@@ -227,85 +292,95 @@ gboolean agg_mesh_splines_connected(agg_mesh_t *w,
   return FALSE ;
 }
 
-gint agg_mesh_element_add(agg_mesh_t *w,
-			       gint s0, gint s1, gint s2, gint s3)
+
+/** 
+ * Add an element to a mesh.
+ * 
+ * @param m an ::agg_mesh_t to have an element added.
+ * @param s0 index of first spline of element;
+ * @param s1 index of second spline of element;
+ * @param s2 index of third spline of element;
+ * @param s3 index of fourth spline of element (if zero, a 
+ * three-sided element is added)
+ * 
+ * @return 0 on success.
+ */
+
+gint agg_mesh_element_add(agg_mesh_t *m,
+			  gint s0, gint s1, gint s2, gint s3)
 
 {
   gint ne, *el ;
 
-  ne = agg_mesh_element_number(w) ;
-  el = agg_mesh_element(w, ne) ;
+  ne = agg_mesh_element_number(m) ;
+  el = agg_mesh_element(m, ne) ;
 
   el[0] = s0 ; el[1] = s1 ; el[2] = s2 ; el[3] = s3 ; el[4] = 0 ;
 
   /*check connections*/
-  if ( !agg_mesh_splines_connected(w, ABS(s0), ABS(s1), &ne) ) {
+  if ( !agg_mesh_splines_connected(m, ABS(s0), ABS(s1), &ne) ) {
     g_error("%s: splines s0 (%d) and s1 (%d) not connected",
 	    __FUNCTION__, s0, s1) ;
   }
-  if ( !agg_mesh_splines_connected(w, ABS(s1), ABS(s2), &ne) ) {
+  if ( !agg_mesh_splines_connected(m, ABS(s1), ABS(s2), &ne) ) {
     g_error("%s: splines s1 (%d) and s2 (%d) not connected",
 	    __FUNCTION__, s1, s2) ;
   }
   if ( s3 != 0 ) {
-    if ( !agg_mesh_splines_connected(w, ABS(s2), ABS(s3), &ne) ) {
+    if ( !agg_mesh_splines_connected(m, ABS(s2), ABS(s3), &ne) ) {
       g_error("%s: splines s2 (%d) and s3 (%d) not connected",
 	      __FUNCTION__, s2, s3) ;
     }
-    if ( !agg_mesh_splines_connected(w, ABS(s3), ABS(s0), &ne) ) {
+    if ( !agg_mesh_splines_connected(m, ABS(s3), ABS(s0), &ne) ) {
       g_error("%s: splines s3 (%d) and s0 (%d) not connected",
 	      __FUNCTION__, s3, s0) ;
     }
   } else {
-    if ( !agg_mesh_splines_connected(w, ABS(s2), ABS(s0), &ne) ) {
+    if ( !agg_mesh_splines_connected(m, ABS(s2), ABS(s0), &ne) ) {
       g_error("%s: splines s2 (%d) and s0 (%d) not connected",
 	      __FUNCTION__, s2, s0) ;
     }
   }
   
-  agg_mesh_element_number(w) ++ ;
+  agg_mesh_element_number(m) ++ ;
   
   return 0 ;
 }
 
-gboolean agg_mesh_spline_degenerate(agg_mesh_t *w, gint s)
-
-{
-  gint p0, p1 ;
-  gdouble *pt0, *pt1 ;
-
-  agg_mesh_spline_ends(w, s, &p0, &p1) ;  
-  pt0 = agg_mesh_point(w, p0) ;
-  pt1 = agg_mesh_point(w, p1) ;
-
-  if ( pt0[0] == pt1[2] && pt0[2] == pt1[2] && pt0[2] == pt1[2] ) return TRUE ;
-  
-  return FALSE ;
-}
-
-static void add_spline(agg_mesh_t *w, gint i0, gint i1)
+static void add_spline(agg_mesh_t *m, gint i0, gint i1)
 
 {
   gint i, nsp, *sp ;
 
-  nsp = agg_mesh_spline_number(w) ;
+  nsp = agg_mesh_spline_number(m) ;
 
-  sp = agg_mesh_spline(w, nsp) ;
+  sp = agg_mesh_spline(m, nsp) ;
   for ( i = 0 ; i <= i1-i0 ; i ++ ) {
     sp[i] = i0 + i ;
   }
 
-  w->isp[nsp+1] = w->isp[nsp] + i1-i0+1 ;
+  m->isp[nsp+1] = m->isp[nsp] + i1-i0+1 ;
 
-  agg_mesh_spline_number(w) ++ ;  
+  agg_mesh_spline_number(m) ++ ;  
 
   return ;
 }
 
-gint agg_mesh_intersection_add(agg_mesh_t *w,
-				    agg_intersection_t *inter,
-				    gint nsp, gint pps,
-				    agg_surface_workspace_t *ws)
+/** 
+ * Add an intersection to a mesh. This should be done before adding
+ * surfaces, so that they can be cut if necessary. 
+ * 
+ * @param m an ::agg_mesh_t;
+ * @param inter a surface-surface intersection;
+ * @param nsp number of splines in \a inter;
+ * @param pps number of points on each spline in \a inter;
+ * 
+ * @return 0 on success.
+ */
+
+gint agg_mesh_intersection_add(agg_mesh_t *m,
+			       agg_intersection_t *inter,
+			       gint nsp, gint pps)
 
 {
   gint ni, i, np, np0 ;
@@ -316,46 +391,46 @@ gint agg_mesh_intersection_add(agg_mesh_t *w,
   /*find limits on intersection*/
   agg_intersection_bbox_set(inter) ;
 
-  ni = agg_mesh_intersection_number(w) ;
-  agg_mesh_intersection(w, ni) = inter ;
+  ni = agg_mesh_intersection_number(m) ;
+  agg_mesh_intersection(m, ni) = inter ;
 
   g_assert(agg_intersection_point_number(inter) == nsp*(pps-1) + 1) ;
 
-  np0 = agg_mesh_point_number(w) ;
-  agg_mesh_intersection_points_start(w, ni) = np0 ;
+  np0 = agg_mesh_point_number(m) ;
+  agg_mesh_intersection_points_start(m, ni) = np0 ;
     
   for ( i = 0 ; i < agg_intersection_point_number(inter) ; i ++ ) {
-    np = agg_mesh_point_number(w) ;
-    p = agg_mesh_point(w, np) ;
+    np = agg_mesh_point_number(m) ;
+    p = agg_mesh_point(m, np) ;
     memcpy(p, agg_intersection_point(inter,i), 3*sizeof(gdouble)) ;
-    agg_mesh_point_tag(w,np) = -1 - ni ;
-    agg_mesh_point_number(w) ++ ;    
+    agg_mesh_point_tag(m,np) = -1 - ni ;
+    agg_mesh_point_number(m) ++ ;    
   }
-  agg_mesh_intersection_points_end(w, ni) =
-    agg_mesh_point_number(w) ;
+  agg_mesh_intersection_points_end(m, ni) =
+    agg_mesh_point_number(m) ;
 
   for ( i = 0 ; i < nsp ; i ++ ) {
-    add_spline(w, np0 + i*(pps-1), np0 + (i+1)*(pps-1)) ;
+    add_spline(m, np0 + i*(pps-1), np0 + (i+1)*(pps-1)) ;
   }
 
-  agg_mesh_intersection_points_per_spline(w,ni) = pps ;
-  agg_mesh_intersection_spline_number(w,ni) = nsp ;
+  agg_mesh_intersection_points_per_spline(m,ni) = pps ;
+  agg_mesh_intersection_spline_number(m,ni) = nsp ;
   
-  agg_mesh_intersection_number(w) ++ ;
+  agg_mesh_intersection_number(m) ++ ;
 
   return 0 ;
 }
 
-static void surface_intersections(agg_mesh_t *w, agg_surface_t *S,
+static void surface_intersections(agg_mesh_t *m, agg_surface_t *S,
 				  gint *inter, gint *ninter)
 
 {
   gint i ;
 
   *ninter = 0 ;
-  for ( i = 0 ; i < agg_mesh_intersection_number(w) ; i ++ ) {
-    if ( agg_intersection_surface1(w->inter[i]) == S ||
-	 agg_intersection_surface2(w->inter[i]) == S ) {
+  for ( i = 0 ; i < agg_mesh_intersection_number(m) ; i ++ ) {
+    if ( agg_intersection_surface1(m->inter[i]) == S ||
+	 agg_intersection_surface2(m->inter[i]) == S ) {
       inter[(*ninter)] = i ; (*ninter) ++ ;
     }
   }
@@ -395,7 +470,7 @@ static void reset_triangleio(triangleio *io)
   return ;
 }
 
-static void set_boundary(agg_mesh_t *w, gint isurf,
+static void set_boundary(agg_mesh_t *m, gint isurf,
 			 gint *inter, gint ninter,
 			 gdouble *st, gint *nst,
 			 gint *segments, gint *nseg,
@@ -427,8 +502,8 @@ static void set_boundary(agg_mesh_t *w, gint isurf,
   }
 
   /*look for correct list of boundary points in parametric space of surface*/
-  S = agg_mesh_surface(w, isurf) ;
-  iS = agg_mesh_intersection(w, inter[0]) ;
+  S = agg_mesh_surface(m, isurf) ;
+  iS = agg_mesh_intersection(m, inter[0]) ;
 
   if ( agg_intersection_surface1(iS) == S) {
     sti = &(iS->st[0]) ;
@@ -446,15 +521,15 @@ static void set_boundary(agg_mesh_t *w, gint isurf,
 
   /*check limits to see if this is a hole or a boundary*/
   if ( smin > 0 && smax < 1 && tmin > 0 && tmax < 1 ) {
-    set_boundary(w, isurf, inter, 0, st, nst, segments, nseg, segmentmarkers,
+    set_boundary(m, isurf, inter, 0, st, nst, segments, nseg, segmentmarkers,
 		 idxlist, nidx) ;
     return ;
   }
   
   /*copy spline end points into boundary*/
-  pps = agg_mesh_intersection_points_per_spline(w,inter[0]) ;
+  pps = agg_mesh_intersection_points_per_spline(m,inter[0]) ;
   nst0 = *nst ;
-  for ( i = 0 ; i <= agg_mesh_intersection_spline_number(w, inter[0]) ;
+  for ( i = 0 ; i <= agg_mesh_intersection_spline_number(m, inter[0]) ;
 	i ++ ) {
     st[2*(*nst) + 0] = sti[i*(pps-1)*AGG_INTERSECTION_DATA_SIZE+0] ;
     st[2*(*nst) + 1] = sti[i*(pps-1)*AGG_INTERSECTION_DATA_SIZE+1] ;
@@ -463,7 +538,7 @@ static void set_boundary(agg_mesh_t *w, gint isurf,
     
     (*nst) ++ ; (*nseg) ++ ;
     idxlist[(*nidx)] =
-      agg_mesh_intersection_points_start(w, inter[0]) + i*(pps-1) ;
+      agg_mesh_intersection_points_start(m, inter[0]) + i*(pps-1) ;
     (*nidx) ++ ;
   }
 
@@ -555,15 +630,32 @@ static void add_hole(agg_mesh_t *w, gint isurf,
   return ;
 }
 
+/** 
+ * Add a parametric surface to a mesh, cutting on intersections if
+ * necessary. This requires that any intersections be added in
+ * advance, using ::agg_mesh_intersection_add. 
+ * 
+ * @param msh a mesh to have a surface added;
+ * @param S the surface to add;
+ * @param P the patch mapping \a S;
+ * @param nsec number of sections to compute;
+ * @param nseg number of segments on each section; 
+ * @param pps number of points on each segment.
+ * @param w workspace for surface evaluation.
+ * 
+ * @return 0 on success.
+ */
 
-gint agg_mesh_surface_add(agg_mesh_t *w,
-			       agg_surface_t *S, agg_patch_t *P,
-			       gint nsec, gint nseg, gint pps,
-			       agg_surface_workspace_t *ws)
+gint agg_mesh_surface_add(agg_mesh_t *msh,
+			  agg_surface_t *S, agg_patch_t *P,
+			  gint nsec, gint nseg, gint pps,
+			  agg_surface_workspace_t *w)
 
 {
   context *ctx ;
   triangleio in ;
+  /*it has to be called this because of how the macros in triangle.h
+    are defined*/
   mesh *m ;
   behavior *b ;
   statistics s ;
@@ -576,19 +668,18 @@ gint agg_mesh_surface_add(agg_mesh_t *w,
   triangle ptr; 
   subseg sptr;  
 
-  isurf = agg_mesh_surface_number(w) ;
-  agg_mesh_patch(w,isurf) = P ;
-  agg_mesh_surface(w,isurf) = S ;
-  agg_mesh_surface_number(w) ++ ;
+  isurf = agg_mesh_surface_number(msh) ;
+  agg_mesh_patch(msh,isurf) = P ;
+  agg_mesh_surface(msh,isurf) = S ;
+  agg_mesh_surface_number(msh) ++ ;
 
   ninter = 0 ;
-  surface_intersections(w, S, inter, &ninter) ;
-  /* g_assert(ninter < 2) ; */
+  surface_intersections(msh, S, inter, &ninter) ;
 
   /*maximum number of boundary points*/
   nbpts = 4 ;
   if ( ninter > 0 ) {
-    nbpts += agg_mesh_intersection_spline_number(w, inter[0]) + 4096 ;
+    nbpts += agg_mesh_intersection_spline_number(msh, inter[0]) + 4096 ;
   }
 
   nbpts = MAX(nbpts, 2048) ;
@@ -608,7 +699,7 @@ gint agg_mesh_surface_add(agg_mesh_t *w,
   in.numberofholes = 0 ;
   
   for ( i = 0 ; i < ninter ; i ++ ) {
-    add_hole(w, isurf, inter[i], ninter,
+    add_hole(msh, isurf, inter[i], ninter,
 	     in.pointlist, &(in.numberofpoints),
 	     in.segmentlist, &(in.numberofsegments),
 	     in.segmentmarkerlist,
@@ -616,7 +707,7 @@ gint agg_mesh_surface_add(agg_mesh_t *w,
 	     idxpre, &npre) ;
   }
  
-  set_boundary(w, isurf, inter, ninter,
+  set_boundary(msh, isurf, inter, ninter,
 	       in.pointlist, &(in.numberofpoints), 
 	       in.segmentlist, &(in.numberofsegments),
 	       in.segmentmarkerlist,
@@ -652,12 +743,12 @@ gint agg_mesh_surface_add(agg_mesh_t *w,
   traversalinit(&m->vertices);
   vertexnumber = b->firstnumber;
   vertexloop = vertextraverse(m);
-  np0 = agg_mesh_point_number(w) ;
+  np0 = agg_mesh_point_number(msh) ;
   while (vertexloop != (vertex) NULL) {
     if (!b->jettison || (vertextype(vertexloop) != UNDEADVERTEX)) {
-      np = agg_mesh_surface_point_add(w, isurf,
-					   vertexloop[0], vertexloop[1], ws) ;
-      agg_mesh_point_tag(w,np) = isurf ;
+      np = agg_mesh_surface_point_add(msh, isurf,
+				      vertexloop[0], vertexloop[1], w) ;
+      agg_mesh_point_tag(msh,np) = isurf ;
       setvertexmark(vertexloop, vertexnumber);
       vertexnumber++;
     }
@@ -687,8 +778,8 @@ gint agg_mesh_surface_add(agg_mesh_t *w,
 	if ( i1 >= npre ) { j1 = i1 + np0 ; } else { j1 = idxpre[i1] ; }
 	if ( i0 >= npre || i1 >= npre ) {
 	  i0 += np0 ; i1 += np0 ;
-	  agg_mesh_spline_interp_points(w, isurf, i0, i1, pps, ws) ;
-	  sp = agg_mesh_spline(w,agg_mesh_spline_number(w)-1) ;
+	  agg_mesh_spline_interp_points(msh, isurf, i0, i1, pps, w) ;
+	  sp = agg_mesh_spline(msh,agg_mesh_spline_number(msh)-1) ;
 	  sp[0] = j0 ; sp[pps-1] = j1 ;
 	  edgenumber++;
 	}
@@ -714,15 +805,15 @@ gint agg_mesh_surface_add(agg_mesh_t *w,
     if ( i1 >= npre ) { j1 = i1 + np0 ; } else { j1 = idxpre[i1] ; }
     if ( i2 >= npre ) { j2 = i2 + np0 ; } else { j2 = idxpre[i2] ; }
     
-    i0 = agg_mesh_spline_from_endpoints(w, j0, j1) ;
+    i0 = agg_mesh_spline_from_endpoints(msh, j0, j1) ;
     if ( i0 != 0 ) {
-      i1 = agg_mesh_spline_from_endpoints(w, j1, j2) ;
+      i1 = agg_mesh_spline_from_endpoints(msh, j1, j2) ;
       if ( i1 != 0 ) {
-	i2 = agg_mesh_spline_from_endpoints(w, j2, j0) ;
+	i2 = agg_mesh_spline_from_endpoints(msh, j2, j0) ;
 	if ( i2 != 0 ) {
-	  e = agg_mesh_element(w, agg_mesh_element_number(w)) ;
+	  e = agg_mesh_element(msh, agg_mesh_element_number(msh)) ;
 	  e[0] = i0 ; e[1] = i1 ; e[2] = i2 ; e[3] = 0 ;
-	  agg_mesh_element_number(w) ++ ;
+	  agg_mesh_element_number(msh) ++ ;
 	}
       }
     }
@@ -730,19 +821,31 @@ gint agg_mesh_surface_add(agg_mesh_t *w,
     triangleloop.tri = triangletraverse(m);
     elementnumber++;
   }
+
+  triangle_context_destroy(ctx) ;
   
   return 0 ;
 }
 
-gint agg_mesh_spline_from_endpoints(agg_mesh_t *w,
-					 gint p0, gint p1)
+/** 
+ * Find a spline from its endpoints
+ * 
+ * @param m a mesh containing a set of splines;
+ * @param p0 index of a point of \a m;
+ * @param p1 index of another point of \a m.
+ * 
+ * @return index of a spline which has endpoints \a p0 and \a p1, or 0
+ * if there is no such spline.
+ */
+
+gint agg_mesh_spline_from_endpoints(agg_mesh_t *m, gint p0, gint p1)
 
 {
   gint i, *sp, len ;
 
-  for ( i = 1 ; i < agg_mesh_spline_number(w) ; i ++ ) {
-    sp = agg_mesh_spline(w, i) ;
-    len = agg_mesh_spline_length(w, i) ;
+  for ( i = 1 ; i < agg_mesh_spline_number(m) ; i ++ ) {
+    sp = agg_mesh_spline(m, i) ;
+    len = agg_mesh_spline_length(m, i) ;
     if ( sp[0] == p0 && sp[len-1] == p1 ) return  i ;
     if ( sp[0] == p1 && sp[len-1] == p0 ) return -i ;
   }
@@ -750,9 +853,21 @@ gint agg_mesh_spline_from_endpoints(agg_mesh_t *w,
   return 0 ;
 }
 
-gint agg_mesh_surface_point_add(agg_mesh_t *w, gint surf,
-				     gdouble s, gdouble t,
-				     agg_surface_workspace_t *ws)
+/** 
+ * Add a point to a mesh
+ * 
+ * @param m mesh to have point added;
+ * @param surf index in \a m of surface on which to evaluate point;
+ * @param s coordinate on patch for surface \a surf;
+ * @param t coordinate on patch for surface \a surf;
+ * @param w workspace for surface evaluation.
+ * 
+ * @return index of newly added point.
+ */
+
+gint agg_mesh_surface_point_add(agg_mesh_t *m, gint surf,
+				gdouble s, gdouble t,
+				agg_surface_workspace_t *w)
 
 {
   gint np ;
@@ -760,26 +875,31 @@ gint agg_mesh_surface_point_add(agg_mesh_t *w, gint surf,
   agg_surface_t *S ;
   agg_patch_t *P ;
   
-  np = agg_mesh_point_number(w) ;
+  np = agg_mesh_point_number(m) ;
 
-  if ( np >= agg_mesh_point_number_max(w) ) {
+  if ( np >= agg_mesh_point_number_max(m) ) {
     g_error("%s: not enough space allocated (%d points)",
-	    __FUNCTION__, agg_mesh_point_number_max(w)) ;
+	    __FUNCTION__, agg_mesh_point_number_max(m)) ;
   }
   
-  p = agg_mesh_point(w, np) ;
-  P = agg_mesh_patch(w, surf) ;
-  g_assert((S = agg_mesh_surface(w, surf)) != NULL) ;
+  p = agg_mesh_point(m, np) ;
+  P = agg_mesh_patch(m, surf) ;
+  g_assert((S = agg_mesh_surface(m, surf)) != NULL) ;
   
   if ( P != NULL ) {
     agg_patch_map(P, s, t, &u, &v) ;    
   } else {
     u = s ; v = t ;
   }
-  agg_surface_point_eval(S, u, v, p, ws) ;    
+  agg_surface_point_eval(S, u, v, p, w) ;    
   p[3] = s ; p[4] = t ;
 
-  agg_mesh_point_number(w) ++ ;
+  agg_mesh_point_number(m) ++ ;
   
   return np ;
 }
+
+
+/**
+ * @}
+ */

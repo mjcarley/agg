@@ -40,6 +40,29 @@ static const struct {
     {NULL,        NULL, -1, -1}
   } ;
 
+static const struct {
+  gchar *name ;
+  agg_axes_t axes ;
+} axes_list[] =
+  {
+    {"xyz",    AGG_AXES_PX_PY_PZ},
+    {"+x+y+z", AGG_AXES_PX_PY_PZ},
+
+    {"yzx",    AGG_AXES_PY_PZ_PX},
+    {"+y+z+x", AGG_AXES_PY_PZ_PX},
+
+    {"zxy",    AGG_AXES_PZ_PX_PY},
+    {"+z+x+y", AGG_AXES_PZ_PX_PY},
+    
+    {"zyx",    AGG_AXES_PZ_PY_PX},
+    {"+z+y+x", AGG_AXES_PZ_PY_PX},
+
+    {"xy-z",   AGG_AXES_PX_PY_MZ},
+    {"+x+y-z", AGG_AXES_PX_PY_MZ},
+    
+    {NULL,  -1}
+  } ;
+
 /** 
  * @{ 
  *
@@ -315,8 +338,9 @@ gint agg_transform_operator_add(agg_transform_t *T, agg_operation_t op,
   }
 
   if ( transform_list[i].np != np ) {
-    g_error("%s: transform requires %d parameters, %d supplied",
-	    __FUNCTION__, transform_list[i].np, np) ;
+    g_error("%s: transform \"%s\" requires %d parameters, %d supplied",
+	    __FUNCTION__,
+	    transform_list[i].name, transform_list[i].np, np) ;
   }
 
   tr = agg_transform_operator_new() ;
@@ -471,6 +495,15 @@ gint agg_transform_operator_scale(agg_operation_t op,
   return 0 ;
 }
 
+/** 
+ * Apply a transform operation to a point.
+ * 
+ * @param op transform operation (usually part of an ::agg_transform_t);
+ * @param xin input point;
+ * @param xout on exit contains transformed version of \a xin.
+ * 
+ * @return 0 on success.
+ */
   
 gint agg_transform_operator_apply(agg_transform_operator_t *op,
 				  gdouble *xin, gdouble *xout)
@@ -493,8 +526,8 @@ gint agg_transform_operator_apply(agg_transform_operator_t *op,
  * Apply a transform to a point
  * 
  * @param T an ::agg_transform_t containing the sequence of operations;
- * @param xin input point;
- * @param xout output point.
+ * @param xin input point (can be the same as \a xout);
+ * @param xout on exit contains transformed version of \a xin.
  * 
  * @return 0 on success.
  */
@@ -519,6 +552,16 @@ gint agg_transform_apply(agg_transform_t *T, gdouble *xin, gdouble *xout)
   return 0 ;
 }
 
+/** 
+ * Apply an axis transform (swap) to a point
+ * 
+ * @param axes an ::agg_axes_t for the required axis transformation;
+ * @param xin input point (can be equal to \a xout);
+ * @param xout on exit contains transformed point data.
+ * 
+ * @return 0 on success.
+ */
+
 gint agg_transform_axes(agg_axes_t axes, gdouble *xin, gdouble *xout)
 
 {
@@ -537,8 +580,70 @@ gint agg_transform_axes(agg_axes_t axes, gdouble *xin, gdouble *xout)
   case AGG_AXES_PZ_PY_PX:
     xout[0] = xt[2] ; xout[1] = xt[1] ; xout[2] = xt[0] ;
     break ;
+  case AGG_AXES_PX_PY_MZ:
+    xout[0] = xt[0] ; xout[1] = xt[1] ; xout[2] = -xt[2] ;
+    break ;
   default: g_assert_not_reached() ;
   }
+  
+  return 0 ;
+}
+
+/** 
+ * Parse a string specifying an axis change on a surface.
+ * 
+ * @param str axis string to parse
+ * 
+ * @return ::agg_axes_t corresponding to \a str, or AGG_AXES_UNDEFINED. 
+ */
+
+agg_axes_t agg_axes_parse(gchar *str)
+
+{
+  gint i ;
+
+  for ( i = 0 ; axes_list[i].name != NULL ; i ++ ) {
+    if ( strcmp(axes_list[i].name, str) == 0 )
+      return axes_list[i].axes ;
+  }
+
+  return AGG_AXES_UNDEFINED ;
+}
+
+/** 
+ * Parse a transform operation described by a string and add it to an
+ * ::agg_transform_t
+ * 
+ * @param T ::agg_transform_t to have an operation added;
+ * @param name name of transform operation (see 
+ * ::agg_transform_operators_write); 
+ * @param p array of ::agg_variable_t holding parameters of transform;
+ * @param np number of entries in \a p.
+ * 
+ * @return 0 on success.
+ */
+
+gint agg_transform_parse(agg_transform_t *T, gchar *name,
+			 agg_variable_t *p, gint np)
+
+{
+  gchar *expr[32] ;
+  gdouble args[32] ;
+  gint i ;
+
+  for ( i = 0 ; i < np ; i ++ ) {
+    args[i] = agg_variable_value(&(p[i])) ;
+    expr[i] = agg_variable_definition((&p[i])) ;
+  }
+
+  for ( i = 0 ;	(transform_list[i].name != NULL) ; i ++ ) {
+    if ( strcmp(transform_list[i].name, name) == 0 ) {
+      agg_transform_operator_add(T, transform_list[i].op, args, expr, np) ;
+      return 0 ;
+    }
+  }
+
+  g_error("%s: operation \"%s\" not recognized", __FUNCTION__, name) ;  
   
   return 0 ;
 }

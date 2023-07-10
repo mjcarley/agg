@@ -29,6 +29,12 @@
 
 #include "hefsi.h"
 
+/** 
+ * @{ 
+ *
+ * @ingroup intersections
+ */
+
 static gint hefsi_func(gdouble s, gdouble t, gdouble *x, gpointer data)
 
 {
@@ -44,6 +50,14 @@ static gint hefsi_func(gdouble s, gdouble t, gdouble *x, gpointer data)
 
   return 0 ;
 }
+
+/** 
+ * Allocate a new surface intersection structure. 
+ * 
+ * @param nstmax maximum number of points on intersection curve.
+ * 
+ * @return newly allocated ::agg_intersection_t.
+ */
 
 agg_intersection_t *agg_intersection_new(gint nstmax)
 
@@ -83,7 +97,7 @@ static gboolean boundary_crossed(agg_patch_t *P1, agg_patch_t *P2,
   crossed = FALSE ;
   if ( agg_patch_wrap_t(P1) ) {
     if ( s1->x1[4] > 1.0-wtol && s2->x1[4] < wtol ) {
-      fprintf(stderr, "HELLO1\n") ;
+      /* fprintf(stderr, "HELLO1\n") ; */
       t = s1->x1[4] - 1.0 ;
       a = (0.0 - t)/(s2->x1[4] - t) ;
       
@@ -97,7 +111,7 @@ static gboolean boundary_crossed(agg_patch_t *P1, agg_patch_t *P2,
     }
 
     if ( s2->x1[4] > 1.0-wtol && s1->x1[4] < wtol ) {
-      fprintf(stderr, "HELLO3\n") ;
+      /* fprintf(stderr, "HELLO3\n") ; */
 
       t = s1->x1[4] ;
       a = t/(t - (s2->x1[4]-1)) ;
@@ -114,7 +128,7 @@ static gboolean boundary_crossed(agg_patch_t *P1, agg_patch_t *P2,
 
   if ( agg_patch_wrap_t(P2) ) {
     if ( s1->x1[6] > 1.0-wtol && s2->x1[6] < wtol ) {
-      fprintf(stderr, "HELLO2\n") ;
+      /* fprintf(stderr, "HELLO2\n") ; */
       t = s1->x1[6] - 1.0 ;
       a = (0.0 - t)/(s2->x1[6] - t) ;
       
@@ -126,7 +140,7 @@ static gboolean boundary_crossed(agg_patch_t *P1, agg_patch_t *P2,
       crossed = TRUE ;
     }
     if ( s2->x1[6] > 1.0-wtol && s1->x1[6] < wtol ) {
-      fprintf(stderr, "HELLO4\n") ;
+      /* fprintf(stderr, "HELLO4\n") ; */
       t = s1->x1[6] ;
       a = t/(t - (s2->x1[6]-1)) ;
       
@@ -214,6 +228,19 @@ static void densify_intersection(agg_intersection_t *inter,
   return ;
 }
 
+/** 
+ * Calculate the intersection of two parametric surfaces. 
+ * 
+ * @param inter on exit contains the intersection curve data;
+ * @param S1 first surface;
+ * @param P1 mapping patch for first surface;
+ * @param S2 second surface;
+ * @param P2 mapping patch for second surface;
+ * @param w workspace for surface evaluation.
+ * 
+ * @return 0 on success.
+ */
+
 gint agg_surface_patch_intersection(agg_intersection_t *inter,
 				    agg_surface_t *S1, agg_patch_t *P1,
 				    agg_surface_t *S2, agg_patch_t *P2,
@@ -293,34 +320,23 @@ gint agg_surface_patch_intersection(agg_intersection_t *inter,
   /* } */
   
   return 0 ;
-  
-  /* /\* agg_intersection_point_number(inter) = nst ; *\/ */
-
-  /* /\*jump between segments in st plane marks start of curve*\/ */
-  /* rmax1 = rmax2 = 0 ; */
-  /* istart1 = istart2 = iend1 = iend2 = NULL ; */
-  /* i = 0 ; ni = 0 ; */
-  /* for ( il = hefsi_workspace_curve(wh,i) ; il->next != NULL ; */
-  /* 	il = il->next ) { */
-  /*   j = GPOINTER_TO_INT(il->data) ; */
-  /*   seg1 = hefsi_workspace_segment(wh,j) ; */
-  /*   j = GPOINTER_TO_INT(il->next->data) ; */
-  /*   seg2 = hefsi_workspace_segment(wh,j) ; */
-  /*   if ( (r = segment_distance2(seg1, seg2, 3)) > rmax1 ) { */
-  /*     rmax1 = r ; */
-  /*     iend1 = il ; */
-  /*     istart1 = il->next ; */
-  /*   } */
-  /*   if ( (r = segment_distance2(seg1, seg2, 5)) > rmax2 ) { */
-  /*     rmax2 = r ; */
-  /*     iend2 = il ; */
-  /*     istart2 = il->next ; */
-  /*   } */
-  /*   ni ++ ; */
-  /* } */
-
-  /* return 0 ; */
 }
+
+/** 
+ * Write an intersection curve to file in the form
+ *
+ * [\f$x\f$ \f$y\f$ \f$z\f$ \f$s_{1}\f$ \f$t_{1}\f$ \f$s_{2}\f$ \f$t_{2}\f$]
+ *
+ * where \f$(x,y,z)\f$ are physical coordinates and
+ * \f$(s_{i},t_{i})\f$ are parametric coordinates on the respective
+ * surface patches (not the surfaces proper)
+ * 
+ * @param f output file stream;
+ * @param inter intersection curve to write;
+ * @param w workspace for surface evaluation.
+ * 
+ * @return 0 on success.
+ */
 
 gint agg_intersection_curve_write(FILE *f, agg_intersection_t *inter,
 				  agg_surface_workspace_t *w)
@@ -368,6 +384,14 @@ gint agg_patch_st_correct(agg_patch_t *P, gdouble *st)
   return 0 ;
 }
 
+/** 
+ * Calculate the bounding box of an intersection curve in the two
+ * surface patch mappings.
+ * 
+ * @param inter intersection curve whose bounding boxes are to be set. 
+ * 
+ * @return 0 on success.
+ */
 
 gint agg_intersection_bbox_set(agg_intersection_t *inter)
 
@@ -497,6 +521,19 @@ static void interp_st(gdouble *st, gint nst, gint c,
   return ;
 }
 
+/** 
+ * Resample an intersection curve to (approximately) evenly spaced
+ * points in the mapping patch.
+ * 
+ * @param inter an intersection curve;
+ * @param nsp number of splines in the resampled curve;
+ * @param pps number of points per spline in the resampled curve;
+ * @param resample on output contains the resampled intersection data;
+ * @param w workspace for surface evaluation.
+ * 
+ * @return 0 on success.
+ */
+
 gint agg_intersection_resample(agg_intersection_t *inter,
 			       gint nsp, gint pps,
 			       agg_intersection_t *resample,
@@ -550,3 +587,8 @@ gint agg_intersection_resample(agg_intersection_t *inter,
   
   return 0 ;
 }
+
+
+/**
+ * @}
+ */

@@ -19,6 +19,14 @@
 
 /** @file */
 
+#ifdef DOXYGEN
+/**
+ *  @brief
+ */
+#else /*DOXYGEN*/
+#endif /*DOXYGEN*/
+
+
 /**
  * @{
  * @ingroup variables
@@ -41,10 +49,33 @@ struct _agg_variable_t {
 } ;
 #endif /*DOXYGEN*/
 
+#ifdef DOXYGEN
+/**
+ *  @brief name of an ::agg_variable_t
+ */
+#define agg_variable_name(v)       
+/**
+ *  @brief definition of an ::agg_variable_t, as as string, or NULL
+ *  for numerical constants
+ */
+#define agg_variable_definition(v) 
+/**
+ *  @brief evaluator for the compiled expression for the variable,
+ *  or NULL for numerical constants
+ */
+#define agg_variable_evaluator(v)  
+/**
+ *  @brief numerical value of the variable (which may change on
+ *  upon reevaluation of the expression)
+ */
+#define agg_variable_value(v)      
+#else  /*DOXYGEN*/
 #define agg_variable_name(_v)       ((_v)->name)
 #define agg_variable_definition(_v) ((_v)->def)
 #define agg_variable_evaluator(_v)  ((_v)->eval)
 #define agg_variable_value(_v)      ((_v)->val)
+#endif /*DOXYGEN*/
+
 
 /**
  *  @}
@@ -87,7 +118,7 @@ struct _agg_section_t {
 
 #ifdef DOXYGEN
 /**
- *  @brief A macro that returns the ::agg_section_type_t of an ::agg_section_t
+ *  @brief ::agg_section_type_t of an ::agg_section_t
  */
 #define agg_section_type(s)                
 /**
@@ -213,11 +244,34 @@ struct _agg_transform_operator_t {
 } ;
 #endif /*DOXYGEN*/
 
+#ifdef DOXYGEN
+/**
+ *  @brief operation performed by an ::agg_transform_operator_t
+ */
+#define agg_transform_operator_operation(op)        
+/**
+ *  @brief parameters of ::agg_variable_t for an ::agg_transform_operator_t
+ */
+#define agg_transform_operator_parameters(op)       
+/**
+ *  @brief \f$i\f$th parameter for ::agg_transform_operator_t
+ */
+#define agg_transform_operator_parameter(op,i)     
+/**
+ *  @brief number of parameters for the ::agg_transform_operator_t
+ */
+#define agg_transform_operator_parameter_number(op) 
+/**
+ *  @brief function called to execute the transform operation
+ */
+#define agg_transform_operator_func(op)             
+#else /*DOXYGEN*/
 #define agg_transform_operator_operation(_op)        ((_op)->op)
 #define agg_transform_operator_parameters(_op)       ((_op)->p)
 #define agg_transform_operator_parameter(_op,_i)     (&((_op)->p[(_i)]))
 #define agg_transform_operator_parameter_number(_op) ((_op)->np)
 #define agg_transform_operator_func(_op)             ((_op)->func)
+#endif /*DOXYGEN*/
 
 #define AGG_TRANSFORM_VARIABLE_NUMBER_MAX 128
 
@@ -238,11 +292,34 @@ struct _agg_transform_t {
 } ;
 #endif /*DOXYGEN*/
 
+#ifdef DOXYGEN
+/**
+ *  @brief \f$i\f$th operation of an ::agg_transform_t
+ */
+#define agg_transform_operator(T,i)        
+/**
+ *  @brief number of operations in an ::agg_transform_t
+ */
+#define agg_transform_operator_number(T)    
+/**
+ *  @brief maximum number of operations in an  ::agg_transform_t
+ */
+#define agg_transform_operator_number_max(T)
+/**
+ *  @brief \f$i\f$th variable in an  ::agg_transform_t
+ */
+#define agg_transform_variable(T,i)        
+/**
+ *  @brief number of variables in an  ::agg_transform_t
+ */
+#define agg_transform_variable_number(T)    
+#else /*DOXYGEN*/
 #define agg_transform_operator(_T,_i)           ((_T)->op[(_i)])
 #define agg_transform_operator_number(_T)       ((_T)->nop)
 #define agg_transform_operator_number_max(_T)   ((_T)->nopmax)
 #define agg_transform_variable(_T,_i)           (&((_T)->v[(_i)]))
 #define agg_transform_variable_number(_T)       ((_T)->nv)
+#endif /*DOXYGEN*/
 
 /**
  *  @}
@@ -254,11 +331,19 @@ struct _agg_transform_t {
  * 
  */
 
+/** @typedef agg_axes_t
+ *
+ * Transformation between different coordinate systems by reassignment
+ * of axes
+ */
+
 typedef enum {
-  AGG_AXES_PX_PY_PZ = 0,  /**< standard, untransformed orientation */
-  AGG_AXES_PY_PZ_PX = 1,  /**< (x,y,z) -> (y, z, x)*/
-  AGG_AXES_PZ_PX_PY = 2,  /**< (x,y,z) -> (z, x, y)*/
-  AGG_AXES_PZ_PY_PX = 3,  /**< (x,y,z) -> (z, y, x)*/
+  AGG_AXES_UNDEFINED = 0,
+  AGG_AXES_PX_PY_PZ = 1,  /**< standard, untransformed orientation */
+  AGG_AXES_PY_PZ_PX = 2,  /**< (x,y,z) -> (y, z, x)*/
+  AGG_AXES_PZ_PX_PY = 3,  /**< (x,y,z) -> (z, x, y)*/
+  AGG_AXES_PZ_PY_PX = 4,  /**< (x,y,z) -> (z, y, x)*/
+  AGG_AXES_PX_PY_MZ = 5,  /**< (x,y,z) -> (x, y,-z) (reflection in x-y)*/
 } agg_axes_t ;
 
 /** @typedef agg_surface_t
@@ -312,36 +397,26 @@ typedef enum {
   AGG_PATCH_TUBULAR   = 2  /**< mapping to surface of open cylinder */
 } agg_patch_mapping_t ;
 
+/** @typedef agg_patch_t
+ *
+ * Data structure for mapping of surfaces
+ */
 #ifdef DOXYGEN
 typedef agg_patch_t ;
 #else /*DOXYGEN*/
 typedef struct _agg_patch_t agg_patch_t ;
 struct _agg_patch_t {
   agg_patch_mapping_t map ;
-  gdouble *st, uvc[16] ; /*boundary points*/
-  gint nc, ci[8],  /*number of corners, corner indices*/
-    nst, nstmax ;   /*number of boundary points, maximum number*/
+  gdouble *st ;
+  gint nst, nstmax ;
   gboolean swrap, twrap ; /*dealing with s and t out of range*/
 } ;
 
 #define agg_patch_point_number(_p)      ((_p)->nst)
 #define agg_patch_point_number_max(_p)  ((_p)->nstmax)
-#define agg_patch_point_s(_p,_i)        ((_p)->st[AGG_PATCH_POINT_SIZE*(_i)+0])
-#define agg_patch_point_t(_p,_i)        ((_p)->st[AGG_PATCH_POINT_SIZE*(_i)+1])
-#define agg_patch_point_len(_p,_i)      ((_p)->st[AGG_PATCH_POINT_SIZE*(_i)+2])
-#define agg_patch_corner_u(_p,_i)       ((_p)->uvc[2*(_i)+0])
-#define agg_patch_corner_v(_p,_i)       ((_p)->uvc[2*(_i)+1])
-#define agg_patch_corner_index(_p,_i)   ((_p)->ci[(_i)])
-#define agg_patch_corner_s(_p,_i)		\
-  ((_p)->st[AGG_PATCH_POINT_SIZE*(agg_patch_corner_index((_p),(_i)))+0])
-#define agg_patch_corner_t(_p,_i)		\
-  ((_p)->st[AGG_PATCH_POINT_SIZE*(agg_patch_corner_index((_p),(_i)))+1])
-#define agg_patch_corner_number(_p)     ((_p)->nc)
 #define agg_patch_mapping(_p)           ((_p)->map)
 #define agg_patch_wrap_s(_p)            ((_p)->swrap)
 #define agg_patch_wrap_t(_p)            ((_p)->twrap)
-#define agg_patch_edge_is_cut(_p,_i)		\
-  (((_p)->ci[(_i)+1] - (_p)->ci[(_i)]) > 1)
 
 #endif /*DOXYGEN*/
 
@@ -356,7 +431,7 @@ struct _agg_patch_t {
  * @ingroup intersections
  */
 
-#define AGG_INTERSECTION_DATA_SIZE 8
+#define AGG_INTERSECTION_DATA_SIZE 7
 
 #ifdef DOXYGEN
 /** @typedef agg_intersection_t
@@ -367,17 +442,17 @@ typedef agg_intersection_t ;
 #else  /*DOXYGEN*/
 typedef struct _agg_intersection_t agg_intersection_t ;
 struct _agg_intersection_t {
-  agg_surface_t *S1, *S2 ;
-  agg_patch_t *P1, *P2 ;
+  agg_surface_t *S[2] ;
+  agg_patch_t *P[2] ;
   gdouble *st, bbox[8] ;
   gint nst, nstmax, ibox[8] ;
 } ;
 #endif /*DOXYGEN*/
 
-#define agg_intersection_surface1(_i) ((_i)->S1)
-#define agg_intersection_surface2(_i) ((_i)->S2)
-#define agg_intersection_patch1(_i) ((_i)->P1)
-#define agg_intersection_patch2(_i) ((_i)->P2)
+#define agg_intersection_surface1(_i) ((_i)->S[0])
+#define agg_intersection_surface2(_i) ((_i)->S[1])
+#define agg_intersection_patch1(_i) ((_i)->P[0])
+#define agg_intersection_patch2(_i) ((_i)->P[1])
 #define agg_intersection_point_s1(_i,_j)	\
   ((_i)->st[AGG_INTERSECTION_DATA_SIZE*(_j)+0])
 #define agg_intersection_point_t1(_i,_j)	\
@@ -386,10 +461,8 @@ struct _agg_intersection_t {
   ((_i)->st[AGG_INTERSECTION_DATA_SIZE*(_j)+2])
 #define agg_intersection_point_t2(_i,_j)	\
   ((_i)->st[AGG_INTERSECTION_DATA_SIZE*(_j)+3])
-#define agg_intersection_parameter(_i,_j)	\
-  ((_i)->st[AGG_INTERSECTION_DATA_SIZE*(_j)+4])
 #define agg_intersection_point(_i,_j)			\
-  (&((_i)->st[AGG_INTERSECTION_DATA_SIZE*(_j)+5]))
+  (&((_i)->st[AGG_INTERSECTION_DATA_SIZE*(_j)+4]))
 #define agg_intersection_point_number(_i) ((_i)->nst)
 #define agg_intersection_point_number_max(_i) ((_i)->nstmax)
 #define agg_intersection_bbox_s1_min(_i) ((_i)->bbox[0])
@@ -426,7 +499,7 @@ struct _agg_intersection_t {
 #ifdef DOXYGEN
 /** @typedef agg_mesh_t
  *
- * Data structure to hold mesh (patch) representation of surfaces
+ * Data structure for surface meshes
  */
 typedef agg_mesh_t ;
 #else /*DOXYGEN*/
@@ -448,8 +521,7 @@ struct _agg_mesh_t {
 #define agg_mesh_point_tag(_w,_i) ((_w)->ptags[(_i)])
 #define agg_mesh_point_number(_w)  ((_w)->np)
 #define agg_mesh_point_number_max(_w)  ((_w)->npmax)
-#define agg_mesh_element(_w,_i)		\
-  &((_w)->e[AGG_MESH_ELEMENT_SIZE*(_i)])
+#define agg_mesh_element(_w,_i) &((_w)->e[AGG_MESH_ELEMENT_SIZE*(_i)])
 #define agg_mesh_element_number(_w)  ((_w)->ne)
 #define agg_mesh_element_number_max(_w)  ((_w)->nemax)
 #define agg_mesh_spline_number(_w)  ((_w)->nsp)
@@ -478,6 +550,50 @@ struct _agg_mesh_t {
  * @}
  */
 
+/**
+ * @{
+ * 
+ * @ingroup body
+ */
+
+#ifdef DOXYGEN
+/** @typedef agg_body_t
+ *
+ * Data structure for bodies made up of collections of surfaces
+ */
+typedef agg_body_t ;
+#else /*DOXYGEN*/
+typedef struct _agg_body_t agg_body_t ;
+struct _agg_body_t {
+  agg_variable_t *g ;
+  agg_expression_data_t *e ;
+  agg_surface_t **S ;
+  agg_patch_t **P ;
+  gchar **names ;
+  gint ng, ngmax, ns, nsmax ;
+} ;
+
+#define agg_body_global(_b,_i)          (&((_b)->g[(_i)]))
+#define agg_body_globals(_b)            ((_b)->g)
+#define agg_body_global_number(_b)      ((_b)->ng)
+#define agg_body_global_number_max(_b)  ((_b)->ngmax)
+#define agg_body_surface(_b,_i)         ((_b)->S[(_i)])
+#define agg_body_surface_number(_b)     ((_b)->ns)
+#define agg_body_surface_number_max(_b) ((_b)->nsmax)
+#define agg_body_surface_last(_b)				\
+  agg_body_surface((_b),(agg_body_surface_number((_b))-1))
+#define agg_body_surface_name(_b,_i)    ((_b)->names[(_i)])
+#define agg_body_patch(_b,_i)           ((_b)->P[(_i)])
+#define agg_body_patch_last(_b)				\
+  agg_body_patch((_b),(agg_body_surface_number((_b))-1))
+
+#endif /*DOXYGEN*/
+
+/**
+ * @}
+ */
+
+
 typedef struct _agg_surface_workspace_t agg_surface_workspace_t ;
 struct _agg_surface_workspace_t {
   agg_section_t *s ;
@@ -492,6 +608,9 @@ gint agg_section_copy(agg_section_t *dest, agg_section_t *src) ;
 gint agg_section_set_circle(agg_section_t *s) ;
 gint agg_section_set_aerofoil(agg_section_t *s, gdouble eta,
 			      gdouble th, gdouble yte) ;
+gint agg_section_parse(agg_section_t *s, gchar *name,
+		       agg_variable_t *p, gint np) ;
+gint agg_sections_list(FILE *f) ;
 
 agg_transform_operator_t *agg_transform_operator_new(void) ;
 agg_transform_t *agg_transform_new(gint nopmax) ;
@@ -523,9 +642,11 @@ gint agg_transform_operator_scale(agg_operation_t op,
 				  agg_variable_t *p, gint np,
 				  gdouble *xin, gdouble *xout) ;
 gint agg_transform_axes(agg_axes_t axes, gdouble *xin, gdouble *xout) ;
+gint agg_transform_parse(agg_transform_t *T,  gchar *name,
+			 agg_variable_t *p, gint np) ;
+agg_axes_t agg_axes_parse(gchar *str) ;
 
-agg_variable_t *agg_variable_find(agg_variable_t **vars, gint nv,
-				  gchar *var) ;
+gint agg_variable_write(FILE *f, agg_variable_t *v) ;
 agg_expression_data_t *agg_expression_data_new(gint nemax) ;
 gint agg_expression_data_variable_add(agg_expression_data_t *d,
 				      agg_variable_t *v) ;
@@ -548,14 +669,8 @@ gdouble agg_naca_four(gdouble t, gdouble p, gdouble m, gdouble x) ;
 agg_patch_t *agg_patch_new(gint nstmax) ;
 gint agg_patch_map(agg_patch_t *p, gdouble s, gdouble t,
 		   gdouble *u, gdouble *v) ;
-gint agg_patch_boundary_write(FILE *f, agg_patch_t *P, gdouble ds,
-			      agg_surface_workspace_t *w) ;
-gint agg_patch_edges_parameterize(agg_patch_t *P) ;
-gint agg_patch_sample(agg_patch_t *P, gdouble ss, gdouble ts,
-		      gdouble *s, gdouble *t) ;
-gint agg_patch_edge_interp(agg_patch_t *P, gint e, gdouble p,
-			   gdouble *s, gdouble *t) ;
 gint agg_patch_st_correct(agg_patch_t *P, gdouble *st) ;
+gint agg_patch_parse(agg_patch_t *P, agg_variable_t *p, gint np) ;
 
 agg_intersection_t *agg_intersection_new(gint nstmax) ;
 gint agg_surface_patch_intersection(agg_intersection_t *inter,
@@ -572,35 +687,39 @@ gint agg_intersection_resample(agg_intersection_t *inter,
 
 agg_mesh_t *agg_mesh_new(gint npmax, gint nspmax, gint nemax) ;
 gint agg_mesh_surface_make(agg_mesh_t *w,
-				agg_surface_t *S, agg_patch_t *P,
-				agg_intersection_t *inter,
-				gint nsec, gint nseg, gint pps,
-				agg_surface_workspace_t *ws) ;
+			   agg_surface_t *S, agg_patch_t *P,
+			   agg_intersection_t *inter,
+			   gint nsec, gint nseg, gint pps,
+			   agg_surface_workspace_t *ws) ;
 gint agg_mesh_write_gmsh(FILE *f, agg_mesh_t *w,
-			      gchar *len, gint offp, gint offsp, gint offs,
-			      gboolean opencascade) ;
+			 gchar *len, gint offp, gint offsp, gint offs,
+			 gboolean opencascade) ;
 gint agg_mesh_spline_ends(agg_mesh_t *w, gint s, gint *p0, gint *p1) ;
 gint agg_mesh_spline_interp_points(agg_mesh_t *w, gint s,
-					gint p0, gint p1, gint pps,
-					agg_surface_workspace_t *ws) ;
+				   gint p0, gint p1, gint pps,
+				   agg_surface_workspace_t *ws) ;
 gboolean agg_mesh_splines_connected(agg_mesh_t *w,
-					 gint i0, gint i1, gint *p) ;
-gint agg_mesh_element_add(agg_mesh_t *w,
-			       gint s0, gint s1, gint s2, gint s3) ;
-gboolean agg_mesh_spline_degenerate(agg_mesh_t *w, gint s) ;
+				    gint i0, gint i1, gint *p) ;
+gint agg_mesh_element_add(agg_mesh_t *w, gint s0, gint s1, gint s2, gint s3) ;
 gint agg_mesh_intersection_add(agg_mesh_t *w,
-				    agg_intersection_t *inter,
-				    gint nsp, gint pps,
-				    agg_surface_workspace_t *ws) ;
+			       agg_intersection_t *inter,
+			       gint nsp, gint pps) ;
 gint agg_mesh_surface_add(agg_mesh_t *w,
-			       agg_surface_t *S, agg_patch_t *P,
-			       gint nsec, gint nseg, gint pps,
-			       agg_surface_workspace_t *ws) ;
-gint agg_mesh_spline_from_endpoints(agg_mesh_t *w,
-					 gint p0, gint p1) ;
+			  agg_surface_t *S, agg_patch_t *P,
+			  gint nsec, gint nseg, gint pps,
+			  agg_surface_workspace_t *ws) ;
+gint agg_mesh_spline_from_endpoints(agg_mesh_t *w, gint p0, gint p1) ;
 gint agg_mesh_surface_point_add(agg_mesh_t *w, gint surf,
-				     gdouble s, gdouble t,
-				     agg_surface_workspace_t *ws) ;
+				gdouble s, gdouble t,
+				agg_surface_workspace_t *ws) ;
+agg_body_t *agg_body_new(gint ngmax, gint nsmax) ;
+gint agg_body_global_add(agg_body_t *b, gchar *var, gchar *def, gdouble val) ;
+gint agg_body_globals_write(FILE *f, agg_body_t *b) ;
+gint agg_body_globals_compile(agg_body_t *b) ;
+gint agg_body_globals_eval(agg_body_t *b) ;
+gint agg_body_read(agg_body_t *b, gchar *file, gboolean echo) ;
+gint agg_body_surface_add(agg_body_t *b, agg_surface_t *S, agg_patch_t *P) ;
+gint agg_body_surfaces_list(FILE *f, agg_body_t *b) ;
 
 #endif /*__AGG_H_INCLUDED__*/
 

@@ -11,6 +11,14 @@ gdouble \textbf{ agg\+\_\+section\+\_\+eval} (\textbf{ agg\+\_\+section\+\_\+t} 
 \item 
 gint \textbf{ agg\+\_\+section\+\_\+copy} (\textbf{ agg\+\_\+section\+\_\+t} $\ast$dest, \textbf{ agg\+\_\+section\+\_\+t} $\ast$src)
 \item 
+gint \textbf{ agg\+\_\+section\+\_\+set\+\_\+circle} (\textbf{ agg\+\_\+section\+\_\+t} $\ast$s)
+\item 
+gint \textbf{ agg\+\_\+section\+\_\+set\+\_\+aerofoil} (\textbf{ agg\+\_\+section\+\_\+t} $\ast$s, gdouble eta, gdouble th, gdouble yte)
+\item 
+gint \textbf{ agg\+\_\+section\+\_\+parse} (\textbf{ agg\+\_\+section\+\_\+t} $\ast$s, gchar $\ast$name, \textbf{ agg\+\_\+variable\+\_\+t} $\ast$p, gint np)
+\item 
+gint \textbf{ agg\+\_\+sections\+\_\+list} (FILE $\ast$f)
+\item 
 \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t} $\ast$ \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+new} (void)
 \item 
 \textbf{ agg\+\_\+transform\+\_\+t} $\ast$ \textbf{ agg\+\_\+transform\+\_\+new} (gint nopmax)
@@ -31,11 +39,25 @@ gint \textbf{ agg\+\_\+transform\+\_\+operators\+\_\+write} (FILE $\ast$f, \text
 \item 
 gint \textbf{ agg\+\_\+transform\+\_\+apply} (\textbf{ agg\+\_\+transform\+\_\+t} $\ast$T, gdouble $\ast$xin, gdouble $\ast$xout)
 \item 
+gint \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+apply} (\textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t} $\ast$op, gdouble $\ast$xin, gdouble $\ast$xout)
+\item 
+gint \textbf{ agg\+\_\+transform\+\_\+axes} (\textbf{ agg\+\_\+axes\+\_\+t} axes, gdouble $\ast$xin, gdouble $\ast$xout)
+\item 
+gint \textbf{ agg\+\_\+transform\+\_\+parse} (\textbf{ agg\+\_\+transform\+\_\+t} $\ast$T, gchar $\ast$name, \textbf{ agg\+\_\+variable\+\_\+t} $\ast$p, gint np)
+\item 
+\textbf{ agg\+\_\+axes\+\_\+t} \textbf{ agg\+\_\+axes\+\_\+parse} (gchar $\ast$str)
+\item 
+gint \textbf{ agg\+\_\+variable\+\_\+write} (FILE $\ast$f, \textbf{ agg\+\_\+variable\+\_\+t} $\ast$v)
+\item 
+gint \textbf{ agg\+\_\+expression\+\_\+data\+\_\+variable\+\_\+add} (\textbf{ agg\+\_\+expression\+\_\+data\+\_\+t} $\ast$d, \textbf{ agg\+\_\+variable\+\_\+t} $\ast$v)
+\item 
 gpointer \textbf{ agg\+\_\+expression\+\_\+compile} (gchar $\ast$e, \textbf{ agg\+\_\+expression\+\_\+data\+\_\+t} $\ast$d)
 \item 
 gdouble \textbf{ agg\+\_\+expression\+\_\+eval} (gpointer e)
 \item 
 gint \textbf{ agg\+\_\+expression\+\_\+data\+\_\+compile} (\textbf{ agg\+\_\+expression\+\_\+data\+\_\+t} $\ast$d)
+\item 
+gint \textbf{ agg\+\_\+expression\+\_\+data\+\_\+eval} (\textbf{ agg\+\_\+expression\+\_\+data\+\_\+t} $\ast$d)
 \item 
 \textbf{ agg\+\_\+surface\+\_\+t} $\ast$ \textbf{ agg\+\_\+surface\+\_\+new} (gint nsmax)
 \item 
@@ -50,16 +72,85 @@ gint \textbf{ agg\+\_\+surface\+\_\+point\+\_\+eval} (\textbf{ agg\+\_\+surface\
 agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$ \textbf{ agg\+\_\+surface\+\_\+workspace\+\_\+new} (void)
 \item 
 gdouble \textbf{ agg\+\_\+naca\+\_\+four} (gdouble t, gdouble p, gdouble m, gdouble x)
+\item 
+gint \textbf{ agg\+\_\+patch\+\_\+map} (\textbf{ agg\+\_\+patch\+\_\+t} $\ast$p, gdouble s, gdouble t, gdouble $\ast$u, gdouble $\ast$v)
+\item 
+gint \textbf{ agg\+\_\+patch\+\_\+st\+\_\+correct} (\textbf{ agg\+\_\+patch\+\_\+t} $\ast$P, gdouble $\ast$st)
+\item 
+gint \textbf{ agg\+\_\+patch\+\_\+parse} (\textbf{ agg\+\_\+patch\+\_\+t} $\ast$P, \textbf{ agg\+\_\+variable\+\_\+t} $\ast$p, gint np)
+\item 
+\textbf{ agg\+\_\+intersection\+\_\+t} $\ast$ \textbf{ agg\+\_\+intersection\+\_\+new} (gint nstmax)
+\item 
+gint \textbf{ agg\+\_\+surface\+\_\+patch\+\_\+intersection} (\textbf{ agg\+\_\+intersection\+\_\+t} $\ast$inter, \textbf{ agg\+\_\+surface\+\_\+t} $\ast$S1, \textbf{ agg\+\_\+patch\+\_\+t} $\ast$P1, \textbf{ agg\+\_\+surface\+\_\+t} $\ast$S2, \textbf{ agg\+\_\+patch\+\_\+t} $\ast$P2, agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$w)
+\item 
+gint \textbf{ agg\+\_\+intersection\+\_\+curve\+\_\+write} (FILE $\ast$f, \textbf{ agg\+\_\+intersection\+\_\+t} $\ast$inter, agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$w)
+\item 
+gint \textbf{ agg\+\_\+intersection\+\_\+bbox\+\_\+set} (\textbf{ agg\+\_\+intersection\+\_\+t} $\ast$inter)
+\item 
+gint \textbf{ agg\+\_\+intersection\+\_\+resample} (\textbf{ agg\+\_\+intersection\+\_\+t} $\ast$inter, gint nsp, gint pps, \textbf{ agg\+\_\+intersection\+\_\+t} $\ast$resample, agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$w)
+\item 
+\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$ \textbf{ agg\+\_\+mesh\+\_\+new} (gint npmax, gint nspmax, gint nemax)
+\item 
+gint \textbf{ agg\+\_\+mesh\+\_\+write\+\_\+gmsh} (FILE $\ast$f, \textbf{ agg\+\_\+mesh\+\_\+t} $\ast$w, gchar $\ast$len, gint offp, gint offsp, gint offs, gboolean opencascade)
+\item 
+gint \textbf{ agg\+\_\+mesh\+\_\+spline\+\_\+ends} (\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$w, gint s, gint $\ast$p0, gint $\ast$p1)
+\item 
+gint \textbf{ agg\+\_\+mesh\+\_\+spline\+\_\+interp\+\_\+points} (\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$w, gint s, gint p0, gint p1, gint pps, agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$ws)
+\item 
+gboolean \textbf{ agg\+\_\+mesh\+\_\+splines\+\_\+connected} (\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$w, gint i0, gint i1, gint $\ast$p)
+\item 
+gint \textbf{ agg\+\_\+mesh\+\_\+element\+\_\+add} (\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$w, gint s0, gint s1, gint s2, gint s3)
+\item 
+gint \textbf{ agg\+\_\+mesh\+\_\+intersection\+\_\+add} (\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$w, \textbf{ agg\+\_\+intersection\+\_\+t} $\ast$inter, gint nsp, gint pps)
+\item 
+gint \textbf{ agg\+\_\+mesh\+\_\+surface\+\_\+add} (\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$w, \textbf{ agg\+\_\+surface\+\_\+t} $\ast$S, \textbf{ agg\+\_\+patch\+\_\+t} $\ast$P, gint nsec, gint nseg, gint pps, agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$ws)
+\item 
+gint \textbf{ agg\+\_\+mesh\+\_\+spline\+\_\+from\+\_\+endpoints} (\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$w, gint p0, gint p1)
+\item 
+gint \textbf{ agg\+\_\+mesh\+\_\+surface\+\_\+point\+\_\+add} (\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$w, gint surf, gdouble s, gdouble t, agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$ws)
+\item 
+\textbf{ agg\+\_\+body\+\_\+t} $\ast$ \textbf{ agg\+\_\+body\+\_\+new} (gint ngmax, gint nsmax)
+\item 
+gint \textbf{ agg\+\_\+body\+\_\+global\+\_\+add} (\textbf{ agg\+\_\+body\+\_\+t} $\ast$b, gchar $\ast$var, gchar $\ast$def, gdouble val)
+\item 
+gint \textbf{ agg\+\_\+body\+\_\+globals\+\_\+write} (FILE $\ast$f, \textbf{ agg\+\_\+body\+\_\+t} $\ast$b)
+\item 
+gint \textbf{ agg\+\_\+body\+\_\+globals\+\_\+compile} (\textbf{ agg\+\_\+body\+\_\+t} $\ast$b)
+\item 
+gint \textbf{ agg\+\_\+body\+\_\+globals\+\_\+eval} (\textbf{ agg\+\_\+body\+\_\+t} $\ast$b)
+\item 
+gint \textbf{ agg\+\_\+body\+\_\+read} (\textbf{ agg\+\_\+body\+\_\+t} $\ast$b, gchar $\ast$file, gboolean echo)
+\item 
+gint \textbf{ agg\+\_\+body\+\_\+surfaces\+\_\+list} (FILE $\ast$f, \textbf{ agg\+\_\+body\+\_\+t} $\ast$b)
 \end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\textbf{ }\par
 \begin{DoxyCompactItemize}
 \item 
+typedef \textbf{ agg\+\_\+body\+\_\+t}
+\end{DoxyCompactItemize}
+
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\label{agg_8h_a507e1c39c279ca276de83410336a5c06}} 
+\#define {\bfseries agg\+\_\+variable\+\_\+name}(v)
+\begin{DoxyCompactList}\small\item\em name of an \doxyref{agg\+\_\+variable\+\_\+t}{p.}{group__variables_gaf99a18818caf06b7a2cdc10dde859f47} \end{DoxyCompactList}\item 
+\mbox{\label{agg_8h_ab1eb3e5fc0db91ca383c2f478300127b}} 
+\#define {\bfseries agg\+\_\+variable\+\_\+definition}(v)
+\begin{DoxyCompactList}\small\item\em definition of an \doxyref{agg\+\_\+variable\+\_\+t}{p.}{group__variables_gaf99a18818caf06b7a2cdc10dde859f47}, as as string, or NULL for numerical constants \end{DoxyCompactList}\item 
+\mbox{\label{agg_8h_a972736a8d33ed2be9f47e84631599d5b}} 
+\#define {\bfseries agg\+\_\+variable\+\_\+evaluator}(v)
+\begin{DoxyCompactList}\small\item\em evaluator for the compiled expression for the variable, or NULL for numerical constants \end{DoxyCompactList}\item 
+\mbox{\label{agg_8h_a9d32a3c48e22b7d630e4fbc4e02c71a0}} 
+\#define {\bfseries agg\+\_\+variable\+\_\+value}(v)
+\begin{DoxyCompactList}\small\item\em numerical value of the variable (which may change on upon reevaluation of the expression) \end{DoxyCompactList}\item 
 typedef \textbf{ agg\+\_\+variable\+\_\+t}
 \end{DoxyCompactItemize}
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\label{agg_8h_a77956769442ada427d64c740062b911a}} 
 \#define {\bfseries agg\+\_\+section\+\_\+type}(s)
-\begin{DoxyCompactList}\small\item\em A macro that returns the \doxyref{agg\+\_\+section\+\_\+type\+\_\+t}{p.}{group__sections_gaf4798d9cfc37c3818fc2f3a2208bfb82} of an \doxyref{agg\+\_\+section\+\_\+t}{p.}{agg_8h_a8cdd164643b93d05245e9b4976f3f0cb}. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em \doxyref{agg\+\_\+section\+\_\+type\+\_\+t}{p.}{group__sections_gaf4798d9cfc37c3818fc2f3a2208bfb82} of an \doxyref{agg\+\_\+section\+\_\+t}{p.}{agg_8h_a8cdd164643b93d05245e9b4976f3f0cb} \end{DoxyCompactList}\item 
 \mbox{\label{agg_8h_a5378fa853984c8f6b4eab5447e1b89b7}} 
 \#define {\bfseries agg\+\_\+section\+\_\+close}(s)
 \begin{DoxyCompactList}\small\item\em TRUE if an \doxyref{agg\+\_\+section\+\_\+t}{p.}{agg_8h_a8cdd164643b93d05245e9b4976f3f0cb} needs to be closed. \end{DoxyCompactList}\item 
@@ -104,6 +195,36 @@ typedef \textbf{ agg\+\_\+expression\+\_\+data\+\_\+t}
 \end{DoxyCompactItemize}
 \begin{DoxyCompactItemize}
 \item 
+\mbox{\label{agg_8h_a9d90d1260ef01edfa55395a8ef258901}} 
+\#define {\bfseries agg\+\_\+transform\+\_\+operator\+\_\+operation}(op)
+\begin{DoxyCompactList}\small\item\em operation performed by an \doxyref{agg\+\_\+transform\+\_\+operator\+\_\+t}{p.}{agg_8h_a9b3c7b4a183fc43a646fdc5cb1673993} \end{DoxyCompactList}\item 
+\mbox{\label{agg_8h_ad5013ee19c62662c2c6a5c56a9d28359}} 
+\#define {\bfseries agg\+\_\+transform\+\_\+operator\+\_\+parameters}(op)
+\begin{DoxyCompactList}\small\item\em parameters of \doxyref{agg\+\_\+variable\+\_\+t}{p.}{group__variables_gaf99a18818caf06b7a2cdc10dde859f47} for an \doxyref{agg\+\_\+transform\+\_\+operator\+\_\+t}{p.}{agg_8h_a9b3c7b4a183fc43a646fdc5cb1673993} \end{DoxyCompactList}\item 
+\mbox{\label{agg_8h_abb2f9f990c5c855f19ff3f801ad6d55a}} 
+\#define {\bfseries agg\+\_\+transform\+\_\+operator\+\_\+parameter}(op,  i)
+\begin{DoxyCompactList}\small\item\em $i$th parameter for \doxyref{agg\+\_\+transform\+\_\+operator\+\_\+t}{p.}{agg_8h_a9b3c7b4a183fc43a646fdc5cb1673993} \end{DoxyCompactList}\item 
+\mbox{\label{agg_8h_a08c68d2085b1b5439357c8197655bafc}} 
+\#define {\bfseries agg\+\_\+transform\+\_\+operator\+\_\+parameter\+\_\+number}(op)
+\begin{DoxyCompactList}\small\item\em number of parameters for the \doxyref{agg\+\_\+transform\+\_\+operator\+\_\+t}{p.}{agg_8h_a9b3c7b4a183fc43a646fdc5cb1673993} \end{DoxyCompactList}\item 
+\mbox{\label{agg_8h_a6ab79d88ba68d2d57369777f1309ddb5}} 
+\#define {\bfseries agg\+\_\+transform\+\_\+operator\+\_\+func}(op)
+\begin{DoxyCompactList}\small\item\em function called to execute the transform operation \end{DoxyCompactList}\item 
+\mbox{\label{agg_8h_a8f2e2adcf62dbb3a21505fa1cd070e76}} 
+\#define {\bfseries agg\+\_\+transform\+\_\+operator}(T,  i)
+\begin{DoxyCompactList}\small\item\em $i$th operation of an \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} \end{DoxyCompactList}\item 
+\mbox{\label{agg_8h_a427b4f4d329639cb65beaea740174178}} 
+\#define {\bfseries agg\+\_\+transform\+\_\+operator\+\_\+number}(T)
+\begin{DoxyCompactList}\small\item\em number of operations in an \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} \end{DoxyCompactList}\item 
+\mbox{\label{agg_8h_af78d0f70b4637f268c6768aa183cd5ae}} 
+\#define {\bfseries agg\+\_\+transform\+\_\+operator\+\_\+number\+\_\+max}(T)
+\begin{DoxyCompactList}\small\item\em maximum number of operations in an \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} \end{DoxyCompactList}\item 
+\mbox{\label{agg_8h_a56809318765396e4ffffd4c8ca479034}} 
+\#define {\bfseries agg\+\_\+transform\+\_\+variable}(T,  i)
+\begin{DoxyCompactList}\small\item\em $i$th variable in an \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} \end{DoxyCompactList}\item 
+\mbox{\label{agg_8h_a9d4fc7c50d8919ccc839d4a334fac643}} 
+\#define {\bfseries agg\+\_\+transform\+\_\+variable\+\_\+number}(T)
+\begin{DoxyCompactList}\small\item\em number of variables in an \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} \end{DoxyCompactList}\item 
 enum \textbf{ agg\+\_\+operation\+\_\+t} \{ \newline
 \textbf{ AGG\+\_\+\+TRANSFORM\+\_\+\+UNDEFINED} = 0
 , \textbf{ AGG\+\_\+\+TRANSFORM\+\_\+\+ROTATE} = 1
@@ -119,7 +240,18 @@ typedef \textbf{ agg\+\_\+transform\+\_\+t}
 \end{DoxyCompactItemize}
 \begin{DoxyCompactItemize}
 \item 
+enum \textbf{ agg\+\_\+axes\+\_\+t} \{  \}
+\item 
 typedef \textbf{ agg\+\_\+surface\+\_\+t}
+\end{DoxyCompactItemize}
+\begin{DoxyCompactItemize}
+\item 
+enum \textbf{ agg\+\_\+patch\+\_\+mapping\+\_\+t} \{ \textbf{ AGG\+\_\+\+PATCH\+\_\+\+BILINEAR} = 0
+, \textbf{ AGG\+\_\+\+PATCH\+\_\+\+SPHERICAL} = 1
+, \textbf{ AGG\+\_\+\+PATCH\+\_\+\+TUBULAR} = 2
+ \}
+\item 
+typedef \textbf{ agg\+\_\+patch\+\_\+t}
 \end{DoxyCompactItemize}
 \begin{DoxyCompactItemize}
 \item 
@@ -127,13 +259,157 @@ typedef \textbf{ agg\+\_\+intersection\+\_\+t}
 \end{DoxyCompactItemize}
 \begin{DoxyCompactItemize}
 \item 
-enum \textbf{ agg\+\_\+patch\+\_\+mapping\+\_\+t} \{ \textbf{ AGG\+\_\+\+PATCH\+\_\+\+BILINEAR} = 0
-, \textbf{ AGG\+\_\+\+PATCH\+\_\+\+SPHERICAL} = 1
- \}
+typedef \textbf{ agg\+\_\+mesh\+\_\+t}
 \end{DoxyCompactItemize}
 
 
 \doxysubsection{Function Documentation}
+\mbox{\label{agg_8h_a1745f8aa9febea5a00f7d5892ea15c6e}} 
+\index{agg.h@{agg.h}!agg\_axes\_parse@{agg\_axes\_parse}}
+\index{agg\_axes\_parse@{agg\_axes\_parse}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_axes\_parse()}
+{\footnotesize\ttfamily \textbf{ agg\+\_\+axes\+\_\+t} agg\+\_\+axes\+\_\+parse (\begin{DoxyParamCaption}\item[{gchar $\ast$}]{str }\end{DoxyParamCaption})}
+
+Parse a string specifying an axis change on a surface.
+
+
+\begin{DoxyParams}{Parameters}
+{\em str} & axis string to parse\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\doxyref{agg\+\_\+axes\+\_\+t}{p.}{group__surfaces_ga9d96b462257229695d4a34527697d492} corresponding to {\itshape str}, or AGG\+\_\+\+AXES\+\_\+\+UNDEFINED. 
+\end{DoxyReturn}
+\mbox{\label{agg_8h_a480c67842eb4dd8b22463f41d29ad6e2}} 
+\index{agg.h@{agg.h}!agg\_body\_global\_add@{agg\_body\_global\_add}}
+\index{agg\_body\_global\_add@{agg\_body\_global\_add}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_body\_global\_add()}
+{\footnotesize\ttfamily gint agg\+\_\+body\+\_\+global\+\_\+add (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+body\+\_\+t} $\ast$}]{b,  }\item[{gchar $\ast$}]{var,  }\item[{gchar $\ast$}]{def,  }\item[{gdouble}]{val }\end{DoxyParamCaption})}
+
+Add a global variable to an \doxyref{agg\+\_\+body\+\_\+t}{p.}{group__body_gab1ba060d2b8a159e268a27c8d01b0a44}
+
+
+\begin{DoxyParams}{Parameters}
+{\em b} & body to which variable should be added; \\
+\hline
+{\em var} & name of variable; \\
+\hline
+{\em def} & string expression defining variable (can be NULL); \\
+\hline
+{\em val} & value of variable (set constant if {\itshape expr} is NULL).\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+variable\+\_\+definition}, \textbf{ agg\+\_\+variable\+\_\+name}, \textbf{ agg\+\_\+variable\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+value}.
+
+\mbox{\label{agg_8h_a12809abb981ee0379ad7f887bdce9222}} 
+\index{agg.h@{agg.h}!agg\_body\_globals\_compile@{agg\_body\_globals\_compile}}
+\index{agg\_body\_globals\_compile@{agg\_body\_globals\_compile}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_body\_globals\_compile()}
+{\footnotesize\ttfamily gint agg\+\_\+body\+\_\+globals\+\_\+compile (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+body\+\_\+t} $\ast$}]{b }\end{DoxyParamCaption})}
+
+Compile expressions for global variables in an \doxyref{agg\+\_\+body\+\_\+t}{p.}{group__body_gab1ba060d2b8a159e268a27c8d01b0a44}. This function should be called before evaluating any variables in the body or its surfaces.
+
+
+\begin{DoxyParams}{Parameters}
+{\em b} & an \doxyref{agg\+\_\+body\+\_\+t}{p.}{group__body_gab1ba060d2b8a159e268a27c8d01b0a44} containing definitions of global variables.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+expression\+\_\+compile()}, \textbf{ agg\+\_\+expression\+\_\+data\+\_\+t}, \textbf{ agg\+\_\+expression\+\_\+data\+\_\+variable\+\_\+add()}, \textbf{ agg\+\_\+variable\+\_\+definition}, \textbf{ agg\+\_\+variable\+\_\+evaluator}, and \textbf{ agg\+\_\+variable\+\_\+t}.
+
+\mbox{\label{agg_8h_a8a64862bcc9c834e015451285e8812db}} 
+\index{agg.h@{agg.h}!agg\_body\_globals\_eval@{agg\_body\_globals\_eval}}
+\index{agg\_body\_globals\_eval@{agg\_body\_globals\_eval}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_body\_globals\_eval()}
+{\footnotesize\ttfamily gint agg\+\_\+body\+\_\+globals\+\_\+eval (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+body\+\_\+t} $\ast$}]{b }\end{DoxyParamCaption})}
+
+Evaluate global variables defined in an \doxyref{agg\+\_\+body\+\_\+t}{p.}{group__body_gab1ba060d2b8a159e268a27c8d01b0a44}. This function should be called before evaluating points on the surfaces which make up the body.
+
+
+\begin{DoxyParams}{Parameters}
+{\em b} & an \doxyref{agg\+\_\+body\+\_\+t}{p.}{group__body_gab1ba060d2b8a159e268a27c8d01b0a44} containing global variables.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+expression\+\_\+data\+\_\+eval()}, \textbf{ agg\+\_\+expression\+\_\+eval()}, \textbf{ agg\+\_\+variable\+\_\+definition}, \textbf{ agg\+\_\+variable\+\_\+evaluator}, \textbf{ agg\+\_\+variable\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+value}.
+
+\mbox{\label{agg_8h_ad1fd42e298c7ef34b4dc521af8a3094a}} 
+\index{agg.h@{agg.h}!agg\_body\_globals\_write@{agg\_body\_globals\_write}}
+\index{agg\_body\_globals\_write@{agg\_body\_globals\_write}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_body\_globals\_write()}
+{\footnotesize\ttfamily gint agg\+\_\+body\+\_\+globals\+\_\+write (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f,  }\item[{\textbf{ agg\+\_\+body\+\_\+t} $\ast$}]{b }\end{DoxyParamCaption})}
+
+Write a body\textquotesingle{}s global variables, their definitions (if given), and values to file
+
+
+\begin{DoxyParams}{Parameters}
+{\em f} & output file; \\
+\hline
+{\em b} & \doxyref{agg\+\_\+body\+\_\+t}{p.}{group__body_gab1ba060d2b8a159e268a27c8d01b0a44} whose global variables are to be written\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+variable\+\_\+definition}, \textbf{ agg\+\_\+variable\+\_\+name}, \textbf{ agg\+\_\+variable\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+value}.
+
+\mbox{\label{agg_8h_a672b47160f046ee778113a960bf50354}} 
+\index{agg.h@{agg.h}!agg\_body\_read@{agg\_body\_read}}
+\index{agg\_body\_read@{agg\_body\_read}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_body\_read()}
+{\footnotesize\ttfamily gint agg\+\_\+body\+\_\+read (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+body\+\_\+t} $\ast$}]{b,  }\item[{gchar $\ast$}]{file,  }\item[{gboolean}]{echo }\end{DoxyParamCaption})}
+
+Read an \doxyref{agg\+\_\+body\+\_\+t}{p.}{group__body_gab1ba060d2b8a159e268a27c8d01b0a44} from file
+
+
+\begin{DoxyParams}{Parameters}
+{\em b} & body to which data in file are to be added; \\
+\hline
+{\em file} & name of file in .agg format; \\
+\hline
+{\em echo} & if TRUE, echo progress to stderr.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+section\+\_\+new()}.
+
+\mbox{\label{agg_8h_a23e541d03af5bc371eef1321a2746d6d}} 
+\index{agg.h@{agg.h}!agg\_body\_surfaces\_list@{agg\_body\_surfaces\_list}}
+\index{agg\_body\_surfaces\_list@{agg\_body\_surfaces\_list}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_body\_surfaces\_list()}
+{\footnotesize\ttfamily gint agg\+\_\+body\+\_\+surfaces\+\_\+list (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f,  }\item[{\textbf{ agg\+\_\+body\+\_\+t} $\ast$}]{b }\end{DoxyParamCaption})}
+
+Write the names of a body\textquotesingle{}s surfaces to file
+
+
+\begin{DoxyParams}{Parameters}
+{\em f} & output file stream; \\
+\hline
+{\em b} & an \doxyref{agg\+\_\+body\+\_\+t}{p.}{group__body_gab1ba060d2b8a159e268a27c8d01b0a44} whose surfaces are to be listed.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
 \mbox{\label{agg_8h_a80416f24e969b55310b8a47b9f0100e9}} 
 \index{agg.h@{agg.h}!agg\_expression\_compile@{agg\_expression\_compile}}
 \index{agg\_expression\_compile@{agg\_expression\_compile}!agg.h@{agg.h}}
@@ -152,6 +428,10 @@ Compile a symbolically defined expression, for future evaluation
 \begin{DoxyReturn}{Returns}
 pointer to compiled expression. 
 \end{DoxyReturn}
+
+
+Referenced by \textbf{ agg\+\_\+body\+\_\+globals\+\_\+compile()}, and \textbf{ agg\+\_\+transform\+\_\+expressions\+\_\+compile()}.
+
 \mbox{\label{agg_8h_ac423c9a2a65b0b8e677576e9e4fbb1b6}} 
 \index{agg.h@{agg.h}!agg\_expression\_data\_compile@{agg\_expression\_data\_compile}}
 \index{agg\_expression\_data\_compile@{agg\_expression\_data\_compile}!agg.h@{agg.h}}
@@ -168,6 +448,52 @@ Compile expressions in an expression data structure, for future evaluation
 \begin{DoxyReturn}{Returns}
 0 on success. 
 \end{DoxyReturn}
+\mbox{\label{agg_8h_afb742b448d0a4702a43ccc2642a30a74}} 
+\index{agg.h@{agg.h}!agg\_expression\_data\_eval@{agg\_expression\_data\_eval}}
+\index{agg\_expression\_data\_eval@{agg\_expression\_data\_eval}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_expression\_data\_eval()}
+{\footnotesize\ttfamily gint agg\+\_\+expression\+\_\+data\+\_\+eval (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+expression\+\_\+data\+\_\+t} $\ast$}]{d }\end{DoxyParamCaption})}
+
+Evaluate expressions in an expression data structure, making the values available for other calculations.
+
+
+\begin{DoxyParams}{Parameters}
+{\em d} & an \doxyref{agg\+\_\+expression\+\_\+data\+\_\+t}{p.}{agg_8h_a99192fd2067443a234e213a421f6f643} whose expressions are to be evaluated.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+Referenced by \textbf{ agg\+\_\+body\+\_\+globals\+\_\+eval()}, and \textbf{ agg\+\_\+transform\+\_\+variables\+\_\+eval()}.
+
+\mbox{\label{agg_8h_adb65910d9a68ec640fb31a05ead4b6dd}} 
+\index{agg.h@{agg.h}!agg\_expression\_data\_variable\_add@{agg\_expression\_data\_variable\_add}}
+\index{agg\_expression\_data\_variable\_add@{agg\_expression\_data\_variable\_add}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_expression\_data\_variable\_add()}
+{\footnotesize\ttfamily gint agg\+\_\+expression\+\_\+data\+\_\+variable\+\_\+add (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+expression\+\_\+data\+\_\+t} $\ast$}]{d,  }\item[{\textbf{ agg\+\_\+variable\+\_\+t} $\ast$}]{v }\end{DoxyParamCaption})}
+
+Add a variable to an \doxyref{agg\+\_\+expression\+\_\+data\+\_\+t}{p.}{agg_8h_a99192fd2067443a234e213a421f6f643}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em d} & \doxyref{agg\+\_\+expression\+\_\+data\+\_\+t}{p.}{agg_8h_a99192fd2067443a234e213a421f6f643} to have variable added; \\
+\hline
+{\em v} & a variable to be added to {\itshape d}; this may depend on variables already in {\itshape d}, but not on variables yet to be added.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+variable\+\_\+definition}, \textbf{ agg\+\_\+variable\+\_\+name}, and \textbf{ agg\+\_\+variable\+\_\+value}.
+
+
+
+Referenced by \textbf{ agg\+\_\+body\+\_\+globals\+\_\+compile()}, \textbf{ agg\+\_\+transform\+\_\+add\+\_\+global\+\_\+variables()}, and \textbf{ agg\+\_\+transform\+\_\+expressions\+\_\+compile()}.
+
 \mbox{\label{agg_8h_acc545aa8d109534c65f1c09e4ef4a61c}} 
 \index{agg.h@{agg.h}!agg\_expression\_eval@{agg\_expression\_eval}}
 \index{agg\_expression\_eval@{agg\_expression\_eval}!agg.h@{agg.h}}
@@ -183,6 +509,388 @@ Evaluate a compiled expression
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
 the value of {\itshape e}. 
+\end{DoxyReturn}
+
+
+Referenced by \textbf{ agg\+\_\+body\+\_\+globals\+\_\+eval()}, and \textbf{ agg\+\_\+transform\+\_\+variables\+\_\+eval()}.
+
+\mbox{\label{agg_8h_a5877e43cbd72aac1ca6092ed6fbe6796}} 
+\index{agg.h@{agg.h}!agg\_intersection\_bbox\_set@{agg\_intersection\_bbox\_set}}
+\index{agg\_intersection\_bbox\_set@{agg\_intersection\_bbox\_set}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_intersection\_bbox\_set()}
+{\footnotesize\ttfamily gint agg\+\_\+intersection\+\_\+bbox\+\_\+set (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+intersection\+\_\+t} $\ast$}]{inter }\end{DoxyParamCaption})}
+
+Calculate the bounding box of an intersection curve in the two surface patch mappings.
+
+
+\begin{DoxyParams}{Parameters}
+{\em inter} & intersection curve whose bounding boxes are to be set.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+\mbox{\label{agg_8h_aef5bb8411ab89014c772d4b30de27fb3}} 
+\index{agg.h@{agg.h}!agg\_intersection\_curve\_write@{agg\_intersection\_curve\_write}}
+\index{agg\_intersection\_curve\_write@{agg\_intersection\_curve\_write}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_intersection\_curve\_write()}
+{\footnotesize\ttfamily gint agg\+\_\+intersection\+\_\+curve\+\_\+write (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f,  }\item[{\textbf{ agg\+\_\+intersection\+\_\+t} $\ast$}]{inter,  }\item[{agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$}]{w }\end{DoxyParamCaption})}
+
+Write an intersection curve to file in the form
+
+[ $x$ $y$ $z$ $s_{1}$ $t_{1}$ $s_{2}$ $t_{2}$]
+
+where $(x,y,z)$ are physical coordinates and $(s_{i},t_{i})$ are parametric coordinates on the respective surface patches (not the surfaces proper)
+
+
+\begin{DoxyParams}{Parameters}
+{\em f} & output file stream; \\
+\hline
+{\em inter} & intersection curve to write; \\
+\hline
+{\em w} & workspace for surface evaluation.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+\mbox{\label{agg_8h_af036658709a83e5b51edace0ff5343e4}} 
+\index{agg.h@{agg.h}!agg\_intersection\_new@{agg\_intersection\_new}}
+\index{agg\_intersection\_new@{agg\_intersection\_new}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_intersection\_new()}
+{\footnotesize\ttfamily \textbf{ agg\+\_\+intersection\+\_\+t} $\ast$ agg\+\_\+intersection\+\_\+new (\begin{DoxyParamCaption}\item[{gint}]{nstmax }\end{DoxyParamCaption})}
+
+Allocate a new surface intersection structure.
+
+
+\begin{DoxyParams}{Parameters}
+{\em nstmax} & maximum number of points on intersection curve.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+newly allocated \doxyref{agg\+\_\+intersection\+\_\+t}{p.}{group__intersections_ga1c54fee67bb03551fa5e663cbc61e3be}. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+intersection\+\_\+t}.
+
+\mbox{\label{agg_8h_a4c81c3ff9bc52ff3e9e950cf9e84c4ce}} 
+\index{agg.h@{agg.h}!agg\_intersection\_resample@{agg\_intersection\_resample}}
+\index{agg\_intersection\_resample@{agg\_intersection\_resample}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_intersection\_resample()}
+{\footnotesize\ttfamily gint agg\+\_\+intersection\+\_\+resample (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+intersection\+\_\+t} $\ast$}]{inter,  }\item[{gint}]{nsp,  }\item[{gint}]{pps,  }\item[{\textbf{ agg\+\_\+intersection\+\_\+t} $\ast$}]{resample,  }\item[{agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$}]{w }\end{DoxyParamCaption})}
+
+Resample an intersection curve to (approximately) evenly spaced points in the mapping patch.
+
+
+\begin{DoxyParams}{Parameters}
+{\em inter} & an intersection curve; \\
+\hline
+{\em nsp} & number of splines in the resampled curve; \\
+\hline
+{\em pps} & number of points per spline in the resampled curve; \\
+\hline
+{\em resample} & on output contains the resampled intersection data; \\
+\hline
+{\em w} & workspace for surface evaluation.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+\mbox{\label{agg_8h_a44e88712ac2493041ca76186483eee1f}} 
+\index{agg.h@{agg.h}!agg\_mesh\_element\_add@{agg\_mesh\_element\_add}}
+\index{agg\_mesh\_element\_add@{agg\_mesh\_element\_add}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_mesh\_element\_add()}
+{\footnotesize\ttfamily gint agg\+\_\+mesh\+\_\+element\+\_\+add (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$}]{m,  }\item[{gint}]{s0,  }\item[{gint}]{s1,  }\item[{gint}]{s2,  }\item[{gint}]{s3 }\end{DoxyParamCaption})}
+
+Add an element to a mesh.
+
+
+\begin{DoxyParams}{Parameters}
+{\em m} & an \doxyref{agg\+\_\+mesh\+\_\+t}{p.}{group__mesh_ga77887f8535b8d608674eb369d758c1cf} to have an element added. \\
+\hline
+{\em s0} & index of first spline of element; \\
+\hline
+{\em s1} & index of second spline of element; \\
+\hline
+{\em s2} & index of third spline of element; \\
+\hline
+{\em s3} & index of fourth spline of element (if zero, a three-\/sided element is added)\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+\mbox{\label{agg_8h_a4e5a1d7c4f04b84f56fc206d1240ee51}} 
+\index{agg.h@{agg.h}!agg\_mesh\_intersection\_add@{agg\_mesh\_intersection\_add}}
+\index{agg\_mesh\_intersection\_add@{agg\_mesh\_intersection\_add}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_mesh\_intersection\_add()}
+{\footnotesize\ttfamily gint agg\+\_\+mesh\+\_\+intersection\+\_\+add (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$}]{m,  }\item[{\textbf{ agg\+\_\+intersection\+\_\+t} $\ast$}]{inter,  }\item[{gint}]{nsp,  }\item[{gint}]{pps }\end{DoxyParamCaption})}
+
+Add an intersection to a mesh. This should be done before adding surfaces, so that they can be cut if necessary.
+
+
+\begin{DoxyParams}{Parameters}
+{\em m} & an \doxyref{agg\+\_\+mesh\+\_\+t}{p.}{group__mesh_ga77887f8535b8d608674eb369d758c1cf}; \\
+\hline
+{\em inter} & a surface-\/surface intersection; \\
+\hline
+{\em nsp} & number of splines in {\itshape inter}; \\
+\hline
+{\em pps} & number of points on each spline in {\itshape inter};\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+\mbox{\label{agg_8h_a936696d95ab7733b3e76f9114eed748d}} 
+\index{agg.h@{agg.h}!agg\_mesh\_spline\_ends@{agg\_mesh\_spline\_ends}}
+\index{agg\_mesh\_spline\_ends@{agg\_mesh\_spline\_ends}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_mesh\_spline\_ends()}
+{\footnotesize\ttfamily gint agg\+\_\+mesh\+\_\+spline\+\_\+ends (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$}]{m,  }\item[{gint}]{s,  }\item[{gint $\ast$}]{p0,  }\item[{gint $\ast$}]{p1 }\end{DoxyParamCaption})}
+
+Find the indices of the end points of a spline in a mesh
+
+
+\begin{DoxyParams}{Parameters}
+{\em m} & mesh containing the splines; \\
+\hline
+{\em s} & index of spline; \\
+\hline
+{\em p0} & on exit, index of one end point of spline {\itshape s}; \\
+\hline
+{\em p1} & on exit, index of other end point of spline {\itshape s}.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success 
+\end{DoxyReturn}
+
+
+Referenced by \textbf{ agg\+\_\+mesh\+\_\+splines\+\_\+connected()}.
+
+\mbox{\label{agg_8h_a802f8fe2b7bb1ac25bee26e62a89b8ef}} 
+\index{agg.h@{agg.h}!agg\_mesh\_spline\_from\_endpoints@{agg\_mesh\_spline\_from\_endpoints}}
+\index{agg\_mesh\_spline\_from\_endpoints@{agg\_mesh\_spline\_from\_endpoints}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_mesh\_spline\_from\_endpoints()}
+{\footnotesize\ttfamily gint agg\+\_\+mesh\+\_\+spline\+\_\+from\+\_\+endpoints (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$}]{m,  }\item[{gint}]{p0,  }\item[{gint}]{p1 }\end{DoxyParamCaption})}
+
+Find a spline from its endpoints
+
+
+\begin{DoxyParams}{Parameters}
+{\em m} & a mesh containing a set of splines; \\
+\hline
+{\em p0} & index of a point of {\itshape m}; \\
+\hline
+{\em p1} & index of another point of {\itshape m}.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+index of a spline which has endpoints {\itshape p0} and {\itshape p1}, or 0 if there is no such spline. 
+\end{DoxyReturn}
+\mbox{\label{agg_8h_a9d9c603ee3ba5f0cf2972b275ba30cf9}} 
+\index{agg.h@{agg.h}!agg\_mesh\_spline\_interp\_points@{agg\_mesh\_spline\_interp\_points}}
+\index{agg\_mesh\_spline\_interp\_points@{agg\_mesh\_spline\_interp\_points}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_mesh\_spline\_interp\_points()}
+{\footnotesize\ttfamily gint agg\+\_\+mesh\+\_\+spline\+\_\+interp\+\_\+points (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$}]{m,  }\item[{gint}]{s,  }\item[{gint}]{p0,  }\item[{gint}]{p1,  }\item[{gint}]{pps,  }\item[{agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$}]{w }\end{DoxyParamCaption})}
+
+Generate a spline by interpolating mapping between two existing points.
+
+
+\begin{DoxyParams}{Parameters}
+{\em m} & an \doxyref{agg\+\_\+mesh\+\_\+t}{p.}{group__mesh_ga77887f8535b8d608674eb369d758c1cf}; \\
+\hline
+{\em s} & index in {\itshape m} of surface to use for interpolation; \\
+\hline
+{\em p0} & index of first point of new spline; \\
+\hline
+{\em p1} & index of end point of new spline; \\
+\hline
+{\em pps} & total number of points on new spline; \\
+\hline
+{\em w} & workspace for surface evaluation.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+\mbox{\label{agg_8h_aa895204dc42fc97a80b81bebe044507f}} 
+\index{agg.h@{agg.h}!agg\_mesh\_splines\_connected@{agg\_mesh\_splines\_connected}}
+\index{agg\_mesh\_splines\_connected@{agg\_mesh\_splines\_connected}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_mesh\_splines\_connected()}
+{\footnotesize\ttfamily gboolean agg\+\_\+mesh\+\_\+splines\+\_\+connected (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$}]{m,  }\item[{gint}]{i0,  }\item[{gint}]{i1,  }\item[{gint $\ast$}]{p }\end{DoxyParamCaption})}
+
+Check if two splines in an \doxyref{agg\+\_\+mesh\+\_\+t}{p.}{group__mesh_ga77887f8535b8d608674eb369d758c1cf} are connected.
+
+
+\begin{DoxyParams}{Parameters}
+{\em m} & an \doxyref{agg\+\_\+mesh\+\_\+t}{p.}{group__mesh_ga77887f8535b8d608674eb369d758c1cf}; \\
+\hline
+{\em i0} & index of first spline to check; \\
+\hline
+{\em i1} & index of second spline to check; \\
+\hline
+{\em p} & on exit, set to index of common point of splines {\itshape i0} and {\itshape i1}.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+TRUE if splines have an end point in common. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+mesh\+\_\+spline\+\_\+ends()}.
+
+\mbox{\label{agg_8h_a2e31a15c453c3da1871250632427b656}} 
+\index{agg.h@{agg.h}!agg\_mesh\_surface\_add@{agg\_mesh\_surface\_add}}
+\index{agg\_mesh\_surface\_add@{agg\_mesh\_surface\_add}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_mesh\_surface\_add()}
+{\footnotesize\ttfamily gint agg\+\_\+mesh\+\_\+surface\+\_\+add (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$}]{msh,  }\item[{\textbf{ agg\+\_\+surface\+\_\+t} $\ast$}]{S,  }\item[{\textbf{ agg\+\_\+patch\+\_\+t} $\ast$}]{P,  }\item[{gint}]{nsec,  }\item[{gint}]{nseg,  }\item[{gint}]{pps,  }\item[{agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$}]{w }\end{DoxyParamCaption})}
+
+Add a parametric surface to a mesh, cutting on intersections if necessary. This requires that any intersections be added in advance, using \doxyref{agg\+\_\+mesh\+\_\+intersection\+\_\+add}{p.}{group__mesh_ga36e43036ba3bc99c967c4d25a4c6b50c}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em msh} & a mesh to have a surface added; \\
+\hline
+{\em S} & the surface to add; \\
+\hline
+{\em P} & the patch mapping {\itshape S}; \\
+\hline
+{\em nsec} & number of sections to compute; \\
+\hline
+{\em nseg} & number of segments on each section; \\
+\hline
+{\em pps} & number of points on each segment. \\
+\hline
+{\em w} & workspace for surface evaluation.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+\mbox{\label{agg_8h_a8337a8e05e56227d9f42ab84d0d89fd4}} 
+\index{agg.h@{agg.h}!agg\_mesh\_surface\_point\_add@{agg\_mesh\_surface\_point\_add}}
+\index{agg\_mesh\_surface\_point\_add@{agg\_mesh\_surface\_point\_add}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_mesh\_surface\_point\_add()}
+{\footnotesize\ttfamily gint agg\+\_\+mesh\+\_\+surface\+\_\+point\+\_\+add (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$}]{m,  }\item[{gint}]{surf,  }\item[{gdouble}]{s,  }\item[{gdouble}]{t,  }\item[{agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$}]{w }\end{DoxyParamCaption})}
+
+Add a point to a mesh
+
+
+\begin{DoxyParams}{Parameters}
+{\em m} & mesh to have point added; \\
+\hline
+{\em surf} & index in {\itshape m} of surface on which to evaluate point; \\
+\hline
+{\em s} & coordinate on patch for surface {\itshape surf}; \\
+\hline
+{\em t} & coordinate on patch for surface {\itshape surf}; \\
+\hline
+{\em w} & workspace for surface evaluation.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+index of newly added point. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+patch\+\_\+t}, and \textbf{ agg\+\_\+surface\+\_\+t}.
+
+\mbox{\label{agg_8h_a20041984f55a7eff78c69f3c6fd0dcb6}} 
+\index{agg.h@{agg.h}!agg\_mesh\_write\_gmsh@{agg\_mesh\_write\_gmsh}}
+\index{agg\_mesh\_write\_gmsh@{agg\_mesh\_write\_gmsh}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_mesh\_write\_gmsh()}
+{\footnotesize\ttfamily gint agg\+\_\+mesh\+\_\+write\+\_\+gmsh (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f,  }\item[{\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$}]{m,  }\item[{gchar $\ast$}]{len,  }\item[{gint}]{offp,  }\item[{gint}]{offsp,  }\item[{gint}]{offs,  }\item[{gboolean}]{opencascade }\end{DoxyParamCaption})}
+
+Write a \doxyref{agg\+\_\+mesh\+\_\+t}{p.}{group__mesh_ga77887f8535b8d608674eb369d758c1cf} to file in GMSH .geo format.
+
+
+\begin{DoxyParams}{Parameters}
+{\em f} & output file stream; \\
+\hline
+{\em m} & mesh to write to file; \\
+\hline
+{\em len} & string to include point definitions for local length scale; \\
+\hline
+{\em offp} & point index offset (added to point indices); \\
+\hline
+{\em offsp} & spline index offset (added to spline indices); \\
+\hline
+{\em offs} & surface index offset (added to GMSH surface indices); \\
+\hline
+{\em opencascade} & if TRUE, assume Open\+Cascade engine is being used.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+\mbox{\label{agg_8h_a91915491c1aed07991188269140680ce}} 
+\index{agg.h@{agg.h}!agg\_patch\_map@{agg\_patch\_map}}
+\index{agg\_patch\_map@{agg\_patch\_map}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_patch\_map()}
+{\footnotesize\ttfamily gint agg\+\_\+patch\+\_\+map (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+patch\+\_\+t} $\ast$}]{P,  }\item[{gdouble}]{s,  }\item[{gdouble}]{t,  }\item[{gdouble $\ast$}]{u,  }\item[{gdouble $\ast$}]{v }\end{DoxyParamCaption})}
+
+Apply mapping in a patch to find parametric variables on surface.
+
+
+\begin{DoxyParams}{Parameters}
+{\em P} & patch whose mapping is to be applied; \\
+\hline
+{\em s} & variable on {\itshape P}, $0\leq s \leq 1$; \\
+\hline
+{\em t} & variable on {\itshape P}, $0\leq t \leq 1$; \\
+\hline
+{\em u} & surface parametric variable; \\
+\hline
+{\em v} & surface parametric variable.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ AGG\+\_\+\+PATCH\+\_\+\+BILINEAR}.
+
+\mbox{\label{agg_8h_a9bbbda35c5b3b3b8a5da05a50cc3da24}} 
+\index{agg.h@{agg.h}!agg\_patch\_parse@{agg\_patch\_parse}}
+\index{agg\_patch\_parse@{agg\_patch\_parse}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_patch\_parse()}
+{\footnotesize\ttfamily gint agg\+\_\+patch\+\_\+parse (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+patch\+\_\+t} $\ast$}]{P,  }\item[{\textbf{ agg\+\_\+variable\+\_\+t} $\ast$}]{p,  }\item[{gint}]{np }\end{DoxyParamCaption})}
+
+Parse string data for an \doxyref{agg\+\_\+patch\+\_\+t}{p.}{group__patches_gabdb5fa64575d1f09fb1e68a13a103777}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em P} & on exit, is set according to input variables; \\
+\hline
+{\em p} & array of variables for parameters setting {\itshape P}; \\
+\hline
+{\em np} & number of variables in {\itshape p}.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+\mbox{\label{agg_8h_a6e0ed58f3d6f8f9e1bbf89706966b282}} 
+\index{agg.h@{agg.h}!agg\_patch\_st\_correct@{agg\_patch\_st\_correct}}
+\index{agg\_patch\_st\_correct@{agg\_patch\_st\_correct}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_patch\_st\_correct()}
+{\footnotesize\ttfamily gint agg\+\_\+patch\+\_\+st\+\_\+correct (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+patch\+\_\+t} $\ast$}]{P,  }\item[{gdouble $\ast$}]{st }\end{DoxyParamCaption})}
+
+Correct out of range values of $(s,t)$ to lie in the range $(0,1)\times(0,1)$ where coordinate wrapping is permitted
+
+
+\begin{DoxyParams}{Parameters}
+{\em P} & an \doxyref{agg\+\_\+patch\+\_\+t}{p.}{group__patches_gabdb5fa64575d1f09fb1e68a13a103777}; \\
+\hline
+{\em st} & an $(s,t)$ parameter pair on patch {\itshape P}.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
 \end{DoxyReturn}
 \mbox{\label{agg_8h_a1245fe64e54485282fb358081f20f2f4}} 
 \index{agg.h@{agg.h}!agg\_section\_copy@{agg\_section\_copy}}
@@ -226,8 +934,118 @@ $y=f(x)$ on success. An error is reported and execution ceases if {\itshape x} i
 \end{DoxyReturn}
 
 
-References \textbf{ AGG\+\_\+\+SECTION\+\_\+\+ELLIPSE}, \textbf{ agg\+\_\+section\+\_\+type}, and \textbf{ AGG\+\_\+\+SECTION\+\_\+\+UNDEFINED}.
+References \textbf{ AGG\+\_\+\+SECTION\+\_\+\+AEROFOIL}, \textbf{ AGG\+\_\+\+SECTION\+\_\+\+ELLIPSE}, \textbf{ agg\+\_\+section\+\_\+type}, and \textbf{ AGG\+\_\+\+SECTION\+\_\+\+UNDEFINED}.
 
+\mbox{\label{agg_8h_a2116c909ff8359c7c5f449180c710cd5}} 
+\index{agg.h@{agg.h}!agg\_section\_parse@{agg\_section\_parse}}
+\index{agg\_section\_parse@{agg\_section\_parse}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_section\_parse()}
+{\footnotesize\ttfamily gint agg\+\_\+section\+\_\+parse (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+section\+\_\+t} $\ast$}]{s,  }\item[{gchar $\ast$}]{name,  }\item[{\textbf{ agg\+\_\+variable\+\_\+t} $\ast$}]{p,  }\item[{gint}]{np }\end{DoxyParamCaption})}
+
+Parse an \doxyref{agg\+\_\+section\+\_\+t}{p.}{agg_8h_a8cdd164643b93d05245e9b4976f3f0cb} description given as a name and list of variable parameters
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & \doxyref{agg\+\_\+section\+\_\+t}{p.}{agg_8h_a8cdd164643b93d05245e9b4976f3f0cb} to set; \\
+\hline
+{\em name} & name of section; \\
+\hline
+{\em p} & array of \doxyref{agg\+\_\+variable\+\_\+t}{p.}{group__variables_gaf99a18818caf06b7a2cdc10dde859f47} containing parameters for section; \\
+\hline
+{\em np} & number of entries in {\itshape p}.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+\mbox{\label{agg_8h_ac848ab5ddc58009fde33f7c728fb7ecf}} 
+\index{agg.h@{agg.h}!agg\_section\_set\_aerofoil@{agg\_section\_set\_aerofoil}}
+\index{agg\_section\_set\_aerofoil@{agg\_section\_set\_aerofoil}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_section\_set\_aerofoil()}
+{\footnotesize\ttfamily gint agg\+\_\+section\+\_\+set\+\_\+aerofoil (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+section\+\_\+t} $\ast$}]{s,  }\item[{gdouble}]{eta,  }\item[{gdouble}]{th,  }\item[{gdouble}]{yte }\end{DoxyParamCaption})}
+
+Set a section to a simple aerofoil shape of specified leading edge exponent, maximum thickness, and trailing edge displacement, as in Kulfan, B. (2010). Recent extensions and applications of the `CST' universal parametric geometry representation method. The Aeronautical Journal, 114(1153), 157-\/176 {\texttt{ https\+://doi.\+org/10.\+1017/\+S0001924000003614}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & \doxyref{agg\+\_\+section\+\_\+t}{p.}{agg_8h_a8cdd164643b93d05245e9b4976f3f0cb} to be initialized; \\
+\hline
+{\em eta} & leading edge exponent $\eta_{1}$; \\
+\hline
+{\em th} & aerofoil thickness; \\
+\hline
+{\em yte} & trailing edge displacement (half trailing edge thickness).\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ AGG\+\_\+\+SECTION\+\_\+\+AEROFOIL}, \textbf{ agg\+\_\+section\+\_\+close}, \textbf{ agg\+\_\+section\+\_\+coefficient\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+coefficient\+\_\+upper}, \textbf{ agg\+\_\+section\+\_\+eta\+\_\+left}, \textbf{ agg\+\_\+section\+\_\+eta\+\_\+right}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+upper}, \textbf{ agg\+\_\+section\+\_\+trailing\+\_\+edge\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+trailing\+\_\+edge\+\_\+upper}, and \textbf{ agg\+\_\+section\+\_\+type}.
+
+\mbox{\label{agg_8h_af083c3db44dc8c3d3666e8ade6f0e9ef}} 
+\index{agg.h@{agg.h}!agg\_section\_set\_circle@{agg\_section\_set\_circle}}
+\index{agg\_section\_set\_circle@{agg\_section\_set\_circle}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_section\_set\_circle()}
+{\footnotesize\ttfamily gint agg\+\_\+section\+\_\+set\+\_\+circle (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+section\+\_\+t} $\ast$}]{s }\end{DoxyParamCaption})}
+
+Set a section to a circle of radius 1/2 centred at $(0,1/2)$, as in Kulfan, B. (2010). Recent extensions and applications of the `CST' universal parametric geometry representation method. The Aeronautical Journal, 114(1153), 157-\/176 {\texttt{ https\+://doi.\+org/10.\+1017/\+S0001924000003614}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & \doxyref{agg\+\_\+section\+\_\+t}{p.}{agg_8h_a8cdd164643b93d05245e9b4976f3f0cb} to be initialized;\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+section\+\_\+coefficient\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+coefficient\+\_\+upper}, \textbf{ AGG\+\_\+\+SECTION\+\_\+\+ELLIPSE}, \textbf{ agg\+\_\+section\+\_\+eta\+\_\+left}, \textbf{ agg\+\_\+section\+\_\+eta\+\_\+right}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+upper}, and \textbf{ agg\+\_\+section\+\_\+type}.
+
+\mbox{\label{agg_8h_a6c28eb8d25611f3cba1f9fe1ac66659f}} 
+\index{agg.h@{agg.h}!agg\_sections\_list@{agg\_sections\_list}}
+\index{agg\_sections\_list@{agg\_sections\_list}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_sections\_list()}
+{\footnotesize\ttfamily gint agg\+\_\+sections\+\_\+list (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f }\end{DoxyParamCaption})}
+
+Write a list of available section types to output
+
+
+\begin{DoxyParams}{Parameters}
+{\em f} & output file stream.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+\mbox{\label{agg_8h_a8c3d4ec240c81bdb3f551d4411837589}} 
+\index{agg.h@{agg.h}!agg\_surface\_patch\_intersection@{agg\_surface\_patch\_intersection}}
+\index{agg\_surface\_patch\_intersection@{agg\_surface\_patch\_intersection}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_surface\_patch\_intersection()}
+{\footnotesize\ttfamily gint agg\+\_\+surface\+\_\+patch\+\_\+intersection (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+intersection\+\_\+t} $\ast$}]{inter,  }\item[{\textbf{ agg\+\_\+surface\+\_\+t} $\ast$}]{S1,  }\item[{\textbf{ agg\+\_\+patch\+\_\+t} $\ast$}]{P1,  }\item[{\textbf{ agg\+\_\+surface\+\_\+t} $\ast$}]{S2,  }\item[{\textbf{ agg\+\_\+patch\+\_\+t} $\ast$}]{P2,  }\item[{agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$}]{w }\end{DoxyParamCaption})}
+
+Calculate the intersection of two parametric surfaces.
+
+
+\begin{DoxyParams}{Parameters}
+{\em inter} & on exit contains the intersection curve data; \\
+\hline
+{\em S1} & first surface; \\
+\hline
+{\em P1} & mapping patch for first surface; \\
+\hline
+{\em S2} & second surface; \\
+\hline
+{\em P2} & mapping patch for second surface; \\
+\hline
+{\em w} & workspace for surface evaluation.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
 \mbox{\label{agg_8h_ac7fd1a95c34d4b227e46b64fe642efae}} 
 \index{agg.h@{agg.h}!agg\_surface\_point\_eval@{agg\_surface\_point\_eval}}
 \index{agg\_surface\_point\_eval@{agg\_surface\_point\_eval}!agg.h@{agg.h}}
@@ -240,7 +1058,7 @@ Evaluate a point on a surface. The surface must have been initialized with \doxy
 
 
 \begin{DoxyParams}{Parameters}
-{\em S} & an \doxyref{agg\+\_\+surface\+\_\+t}{p.}{group__surfaces_ga1c502e562486827063a7169cd79b5cc0}; \\
+{\em S} & an \doxyref{agg\+\_\+surface\+\_\+t}{p.}{agg_8h_a1c502e562486827063a7169cd79b5cc0}; \\
 \hline
 {\em u} & surface parameter $u$; \\
 \hline
@@ -270,7 +1088,7 @@ Add a section to a surface at a given value of parameter $u$. The section data a
 
 
 \begin{DoxyParams}{Parameters}
-{\em S} & an \doxyref{agg\+\_\+surface\+\_\+t}{p.}{group__surfaces_ga1c502e562486827063a7169cd79b5cc0}; \\
+{\em S} & an \doxyref{agg\+\_\+surface\+\_\+t}{p.}{agg_8h_a1c502e562486827063a7169cd79b5cc0}; \\
 \hline
 {\em s} & an \doxyref{agg\+\_\+section\+\_\+t}{p.}{agg_8h_a8cdd164643b93d05245e9b4976f3f0cb}; \\
 \hline
@@ -292,7 +1110,7 @@ Interpolate section data from a surface into a local section, using Berrut and T
 
 
 \begin{DoxyParams}{Parameters}
-{\em S} & an \doxyref{agg\+\_\+surface\+\_\+t}{p.}{group__surfaces_ga1c502e562486827063a7169cd79b5cc0} containing a number of sections; \\
+{\em S} & an \doxyref{agg\+\_\+surface\+\_\+t}{p.}{agg_8h_a1c502e562486827063a7169cd79b5cc0} containing a number of sections; \\
 \hline
 {\em u} & parameter at which to interpolate section; \\
 \hline
@@ -318,7 +1136,7 @@ Generate interpolation weights for sections on a surface, the preprocessing stag
 
 
 \begin{DoxyParams}{Parameters}
-{\em S} & an \doxyref{agg\+\_\+surface\+\_\+t}{p.}{group__surfaces_ga1c502e562486827063a7169cd79b5cc0} containing a number of sections.\\
+{\em S} & an \doxyref{agg\+\_\+surface\+\_\+t}{p.}{agg_8h_a1c502e562486827063a7169cd79b5cc0} containing a number of sections.\\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
@@ -361,7 +1179,7 @@ Add a list of global variables to the variables of a transform
 \end{DoxyReturn}
 
 
-References \textbf{ agg\+\_\+expression\+\_\+data\+\_\+t}.
+References \textbf{ agg\+\_\+expression\+\_\+data\+\_\+t}, and \textbf{ agg\+\_\+expression\+\_\+data\+\_\+variable\+\_\+add()}.
 
 \mbox{\label{agg_8h_a1d94218842c8aca6203ddba991b32a5f}} 
 \index{agg.h@{agg.h}!agg\_transform\_apply@{agg\_transform\_apply}}
@@ -375,14 +1193,42 @@ Apply a transform to a point
 \begin{DoxyParams}{Parameters}
 {\em T} & an \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} containing the sequence of operations; \\
 \hline
-{\em xin} & input point; \\
+{\em xin} & input point (can be the same as {\itshape xout}); \\
 \hline
-{\em xout} & output point.\\
+{\em xout} & on exit contains transformed version of {\itshape xin}.\\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
 0 on success. 
 \end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+transform\+\_\+operator}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+apply()}, and \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+number}.
+
+\mbox{\label{agg_8h_aff5f7e15c699e9e6b874df084150f08a}} 
+\index{agg.h@{agg.h}!agg\_transform\_axes@{agg\_transform\_axes}}
+\index{agg\_transform\_axes@{agg\_transform\_axes}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_transform\_axes()}
+{\footnotesize\ttfamily gint agg\+\_\+transform\+\_\+axes (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+axes\+\_\+t}}]{axes,  }\item[{gdouble $\ast$}]{xin,  }\item[{gdouble $\ast$}]{xout }\end{DoxyParamCaption})}
+
+Apply an axis transform (swap) to a point
+
+
+\begin{DoxyParams}{Parameters}
+{\em axes} & an \doxyref{agg\+\_\+axes\+\_\+t}{p.}{group__surfaces_ga9d96b462257229695d4a34527697d492} for the required axis transformation; \\
+\hline
+{\em xin} & input point (can be equal to {\itshape xout}); \\
+\hline
+{\em xout} & on exit contains transformed point data.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ AGG\+\_\+\+AXES\+\_\+\+PX\+\_\+\+PY\+\_\+\+MZ}, \textbf{ AGG\+\_\+\+AXES\+\_\+\+PX\+\_\+\+PY\+\_\+\+PZ}, \textbf{ AGG\+\_\+\+AXES\+\_\+\+PY\+\_\+\+PZ\+\_\+\+PX}, \textbf{ AGG\+\_\+\+AXES\+\_\+\+PZ\+\_\+\+PX\+\_\+\+PY}, and \textbf{ AGG\+\_\+\+AXES\+\_\+\+PZ\+\_\+\+PY\+\_\+\+PX}.
+
 \mbox{\label{agg_8h_a015c632cb62cafdc579df29f44d8eab9}} 
 \index{agg.h@{agg.h}!agg\_transform\_expressions\_compile@{agg\_transform\_expressions\_compile}}
 \index{agg\_transform\_expressions\_compile@{agg\_transform\_expressions\_compile}!agg.h@{agg.h}}
@@ -401,7 +1247,7 @@ Compile expressions in a transform for future evaluation.
 \end{DoxyReturn}
 
 
-References \textbf{ agg\+\_\+expression\+\_\+data\+\_\+t}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+t}.
+References \textbf{ agg\+\_\+expression\+\_\+compile()}, \textbf{ agg\+\_\+expression\+\_\+data\+\_\+t}, \textbf{ agg\+\_\+expression\+\_\+data\+\_\+variable\+\_\+add()}, \textbf{ agg\+\_\+transform\+\_\+operator}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+number}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+parameter}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+parameter\+\_\+number}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, \textbf{ agg\+\_\+transform\+\_\+variable}, \textbf{ agg\+\_\+transform\+\_\+variable\+\_\+number}, \textbf{ agg\+\_\+variable\+\_\+definition}, \textbf{ agg\+\_\+variable\+\_\+evaluator}, and \textbf{ agg\+\_\+variable\+\_\+t}.
 
 \mbox{\label{agg_8h_af8e2e52219b0108f7df70bc4dd39031f}} 
 \index{agg.h@{agg.h}!agg\_transform\_new@{agg\_transform\_new}}
@@ -421,7 +1267,7 @@ newly allocated \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9
 \end{DoxyReturn}
 
 
-References \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, and \textbf{ agg\+\_\+transform\+\_\+t}.
+References \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+number}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+number\+\_\+max}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, \textbf{ agg\+\_\+transform\+\_\+t}, and \textbf{ agg\+\_\+transform\+\_\+variable\+\_\+number}.
 
 \mbox{\label{agg_8h_a3469482e2c22920b5accefdc004297c4}} 
 \index{agg.h@{agg.h}!agg\_transform\_operator\_add@{agg\_transform\_operator\_add}}
@@ -449,7 +1295,35 @@ Add an operation to a transform
 \end{DoxyReturn}
 
 
-References \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+new()}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+t}.
+References \textbf{ agg\+\_\+transform\+\_\+operator}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+func}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+new()}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+number}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+operation}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+parameter}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+parameter\+\_\+number}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, \textbf{ agg\+\_\+variable\+\_\+definition}, \textbf{ agg\+\_\+variable\+\_\+name}, \textbf{ agg\+\_\+variable\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+value}.
+
+
+
+Referenced by \textbf{ agg\+\_\+transform\+\_\+parse()}.
+
+\mbox{\label{agg_8h_a7e985891f93fe4b64a177ac841672909}} 
+\index{agg.h@{agg.h}!agg\_transform\_operator\_apply@{agg\_transform\_operator\_apply}}
+\index{agg\_transform\_operator\_apply@{agg\_transform\_operator\_apply}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_transform\_operator\_apply()}
+{\footnotesize\ttfamily gint agg\+\_\+transform\+\_\+operator\+\_\+apply (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t} $\ast$}]{op,  }\item[{gdouble $\ast$}]{xin,  }\item[{gdouble $\ast$}]{xout }\end{DoxyParamCaption})}
+
+Apply a transform operation to a point.
+
+
+\begin{DoxyParams}{Parameters}
+{\em op} & transform operation (usually part of an \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da}); \\
+\hline
+{\em xin} & input point; \\
+\hline
+{\em xout} & on exit contains transformed version of {\itshape xin}.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+Referenced by \textbf{ agg\+\_\+transform\+\_\+apply()}.
 
 \mbox{\label{agg_8h_a9647f98c5477495e98aa83eaed70c171}} 
 \index{agg.h@{agg.h}!agg\_transform\_operators\_write@{agg\_transform\_operators\_write}}
@@ -471,7 +1345,33 @@ Write a list of operators and parameters in a transform to file
 \end{DoxyReturn}
 
 
-References \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+t}.
+References \textbf{ agg\+\_\+transform\+\_\+operator}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+number}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+operation}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+parameter}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+parameter\+\_\+number}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+t}.
+
+\mbox{\label{agg_8h_a77479169572fa74999fded7d30af2453}} 
+\index{agg.h@{agg.h}!agg\_transform\_parse@{agg\_transform\_parse}}
+\index{agg\_transform\_parse@{agg\_transform\_parse}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_transform\_parse()}
+{\footnotesize\ttfamily gint agg\+\_\+transform\+\_\+parse (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+transform\+\_\+t} $\ast$}]{T,  }\item[{gchar $\ast$}]{name,  }\item[{\textbf{ agg\+\_\+variable\+\_\+t} $\ast$}]{p,  }\item[{gint}]{np }\end{DoxyParamCaption})}
+
+Parse a transform operation described by a string and add it to an \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da}
+
+
+\begin{DoxyParams}{Parameters}
+{\em T} & \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} to have an operation added; \\
+\hline
+{\em name} & name of transform operation (see \doxyref{agg\+\_\+transform\+\_\+operators\+\_\+write}{p.}{group__transforms_ga9647f98c5477495e98aa83eaed70c171}); \\
+\hline
+{\em p} & array of \doxyref{agg\+\_\+variable\+\_\+t}{p.}{group__variables_gaf99a18818caf06b7a2cdc10dde859f47} holding parameters of transform; \\
+\hline
+{\em np} & number of entries in {\itshape p}.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+add()}, \textbf{ agg\+\_\+variable\+\_\+definition}, and \textbf{ agg\+\_\+variable\+\_\+value}.
 
 \mbox{\label{agg_8h_aa9932f923e53ba6651b417913a88bd62}} 
 \index{agg.h@{agg.h}!agg\_transform\_variable\_add@{agg\_transform\_variable\_add}}
@@ -497,7 +1397,7 @@ Add a variable to a transform
 \end{DoxyReturn}
 
 
-References \textbf{ agg\+\_\+variable\+\_\+t}.
+References \textbf{ agg\+\_\+transform\+\_\+variable\+\_\+number}, and \textbf{ agg\+\_\+variable\+\_\+t}.
 
 \mbox{\label{agg_8h_a521307ad04c43f7912a72942271cb8e0}} 
 \index{agg.h@{agg.h}!agg\_transform\_variables\_eval@{agg\_transform\_variables\_eval}}
@@ -517,7 +1417,7 @@ Evaluate variables in a transform. Expressions should have been compiled using \
 \end{DoxyReturn}
 
 
-References \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+t}.
+References \textbf{ agg\+\_\+expression\+\_\+data\+\_\+eval()}, \textbf{ agg\+\_\+expression\+\_\+eval()}, \textbf{ agg\+\_\+transform\+\_\+operator}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+number}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+parameter}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+parameter\+\_\+number}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, \textbf{ agg\+\_\+transform\+\_\+variable}, \textbf{ agg\+\_\+transform\+\_\+variable\+\_\+number}, \textbf{ agg\+\_\+variable\+\_\+definition}, \textbf{ agg\+\_\+variable\+\_\+evaluator}, \textbf{ agg\+\_\+variable\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+value}.
 
 \mbox{\label{agg_8h_a81f96f54e93e7d88b8bf40f446ac3341}} 
 \index{agg.h@{agg.h}!agg\_transform\_variables\_write@{agg\_transform\_variables\_write}}
@@ -541,7 +1441,29 @@ Write list of variables and values for a transform to output
 \end{DoxyReturn}
 
 
-References \textbf{ agg\+\_\+variable\+\_\+t}.
+References \textbf{ agg\+\_\+transform\+\_\+variable}, \textbf{ agg\+\_\+transform\+\_\+variable\+\_\+number}, \textbf{ agg\+\_\+variable\+\_\+definition}, \textbf{ agg\+\_\+variable\+\_\+name}, \textbf{ agg\+\_\+variable\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+value}.
+
+\mbox{\label{agg_8h_a35d59f3797c818fcb381a128169b7a5a}} 
+\index{agg.h@{agg.h}!agg\_variable\_write@{agg\_variable\_write}}
+\index{agg\_variable\_write@{agg\_variable\_write}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_variable\_write()}
+{\footnotesize\ttfamily gint agg\+\_\+variable\+\_\+write (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f,  }\item[{\textbf{ agg\+\_\+variable\+\_\+t} $\ast$}]{v }\end{DoxyParamCaption})}
+
+Write a variable definition to file. If the variable is defined using a string expression, this is written, otherwise the constant numerical value is output.
+
+
+\begin{DoxyParams}{Parameters}
+{\em f} & output file stream; \\
+\hline
+{\em v} & variable to write.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+variable\+\_\+definition}, \textbf{ agg\+\_\+variable\+\_\+name}, and \textbf{ agg\+\_\+variable\+\_\+value}.
 
 
 
@@ -554,7 +1476,7 @@ References \textbf{ agg\+\_\+variable\+\_\+t}.
 
 Data structure holding internal information for evaluation of expressions 
 
-Referenced by \textbf{ agg\+\_\+transform\+\_\+add\+\_\+global\+\_\+variables()}, and \textbf{ agg\+\_\+transform\+\_\+expressions\+\_\+compile()}.
+Referenced by \textbf{ agg\+\_\+body\+\_\+globals\+\_\+compile()}, \textbf{ agg\+\_\+transform\+\_\+add\+\_\+global\+\_\+variables()}, and \textbf{ agg\+\_\+transform\+\_\+expressions\+\_\+compile()}.
 
 \mbox{\label{agg_8h_a8cdd164643b93d05245e9b4976f3f0cb}} 
 \index{agg.h@{agg.h}!agg\_section\_t@{agg\_section\_t}}
@@ -565,6 +1487,16 @@ Referenced by \textbf{ agg\+\_\+transform\+\_\+add\+\_\+global\+\_\+variables()}
 Data structure holding information for evaluation of a section 
 
 Referenced by \textbf{ agg\+\_\+section\+\_\+new()}, \textbf{ agg\+\_\+surface\+\_\+new()}, \textbf{ agg\+\_\+surface\+\_\+point\+\_\+eval()}, and \textbf{ agg\+\_\+surface\+\_\+section\+\_\+interp()}.
+
+\mbox{\label{agg_8h_a1c502e562486827063a7169cd79b5cc0}} 
+\index{agg.h@{agg.h}!agg\_surface\_t@{agg\_surface\_t}}
+\index{agg\_surface\_t@{agg\_surface\_t}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_surface\_t}
+{\footnotesize\ttfamily agg\+\_\+surface\+\_\+t}
+
+Data structure to hold surfaces formed by transformation of sections 
+
+Referenced by \textbf{ agg\+\_\+body\+\_\+new()}, \textbf{ agg\+\_\+mesh\+\_\+surface\+\_\+point\+\_\+add()}, and \textbf{ agg\+\_\+surface\+\_\+new()}.
 
 \mbox{\label{agg_8h_a9b3c7b4a183fc43a646fdc5cb1673993}} 
 \index{agg.h@{agg.h}!agg\_transform\_operator\_t@{agg\_transform\_operator\_t}}

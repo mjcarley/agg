@@ -8,10 +8,6 @@ Evaluation of (cross-\/) sections such as ellipses and aerofoils.
 \begin{DoxyCompactItemize}
 \item 
 \textbf{ agg\+\_\+section\+\_\+t} $\ast$ \textbf{ agg\+\_\+section\+\_\+new} (gint oumax, gint olmax)
-\item 
-gdouble \textbf{ agg\+\_\+section\+\_\+eval} (\textbf{ agg\+\_\+section\+\_\+t} $\ast$s, gdouble x)
-\item 
-gint \textbf{ agg\+\_\+section\+\_\+copy} (\textbf{ agg\+\_\+section\+\_\+t} $\ast$dest, \textbf{ agg\+\_\+section\+\_\+t} $\ast$src)
 \end{DoxyCompactItemize}
 \begin{DoxyCompactItemize}
 \item 
@@ -51,50 +47,6 @@ AGG\+\_\+\+SECTION\+\_\+\+ELLIPSE&generic closed curve \\
 
 
 \doxysubsection{Function Documentation}
-\mbox{\label{group__sections_ga1245fe64e54485282fb358081f20f2f4}} 
-\index{Section geometries@{Section geometries}!agg\_section\_copy@{agg\_section\_copy}}
-\index{agg\_section\_copy@{agg\_section\_copy}!Section geometries@{Section geometries}}
-\doxysubsubsection{agg\_section\_copy()}
-{\footnotesize\ttfamily gint agg\+\_\+section\+\_\+copy (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+section\+\_\+t} $\ast$}]{dest,  }\item[{\textbf{ agg\+\_\+section\+\_\+t} $\ast$}]{src }\end{DoxyParamCaption})}
-
-Copy one surface section into another
-
-
-\begin{DoxyParams}{Parameters}
-{\em dest} & destination section; \\
-\hline
-{\em src} & source section.\\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-0 on success, with {\itshape src} copied into {\itshape dest}. 
-\end{DoxyReturn}
-
-
-References \textbf{ agg\+\_\+section\+\_\+close}, \textbf{ agg\+\_\+section\+\_\+coefficient\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+coefficient\+\_\+upper}, \textbf{ agg\+\_\+section\+\_\+eta\+\_\+left}, \textbf{ agg\+\_\+section\+\_\+eta\+\_\+right}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+lower\+\_\+max}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+upper}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+upper\+\_\+max}, \textbf{ agg\+\_\+section\+\_\+trailing\+\_\+edge\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+trailing\+\_\+edge\+\_\+upper}, and \textbf{ agg\+\_\+section\+\_\+type}.
-
-\mbox{\label{group__sections_gaa057ef58299424703a8cc0d8a16ebf03}} 
-\index{Section geometries@{Section geometries}!agg\_section\_eval@{agg\_section\_eval}}
-\index{agg\_section\_eval@{agg\_section\_eval}!Section geometries@{Section geometries}}
-\doxysubsubsection{agg\_section\_eval()}
-{\footnotesize\ttfamily gdouble agg\+\_\+section\+\_\+eval (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+section\+\_\+t} $\ast$}]{s,  }\item[{gdouble}]{x }\end{DoxyParamCaption})}
-
-Evaluate a section geometry
-
-
-\begin{DoxyParams}{Parameters}
-{\em s} & a \doxyref{agg\+\_\+section\+\_\+t}{p.}{agg_8h_a8cdd164643b93d05245e9b4976f3f0cb} containing the section data; \\
-\hline
-{\em x} & evaluation point $-1\leq x\leq 1$.\\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-$y=f(x)$ on success. An error is reported and execution ceases if {\itshape x} is out of range or the section type is undefined. 
-\end{DoxyReturn}
-
-
-References \textbf{ AGG\+\_\+\+SECTION\+\_\+\+ELLIPSE}, \textbf{ agg\+\_\+section\+\_\+type}, and \textbf{ AGG\+\_\+\+SECTION\+\_\+\+UNDEFINED}.
-
 \mbox{\label{group__sections_ga105f0353bff693485509f3cf9bb6ae46}} 
 \index{Section geometries@{Section geometries}!agg\_section\_new@{agg\_section\_new}}
 \index{agg\_section\_new@{agg\_section\_new}!Section geometries@{Section geometries}}
@@ -119,5 +71,5 @@ References \textbf{ agg\+\_\+section\+\_\+order\+\_\+lower\+\_\+max}, \textbf{ a
 
 
 
-Referenced by \textbf{ agg\+\_\+surface\+\_\+workspace\+\_\+new()}.
+Referenced by \textbf{ agg\+\_\+body\+\_\+read()}, and \textbf{ agg\+\_\+surface\+\_\+workspace\+\_\+new()}.
 

@@ -64,8 +64,16 @@ $(function() {
 <tr class="separator:ga3469482e2c22920b5accefdc004297c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga9647f98c5477495e98aa83eaed70c171"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__transforms.html#ga9647f98c5477495e98aa83eaed70c171">agg_transform_operators_write</a> (FILE *f, <a class="el" href="agg_8h.html#ab26de2509de1b8f9b7bc6523852dc6da">agg_transform_t</a> *T)</td></tr>
 <tr class="separator:ga9647f98c5477495e98aa83eaed70c171"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7e985891f93fe4b64a177ac841672909"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__transforms.html#ga7e985891f93fe4b64a177ac841672909">agg_transform_operator_apply</a> (<a class="el" href="agg_8h.html#a9b3c7b4a183fc43a646fdc5cb1673993">agg_transform_operator_t</a> *op, gdouble *xin, gdouble *xout)</td></tr>
+<tr class="separator:ga7e985891f93fe4b64a177ac841672909"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga1d94218842c8aca6203ddba991b32a5f"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__transforms.html#ga1d94218842c8aca6203ddba991b32a5f">agg_transform_apply</a> (<a class="el" href="agg_8h.html#ab26de2509de1b8f9b7bc6523852dc6da">agg_transform_t</a> *T, gdouble *xin, gdouble *xout)</td></tr>
 <tr class="separator:ga1d94218842c8aca6203ddba991b32a5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaff5f7e15c699e9e6b874df084150f08a"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__transforms.html#gaff5f7e15c699e9e6b874df084150f08a">agg_transform_axes</a> (<a class="el" href="group__surfaces.html#ga9d96b462257229695d4a34527697d492">agg_axes_t</a> axes, gdouble *xin, gdouble *xout)</td></tr>
+<tr class="separator:gaff5f7e15c699e9e6b874df084150f08a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1745f8aa9febea5a00f7d5892ea15c6e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__surfaces.html#ga9d96b462257229695d4a34527697d492">agg_axes_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__transforms.html#ga1745f8aa9febea5a00f7d5892ea15c6e">agg_axes_parse</a> (gchar *str)</td></tr>
+<tr class="separator:ga1745f8aa9febea5a00f7d5892ea15c6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga77479169572fa74999fded7d30af2453"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__transforms.html#ga77479169572fa74999fded7d30af2453">agg_transform_parse</a> (<a class="el" href="agg_8h.html#ab26de2509de1b8f9b7bc6523852dc6da">agg_transform_t</a> *T, gchar *name, <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a> *p, gint np)</td></tr>
+<tr class="separator:ga77479169572fa74999fded7d30af2453"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gae287f33d9a1988a16e6e8bfbcf8498f7"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__transforms.html#gae287f33d9a1988a16e6e8bfbcf8498f7">agg_operation_t</a> { <br />
 &#160;&#160;<a class="el" href="group__transforms.html#gae287f33d9a1988a16e6e8bfbcf8498f7adaec27e2727ebb165f174cec8f5e8671">AGG_TRANSFORM_UNDEFINED</a> = 0
 , <a class="el" href="group__transforms.html#gae287f33d9a1988a16e6e8bfbcf8498f7ab01058b6abfb8801d4b7bd228d041479">AGG_TRANSFORM_ROTATE</a> = 1
@@ -108,6 +116,32 @@ $(function() {
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="ga1745f8aa9febea5a00f7d5892ea15c6e" name="ga1745f8aa9febea5a00f7d5892ea15c6e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga1745f8aa9febea5a00f7d5892ea15c6e">&#9670;&nbsp;</a></span>agg_axes_parse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group__surfaces.html#ga9d96b462257229695d4a34527697d492">agg_axes_t</a> agg_axes_parse </td>
+          <td>(</td>
+          <td class="paramtype">gchar *&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Parse a string specifying an axis change on a surface.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>axis string to parse</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="group__surfaces.html#ga9d96b462257229695d4a34527697d492">agg_axes_t</a> corresponding to <em>str</em>, or AGG_AXES_UNDEFINED. </dd></dl>
+
+</div>
+</div>
 <a id="ga162e7e767b148e09e0f98e9af91b32fe" name="ga162e7e767b148e09e0f98e9af91b32fe"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga162e7e767b148e09e0f98e9af91b32fe">&#9670;&nbsp;</a></span>agg_transform_add_global_variables()</h2>
 
@@ -150,7 +184,7 @@ $(function() {
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
 
-<p class="reference">References <a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a>.</p>
+<p class="reference">References <a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a>, and <a class="el" href="agg_8h.html#adb65910d9a68ec640fb31a05ead4b6dd">agg_expression_data_variable_add()</a>.</p>
 
 </div>
 </div>
@@ -189,12 +223,60 @@ $(function() {
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">T</td><td>an <a class="el" href="agg_8h.html#ab26de2509de1b8f9b7bc6523852dc6da">agg_transform_t</a> containing the sequence of operations; </td></tr>
-    <tr><td class="paramname">xin</td><td>input point; </td></tr>
-    <tr><td class="paramname">xout</td><td>output point.</td></tr>
+    <tr><td class="paramname">xin</td><td>input point (can be the same as <em>xout</em>); </td></tr>
+    <tr><td class="paramname">xout</td><td>on exit contains transformed version of <em>xin</em>.</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+<p class="reference">References <a class="el" href="agg_8h.html#a8f2e2adcf62dbb3a21505fa1cd070e76">agg_transform_operator</a>, <a class="el" href="group__transforms.html#ga7e985891f93fe4b64a177ac841672909">agg_transform_operator_apply()</a>, and <a class="el" href="agg_8h.html#a427b4f4d329639cb65beaea740174178">agg_transform_operator_number</a>.</p>
+
+</div>
+</div>
+<a id="gaff5f7e15c699e9e6b874df084150f08a" name="gaff5f7e15c699e9e6b874df084150f08a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaff5f7e15c699e9e6b874df084150f08a">&#9670;&nbsp;</a></span>agg_transform_axes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_transform_axes </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__surfaces.html#ga9d96b462257229695d4a34527697d492">agg_axes_t</a>&#160;</td>
+          <td class="paramname"><em>axes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gdouble *&#160;</td>
+          <td class="paramname"><em>xin</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gdouble *&#160;</td>
+          <td class="paramname"><em>xout</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Apply an axis transform (swap) to a point</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">axes</td><td>an <a class="el" href="group__surfaces.html#ga9d96b462257229695d4a34527697d492">agg_axes_t</a> for the required axis transformation; </td></tr>
+    <tr><td class="paramname">xin</td><td>input point (can be equal to <em>xout</em>); </td></tr>
+    <tr><td class="paramname">xout</td><td>on exit contains transformed point data.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+<p class="reference">References <a class="el" href="agg_8h.html#ga9d96b462257229695d4a34527697d492aaefa87f8e684f3285c397d4184700837">AGG_AXES_PX_PY_MZ</a>, <a class="el" href="agg_8h.html#ga9d96b462257229695d4a34527697d492a98db150ad34df3857f9b834e984f2d21">AGG_AXES_PX_PY_PZ</a>, <a class="el" href="agg_8h.html#ga9d96b462257229695d4a34527697d492aa831b37d2d1da05c5d7127db7847f912">AGG_AXES_PY_PZ_PX</a>, <a class="el" href="agg_8h.html#ga9d96b462257229695d4a34527697d492aab7e8954312e7981efb2ae7b55f91ae4">AGG_AXES_PZ_PX_PY</a>, and <a class="el" href="agg_8h.html#ga9d96b462257229695d4a34527697d492ac97f02ff667be417fe6fbb1c540df3da">AGG_AXES_PZ_PY_PX</a>.</p>
 
 </div>
 </div>
@@ -222,7 +304,7 @@ $(function() {
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
 
-<p class="reference">References <a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a>, <a class="el" href="agg_8h.html#a9b3c7b4a183fc43a646fdc5cb1673993">agg_transform_operator_t</a>, and <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>.</p>
+<p class="reference">References <a class="el" href="agg_8h.html#a80416f24e969b55310b8a47b9f0100e9">agg_expression_compile()</a>, <a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a>, <a class="el" href="agg_8h.html#adb65910d9a68ec640fb31a05ead4b6dd">agg_expression_data_variable_add()</a>, <a class="el" href="agg_8h.html#a8f2e2adcf62dbb3a21505fa1cd070e76">agg_transform_operator</a>, <a class="el" href="agg_8h.html#a427b4f4d329639cb65beaea740174178">agg_transform_operator_number</a>, <a class="el" href="agg_8h.html#abb2f9f990c5c855f19ff3f801ad6d55a">agg_transform_operator_parameter</a>, <a class="el" href="agg_8h.html#a08c68d2085b1b5439357c8197655bafc">agg_transform_operator_parameter_number</a>, <a class="el" href="agg_8h.html#a9b3c7b4a183fc43a646fdc5cb1673993">agg_transform_operator_t</a>, <a class="el" href="agg_8h.html#a56809318765396e4ffffd4c8ca479034">agg_transform_variable</a>, <a class="el" href="agg_8h.html#a9d4fc7c50d8919ccc839d4a334fac643">agg_transform_variable_number</a>, <a class="el" href="agg_8h.html#ab1eb3e5fc0db91ca383c2f478300127b">agg_variable_definition</a>, <a class="el" href="agg_8h.html#a972736a8d33ed2be9f47e84631599d5b">agg_variable_evaluator</a>, and <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>.</p>
 
 </div>
 </div>
@@ -250,7 +332,7 @@ $(function() {
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>newly allocated <a class="el" href="agg_8h.html#ab26de2509de1b8f9b7bc6523852dc6da">agg_transform_t</a> </dd></dl>
 
-<p class="reference">References <a class="el" href="agg_8h.html#a9b3c7b4a183fc43a646fdc5cb1673993">agg_transform_operator_t</a>, and <a class="el" href="agg_8h.html#ab26de2509de1b8f9b7bc6523852dc6da">agg_transform_t</a>.</p>
+<p class="reference">References <a class="el" href="agg_8h.html#a427b4f4d329639cb65beaea740174178">agg_transform_operator_number</a>, <a class="el" href="agg_8h.html#af78d0f70b4637f268c6768aa183cd5ae">agg_transform_operator_number_max</a>, <a class="el" href="agg_8h.html#a9b3c7b4a183fc43a646fdc5cb1673993">agg_transform_operator_t</a>, <a class="el" href="agg_8h.html#ab26de2509de1b8f9b7bc6523852dc6da">agg_transform_t</a>, and <a class="el" href="agg_8h.html#a9d4fc7c50d8919ccc839d4a334fac643">agg_transform_variable_number</a>.</p>
 
 </div>
 </div>
@@ -310,7 +392,55 @@ $(function() {
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success </dd></dl>
 
-<p class="reference">References <a class="el" href="group__transforms.html#ga57e762424be00dc262795556c254934b">agg_transform_operator_new()</a>, <a class="el" href="agg_8h.html#a9b3c7b4a183fc43a646fdc5cb1673993">agg_transform_operator_t</a>, and <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>.</p>
+<p class="reference">References <a class="el" href="agg_8h.html#a8f2e2adcf62dbb3a21505fa1cd070e76">agg_transform_operator</a>, <a class="el" href="agg_8h.html#a6ab79d88ba68d2d57369777f1309ddb5">agg_transform_operator_func</a>, <a class="el" href="group__transforms.html#ga57e762424be00dc262795556c254934b">agg_transform_operator_new()</a>, <a class="el" href="agg_8h.html#a427b4f4d329639cb65beaea740174178">agg_transform_operator_number</a>, <a class="el" href="agg_8h.html#a9d90d1260ef01edfa55395a8ef258901">agg_transform_operator_operation</a>, <a class="el" href="agg_8h.html#abb2f9f990c5c855f19ff3f801ad6d55a">agg_transform_operator_parameter</a>, <a class="el" href="agg_8h.html#a08c68d2085b1b5439357c8197655bafc">agg_transform_operator_parameter_number</a>, <a class="el" href="agg_8h.html#a9b3c7b4a183fc43a646fdc5cb1673993">agg_transform_operator_t</a>, <a class="el" href="agg_8h.html#ab1eb3e5fc0db91ca383c2f478300127b">agg_variable_definition</a>, <a class="el" href="agg_8h.html#a507e1c39c279ca276de83410336a5c06">agg_variable_name</a>, <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>, and <a class="el" href="agg_8h.html#a9d32a3c48e22b7d630e4fbc4e02c71a0">agg_variable_value</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="agg_8h.html#a77479169572fa74999fded7d30af2453">agg_transform_parse()</a>.</p>
+
+</div>
+</div>
+<a id="ga7e985891f93fe4b64a177ac841672909" name="ga7e985891f93fe4b64a177ac841672909"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga7e985891f93fe4b64a177ac841672909">&#9670;&nbsp;</a></span>agg_transform_operator_apply()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_transform_operator_apply </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="agg_8h.html#a9b3c7b4a183fc43a646fdc5cb1673993">agg_transform_operator_t</a> *&#160;</td>
+          <td class="paramname"><em>op</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gdouble *&#160;</td>
+          <td class="paramname"><em>xin</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gdouble *&#160;</td>
+          <td class="paramname"><em>xout</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Apply a transform operation to a point.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">op</td><td>transform operation (usually part of an <a class="el" href="agg_8h.html#ab26de2509de1b8f9b7bc6523852dc6da">agg_transform_t</a>); </td></tr>
+    <tr><td class="paramname">xin</td><td>input point; </td></tr>
+    <tr><td class="paramname">xout</td><td>on exit contains transformed version of <em>xin</em>.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="agg_8h.html#a1d94218842c8aca6203ddba991b32a5f">agg_transform_apply()</a>.</p>
 
 </div>
 </div>
@@ -374,7 +504,60 @@ $(function() {
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
 
-<p class="reference">References <a class="el" href="agg_8h.html#a9b3c7b4a183fc43a646fdc5cb1673993">agg_transform_operator_t</a>, and <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>.</p>
+<p class="reference">References <a class="el" href="agg_8h.html#a8f2e2adcf62dbb3a21505fa1cd070e76">agg_transform_operator</a>, <a class="el" href="agg_8h.html#a427b4f4d329639cb65beaea740174178">agg_transform_operator_number</a>, <a class="el" href="agg_8h.html#a9d90d1260ef01edfa55395a8ef258901">agg_transform_operator_operation</a>, <a class="el" href="agg_8h.html#abb2f9f990c5c855f19ff3f801ad6d55a">agg_transform_operator_parameter</a>, <a class="el" href="agg_8h.html#a08c68d2085b1b5439357c8197655bafc">agg_transform_operator_parameter_number</a>, <a class="el" href="agg_8h.html#a9b3c7b4a183fc43a646fdc5cb1673993">agg_transform_operator_t</a>, and <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>.</p>
+
+</div>
+</div>
+<a id="ga77479169572fa74999fded7d30af2453" name="ga77479169572fa74999fded7d30af2453"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga77479169572fa74999fded7d30af2453">&#9670;&nbsp;</a></span>agg_transform_parse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_transform_parse </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="agg_8h.html#ab26de2509de1b8f9b7bc6523852dc6da">agg_transform_t</a> *&#160;</td>
+          <td class="paramname"><em>T</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gchar *&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a> *&#160;</td>
+          <td class="paramname"><em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>np</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Parse a transform operation described by a string and add it to an <a class="el" href="agg_8h.html#ab26de2509de1b8f9b7bc6523852dc6da">agg_transform_t</a></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">T</td><td><a class="el" href="agg_8h.html#ab26de2509de1b8f9b7bc6523852dc6da">agg_transform_t</a> to have an operation added; </td></tr>
+    <tr><td class="paramname">name</td><td>name of transform operation (see <a class="el" href="group__transforms.html#ga9647f98c5477495e98aa83eaed70c171">agg_transform_operators_write</a>); </td></tr>
+    <tr><td class="paramname">p</td><td>array of <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a> holding parameters of transform; </td></tr>
+    <tr><td class="paramname">np</td><td>number of entries in <em>p</em>.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+<p class="reference">References <a class="el" href="group__transforms.html#ga3469482e2c22920b5accefdc004297c4">agg_transform_operator_add()</a>, <a class="el" href="agg_8h.html#ab1eb3e5fc0db91ca383c2f478300127b">agg_variable_definition</a>, and <a class="el" href="agg_8h.html#a9d32a3c48e22b7d630e4fbc4e02c71a0">agg_variable_value</a>.</p>
 
 </div>
 </div>
@@ -427,7 +610,7 @@ $(function() {
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success </dd></dl>
 
-<p class="reference">References <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>.</p>
+<p class="reference">References <a class="el" href="agg_8h.html#a9d4fc7c50d8919ccc839d4a334fac643">agg_transform_variable_number</a>, and <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>.</p>
 
 </div>
 </div>
@@ -455,7 +638,7 @@ $(function() {
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
 
-<p class="reference">References <a class="el" href="agg_8h.html#a9b3c7b4a183fc43a646fdc5cb1673993">agg_transform_operator_t</a>, and <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>.</p>
+<p class="reference">References <a class="el" href="agg_8h.html#afb742b448d0a4702a43ccc2642a30a74">agg_expression_data_eval()</a>, <a class="el" href="agg_8h.html#acc545aa8d109534c65f1c09e4ef4a61c">agg_expression_eval()</a>, <a class="el" href="agg_8h.html#a8f2e2adcf62dbb3a21505fa1cd070e76">agg_transform_operator</a>, <a class="el" href="agg_8h.html#a427b4f4d329639cb65beaea740174178">agg_transform_operator_number</a>, <a class="el" href="agg_8h.html#abb2f9f990c5c855f19ff3f801ad6d55a">agg_transform_operator_parameter</a>, <a class="el" href="agg_8h.html#a08c68d2085b1b5439357c8197655bafc">agg_transform_operator_parameter_number</a>, <a class="el" href="agg_8h.html#a9b3c7b4a183fc43a646fdc5cb1673993">agg_transform_operator_t</a>, <a class="el" href="agg_8h.html#a56809318765396e4ffffd4c8ca479034">agg_transform_variable</a>, <a class="el" href="agg_8h.html#a9d4fc7c50d8919ccc839d4a334fac643">agg_transform_variable_number</a>, <a class="el" href="agg_8h.html#ab1eb3e5fc0db91ca383c2f478300127b">agg_variable_definition</a>, <a class="el" href="agg_8h.html#a972736a8d33ed2be9f47e84631599d5b">agg_variable_evaluator</a>, <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>, and <a class="el" href="agg_8h.html#a9d32a3c48e22b7d630e4fbc4e02c71a0">agg_variable_value</a>.</p>
 
 </div>
 </div>
@@ -501,14 +684,14 @@ $(function() {
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
 
-<p class="reference">References <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>.</p>
+<p class="reference">References <a class="el" href="agg_8h.html#a56809318765396e4ffffd4c8ca479034">agg_transform_variable</a>, <a class="el" href="agg_8h.html#a9d4fc7c50d8919ccc839d4a334fac643">agg_transform_variable_number</a>, <a class="el" href="agg_8h.html#ab1eb3e5fc0db91ca383c2f478300127b">agg_variable_definition</a>, <a class="el" href="agg_8h.html#a507e1c39c279ca276de83410336a5c06">agg_variable_name</a>, <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>, and <a class="el" href="agg_8h.html#a9d32a3c48e22b7d630e4fbc4e02c71a0">agg_variable_value</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jun 7 2023 17:54:46 for AGG by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Mon Jul 10 2023 17:58:17 for AGG by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

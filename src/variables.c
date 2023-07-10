@@ -34,18 +34,6 @@
  * @ingroup variables
  */
 
-agg_variable_t *agg_variable_find(agg_variable_t **vars, gint nv,
-				  gchar *var)
-
-{
-  gint i ;
-
-  for ( i = 0 ; i < nv ; i ++ ) {
-    if ( strcmp(agg_variable_name(vars[i]), var) == 0 ) return vars[i] ;
-  }
-  
-  return NULL ;
-}
 
 agg_expression_data_t *agg_expression_data_new(gint nemax)
 
@@ -60,6 +48,16 @@ agg_expression_data_t *agg_expression_data_new(gint nemax)
   
   return d ;
 }
+
+/** 
+ * Add a variable to an ::agg_expression_data_t.
+ * 
+ * @param d ::agg_expression_data_t to have variable added;
+ * @param v a variable to be added to \a d; this may depend on variables
+ * already in \a d, but not on variables yet to be added.
+ * 
+ * @return 0 on success.
+ */
 
 gint agg_expression_data_variable_add(agg_expression_data_t *d,
 				      agg_variable_t *v)
@@ -162,6 +160,15 @@ gint agg_expression_data_compile(agg_expression_data_t *d)
   return 0 ;
 }
 
+/** 
+ * Evaluate expressions in an expression data structure, making the
+ * values available for other calculations.
+ * 
+ * @param d an ::agg_expression_data_t whose expressions are to be evaluated. 
+ * 
+ * @return 0 on success.
+ */
+
 gint agg_expression_data_eval(agg_expression_data_t *d)
 
 {
@@ -174,6 +181,32 @@ gint agg_expression_data_eval(agg_expression_data_t *d)
       *((gdouble *)vars[i].address) = te_eval(d->expr[i]) ;
     }
   }
+  
+  return 0 ;
+}
+
+/** 
+ * Write a variable definition to file. If the variable is defined
+ * using a string expression, this is written, otherwise the constant
+ * numerical value is output.
+ * 
+ * @param f output file stream;
+ * @param v variable to write.
+ * 
+ * @return 0 on success. 
+ */
+
+gint agg_variable_write(FILE *f, agg_variable_t *v)
+
+{
+  if ( agg_variable_name(v) != NULL )
+    fprintf(f, "\"%s\" ", agg_variable_name(v)) ;
+
+  if ( agg_variable_definition(v) != NULL )
+    fprintf(f, "\"%s\"", agg_variable_definition(v)) ;
+
+  if ( agg_variable_definition(v) == NULL )
+    fprintf(f, "%lg", agg_variable_value(v)) ;
   
   return 0 ;
 }

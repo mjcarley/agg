@@ -27,6 +27,22 @@
 
 #include "agg-private.h"
 
+typedef void (*section_parse_func_t)(agg_section_t *s,
+				     agg_variable_t *p, gint np) ;
+
+void _agg_aerofoil_parse(agg_section_t *s, agg_variable_t *p, gint np) ;
+void _agg_circle_parse(agg_section_t *s, agg_variable_t *p, gint np) ;
+
+static const struct {
+  gchar *name ;
+  gint np ;
+  section_parse_func_t func ;
+} parse_data[] = {
+  {"aerofoil", 3, _agg_aerofoil_parse},
+  {"circle",   0, _agg_circle_parse  },
+  {NULL, 0, NULL}
+} ;
+
 /**
  * @{
  *
@@ -140,6 +156,18 @@ gdouble agg_section_eval(agg_section_t *s, gdouble x)
   return 0.0 ;
 }
 
+/** 
+ * Set a section to a circle of radius 1/2 centred at \f$(0,1/2)\f$,
+ * as in Kulfan, B. (2010). Recent extensions and applications of the
+ * `CST' universal parametric geometry representation method. The
+ * Aeronautical Journal, 114(1153), 157-176
+ * https://doi.org/10.1017/S0001924000003614
+ * 
+ * @param s ::agg_section_t to be initialized;
+ * 
+ * @return 0 on success. 
+ */
+
 gint agg_section_set_circle(agg_section_t *s)
 
 {
@@ -156,6 +184,22 @@ gint agg_section_set_circle(agg_section_t *s)
   
   return 0 ;
 }
+
+/** 
+ * Set a section to a simple aerofoil shape of specified leading edge
+ * exponent, maximum thickness, and trailing edge displacement, as in
+ * Kulfan, B. (2010). Recent extensions and applications of the `CST'
+ * universal parametric geometry representation method. The
+ * Aeronautical Journal, 114(1153), 157-176
+ * https://doi.org/10.1017/S0001924000003614
+ * 
+ * @param s ::agg_section_t to be initialized;
+ * @param eta leading edge exponent \f$\eta_{1}\f$;
+ * @param th aerofoil thickness;
+ * @param yte trailing edge displacement (half trailing edge thickness). 
+ * 
+ * @return 0 on success.
+ */
 
 gint agg_section_set_aerofoil(agg_section_t *s, gdouble eta,
 			      gdouble th, gdouble yte)
@@ -229,6 +273,99 @@ gint agg_section_copy(agg_section_t *dest, agg_section_t *src)
   agg_section_trailing_edge_lower(dest) =
     agg_section_trailing_edge_lower(src) ;
   
+  return 0 ;
+}
+
+void _agg_aerofoil_parse(agg_section_t *s, agg_variable_t *p, gint np)
+
+{
+  gdouble eta, th, yte ;
+
+  if ( agg_variable_definition(&(p[0])) != NULL )
+    g_error("%s: eta must be a numerical constant", __FUNCTION__) ;
+  eta = agg_variable_value(&(p[0])) ;
+  if ( agg_variable_definition(&(p[1])) != NULL )
+    g_error("%s: thickness must be a numerical constant", __FUNCTION__) ;
+  th = agg_variable_value(&(p[1])) ;
+  if ( agg_variable_definition(&(p[2])) != NULL )
+    g_error("%s: trailing edge thickness must be a numerical constant",
+	    __FUNCTION__) ;
+  yte = agg_variable_value(&(p[2])) ;
+
+  agg_section_set_aerofoil(s, eta, th, yte) ;
+  
+  return ;
+}
+
+void _agg_circle_parse(agg_section_t *s, agg_variable_t *p, gint np)
+
+{
+  if ( np > 0 ) 
+    g_error("%s: circular section has no parameters", __FUNCTION__) ;
+
+  agg_section_set_circle(s) ;
+  
+  return ;
+}
+
+/** 
+ * Parse an ::agg_section_t description given as a name and list of
+ * variable parameters
+ * 
+ * @param s ::agg_section_t to set;
+ * @param name name of section;
+ * @param p array of ::agg_variable_t containing parameters for section;
+ * @param np number of entries in \a p.
+ * 
+ * @return 0 on success.
+ */
+
+gint agg_section_parse(agg_section_t *s, gchar *name,
+		       agg_variable_t *p, gint np)
+
+{
+  section_parse_func_t func ;
+  gint i, nparam ;
+
+  for ( (i = 0), (func = NULL) ; parse_data[i].name != NULL ; i ++ ) {
+    if ( strcmp(parse_data[i].name, name) == 0 ) {
+      func = parse_data[i].func ;
+      nparam = parse_data[i].np ;
+    }
+  }
+
+  if ( func == NULL ) {
+    g_error("%s: unrecognized section name \"%s\"", __FUNCTION__, name) ;
+  }
+  
+  if ( np != nparam ) {
+    g_error("%s: section \"%s\" requires %d parameters (not %d)",
+	    __FUNCTION__, name, nparam, np) ;
+  }
+
+  func(s, p, np) ;
+  
+  return 0 ;
+}
+
+/** 
+ * Write a list of available section types to output
+ * 
+ * @param f output file stream.
+ * 
+ * @return 0 on success.
+ */
+
+gint agg_sections_list(FILE *f)
+
+{
+  gint i ;
+
+  for ( i = 0 ; parse_data[i].name != NULL ; i ++ ) {
+    fprintf(stderr, "  %s(%d parameters)\n",
+	    parse_data[i].name, parse_data[i].np) ;
+  }
+
   return 0 ;
 }
 

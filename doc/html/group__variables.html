@@ -46,12 +46,18 @@ $(function() {
 <p>Symbolically defined variables and expressions.  
 <a href="#details">More...</a></p>
 <table class="memberdecls">
+<tr class="memitem:gadb65910d9a68ec640fb31a05ead4b6dd"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__variables.html#gadb65910d9a68ec640fb31a05ead4b6dd">agg_expression_data_variable_add</a> (<a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a> *d, <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a> *v)</td></tr>
+<tr class="separator:gadb65910d9a68ec640fb31a05ead4b6dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga80416f24e969b55310b8a47b9f0100e9"><td class="memItemLeft" align="right" valign="top">gpointer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__variables.html#ga80416f24e969b55310b8a47b9f0100e9">agg_expression_compile</a> (gchar *e, <a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a> *d)</td></tr>
 <tr class="separator:ga80416f24e969b55310b8a47b9f0100e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gacc545aa8d109534c65f1c09e4ef4a61c"><td class="memItemLeft" align="right" valign="top">gdouble&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__variables.html#gacc545aa8d109534c65f1c09e4ef4a61c">agg_expression_eval</a> (gpointer e)</td></tr>
 <tr class="separator:gacc545aa8d109534c65f1c09e4ef4a61c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gac423c9a2a65b0b8e677576e9e4fbb1b6"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__variables.html#gac423c9a2a65b0b8e677576e9e4fbb1b6">agg_expression_data_compile</a> (<a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a> *d)</td></tr>
 <tr class="separator:gac423c9a2a65b0b8e677576e9e4fbb1b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gafb742b448d0a4702a43ccc2642a30a74"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__variables.html#gafb742b448d0a4702a43ccc2642a30a74">agg_expression_data_eval</a> (<a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a> *d)</td></tr>
+<tr class="separator:gafb742b448d0a4702a43ccc2642a30a74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga35d59f3797c818fcb381a128169b7a5a"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__variables.html#ga35d59f3797c818fcb381a128169b7a5a">agg_variable_write</a> (FILE *f, <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a> *v)</td></tr>
+<tr class="separator:ga35d59f3797c818fcb381a128169b7a5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaf99a18818caf06b7a2cdc10dde859f47"><td class="memItemLeft" align="right" valign="top">typedef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a></td></tr>
 <tr class="separator:gaf99a18818caf06b7a2cdc10dde859f47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -93,6 +99,8 @@ $(function() {
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>pointer to compiled expression. </dd></dl>
 
+<p class="reference">Referenced by <a class="el" href="agg_8h.html#a12809abb981ee0379ad7f887bdce9222">agg_body_globals_compile()</a>, and <a class="el" href="agg_8h.html#a015c632cb62cafdc579df29f44d8eab9">agg_transform_expressions_compile()</a>.</p>
+
 </div>
 </div>
 <a id="gac423c9a2a65b0b8e677576e9e4fbb1b6" name="gac423c9a2a65b0b8e677576e9e4fbb1b6"></a>
@@ -121,6 +129,75 @@ $(function() {
 
 </div>
 </div>
+<a id="gafb742b448d0a4702a43ccc2642a30a74" name="gafb742b448d0a4702a43ccc2642a30a74"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gafb742b448d0a4702a43ccc2642a30a74">&#9670;&nbsp;</a></span>agg_expression_data_eval()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_expression_data_eval </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a> *&#160;</td>
+          <td class="paramname"><em>d</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Evaluate expressions in an expression data structure, making the values available for other calculations.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">d</td><td>an <a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a> whose expressions are to be evaluated.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="agg_8h.html#a8a64862bcc9c834e015451285e8812db">agg_body_globals_eval()</a>, and <a class="el" href="agg_8h.html#a521307ad04c43f7912a72942271cb8e0">agg_transform_variables_eval()</a>.</p>
+
+</div>
+</div>
+<a id="gadb65910d9a68ec640fb31a05ead4b6dd" name="gadb65910d9a68ec640fb31a05ead4b6dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gadb65910d9a68ec640fb31a05ead4b6dd">&#9670;&nbsp;</a></span>agg_expression_data_variable_add()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_expression_data_variable_add </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a> *&#160;</td>
+          <td class="paramname"><em>d</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a> *&#160;</td>
+          <td class="paramname"><em>v</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Add a variable to an <a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">d</td><td><a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a> to have variable added; </td></tr>
+    <tr><td class="paramname">v</td><td>a variable to be added to <em>d</em>; this may depend on variables already in <em>d</em>, but not on variables yet to be added.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+<p class="reference">References <a class="el" href="agg_8h.html#ab1eb3e5fc0db91ca383c2f478300127b">agg_variable_definition</a>, <a class="el" href="agg_8h.html#a507e1c39c279ca276de83410336a5c06">agg_variable_name</a>, and <a class="el" href="agg_8h.html#a9d32a3c48e22b7d630e4fbc4e02c71a0">agg_variable_value</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="agg_8h.html#a12809abb981ee0379ad7f887bdce9222">agg_body_globals_compile()</a>, <a class="el" href="agg_8h.html#a162e7e767b148e09e0f98e9af91b32fe">agg_transform_add_global_variables()</a>, and <a class="el" href="agg_8h.html#a015c632cb62cafdc579df29f44d8eab9">agg_transform_expressions_compile()</a>.</p>
+
+</div>
+</div>
 <a id="gacc545aa8d109534c65f1c09e4ef4a61c" name="gacc545aa8d109534c65f1c09e4ef4a61c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gacc545aa8d109534c65f1c09e4ef4a61c">&#9670;&nbsp;</a></span>agg_expression_eval()</h2>
 
@@ -145,6 +222,47 @@ $(function() {
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the value of <em>e</em>. </dd></dl>
 
+<p class="reference">Referenced by <a class="el" href="agg_8h.html#a8a64862bcc9c834e015451285e8812db">agg_body_globals_eval()</a>, and <a class="el" href="agg_8h.html#a521307ad04c43f7912a72942271cb8e0">agg_transform_variables_eval()</a>.</p>
+
+</div>
+</div>
+<a id="ga35d59f3797c818fcb381a128169b7a5a" name="ga35d59f3797c818fcb381a128169b7a5a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga35d59f3797c818fcb381a128169b7a5a">&#9670;&nbsp;</a></span>agg_variable_write()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_variable_write </td>
+          <td>(</td>
+          <td class="paramtype">FILE *&#160;</td>
+          <td class="paramname"><em>f</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a> *&#160;</td>
+          <td class="paramname"><em>v</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Write a variable definition to file. If the variable is defined using a string expression, this is written, otherwise the constant numerical value is output.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">f</td><td>output file stream; </td></tr>
+    <tr><td class="paramname">v</td><td>variable to write.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+<p class="reference">References <a class="el" href="agg_8h.html#ab1eb3e5fc0db91ca383c2f478300127b">agg_variable_definition</a>, <a class="el" href="agg_8h.html#a507e1c39c279ca276de83410336a5c06">agg_variable_name</a>, and <a class="el" href="agg_8h.html#a9d32a3c48e22b7d630e4fbc4e02c71a0">agg_variable_value</a>.</p>
+
 </div>
 </div>
 <h2 class="groupheader">Variable Documentation</h2>
@@ -161,14 +279,14 @@ $(function() {
 </div><div class="memdoc">
 <p >Data structure holding variable names, values, and symbolic definitions </p>
 
-<p class="reference">Referenced by <a class="el" href="agg_8h.html#ac7fd1a95c34d4b227e46b64fe642efae">agg_surface_point_eval()</a>, <a class="el" href="agg_8h.html#a015c632cb62cafdc579df29f44d8eab9">agg_transform_expressions_compile()</a>, <a class="el" href="agg_8h.html#a3469482e2c22920b5accefdc004297c4">agg_transform_operator_add()</a>, <a class="el" href="agg_8h.html#a9647f98c5477495e98aa83eaed70c171">agg_transform_operators_write()</a>, <a class="el" href="agg_8h.html#aa9932f923e53ba6651b417913a88bd62">agg_transform_variable_add()</a>, <a class="el" href="agg_8h.html#a521307ad04c43f7912a72942271cb8e0">agg_transform_variables_eval()</a>, and <a class="el" href="agg_8h.html#a81f96f54e93e7d88b8bf40f446ac3341">agg_transform_variables_write()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="agg_8h.html#a480c67842eb4dd8b22463f41d29ad6e2">agg_body_global_add()</a>, <a class="el" href="agg_8h.html#a12809abb981ee0379ad7f887bdce9222">agg_body_globals_compile()</a>, <a class="el" href="agg_8h.html#a8a64862bcc9c834e015451285e8812db">agg_body_globals_eval()</a>, <a class="el" href="agg_8h.html#ad1fd42e298c7ef34b4dc521af8a3094a">agg_body_globals_write()</a>, <a class="el" href="group__body.html#ga04a251df56d2d37e276d047231bdda35">agg_body_new()</a>, <a class="el" href="agg_8h.html#ac7fd1a95c34d4b227e46b64fe642efae">agg_surface_point_eval()</a>, <a class="el" href="agg_8h.html#a015c632cb62cafdc579df29f44d8eab9">agg_transform_expressions_compile()</a>, <a class="el" href="agg_8h.html#a3469482e2c22920b5accefdc004297c4">agg_transform_operator_add()</a>, <a class="el" href="agg_8h.html#a9647f98c5477495e98aa83eaed70c171">agg_transform_operators_write()</a>, <a class="el" href="agg_8h.html#aa9932f923e53ba6651b417913a88bd62">agg_transform_variable_add()</a>, <a class="el" href="agg_8h.html#a521307ad04c43f7912a72942271cb8e0">agg_transform_variables_eval()</a>, and <a class="el" href="agg_8h.html#a81f96f54e93e7d88b8bf40f446ac3341">agg_transform_variables_write()</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jun 7 2023 17:54:46 for AGG by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Mon Jul 10 2023 17:58:17 for AGG by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

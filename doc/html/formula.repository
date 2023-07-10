@@ -1,22 +1,35 @@
-\_form#0=145x19:$B_{r}^{(n)}(x)=\binom{n}{r}x^{r}(1-x)^{n-r}$
-\_form#1=40x18:$B_{r}^{(n)}(x)$
-\_form#2=61x11:$-1\leq x\leq 1$
-\_form#3=48x14:$y=f(x)$
-\_form#4=11x9:$\eta_{1}$
-\_form#5=31x9:$x=0$
-\_form#6=13x9:$\eta_{2}$
-\_form#7=30x9:$x=1$
-\_form#8=5x9:$i$
+\_form#0=11x9:$\eta_{1}$
+\_form#1=31x9:$x=0$
+\_form#2=13x9:$\eta_{2}$
+\_form#3=30x9:$x=1$
+\_form#4=5x9:$i$
+\_form#5=25x14:$(s,t)$
+\_form#6=28x14:$(u,v)$
+\_form#7=145x19:$B_{r}^{(n)}(x)=\binom{n}{r}x^{r}(1-x)^{n-r}$
+\_form#8=40x18:$B_{r}^{(n)}(x)$
 \_form#9=9x6:$u$
 \_form#10=8x6:$v$
 \_form#11=36x14:$\mathbf{x}(u,v)$
-\_form#12=61x11:$-1\leq x\leq1$
-\_form#13=30x14:$y(|x|)$
-\_form#14=31x10:$x<0$
-\_form#15=44x9:$t=0.12$
-\_form#16=46x11:$p=0.02$
-\_form#17=45x9:$m=0.3$
-\_form#18=28x14:$(u,v)$
-\_form#19=29x10:$\partial\mathbf{x}\partial u$
-\_form#20=29x10:$\partial\mathbf{x}\partial v$
-\_form#21=25x14:$(s,t)$
+\_form#12=29x10:$\partial\mathbf{x}\partial u$
+\_form#13=29x10:$\partial\mathbf{x}\partial v$
+\_form#14=8x6:$x$
+\_form#15=8x9:$y$
+\_form#16=6x6:$z$
+\_form#17=10x9:$s_{1}$
+\_form#18=10x11:$t_{1}$
+\_form#19=10x9:$s_{2}$
+\_form#20=10x11:$t_{2}$
+\_form#21=40x14:$(x,y,z)$
+\_form#22=33x14:$(s_{i},t_{i})$
+\_form#23=70x14:$(0,1)\times(0,1)$
+\_form#24=44x9:$t=0.12$
+\_form#25=46x11:$p=0.02$
+\_form#26=45x9:$m=0.3$
+\_form#27=61x11:$-1\leq x\leq1$
+\_form#28=30x14:$y(|x|)$
+\_form#29=31x10:$x<0$
+\_form#30=53x11:$0\leq s \leq 1$
+\_form#31=50x11:$0\leq t \leq 1$
+\_form#32=61x11:$-1\leq x\leq 1$
+\_form#33=48x14:$y=f(x)$
+\_form#34=39x14:$(0,1/2)$

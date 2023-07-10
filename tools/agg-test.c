@@ -32,6 +32,7 @@ const gchar *tests[] = {"bernstein",
 			"transform",
 			"surface",
 			"body",
+			"parser",
 			""} ;
 
 static void surface_sphere(agg_surface_t *S, gdouble x, gdouble y, gdouble z,
@@ -77,7 +78,8 @@ static void surface_sphere(agg_surface_t *S, gdouble x, gdouble y, gdouble z,
 }
 
 static void surface_tube(agg_surface_t *S, gdouble x, gdouble y, gdouble z,
-			 gdouble r, gdouble len, agg_section_t *s)
+			 agg_variable_t *global, gint nglobal,
+			 agg_section_t *s)
 
 {
   gdouble u, p[3] ;
@@ -87,16 +89,20 @@ static void surface_tube(agg_surface_t *S, gdouble x, gdouble y, gdouble z,
   u = 0.0 ;
   agg_section_set_circle(s) ;
   T = agg_surface_transform(S) ;
+  agg_transform_add_global_variables(T, global, nglobal) ;  
+
   agg_surface_section_add(S, s, u) ;
   /*centre on (0,0): circle of radius 1/2*/
   p[0] = -0.5 ; p[1] = 0 ; p[2] = 0 ;
   agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, p, expr, 3) ;
   /*scale on radius*/
-  p[0] = 2*r ;
+  expr[0] = "2*radius" ;
   agg_transform_operator_add(T, AGG_TRANSFORM_SCALE, p, expr, 1) ;
+  expr[0] = NULL ;
   /*translate in space to form cylinder*/
   p[0] = 0 ; p[1] = 0 ; p[2] = 0 ;
-  sprintf(etmp, "-%lg/2 + %lg*u", len, len) ;
+  /* sprintf(etmp, "-%lg/2 + %lg*u", len, len) ; */
+  sprintf(etmp, "-len/2 + len*u") ;
   expr[2] = etmp ;
   /* expr[2] = "-len/2 + len*u" ; */
   agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, p, expr, 3) ;
@@ -120,46 +126,48 @@ static void surface_tube(agg_surface_t *S, gdouble x, gdouble y, gdouble z,
 }
 
 static void surface_wing(agg_surface_t *S, gdouble x, gdouble y, gdouble z,
-			 gdouble root, gdouble span,
-			 gdouble lm, gdouble swle, gdouble dh,
+			 agg_variable_t *global, gint nglobal,
 			 agg_section_t *s)
 
 {
   gdouble u, p[3] ;
   agg_transform_t *T ;
-  gchar *expr[8] = {NULL}, etmp[1024] ;
+  gchar etmp[3][1024], *expr[8] = {NULL} ;
 
   u = 0.0 ;
   T = agg_surface_transform(S) ;
   agg_surface_section_add(S, s, u) ;
+
+  agg_transform_add_global_variables(T, global, nglobal) ;  
   
   expr[0] = expr[1] = expr[2] = NULL ; 
   /*scale on taper ratio, shrinking about leading edge*/
   p[0] = 0.0 ; p[1] = 0 ; p[2] = 0 ;
-  sprintf(etmp, "1 + u*(%lg-1)", lm) ;
-  expr[2] = g_strdup(etmp) ;
+  sprintf(etmp[2], "1 + u*(taper-1)") ;
+  expr[2] = etmp[2] ;
   agg_transform_operator_add(T, AGG_TRANSFORM_SHRINK, p, expr, 3) ;
   expr[0] = expr[1] = expr[2] = NULL ; 
   /*scale on root chord*/
-  p[0] = root ;
+  p[0] = 0 ;
+  sprintf(etmp[0], "root") ;
+  expr[0] = etmp[0] ;
   agg_transform_operator_add(T, AGG_TRANSFORM_SCALE, p, expr, 1) ;
   expr[0] = expr[1] = expr[2] = NULL ; 
 
-  /*translate along span and sweep*/
+  /*translate along span and sweep; add span/1000 to stop wings
+    meeting in the middle and confusing the intersection calculation*/
   p[0] = 0 ; p[1] = 0 ; p[2] = 0 ;
-  sprintf(etmp, "%lg*sin(%lg)*u", span, swle) ;
-  expr[0] = g_strdup(etmp) ;
-  sprintf(etmp, "%lg*sin(%lg)*u", span, dh) ;
-  expr[1] = g_strdup(etmp) ;
-  sprintf(etmp, "%lg*u", span) ;
-  expr[2] = g_strdup(etmp) ;
+  sprintf(etmp[0], "span*sin(sweep)*u") ;
+  expr[0] = etmp[0] ;
+  sprintf(etmp[1], "span*sin(dihedral)*u") ;
+  expr[1] = etmp[1] ;
+  sprintf(etmp[2], "span/1000 + span*u") ;
+  expr[2] = etmp[2] ;
   agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, p, expr, 3) ;
   expr[0] = expr[1] = expr[2] = NULL ; 
   p[0] = x ; p[1] = y ; p[2] = z ;
   agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, p, expr, 3) ;
   expr[0] = expr[1] = expr[2] = NULL ; 
-
-  /* agg_surface_axes(S) = AGG_AXES_PZ_PY_PX ; */
 
   agg_surface_umin(S) = 0.0 ; 
   agg_surface_umax(S) = 1.0 ; 
@@ -385,18 +393,34 @@ static void surface_test(void)
 static void body_test(void)
 
 {
-  gint nsec, nseg, pps, offp, offsp, offs, nsurf, i, sgn ;
-  gdouble len, rfuse, yw, zw, chord, span, taper, swle, dihedral ;
+  gint nsec, nseg, pps, offp, offsp, offs, nsurf, i, j, ninter, sgn ;
+  gdouble len, rfuse, yw, zw ;
   gdouble yf, zf, chf, spf, tpf, swf, dhf ;
   agg_surface_t **S ; 
   agg_surface_workspace_t *w ;
   agg_mesh_t *wf ;
+  agg_body_t *b ;
   agg_intersection_t **inter, **resample ;
   agg_section_t *sc, *sw ;
   agg_patch_t **P ;
   FILE *output ;
 
-  nsurf = 5 ;
+  nsurf = 3 ;
+
+  b = agg_body_new(32, 32) ;
+  
+  agg_body_global_add(b, "radius", NULL, 0.4) ;
+  agg_body_global_add(b, "len", NULL, 5) ;
+  agg_body_global_add(b, "root", NULL, 1.5) ;
+  agg_body_global_add(b, "span", "len*0.7", 5) ;
+  agg_body_global_add(b, "dihedral", "5*pi/180", 0) ;
+  agg_body_global_add(b, "sweep", "25*pi/180", 0) ;
+  agg_body_global_add(b, "taper", NULL, 0.5) ;
+
+  agg_body_globals_compile(b) ;
+  
+  agg_body_globals_eval(b) ;
+  agg_body_globals_write(stderr, b) ;
   
   S = (agg_surface_t **)g_malloc0(nsurf*sizeof(agg_surface_t *)) ;
   P = (agg_patch_t **)g_malloc0(nsurf*sizeof(agg_patch_t *)) ;
@@ -412,14 +436,15 @@ static void body_test(void)
   for ( i = 0 ; i < nsurf ; i ++ ) {
     S[i] = agg_surface_new(64) ;
     P[i] = agg_patch_new(1024) ;
+  }
+  for ( i = 0 ; i < nsurf*(nsurf-1) ; i ++ ) {
     inter[i] = agg_intersection_new(8192) ;
     resample[i] = agg_intersection_new(8192) ;
   }    
   
   rfuse = 0.4 ; len = 5.0 ;
   /*wing parameters*/
-  yw = -rfuse/4 ; zw = -1 ; chord = 1.5 ; span = 4.0 ; taper = 0.5 ;
-  swle = 15*M_PI/180 ; dihedral = 5.0*M_PI/180.0 ;
+  yw = -rfuse/4 ; zw = -1 ;
 
   /*tailplane parameters*/
   yf = rfuse/8 ; zf = 0.5*len*0.7 ;  chf = 0.4 ; spf = 1.0 ;
@@ -428,44 +453,57 @@ static void body_test(void)
   /* agg_patch_mapping(P[0]) = AGG_PATCH_SPHERICAL ; */
   agg_patch_mapping(P[0]) = AGG_PATCH_TUBULAR ;
   agg_patch_wrap_t(P[0]) = TRUE ;
-  surface_tube(S[0], 0.0, 0.0, 0.0, rfuse, len, sc) ;
+  surface_tube(S[0], 0.0, 0.0, 0.0,
+	       agg_body_globals(b), agg_body_global_number(b),
+	       sc) ;
 
   sgn = 1 ;
-  for ( i = 1 ; i < 3 ; i ++ ) {
+  for ( i = 1 ; i < MIN(3,nsurf) ; i ++ ) {
     agg_patch_mapping(P[i]) = AGG_PATCH_SPHERICAL ;
     agg_patch_wrap_t(P[i]) = TRUE ;
-    surface_wing(S[i], zw, yw, 0.0, chord, sgn*span, taper,
-		 sgn*swle, sgn*dihedral, sw) ;
-    sgn = -sgn ;
+    surface_wing(S[i], zw, yw, 0.0,
+		 agg_body_globals(b), agg_body_global_number(b),
+		 sw) ;
+    /* sgn = -sgn ; */
   }
-  for ( i = 3 ; i < 5 ; i ++ ) {
-    agg_patch_mapping(P[i]) = AGG_PATCH_SPHERICAL ;
-    agg_patch_wrap_t(P[i]) = TRUE ;
-    surface_wing(S[i], zf, yf, 0.0, chf, sgn*spf, tpf,
-		 sgn*swf, sgn*dhf, sw) ;
-    sgn = -sgn ;
-  }
+  
+  agg_surface_axes(S[2]) = AGG_AXES_PX_PY_MZ ;  
+  
+  /* for ( i = 3 ; i < 5 ; i ++ ) { */
+  /*   agg_patch_mapping(P[i]) = AGG_PATCH_SPHERICAL ; */
+  /*   agg_patch_wrap_t(P[i]) = TRUE ; */
+  /*   surface_wing(S[i], zf, yf, 0.0, chf, sgn*spf, tpf, */
+  /* 		 sgn*swf, sgn*dhf, */
+  /* 		 agg_body_globals(b), agg_body_global_number(b), sgn, */
+  /* 		 sw) ; */
+  /*   sgn = -sgn ; */
+  /* } */
 
   wf = agg_mesh_new(65536, 65536, 65536) ;
   nsec = 8 ; nseg = 65 ; pps = 2 ;
   offp = offsp = offs = 1 ;
-  /*wing intersection with body calculated in different order for each
-    wing to check handling of intersections when surfaces are added to
-    body*/
-  agg_surface_patch_intersection(inter[0], S[0], P[0], S[1], P[1], w) ;
-  agg_surface_patch_intersection(inter[1], S[2], P[2], S[0], P[0], w) ;
-  agg_surface_patch_intersection(inter[2], S[0], P[0], S[3], P[3], w) ;
-  agg_surface_patch_intersection(inter[3], S[4], P[4], S[0], P[0], w) ;
 
-  for ( i = 0 ; i < 4 ; i ++ ) {
-    fprintf(stderr, "%d intersection points detected\n",
-	    agg_patch_point_number(inter[i])) ;
+  ninter = 0 ; 
+  for ( i = 0 ; i < nsurf ; i ++ ) {
+    for ( j = i+1 ; j < nsurf ; j ++ ) {
+      agg_surface_patch_intersection(inter[ninter],
+				     S[i], P[i], S[j], P[j], w) ;
+      if ( agg_intersection_point_number(inter[ninter]) != 0 ) {
+	  fprintf(stderr,
+		  "%d intersection points between surface %d and surface %d\n",
+		  agg_intersection_point_number(inter[ninter]), i, j) ;
+	  ninter ++ ;
+      }
+    }
+  }
+  
+  for ( i = 0 ; i < ninter ; i ++ ) {
     agg_intersection_resample(inter[i], nseg, pps, resample[i], w) ;
     agg_intersection_bbox_set(resample[i]) ;
-    agg_mesh_intersection_add(wf, resample[i], nseg, pps, w) ;
+    agg_mesh_intersection_add(wf, resample[i], nseg, pps) ;
   }
 
-  for ( i = 0 ; i < 5 ; i ++ ) {
+  for ( i = 0 ; i < nsurf ; i ++ ) {
     fprintf(stderr, "adding surface %d\n", i) ;
     agg_mesh_surface_add(wf, S[i], P[i], nsec, nseg, pps, w) ;
   }
@@ -475,6 +513,74 @@ static void body_test(void)
   agg_mesh_write_gmsh(output, wf, "lc", offp, offsp, offs, FALSE) ;
   fclose(output) ;
 
+  return ;
+}
+
+static void parser_test(void)
+
+{
+  agg_body_t *b ;
+  gchar *file = "test.agg" ;
+  agg_mesh_t *m ;
+  gint i, j, ninter, nsec, nseg, pps, offp, offsp, offs ;
+  agg_intersection_t *inter[64]={NULL}, *resample[64]={NULL} ;
+  agg_surface_workspace_t *w ;
+  FILE *output ;
+  
+  b = agg_body_new(32, 32) ;
+  w = agg_surface_workspace_new() ;
+
+  agg_body_read(b, file, TRUE) ;
+
+  agg_body_globals_compile(b) ;
+  agg_body_globals_eval(b) ;
+  agg_body_globals_write(stderr, b) ;
+  fprintf(stderr, "%d surface%s\n", agg_body_surface_number(b),
+	  (agg_body_surface_number(b) > 1 ? "s" : "")) ;
+  agg_body_surfaces_list(stderr, b) ;
+
+  m = agg_mesh_new(65536, 65536, 65536) ;
+  nsec = 8 ; nseg = 65 ; pps = 2 ;
+  offp = offsp = offs = 1 ;
+
+  ninter = 0 ;
+  for ( i = 0 ; i < agg_body_surface_number(b); i ++ ) {
+    for ( j = i+1 ; j < agg_body_surface_number(b); j ++ ) {
+      if ( inter[ninter] == NULL ) {
+	inter[ninter] = agg_intersection_new(8192) ;
+	resample[ninter] = agg_intersection_new(8192) ;
+      }
+      agg_surface_patch_intersection(inter[ninter],
+				     agg_body_surface(b,i),
+				     agg_body_patch(b,i),
+				     agg_body_surface(b,j),
+				     agg_body_patch(b,j), w) ;
+      if ( agg_intersection_point_number(inter[ninter]) != 0 ) {
+	  fprintf(stderr,
+		  "%d intersection points between surface %d and surface %d\n",
+		  agg_intersection_point_number(inter[ninter]), i, j) ;
+	  ninter ++ ;
+      }
+    }
+  }
+
+  for ( i = 0 ; i < ninter ; i ++ ) {
+    agg_intersection_resample(inter[i], nseg, pps, resample[i], w) ;
+    agg_intersection_bbox_set(resample[i]) ;
+    agg_mesh_intersection_add(m, resample[i], nseg, pps) ;
+  }
+  
+  for ( i = 0 ; i < agg_body_surface_number(b); i ++ ) {
+    fprintf(stderr, "adding surface %d\n", i) ;
+    agg_mesh_surface_add(m, agg_body_surface(b,i), agg_body_patch(b,i),
+			 nsec, nseg, pps, w) ;
+  }
+
+  output = fopen("surface.geo", "w") ;
+  fprintf(output, "lc = 0.1 ;\n") ;
+  agg_mesh_write_gmsh(output, m, "lc", offp, offsp, offs, FALSE) ;
+  fclose(output) ;
+  
   return ;
 }
 
@@ -531,6 +637,12 @@ gint main(gint argc, gchar **argv)
 
   if ( test == 5 ) {
     body_test() ;
+    
+    return 0 ;
+  }
+
+  if ( test == 6 ) {
+    parser_test() ;
     
     return 0 ;
   }

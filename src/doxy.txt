@@ -6,7 +6,6 @@
  *
  */
 
-
 /**
  * @defgroup bernstein Bernstein polynomials
  *
@@ -65,9 +64,15 @@
 
 
 /**
- * @defgroup wireframe Wireframe surfaces
- *
- * @brief Wireframe representation of surfaces for export
+ * @defgroup mesh Surface meshes
+ * 
+ * @brief Generation of watertight meshes of collections of surfaces
  *
  */
 
+/**
+ * @defgroup body General bodies
+ * 
+ * @brief Bodies are made up of collections of elementary surfaces
+ *
+ */

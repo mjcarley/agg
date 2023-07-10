@@ -30,7 +30,8 @@ libagg_la_SOURCES = \
 	hefsi.h \
 	patch.c \
 	moller-tri.c \
-	mesh.c
+	mesh.c \
+	body.c
 
 include_HEADERS = \
 	agg.h

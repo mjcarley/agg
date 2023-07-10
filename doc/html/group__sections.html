@@ -48,10 +48,6 @@ $(function() {
 <table class="memberdecls">
 <tr class="memitem:ga105f0353bff693485509f3cf9bb6ae46"><td class="memItemLeft" align="right" valign="top"><a class="el" href="agg_8h.html#a8cdd164643b93d05245e9b4976f3f0cb">agg_section_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sections.html#ga105f0353bff693485509f3cf9bb6ae46">agg_section_new</a> (gint oumax, gint olmax)</td></tr>
 <tr class="separator:ga105f0353bff693485509f3cf9bb6ae46"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaa057ef58299424703a8cc0d8a16ebf03"><td class="memItemLeft" align="right" valign="top">gdouble&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sections.html#gaa057ef58299424703a8cc0d8a16ebf03">agg_section_eval</a> (<a class="el" href="agg_8h.html#a8cdd164643b93d05245e9b4976f3f0cb">agg_section_t</a> *s, gdouble x)</td></tr>
-<tr class="separator:gaa057ef58299424703a8cc0d8a16ebf03"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga1245fe64e54485282fb358081f20f2f4"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sections.html#ga1245fe64e54485282fb358081f20f2f4">agg_section_copy</a> (<a class="el" href="agg_8h.html#a8cdd164643b93d05245e9b4976f3f0cb">agg_section_t</a> *dest, <a class="el" href="agg_8h.html#a8cdd164643b93d05245e9b4976f3f0cb">agg_section_t</a> *src)</td></tr>
-<tr class="separator:ga1245fe64e54485282fb358081f20f2f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaf4798d9cfc37c3818fc2f3a2208bfb82"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sections.html#gaf4798d9cfc37c3818fc2f3a2208bfb82">agg_section_type_t</a> { <a class="el" href="group__sections.html#gaf4798d9cfc37c3818fc2f3a2208bfb82af1bfd785432453c479b9859537467b0e">AGG_SECTION_UNDEFINED</a> = 0
 , <a class="el" href="group__sections.html#gaf4798d9cfc37c3818fc2f3a2208bfb82a6cb226964b1603cd710ae92956340cf5">AGG_SECTION_AEROFOIL</a> = 1
 , <a class="el" href="group__sections.html#gaf4798d9cfc37c3818fc2f3a2208bfb82a1f2658f00e6fa1163027b28209a40cc1">AGG_SECTION_ELLIPSE</a> = 2
@@ -85,84 +81,6 @@ $(function() {
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="ga1245fe64e54485282fb358081f20f2f4" name="ga1245fe64e54485282fb358081f20f2f4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga1245fe64e54485282fb358081f20f2f4">&#9670;&nbsp;</a></span>agg_section_copy()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">gint agg_section_copy </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="agg_8h.html#a8cdd164643b93d05245e9b4976f3f0cb">agg_section_t</a> *&#160;</td>
-          <td class="paramname"><em>dest</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="agg_8h.html#a8cdd164643b93d05245e9b4976f3f0cb">agg_section_t</a> *&#160;</td>
-          <td class="paramname"><em>src</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p >Copy one surface section into another</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">dest</td><td>destination section; </td></tr>
-    <tr><td class="paramname">src</td><td>source section.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>0 on success, with <em>src</em> copied into <em>dest</em>. </dd></dl>
-
-<p class="reference">References <a class="el" href="agg_8h.html#a5378fa853984c8f6b4eab5447e1b89b7">agg_section_close</a>, <a class="el" href="agg_8h.html#a108622652317c5e32cc5b274dbd27074">agg_section_coefficient_lower</a>, <a class="el" href="agg_8h.html#a1dd337d4464caea072bc3276765574b9">agg_section_coefficient_upper</a>, <a class="el" href="agg_8h.html#ae30718f98a4e084775819bebfb7cdb01">agg_section_eta_left</a>, <a class="el" href="agg_8h.html#af4e997cbe72578421773d629c6e7e28f">agg_section_eta_right</a>, <a class="el" href="agg_8h.html#a91b05d5236f59b33c0523326b46c9740">agg_section_order_lower</a>, <a class="el" href="agg_8h.html#a10ca46c7a9c33ca79281c319a73963ba">agg_section_order_lower_max</a>, <a class="el" href="agg_8h.html#a0eac1de141f11cad7fdb472c92636318">agg_section_order_upper</a>, <a class="el" href="agg_8h.html#a132c33835221c2a5090e914fa3de337b">agg_section_order_upper_max</a>, <a class="el" href="agg_8h.html#ad48b2ab0dbe46e279e115dd3d50294b2">agg_section_trailing_edge_lower</a>, <a class="el" href="agg_8h.html#a209c0c509b1864c497b13a064114582f">agg_section_trailing_edge_upper</a>, and <a class="el" href="agg_8h.html#a77956769442ada427d64c740062b911a">agg_section_type</a>.</p>
-
-</div>
-</div>
-<a id="gaa057ef58299424703a8cc0d8a16ebf03" name="gaa057ef58299424703a8cc0d8a16ebf03"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gaa057ef58299424703a8cc0d8a16ebf03">&#9670;&nbsp;</a></span>agg_section_eval()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">gdouble agg_section_eval </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="agg_8h.html#a8cdd164643b93d05245e9b4976f3f0cb">agg_section_t</a> *&#160;</td>
-          <td class="paramname"><em>s</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">gdouble&#160;</td>
-          <td class="paramname"><em>x</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p >Evaluate a section geometry</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">s</td><td>a <a class="el" href="agg_8h.html#a8cdd164643b93d05245e9b4976f3f0cb">agg_section_t</a> containing the section data; </td></tr>
-    <tr><td class="paramname">x</td><td>evaluation point <img class="formulaInl" alt="$-1\leq x\leq 1$" src="form_2.png" width="61" height="11"/>.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd><img class="formulaInl" alt="$y=f(x)$" src="form_3.png" width="48" height="14"/> on success. An error is reported and execution ceases if <em>x</em> is out of range or the section type is undefined. </dd></dl>
-
-<p class="reference">References <a class="el" href="agg_8h.html#gaf4798d9cfc37c3818fc2f3a2208bfb82a1f2658f00e6fa1163027b28209a40cc1">AGG_SECTION_ELLIPSE</a>, <a class="el" href="agg_8h.html#a77956769442ada427d64c740062b911a">agg_section_type</a>, and <a class="el" href="agg_8h.html#gaf4798d9cfc37c3818fc2f3a2208bfb82af1bfd785432453c479b9859537467b0e">AGG_SECTION_UNDEFINED</a>.</p>
-
-</div>
-</div>
 <a id="ga105f0353bff693485509f3cf9bb6ae46" name="ga105f0353bff693485509f3cf9bb6ae46"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga105f0353bff693485509f3cf9bb6ae46">&#9670;&nbsp;</a></span>agg_section_new()</h2>
 
@@ -200,14 +118,14 @@ $(function() {
 
 <p class="reference">References <a class="el" href="agg_8h.html#a10ca46c7a9c33ca79281c319a73963ba">agg_section_order_lower_max</a>, <a class="el" href="agg_8h.html#a132c33835221c2a5090e914fa3de337b">agg_section_order_upper_max</a>, and <a class="el" href="agg_8h.html#a8cdd164643b93d05245e9b4976f3f0cb">agg_section_t</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="agg_8h.html#a024e7cbe995df9bc519a77525bf8b639">agg_surface_workspace_new()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="agg_8h.html#a672b47160f046ee778113a960bf50354">agg_body_read()</a>, and <a class="el" href="agg_8h.html#a024e7cbe995df9bc519a77525bf8b639">agg_surface_workspace_new()</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jun 7 2023 17:54:46 for AGG by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Mon Jul 10 2023 17:58:17 for AGG by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>
