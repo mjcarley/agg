@@ -33,6 +33,7 @@ const gchar *tests[] = {"bernstein",
 			"surface",
 			"body",
 			"parser",
+			"ico",
 			""} ;
 
 static void surface_sphere(agg_surface_t *S, gdouble x, gdouble y, gdouble z,
@@ -393,9 +394,9 @@ static void surface_test(void)
 static void body_test(void)
 
 {
-  gint nsec, nseg, pps, offp, offsp, offs, nsurf, i, j, ninter, sgn ;
-  gdouble len, rfuse, yw, zw ;
-  gdouble yf, zf, chf, spf, tpf, swf, dhf ;
+  gint nsec, nseg, pps, offp, offsp, offs, nsurf, i, j, ninter ;
+  gdouble rfuse, yw, zw ;
+  /* gdouble yf, zf, chf, spf, tpf, swf, dhf ; */
   agg_surface_t **S ; 
   agg_surface_workspace_t *w ;
   agg_mesh_t *wf ;
@@ -442,13 +443,14 @@ static void body_test(void)
     resample[i] = agg_intersection_new(8192) ;
   }    
   
-  rfuse = 0.4 ; len = 5.0 ;
+  rfuse = 0.4 ;
+  /* len = 5.0 ; */
   /*wing parameters*/
   yw = -rfuse/4 ; zw = -1 ;
 
   /*tailplane parameters*/
-  yf = rfuse/8 ; zf = 0.5*len*0.7 ;  chf = 0.4 ; spf = 1.0 ;
-  tpf = 0.9 ; swf = 18*M_PI/180 ; dhf = 3.0*M_PI/180.0 ;
+  /* yf = rfuse/8 ; zf = 0.5*len*0.7 ;  chf = 0.4 ; spf = 1.0 ; */
+  /* tpf = 0.9 ; swf = 18*M_PI/180 ; dhf = 3.0*M_PI/180.0 ; */
   
   /* agg_patch_mapping(P[0]) = AGG_PATCH_SPHERICAL ; */
   agg_patch_mapping(P[0]) = AGG_PATCH_TUBULAR ;
@@ -457,14 +459,12 @@ static void body_test(void)
 	       agg_body_globals(b), agg_body_global_number(b),
 	       sc) ;
 
-  sgn = 1 ;
   for ( i = 1 ; i < MIN(3,nsurf) ; i ++ ) {
     agg_patch_mapping(P[i]) = AGG_PATCH_SPHERICAL ;
     agg_patch_wrap_t(P[i]) = TRUE ;
     surface_wing(S[i], zw, yw, 0.0,
 		 agg_body_globals(b), agg_body_global_number(b),
 		 sw) ;
-    /* sgn = -sgn ; */
   }
   
   agg_surface_axes(S[2]) = AGG_AXES_PX_PY_MZ ;  
@@ -516,11 +516,10 @@ static void body_test(void)
   return ;
 }
 
-static void parser_test(void)
+static void parser_test(gchar *file)
 
 {
   agg_body_t *b ;
-  gchar *file = "test.agg" ;
   agg_mesh_t *m ;
   gint i, j, ninter, nsec, nseg, pps, offp, offsp, offs ;
   agg_intersection_t *inter[64]={NULL}, *resample[64]={NULL} ;
@@ -556,10 +555,10 @@ static void parser_test(void)
 				     agg_body_surface(b,j),
 				     agg_body_patch(b,j), w) ;
       if ( agg_intersection_point_number(inter[ninter]) != 0 ) {
-	  fprintf(stderr,
-		  "%d intersection points between surface %d and surface %d\n",
-		  agg_intersection_point_number(inter[ninter]), i, j) ;
-	  ninter ++ ;
+	fprintf(stderr,
+		"%d intersection points between surface %d and surface %d\n",
+		agg_intersection_point_number(inter[ninter]), i, j) ;
+	ninter ++ ;
       }
     }
   }
@@ -584,18 +583,71 @@ static void parser_test(void)
   return ;
 }
 
+static void ico_test(void)
+
+{
+  gdouble st[24], u, v, p[3], x[3] ;
+  gint e[60], i ;
+  agg_patch_t *P ;
+  agg_surface_t *S ;
+  agg_transform_t *T ;
+  agg_section_t *s ;
+  gchar *expr[8] = {NULL} ;
+  agg_surface_workspace_t *w ;
+  
+  S = agg_surface_new(64) ;
+  P = agg_patch_new(1024) ;
+  agg_patch_mapping(P) = AGG_PATCH_SPHERICAL ;
+  agg_patch_wrap_t(P) = TRUE ;
+  w = agg_surface_workspace_new() ;
+  s = agg_section_new(32, 32) ;
+  agg_section_set_circle(s) ;
+
+  agg_surface_section_add(S, s, 0) ;
+  T = agg_surface_transform(S) ;
+  /*centre on (0,0): circle of radius 1/2*/
+  p[0] = -0.5 ; p[1] = 0 ; p[2] = 0 ;
+  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, p, expr, 3) ;
+  /*scale circle radius along z axis: circle of radius 1/2 at u=1/2 */
+  p[0] =  0.0 ; p[1] = 0.0 ;
+  expr[2] = "2*sqrt(u*(1-u))" ;
+  agg_transform_operator_add(T, AGG_TRANSFORM_SHRINK, p, expr, 3) ;
+  /*shift centre to z=0*/
+  p[0] =  0.0 ; p[1] = 0 ; p[2] = 0 ;
+  expr[2] = "u" ;
+  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, p, expr, 3) ;
+
+  agg_surface_umin(S) = 0.0 ; 
+  agg_surface_umax(S) = 1.0 ; 
+  agg_expression_data_compile(T->e) ;
+  agg_transform_expressions_compile(T) ;
+
+  agg_surface_weights_make(S) ;
+  
+  agg_sphere_ico_base(&(st[1]), 2, &(st[0]), 2, e, 2, TRUE) ;
+
+  for ( i = 0 ; i < 12 ; i ++ ) {
+    agg_patch_map(P, st[2*i+0], st[2*i+1], &u, &v) ;
+    agg_surface_point_eval(S, u, v, x, w) ;
+    fprintf(stdout, "%e %e %e\n", x[0], x[1], x[2]) ;
+  }
+  
+  return ;
+}
+
 gint main(gint argc, gchar **argv)
 
 {
-  gchar ch, *progname ;
+  gchar ch, *progname, *file = "test.agg" ;
   gint test ;
 
   progname = g_strdup(g_path_get_basename(argv[0])) ;
   test = -1 ;
   
-  while ( (ch = getopt(argc, argv, "T:")) != EOF ) {
+  while ( (ch = getopt(argc, argv, "i:T:")) != EOF ) {
     switch (ch) {
     default: g_assert_not_reached() ; break ;
+    case 'i': file = g_strdup(optarg) ; break ;
     case 'T': test = parse_test(optarg) ; break ;
     }
   }
@@ -642,7 +694,13 @@ gint main(gint argc, gchar **argv)
   }
 
   if ( test == 6 ) {
-    parser_test() ;
+    parser_test(file) ;
+    
+    return 0 ;
+  }
+
+  if ( test == 7 ) {
+    ico_test() ;
     
     return 0 ;
   }

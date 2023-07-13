@@ -216,11 +216,13 @@ struct _agg_expression_data_t {
  */
 
 typedef enum {
-  AGG_TRANSFORM_UNDEFINED = 0,	/**< undefined transform */
-  AGG_TRANSFORM_ROTATE    = 1,  /**< anti-clockwise rotation about a point */
-  AGG_TRANSFORM_SHRINK    = 2,	/**< scaling by contracting towards a point */
-  AGG_TRANSFORM_TRANSLATE = 3,	/**< translation in three dimensions */
-  AGG_TRANSFORM_SCALE     = 4	/**< scaling by multiplying a constant factor */
+  AGG_TRANSFORM_UNDEFINED = 0, /**< undefined transform */
+  AGG_TRANSFORM_ROTATE    = 1, /**< anti-clockwise rotation about a point */
+  AGG_TRANSFORM_SHRINK    = 2, /**< scaling by contracting towards a point */
+  AGG_TRANSFORM_TRANSLATE = 3, /**< translation in three dimensions */
+  AGG_TRANSFORM_SCALE     = 4, /**< scaling by multiplying a constant factor */
+  AGG_TRANSFORM_SCALE_X   = 5, /**< scaling in x multiplying a constant factor */
+  AGG_TRANSFORM_SCALE_Y   = 6  /**< scaling in y multiplying a constant factor */
 } agg_operation_t ;
 
 typedef gint (*agg_transform_operator_func_t)(agg_operation_t op,
@@ -409,15 +411,16 @@ struct _agg_patch_t {
   agg_patch_mapping_t map ;
   gdouble *st ;
   gint nst, nstmax ;
-  gboolean swrap, twrap ; /*dealing with s and t out of range*/
+  gboolean swrap, twrap,  /*dealing with s and t out of range*/
+    invert ; /*invert triangles to maintain correct normal*/
 } ;
 
-#define agg_patch_point_number(_p)      ((_p)->nst)
-#define agg_patch_point_number_max(_p)  ((_p)->nstmax)
-#define agg_patch_mapping(_p)           ((_p)->map)
-#define agg_patch_wrap_s(_p)            ((_p)->swrap)
-#define agg_patch_wrap_t(_p)            ((_p)->twrap)
-
+#define agg_patch_point_number(_P)      ((_P)->nst)
+#define agg_patch_point_number_max(_P)  ((_P)->nstmax)
+#define agg_patch_mapping(_P)           ((_P)->map)
+#define agg_patch_wrap_s(_P)            ((_P)->swrap)
+#define agg_patch_wrap_t(_P)            ((_P)->twrap)
+#define agg_patch_invert(_P)            ((_P)->invert)
 #endif /*DOXYGEN*/
 
 /**
@@ -453,6 +456,10 @@ struct _agg_intersection_t {
 #define agg_intersection_surface2(_i) ((_i)->S[1])
 #define agg_intersection_patch1(_i) ((_i)->P[0])
 #define agg_intersection_patch2(_i) ((_i)->P[1])
+#define agg_intersection_point_s(_i,_j,_c)		\
+  ((_i)->st[AGG_INTERSECTION_DATA_SIZE*(_j)+2*(_c)+0])
+#define agg_intersection_point_t(_i,_j,_c)		\
+  ((_i)->st[AGG_INTERSECTION_DATA_SIZE*(_j)+2*(_c)+1])
 #define agg_intersection_point_s1(_i,_j)	\
   ((_i)->st[AGG_INTERSECTION_DATA_SIZE*(_j)+0])
 #define agg_intersection_point_t1(_i,_j)	\
@@ -641,6 +648,12 @@ gint agg_transform_operator_shrink(agg_operation_t op,
 gint agg_transform_operator_scale(agg_operation_t op,
 				  agg_variable_t *p, gint np,
 				  gdouble *xin, gdouble *xout) ;
+gint agg_transform_operator_xscale(agg_operation_t op,
+				   agg_variable_t *p, gint np,
+				   gdouble *xin, gdouble *xout) ;
+gint agg_transform_operator_yscale(agg_operation_t op,
+				   agg_variable_t *p, gint np,
+				   gdouble *xin, gdouble *xout) ;
 gint agg_transform_axes(agg_axes_t axes, gdouble *xin, gdouble *xout) ;
 gint agg_transform_parse(agg_transform_t *T,  gchar *name,
 			 agg_variable_t *p, gint np) ;
@@ -720,6 +733,10 @@ gint agg_body_globals_eval(agg_body_t *b) ;
 gint agg_body_read(agg_body_t *b, gchar *file, gboolean echo) ;
 gint agg_body_surface_add(agg_body_t *b, agg_surface_t *S, agg_patch_t *P) ;
 gint agg_body_surfaces_list(FILE *f, agg_body_t *b) ;
+
+gint agg_sphere_ico_base(gdouble *th, gint tstr,
+			 gdouble *ph, gint pstr,
+			 gint *e, gint estr, gboolean convert) ;
 
 #endif /*__AGG_H_INCLUDED__*/
 

@@ -8,8 +8,8 @@ global {
  sweep = "25*pi/180"
  taper = 0.5
  twist = "15*pi/180"
- xle = "0.25*len"
- yle = "-radius/2"
+ xle = "0.35*len"
+ yle = "-0.5*radius"
 }
 
 surface {
@@ -18,12 +18,13 @@ surface {
   section(0.3, "aerofoil", 0.5, 0.12, 0.0)
   section(0.9, "aerofoil", 0.5, 0.08, 0.0)
   transform("shrink", 0, 0, "1+u*(taper-1)")
-  transform("rotate", 0, 0, "twist*u")
+  transform("yscale", "(1-u)^(1/8)")  
   transform("scale", "root")
+  transform("rotate", 0, 0, "twist*u")
   transform("translate", "xle + span*sin(sweep)*u",
   			 "yle+span*sin(dihedral)*u",
 			 "span/1000 + span*u")
-  patch("spherical", "nowrap", "wrap")
+  patch("tubular", "nowrap", "wrap")
 }
 
 surface {
@@ -31,21 +32,25 @@ surface {
   section(0, "aerofoil", 0.5, 0.2, 0.0)
   section(0.3, "aerofoil", 0.5, 0.12, 0.0)
   section(0.9, "aerofoil", 0.5, 0.08, 0.0)
-  transform("shrink", 0, 0, "1+u*(taper-1)")
+  transform("shrink", 0, 0, "1+u*(taper-1)")  
+  transform("yscale", "(1-u)^(1/8)")  
   transform("scale", "root")
   transform("translate", "xle + span*sin(sweep)*u",
   			 "yle + span*sin(dihedral)*u",
   	    		 "span/1000 + span*u")
-  patch("spherical", "nowrap", "wrap")
-  axes("xy-z")
+  # patch requires inversion because of the axis transformation below
+  patch("tubular", "nowrap", "wrap", "invert")
+  #patch("spherical", "nowrap", "wrap")  
+  axes("+x+y-z")
 }
-
+ 
 surface {
   name("fuselage")
   section(0, "circle")
   transform("translate", -0.5, 0, 0)
   transform("scale", "2*radius")
+  transform("scale", "u^(0.25)*(1-u)^0.125")
   transform("translate", 0, 0, "len*u")
-  patch("tubular", "nowrap", "wrap")
+  patch("spherical", "nowrap", "wrap")
   axes("zxy")
 }

@@ -518,6 +518,11 @@ void _agg_surface_read(GScanner *scanner, agg_body_t *b, gboolean echo,
     }
   }
 
+  /*sanity check*/
+  if ( agg_surface_section_number(S) == 0 )
+    g_error("%s: on line %u, surface contains no section data",
+	    __FUNCTION__, g_scanner_cur_line(scanner)) ;
+  
   if ( echo )
     fprintf(stderr, "line %u: surface read\n", g_scanner_cur_line(scanner)) ;
   g_scanner_get_next_token(scanner) ;
@@ -728,7 +733,8 @@ gint agg_body_read(agg_body_t *b, gchar *file, gboolean echo)
   
   scanner = g_scanner_new(NULL) ;
   scanner->config->int_2_float = TRUE ;
-
+  scanner->config->scan_identifier_1char = TRUE ;
+  
   data[PARSER_DATA_SECTION] = agg_section_new(64, 64) ;
   
   fd = open(file, O_RDONLY) ;

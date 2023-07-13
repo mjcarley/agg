@@ -37,6 +37,8 @@ static const struct {
     {"shrink",    agg_transform_operator_shrink,    AGG_TRANSFORM_SHRINK   , 3},
     {"translate", agg_transform_operator_translate, AGG_TRANSFORM_TRANSLATE, 3},
     {"scale",     agg_transform_operator_scale,     AGG_TRANSFORM_SCALE    , 1},
+    {"xscale",    agg_transform_operator_xscale,    AGG_TRANSFORM_SCALE_X  , 1},
+    {"yscale",    agg_transform_operator_yscale,    AGG_TRANSFORM_SCALE_Y  , 1},
     {NULL,        NULL, -1, -1}
   } ;
 
@@ -491,6 +493,44 @@ gint agg_transform_operator_scale(agg_operation_t op,
   xout[0] = xin[0]*sc ;
   xout[1] = xin[1]*sc ;
   xout[2] = xin[2]*sc ;
+
+  return 0 ;
+}
+
+gint agg_transform_operator_xscale(agg_operation_t op,
+				   agg_variable_t *p, gint np,
+				   gdouble *xin, gdouble *xout)
+
+{
+  gdouble sc ;
+  
+  g_assert(np == 1) ;
+  g_assert(op == AGG_TRANSFORM_SCALE_X) ;
+
+  sc = p[0].val ;
+
+  xout[0] = xin[0]*sc ;
+  xout[1] = xin[1] ;
+  xout[2] = xin[2] ;
+
+  return 0 ;
+}
+
+gint agg_transform_operator_yscale(agg_operation_t op,
+				   agg_variable_t *p, gint np,
+				   gdouble *xin, gdouble *xout)
+
+{
+  gdouble sc ;
+  
+  g_assert(np == 1) ;
+  g_assert(op == AGG_TRANSFORM_SCALE_Y) ;
+
+  sc = p[0].val ;
+
+  xout[0] = xin[0] ;
+  xout[1] = xin[1]*sc ;
+  xout[2] = xin[2] ;
 
   return 0 ;
 }

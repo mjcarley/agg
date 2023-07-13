@@ -31,7 +31,8 @@ libagg_la_SOURCES = \
 	patch.c \
 	moller-tri.c \
 	mesh.c \
-	body.c
+	body.c \
+	ico.c
 
 include_HEADERS = \
 	agg.h

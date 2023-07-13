@@ -7,31 +7,19 @@
 # distribution block(s) contain(s) description of geometry as
 # parameterized patches
 #
-
 global {
-# syntax: <identifier> = "<expression>" (quotes required for non-numeric values)
-  D = 1.0
+  radius = 1
   n1 = 0.5
   n2 = 0.5
 }
 
-body("sphere")
+surface
 
 {
-  grid(16384, 32768)
-  {
-    invert()
-    hemispherical(1)
-  }
-
-  distribution("ball", 0, 1, 32, "cosine")
-
-  {
-    shape("ellipse", -1, 1, n1, n2) ;    
-    ##transform("shrink", 0.5, 0.0, "sqrt(s*(1-s))")
-    transform("shrink", 0.5, 0.0, "sqrt(s/2*(1-s/2))")
-    transform("scale", "2*D")
-    transform("shift", "-D", 0.0, "D*s")
-
-  }
+  name("sphere") 
+  patch("spherical", "nowrap", "wrap")
+  section(0, "circle")
+  transform("translate", -0.5, 0, 0)
+  transform("scale", "2*radius*sqrt(u*(1-u))")
+  transform("translate", 0, 0, "radius*u")
 }
