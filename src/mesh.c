@@ -892,15 +892,11 @@ gint agg_mesh_surface_add(agg_mesh_t *msh,
   gint ncap = 4 ;
   gdouble del = 0.0625 ;
   gdouble s0, t0, s1, t1, s2, t2 ;
-  /* del = 0 ; */
   
   isurf = agg_mesh_surface_number(msh) ;
   agg_mesh_patch(msh,isurf) = P ;
   agg_mesh_surface(msh,isurf) = S ;
   agg_mesh_surface_number(msh) ++ ;
-
-  /* ninter = 0 ; */
-  /* surface_intersections(msh, S, inter, &ninter) ; */
 
   /*maximum number of boundary points*/
   nbpts = 1024 ;
@@ -1139,6 +1135,77 @@ gint agg_mesh_surface_point_add(agg_mesh_t *m, gint surf,
   return np ;
 }
 
+/** 
+ * Mesh a ::agg_body_t containing a collection of
+ * (possibly-intersecting) surfaces
+ * 
+ * @param m an ::agg_mesh_t to contain mesh on output;
+ * @param b body to be meshed;
+ * @param nsec number of sections to generate on each surface of \a b;
+ * @param nsp number of splines on each section;
+ * @param pps number of points per spline;
+ * @param w workspace for surface evaluation.
+ * 
+ * @return 0 on success.
+ */
+
+gint agg_mesh_body(agg_mesh_t *m, agg_body_t *b,
+		   gint nsec, gint nsp, gint pps,
+		   agg_surface_workspace_t *w)
+
+{
+  gint i, j ;
+  agg_intersection_t *inter, *resample ;
+
+  inter    = agg_intersection_new(8192) ;
+  resample = agg_intersection_new(8192) ;
+  for ( i = 0 ; i < agg_body_surface_number(b); i ++ ) {
+    for ( j = i+1 ; j < agg_body_surface_number(b); j ++ ) {
+      agg_surface_patch_intersection(inter,
+				     agg_body_surface(b,i),
+				     agg_body_patch(b,i),
+				     agg_body_surface(b,j),
+				     agg_body_patch(b,j), w) ;
+      if ( agg_intersection_point_number(inter) != 0 ) {
+	agg_intersection_resample(inter, nsp, pps, resample, w) ;
+	agg_intersection_bbox_set(resample) ;
+	agg_mesh_intersection_add(m, resample, nsp, pps) ;
+	inter    = agg_intersection_new(8192) ;
+	resample = agg_intersection_new(8192) ;
+      }
+    }
+  }
+  
+  for ( i = 0 ; i < agg_body_surface_number(b); i ++ ) {
+    agg_mesh_surface_add(m, agg_body_surface(b,i), agg_body_patch(b,i),
+			 nsec, nsp, pps, w) ;
+  }
+
+  return 0 ;
+}
+
+gint agg_mesh_element_nodes(agg_mesh_t *m, gint e,
+			    gint *nodes, gint *nnodes, gint *s)
+
+{
+  gint i, *el, *sp, len ;
+
+  el = agg_mesh_element(m, e) ;
+  *nnodes = agg_mesh_element_size(el) ;
+
+  for ( i = 0 ; i < (*nnodes) ; i ++ ) {
+    sp = agg_mesh_spline(m, el[i]) ;
+    len = agg_mesh_spline_length(m, ABS(el[i])) ;
+    if ( el[i] > 0 ) {
+      nodes[i] = sp[0] ;
+    } else {
+      nodes[i] = sp[len-1] ;
+    }
+    *s = agg_mesh_point_tag(m, nodes[i]) ;
+  }
+  
+  return 0 ;
+}
 
 /**
  * @}

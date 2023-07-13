@@ -521,8 +521,8 @@ static void parser_test(gchar *file)
 {
   agg_body_t *b ;
   agg_mesh_t *m ;
-  gint i, j, ninter, nsec, nseg, pps, offp, offsp, offs ;
-  agg_intersection_t *inter[64]={NULL}, *resample[64]={NULL} ;
+  gint i, j, ninter, nsec, nsp, pps, offp, offsp, offs ;
+  agg_intersection_t *inter, *resample ;
   agg_surface_workspace_t *w ;
   FILE *output ;
   
@@ -539,41 +539,40 @@ static void parser_test(gchar *file)
   agg_body_surfaces_list(stderr, b) ;
 
   m = agg_mesh_new(65536, 65536, 65536) ;
-  nsec = 8 ; nseg = 65 ; pps = 2 ;
+  nsec = 8 ; nsp = 65 ; pps = 2 ;
   offp = offsp = offs = 1 ;
 
-  ninter = 0 ;
-  for ( i = 0 ; i < agg_body_surface_number(b); i ++ ) {
-    for ( j = i+1 ; j < agg_body_surface_number(b); j ++ ) {
-      if ( inter[ninter] == NULL ) {
-	inter[ninter] = agg_intersection_new(8192) ;
-	resample[ninter] = agg_intersection_new(8192) ;
-      }
-      agg_surface_patch_intersection(inter[ninter],
-				     agg_body_surface(b,i),
-				     agg_body_patch(b,i),
-				     agg_body_surface(b,j),
-				     agg_body_patch(b,j), w) ;
-      if ( agg_intersection_point_number(inter[ninter]) != 0 ) {
-	fprintf(stderr,
-		"%d intersection points between surface %d and surface %d\n",
-		agg_intersection_point_number(inter[ninter]), i, j) ;
-	ninter ++ ;
-      }
-    }
-  }
-
-  for ( i = 0 ; i < ninter ; i ++ ) {
-    agg_intersection_resample(inter[i], nseg, pps, resample[i], w) ;
-    agg_intersection_bbox_set(resample[i]) ;
-    agg_mesh_intersection_add(m, resample[i], nseg, pps) ;
-  }
+  agg_mesh_body(m, b, nsec, nsp, pps, w) ;
   
-  for ( i = 0 ; i < agg_body_surface_number(b); i ++ ) {
-    fprintf(stderr, "adding surface %d\n", i) ;
-    agg_mesh_surface_add(m, agg_body_surface(b,i), agg_body_patch(b,i),
-			 nsec, nseg, pps, w) ;
-  }
+  /* ninter = 0 ; */
+  /* inter    = agg_intersection_new(8192) ; */
+  /* resample = agg_intersection_new(8192) ; */
+  /* for ( i = 0 ; i < agg_body_surface_number(b); i ++ ) { */
+  /*   for ( j = i+1 ; j < agg_body_surface_number(b); j ++ ) { */
+  /*     agg_surface_patch_intersection(inter, */
+  /* 				     agg_body_surface(b,i), */
+  /* 				     agg_body_patch(b,i), */
+  /* 				     agg_body_surface(b,j), */
+  /* 				     agg_body_patch(b,j), w) ; */
+  /*     if ( agg_intersection_point_number(inter) != 0 ) { */
+  /* 	fprintf(stderr, */
+  /* 		"%d intersection points between surface %d and surface %d\n", */
+  /* 		agg_intersection_point_number(inter), i, j) ; */
+  /* 	agg_intersection_resample(inter, nsp, pps, resample, w) ; */
+  /* 	agg_intersection_bbox_set(resample) ; */
+  /* 	agg_mesh_intersection_add(m, resample, nsp, pps) ; */
+  /* 	inter    = agg_intersection_new(8192) ; */
+  /* 	resample = agg_intersection_new(8192) ; */
+  /* 	ninter ++ ; */
+  /*     } */
+  /*   } */
+  /* } */
+  
+  /* for ( i = 0 ; i < agg_body_surface_number(b); i ++ ) { */
+  /*   fprintf(stderr, "adding surface %d\n", i) ; */
+  /*   agg_mesh_surface_add(m, agg_body_surface(b,i), agg_body_patch(b,i), */
+  /* 			 nsec, nsp, pps, w) ; */
+  /* } */
 
   output = fopen("surface.geo", "w") ;
   fprintf(output, "lc = 0.1 ;\n") ;

@@ -725,6 +725,12 @@ gint agg_mesh_spline_from_endpoints(agg_mesh_t *w, gint p0, gint p1) ;
 gint agg_mesh_surface_point_add(agg_mesh_t *w, gint surf,
 				gdouble s, gdouble t,
 				agg_surface_workspace_t *ws) ;
+gint agg_mesh_body(agg_mesh_t *m, agg_body_t *b,
+		   gint nsec, gint nsp, gint pps,
+		   agg_surface_workspace_t *w) ;
+gint agg_mesh_element_nodes(agg_mesh_t *m, gint e,
+			    gint *nodes, gint *nnodes, gint *s) ;
+
 agg_body_t *agg_body_new(gint ngmax, gint nsmax) ;
 gint agg_body_global_add(agg_body_t *b, gchar *var, gchar *def, gdouble val) ;
 gint agg_body_globals_write(FILE *f, agg_body_t *b) ;
