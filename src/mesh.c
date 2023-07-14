@@ -393,7 +393,11 @@ gint agg_mesh_intersection_add(agg_mesh_t *m,
 
   ni = agg_mesh_intersection_number(m) ;
   agg_mesh_intersection(m, ni) = inter ;
+  
+  agg_mesh_intersection_number(m) ++ ;
 
+  return 0 ;
+  
   g_assert(agg_intersection_point_number(inter) == nsp*(pps-1) + 1) ;
 
   np0 = agg_mesh_point_number(m) ;
@@ -453,22 +457,6 @@ static void reset_triangleio(triangleio *io)
   return ;
 }
 
-/* static void add_segments(gint *segments, gint *nseg, gint nst, gint n) */
-
-/* { */
-/*   gint i ; */
-
-/*   for ( i = 0 ; i < n-1 ; i ++ ) { */
-/*     segments[2*(*nseg)+0] = nst+i+0 ; segments[2*(*nseg)+1] = nst+i+1 ; */
-/*     (*nseg) ++ ; */
-/*   } */
-/*   i = n-1 ; */
-/*   segments[2*(*nseg)+0] = nst+i ; segments[2*(*nseg)+1] = nst+0 ; */
-/*   (*nseg) ++ ; */
-  
-/*   return ; */
-/* } */
-
 static void add_point(gdouble *st, gint *nst, gdouble s, gdouble t)
 
 {
@@ -478,32 +466,6 @@ static void add_point(gdouble *st, gint *nst, gdouble s, gdouble t)
   
   return ;
 }
-
-/* static void interp_segments(gdouble s0, gdouble t0, */
-/* 			    gdouble s1, gdouble t1, gint ns, */
-/* 			    gdouble *st, gint *nst, */
-/* 			    gint *segments, gint *segmentmarkers, */
-/* 			    gint *nseg) */
-
-/* { */
-/*   gdouble s ; */
-/*   gint i ; */
-/*   /\*interpolate points from (s0,t0) to (s1,t1), with segments as */
-/*     required: first point on line must be last entry in st*\/ */
-
-/*   for ( i = 1 ; i <= ns ; i ++ ) { */
-/*     s = (gdouble)i/ns ; */
-/*     segments[2*(*nseg)+0] = (*nst)-1 ; */
-/*     segments[2*(*nseg)+1] = (*nst)   ; */
-/*     /\* segmentmarkers[(*nseg)] = tag ; *\/ */
-/*     (*nseg) ++ ; */
-/*     st[2*(*nst)+0] = s0 + s*(s1 - s0) ; */
-/*     st[2*(*nst)+1] = t0 + s*(t1 - t0) ; */
-/*     (*nst) ++ ; */
-/*   } */
-  
-/*   return ; */
-/* } */
 
 #define CONTACT_DATA_SIZE 5
 
@@ -698,8 +660,6 @@ static void set_boundary(agg_mesh_t *m, gint isurf,
   for ( i = nc = nh = 0 ; i < agg_mesh_intersection_number(m) ; i ++ ) {
     edge_contacts(m, isurf, i, contacts, &nc, iholes, &nh) ;
   }
-
-  /* g_assert(nh + nc == agg_mesh_intersection_number(m)) ; */
   
   /*single intersections only for now*/
   g_assert(nc == 1 || nc == 0) ;
@@ -765,18 +725,21 @@ static void set_boundary(agg_mesh_t *m, gint isurf,
       iS = agg_mesh_intersection(m, inter) ;
       /* pps = agg_mesh_intersection_points_per_spline(m,inter) ; */
       c     = epoints[i*CONTACT_DATA_SIZE+4] ;
+      g_assert(iS->S[c] == m->S[isurf]) ;
       j0 = epoints[(i+0)*CONTACT_DATA_SIZE+3] ;
       j1 = epoints[(i+1)*CONTACT_DATA_SIZE+3] ;
       if ( j0 < j1 ) {
-	for ( j = j0+1 ; j <= j1 ; j ++ )
+	for ( j = j0 ; j <= j1 ; j ++ )
 	  add_point(st, nst,
 		    agg_intersection_point_s(iS, j, c),
 		    agg_intersection_point_t(iS, j, c)) ;
+	(*nst) -- ;
       } else {
-	for ( j = j0-1 ; j >= j1 ; j -- )
+	for ( j = j0 ; j >= j1 ; j -- )
 	  add_point(st, nst,
 		    agg_intersection_point_s(iS, j, c),
-		    agg_intersection_point_t(iS, j, c)) ;	  
+		    agg_intersection_point_t(iS, j, c)) ;
+	(*nst) -- ;
       }
     } else {
       /*corner point*/
@@ -828,16 +791,6 @@ static void set_boundary(agg_mesh_t *m, gint isurf,
   
   return ;
 }
-
-/* static void triangle_add_point(triangleio *in, gdouble s, gdouble t) */
-
-/* { */
-/*   in->pointlist[(in->numberofpoints*2+0)] = s ; */
-/*   in->pointlist[(in->numberofpoints*2+1)] = t ; */
-/*   in->numberofpoints += 1 ; */
-
-/*   return ; */
-/* } */
 
 static gboolean boundary_point(gint *b, gint nb, gint p)
 
@@ -892,6 +845,7 @@ gint agg_mesh_surface_add(agg_mesh_t *msh,
   gint ncap = 4 ;
   gdouble del = 0.0625 ;
   gdouble s0, t0, s1, t1, s2, t2 ;
+  del = 0 ;
   
   isurf = agg_mesh_surface_number(msh) ;
   agg_mesh_patch(msh,isurf) = P ;
@@ -907,7 +861,7 @@ gint agg_mesh_surface_add(agg_mesh_t *msh,
   nbpts = MAX(nbpts, 2048) ;
   
   ctx = triangle_context_create() ;
-  triangle_context_options(ctx, "pzqa0.002");
+  triangle_context_options(ctx, "pzqa0.02");
   /* triangle_context_options(ctx, "czqa0.001"); */
   reset_triangleio(&in);
 
@@ -919,7 +873,7 @@ gint agg_mesh_surface_add(agg_mesh_t *msh,
 
   in.numberofpoints = in.numberofsegments = 0 ;
   in.numberofholes = 0 ;
- 
+
   set_boundary(msh, isurf,
 	       in.pointlist, &(in.numberofpoints),
 	       in.segmentlist, &(in.numberofsegments),
@@ -937,6 +891,7 @@ gint agg_mesh_surface_add(agg_mesh_t *msh,
 
   traversalinit(&m->vertices);
   vertexnumber = b->firstnumber;
+  g_assert(vertexnumber == 0) ;
   vertexloop = vertextraverse(m);
   np0 = agg_mesh_point_number(msh) ;
   nbound = 0 ;
@@ -973,8 +928,8 @@ gint agg_mesh_surface_add(agg_mesh_t *msh,
 	dest(triangleloop, p2);
 	i0 = vertexmark(p1) ; i1 = vertexmark(p2) ;
 	j0 = i0 + np0 ; j1 = i1 + np0 ; 
-	i0 += np0 ; i1 += np0 ;
-	agg_mesh_spline_interp_points(msh, isurf, i0, i1, pps, w) ;
+	/* i0 += np0 ; i1 += np0 ; */
+	agg_mesh_spline_interp_points(msh, isurf, j0, j1, pps, w) ;
 	sp = agg_mesh_spline(msh,agg_mesh_spline_number(msh)-1) ;
 	sp[0] = j0 ; sp[pps-1] = j1 ;
 	edgenumber++;
@@ -1018,13 +973,12 @@ gint agg_mesh_surface_add(agg_mesh_t *msh,
     triangleloop.tri = triangletraverse(m);
     elementnumber++;
   }
-
-  if ( agg_patch_mapping(P) == AGG_PATCH_TUBULAR ||
-       agg_patch_mapping(P) == AGG_PATCH_BILINEAR ) {
   
-    triangle_context_destroy(ctx) ;
-    return 0 ;
-  }
+  triangle_context_destroy(ctx) ;
+  if ( agg_patch_mapping(P) == AGG_PATCH_TUBULAR ||
+       agg_patch_mapping(P) == AGG_PATCH_BILINEAR ) return 0 ;
+
+  if ( del == 0 ) return 0 ;
   
   /*add the end cap to deal with singularity on surfaces*/
   for ( i = 1 ; i < agg_mesh_spline_number(msh) ; i ++ ) {
@@ -1057,8 +1011,6 @@ gint agg_mesh_surface_add(agg_mesh_t *msh,
       
     }
   }
-  
-  triangle_context_destroy(ctx) ;
   
   return 0 ;
 }
@@ -1129,6 +1081,7 @@ gint agg_mesh_surface_point_add(agg_mesh_t *m, gint surf,
   }
   agg_surface_point_eval(S, u, v, p, w) ;    
   p[3] = s ; p[4] = t ;
+  agg_mesh_point_tag(m,np) = surf ;
 
   agg_mesh_point_number(m) ++ ;
   
@@ -1184,24 +1137,50 @@ gint agg_mesh_body(agg_mesh_t *m, agg_body_t *b,
   return 0 ;
 }
 
+/** 
+ * Find the oriented nodes of an element in an ::agg_mesh_t
+ * 
+ * @param m mesh containing elements to be queried;
+ * @param e element index;
+ * @param nodes on exit contains nodes of element \e in cyclic order;
+ * @param nnodes on exit contains number of nodes in \a nodes;
+ * @param s index in \a m of surface containing nodes.
+ * 
+ * @return 0 on success.
+ */
+
 gint agg_mesh_element_nodes(agg_mesh_t *m, gint e,
 			    gint *nodes, gint *nnodes, gint *s)
 
 {
-  gint i, *el, *sp, len ;
+  gint i, *el, *sp, len, tag ;
 
   el = agg_mesh_element(m, e) ;
   *nnodes = agg_mesh_element_size(el) ;
 
   for ( i = 0 ; i < (*nnodes) ; i ++ ) {
-    sp = agg_mesh_spline(m, el[i]) ;
+    sp = agg_mesh_spline(m, ABS(el[i])) ;
     len = agg_mesh_spline_length(m, ABS(el[i])) ;
     if ( el[i] > 0 ) {
       nodes[i] = sp[0] ;
     } else {
       nodes[i] = sp[len-1] ;
     }
-    *s = agg_mesh_point_tag(m, nodes[i]) ;
+    tag = agg_mesh_point_tag(m, nodes[i]) ;
+    if ( i > 0 ) {
+      if ( (*s) != tag )
+	g_error("%s: element nodes not all from same surface",
+		__FUNCTION__) ;
+    }
+    *s = tag ;
+  }
+
+  for ( i = 0 ; i < (*nnodes)-1 ; i ++ ) {
+    gint sc ;
+    sc = agg_mesh_spline_from_endpoints(m, nodes[i], nodes[i+1]) ;
+    if ( ABS(sc) != ABS(el[i]) ) {
+      g_error("%s: nodes do not match spline endpoints", __FUNCTION__) ;
+    }
   }
   
   return 0 ;
