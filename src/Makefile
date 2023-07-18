@@ -236,7 +236,7 @@ AWK = gawk
 BLASWRAP = yes
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -O0 -g -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -D_GNU_SOURCE -fopenmp  -mavx -mavx2 -mfma -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/home/michael/Codes/include
+CFLAGS = -O3 -g -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -D_GNU_SOURCE -fopenmp  -mavx -mavx2 -mfma -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/home/michael/Codes/include
 CPP = gcc -E
 CPPFLAGS = 
 CYGPATH_W = echo
@@ -360,9 +360,7 @@ target_alias =
 top_build_prefix = ../
 top_builddir = ..
 top_srcdir = ..
-AM_CPPFLAGS = -I$(top_srcdir) -I$(includedir) -DG_LOG_DOMAIN=\"AGG\" \
-	-DTRILIBRARY -DANSI_DECLARATORS -DEXTERNAL_TEST
-
+AM_CPPFLAGS = -I$(top_srcdir) -I$(includedir) -DG_LOG_DOMAIN=\"AGG\"
 bin_SCRIPTS = agg-config
 BUILT_SOURCES = \
 	agg-config

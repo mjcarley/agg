@@ -360,9 +360,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-AM_CPPFLAGS = -I$(top_srcdir) -I$(includedir) -DG_LOG_DOMAIN=\"AGG\" \
-	-DTRILIBRARY -DANSI_DECLARATORS -DEXTERNAL_TEST
-
+AM_CPPFLAGS = -I$(top_srcdir) -I$(includedir) -DG_LOG_DOMAIN=\"AGG\"
 bin_SCRIPTS = agg-config
 BUILT_SOURCES = \
 	agg-config

@@ -814,7 +814,8 @@ static gboolean boundary_point(gint *b, gint nb, gint p)
  * @param P the patch mapping \a S;
  * @param nsec number of sections to compute;
  * @param nseg number of segments on each section; 
- * @param pps number of points on each segment.
+ * @param pps number of points on each segment;
+ * @param args argument string to pass to triangle;
  * @param w workspace for surface evaluation.
  * 
  * @return 0 on success.
@@ -823,6 +824,7 @@ static gboolean boundary_point(gint *b, gint nb, gint p)
 gint agg_mesh_surface_add(agg_mesh_t *msh,
 			  agg_surface_t *S, agg_patch_t *P,
 			  gint nsec, gint nseg, gint pps,
+			  gchar *args,
 			  agg_surface_workspace_t *w)
 
 {
@@ -861,7 +863,7 @@ gint agg_mesh_surface_add(agg_mesh_t *msh,
   nbpts = MAX(nbpts, 2048) ;
   
   ctx = triangle_context_create() ;
-  triangle_context_options(ctx, "pzqa0.02");
+  triangle_context_options(ctx, args) ;
   /* triangle_context_options(ctx, "czqa0.001"); */
   reset_triangleio(&in);
 
@@ -1047,7 +1049,7 @@ gint agg_mesh_spline_from_endpoints(agg_mesh_t *m, gint p0, gint p1)
  * @param m mesh to have point added;
  * @param surf index in \a m of surface on which to evaluate point;
  * @param s coordinate on patch for surface \a surf;
- * @param t coordinate on patch for surface \a surf;
+i * @param t coordinate on patch for surface \a surf;
  * @param w workspace for surface evaluation.
  * 
  * @return index of newly added point.
@@ -1090,21 +1092,28 @@ gint agg_mesh_surface_point_add(agg_mesh_t *m, gint surf,
 
 /** 
  * Mesh a ::agg_body_t containing a collection of
- * (possibly-intersecting) surfaces
+ * (possibly-intersecting) surfaces, using Christian Woltering's
+ * library version of Jonathan Shewchuk's Triangle code:
+ * 
+ * https://github.com/wo80/Triangle/
+ * https://www.cs.cmu.edu/~quake/triangle.html
  * 
  * @param m an ::agg_mesh_t to contain mesh on output;
  * @param b body to be meshed;
  * @param nsec number of sections to generate on each surface of \a b;
  * @param nsp number of splines on each section;
  * @param pps number of points per spline;
+ * @param args argument string to pass to Triangle (see Triangle link
+ * for details);
  * @param w workspace for surface evaluation.
  * 
  * @return 0 on success.
  */
 
-gint agg_mesh_body(agg_mesh_t *m, agg_body_t *b,
-		   gint nsec, gint nsp, gint pps,
-		   agg_surface_workspace_t *w)
+gint agg_mesh_body_triangle(agg_mesh_t *m, agg_body_t *b,
+			    gint nsec, gint nsp, gint pps,
+			    gchar *args,
+			    agg_surface_workspace_t *w)
 
 {
   gint i, j ;
@@ -1131,11 +1140,133 @@ gint agg_mesh_body(agg_mesh_t *m, agg_body_t *b,
   
   for ( i = 0 ; i < agg_body_surface_number(b); i ++ ) {
     agg_mesh_surface_add(m, agg_body_surface(b,i), agg_body_patch(b,i),
-			 nsec, nsp, pps, w) ;
+			 nsec, nsp, pps, args, w) ;
   }
 
   return 0 ;
 }
+
+gint agg_mesh_body_regular(agg_mesh_t *m, agg_body_t *b,
+			    gint nsec, gint nsp, gint pps,
+			    agg_surface_workspace_t *w)
+
+{
+  gint i, j, iS, np0, nsp0, s0, s1, s2, s3 ;
+  gdouble s, t ;
+  
+  if ( agg_mesh_intersection_number(m) > 0 ) {
+    g_error("%s: cannot generate regular grids on intersected surfaces",
+	    __FUNCTION__) ;
+  }
+
+  for ( iS = 0 ; iS < agg_mesh_surface_number(m) ; iS ++ ) {
+    np0 = agg_mesh_point_number(m) ;
+    nsp0 = agg_mesh_spline_number(m) ;
+    for ( i = 0 ; i <= nsec ; i ++ ) {
+      for ( j = 0 ; j <= nsp ; j ++ ) {
+	s = (gdouble)i/nsec ; t = (gdouble)j/nsp ;
+	agg_mesh_surface_point_add(m, iS, s, t, w) ;
+      }
+    }
+
+    /*splines joining element corners*/
+    for ( i = 0 ; i < nsec ; i ++ ) {
+      for ( j = 0 ; j < nsp ; j ++ ) {
+	agg_mesh_spline_interp_points(m, iS,
+				      np0 + (i+0)*(nsp+1) + j + 0,
+				      np0 + (i+1)*(nsp+1) + j + 0, pps, w) ;
+	/* fprintf(stderr, "%d %d\n", */
+	/* 	agg_mesh_spline_number(m)-1, (nsp0+2*(i+0)*nsp+2*(j+0)+0)) ; */
+	agg_mesh_spline_interp_points(m, iS,
+				      np0 + (i+0)*(nsp+1) + j + 0,
+				      np0 + (i+0)*(nsp+1) + j + 1, pps, w) ;
+	/* fprintf(stderr, "%d %d\n", */
+	/* 	agg_mesh_spline_number(m)-1, nsp0+2*(i+0)*nsp+2*(j+0)+1) ; */
+      }
+    }
+    i = nsec ;
+    for ( j = 0 ; j < nsp ; j ++ ) {
+      agg_mesh_spline_interp_points(m, iS,
+				    np0 + (i+0)*(nsp+1) + j + 0,
+				    np0 + (i+0)*(nsp+1) + j + 1, pps, w) ;
+      /* fprintf(stderr, "%d %d\n", */
+      /* 	      agg_mesh_spline_number(m)-1,  */
+      /* 		      (nsp0+2*(i+0)*nsp+(j+0)+0)) ; */
+    }
+    j = nsp ;
+    for ( i = 0 ; i < nsec ; i ++ ) {
+      agg_mesh_spline_interp_points(m, iS,
+				    np0 + (i+0)*(nsp+1) + j + 0,
+				    np0 + (i+1)*(nsp+1) + j + 0, pps, w) ;
+      /* fprintf(stderr, "%d %d\n", */
+      /* 	      agg_mesh_spline_number(m)-1, */
+      /* 	      nsp0 + 2*nsec*nsp + j + i) ; */
+    }    
+
+    for ( i = np0 ; i < agg_mesh_point_number(m) ; i ++ ) {
+      agg_mesh_point_tag(m, i) = iS ;
+    }
+    
+    /*elements*/
+    for ( i = 0 ; i < nsec - 1 ; i ++ ) {
+      for ( j = 0 ; j < nsp - 1 ; j ++ ) {
+	s0 = nsp0 + 2*(i+0)*nsp + 2*(j+0) + 0 ;
+	s1 = nsp0 + 2*(i+1)*nsp + 2*(j+0) + 1 ;
+	s2 = nsp0 + 2*(i+0)*nsp + 2*(j+1) + 0 ;
+	s3 = nsp0 + 2*(i+0)*nsp + 2*(j+0) + 1 ;
+
+	if ( agg_patch_invert(agg_mesh_patch(m, iS)) ) {
+	  agg_mesh_element_add(m, s3, s2, -s1, -s0) ;
+	} else {
+	  agg_mesh_element_add(m, s0, s1, -s2, -s3) ;
+	}
+      }
+    }
+
+    i = nsec - 1 ;
+    for ( j = 0 ; j < nsp - 1 ; j ++ ) {
+      s0 = nsp0 + 2*(i+0)*nsp + 2*(j+0) + 0 ;
+      s1 = nsp0 + 2*(i+1)*nsp +   (j+0) + 0 ;
+      s2 = nsp0 + 2*(i+0)*nsp + 2*(j+1) + 0 ;
+      s3 = nsp0 + 2*(i+0)*nsp + 2*(j+0) + 1 ;
+      /* agg_mesh_element_add(m, s0, s1, -s2, -s3) ; */
+      if ( agg_patch_invert(agg_mesh_patch(m, iS)) ) {
+	agg_mesh_element_add(m, s3, s2, -s1, -s0) ;
+      } else {
+	agg_mesh_element_add(m, s0, s1, -s2, -s3) ;
+      }
+    }
+    j = nsp - 1 ;
+    for ( i = 0 ; i < nsec - 1 ; i ++ ) {
+      s0 = nsp0 + 2*(i+0)*nsp + 2*(j+0) + 0 ;
+      s1 = nsp0 + 2*(i+1)*nsp + 2*(j+0) + 1 ;
+      s2 = nsp0 + 2*nsec*nsp + j + 1 + i ;
+      s3 = nsp0 + 2*(i+0)*nsp + 2*(j+0) + 1 ;
+          
+      /* agg_mesh_element_add(m, s0, s1, -s2, -s3) ; */
+      if ( agg_patch_invert(agg_mesh_patch(m, iS)) ) {
+	agg_mesh_element_add(m, s3, s2, -s1, -s0) ;
+      } else {
+	agg_mesh_element_add(m, s0, s1, -s2, -s3) ;
+      }
+    }
+    i = nsec - 1 ; j = nsp - 1 ;
+    s0 = nsp0 + 2*(i+0)*nsp + 2*(j+0) + 0 ;
+    s1 = nsp0 + 2*(i+1)*nsp + (j+0) + 0 ;
+    s2 = nsp0 + 2*nsec*nsp + j + 1 + i ;
+    s3 = nsp0 + 2*(i+0)*nsp + 2*(j+0) + 1 ;    
+    /* agg_mesh_element_add(m, s0, s1, -s2, -s3) ; */
+    if ( agg_patch_invert(agg_mesh_patch(m, iS)) ) {
+      agg_mesh_element_add(m, s3, s2, -s1, -s0) ;
+    } else {
+      agg_mesh_element_add(m, s0, s1, -s2, -s3) ;
+    }
+  }
+
+  
+  return 0 ;
+}
+
 
 /** 
  * Find the oriented nodes of an element in an ::agg_mesh_t

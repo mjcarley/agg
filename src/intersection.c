@@ -193,7 +193,7 @@ static void densify_intersection(agg_intersection_t *inter,
     g_assert(sti[1] >= 0) ;
     agg_patch_map(P1, sti[0], sti[1], &u, &v) ;
     agg_surface_point_eval(S1, u, v, x, w) ;
-    /* hefsi_refine_point(h1, &(sti[0]), h2, &(sti[2]), x, tol, 8) ; */
+    hefsi_refine_point(h1, &(sti[0]), h2, &(sti[2]), x, tol, 8) ;
     agg_patch_st_correct(P1, &(sti[0])) ;
     agg_patch_st_correct(P2, &(sti[2])) ;
     agg_intersection_point_number(inter) ++ ;
@@ -542,12 +542,24 @@ gint agg_intersection_resample(agg_intersection_t *inter,
 {
   gint np, i, c ;
   gdouble tmin, tmax, t, *st, u, v ;
+  hefsi_surface_t *h1, *h2 ;
+  gpointer data1[] =
+    {agg_intersection_surface1(inter),
+     agg_intersection_patch1(inter),
+     w} ;
+  gpointer data2[] =
+    {agg_intersection_surface2(inter),
+     agg_intersection_patch2(inter),
+     w} ;
 
   agg_intersection_patch1(resample) = agg_intersection_patch1(inter) ;
   agg_intersection_patch2(resample) = agg_intersection_patch2(inter) ;
   agg_intersection_surface1(resample) = agg_intersection_surface1(inter) ;
   agg_intersection_surface2(resample) = agg_intersection_surface2(inter) ;
   
+  h1 = hefsi_surface_new(hefsi_func, data1, FALSE, 0, 1, 0, 1) ;
+  h2 = hefsi_surface_new(hefsi_func, data2, FALSE, 0, 1, 0, 1) ;
+
   /*find the limits on (s,t) on each surface*/
   agg_intersection_bbox_set(inter) ;
 
@@ -581,6 +593,11 @@ gint agg_intersection_resample(agg_intersection_t *inter,
 		  &u, &v) ;
     agg_surface_point_eval(agg_intersection_surface1(resample), u, v,
 			   agg_intersection_point(resample,i), w) ;
+    if ( t != 0 && t != 1 ) {
+      hefsi_refine_point(h1, &(st[i*AGG_INTERSECTION_DATA_SIZE+0]),
+			 h2, &(st[i*AGG_INTERSECTION_DATA_SIZE+2]),
+			 agg_intersection_point(resample,i), 1e-9, 8) ;
+    }
   }
 
   agg_intersection_point_number(resample) = np ;

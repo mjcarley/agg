@@ -1,5 +1,4 @@
-AM_CPPFLAGS = -I$(top_srcdir) -I$(includedir) -DG_LOG_DOMAIN=\"AGG\" \
-	-DTRILIBRARY -DANSI_DECLARATORS -DEXTERNAL_TEST
+AM_CPPFLAGS = -I$(top_srcdir) -I$(includedir) -DG_LOG_DOMAIN=\"AGG\"
 
 bin_SCRIPTS=agg-config
 

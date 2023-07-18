@@ -10,6 +10,7 @@ global {
  twist = "15*pi/180"
  xle = "0.35*len"
  yle = "-0.3*radius"
+ del = "span/1000"
 }
 
 surface {

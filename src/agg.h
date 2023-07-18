@@ -720,14 +720,19 @@ gint agg_mesh_intersection_add(agg_mesh_t *w,
 gint agg_mesh_surface_add(agg_mesh_t *w,
 			  agg_surface_t *S, agg_patch_t *P,
 			  gint nsec, gint nseg, gint pps,
+			  gchar *args,
 			  agg_surface_workspace_t *ws) ;
 gint agg_mesh_spline_from_endpoints(agg_mesh_t *w, gint p0, gint p1) ;
 gint agg_mesh_surface_point_add(agg_mesh_t *w, gint surf,
 				gdouble s, gdouble t,
 				agg_surface_workspace_t *ws) ;
-gint agg_mesh_body(agg_mesh_t *m, agg_body_t *b,
-		   gint nsec, gint nsp, gint pps,
-		   agg_surface_workspace_t *w) ;
+gint agg_mesh_body_triangle(agg_mesh_t *m, agg_body_t *b,
+			    gint nsec, gint nsp, gint pps,
+			    gchar *args,		   
+			    agg_surface_workspace_t *w) ;
+gint agg_mesh_body_regular(agg_mesh_t *m, agg_body_t *b,
+			   gint nsec, gint nsp, gint pps,
+			   agg_surface_workspace_t *w) ;
 gint agg_mesh_element_nodes(agg_mesh_t *m, gint e,
 			    gint *nodes, gint *nnodes, gint *s) ;
 

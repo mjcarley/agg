@@ -155,14 +155,19 @@ static void surface_wing(agg_surface_t *S, gdouble x, gdouble y, gdouble z,
   agg_transform_operator_add(T, AGG_TRANSFORM_SCALE, p, expr, 1) ;
   expr[0] = expr[1] = expr[2] = NULL ; 
 
-  /*translate along span and sweep; add span/1000 to stop wings
+  sprintf(etmp[0], "(1-u)^(1/8)") ;
+  expr[0] = etmp[0] ;
+  agg_transform_operator_add(T, AGG_TRANSFORM_SCALE_Y, p, expr, 1) ;
+  expr[0] = expr[1] = expr[2] = NULL ; 
+  
+  /*translate along span and sweep; add del to stop wings
     meeting in the middle and confusing the intersection calculation*/
   p[0] = 0 ; p[1] = 0 ; p[2] = 0 ;
   sprintf(etmp[0], "span*sin(sweep)*u") ;
   expr[0] = etmp[0] ;
   sprintf(etmp[1], "span*sin(dihedral)*u") ;
   expr[1] = etmp[1] ;
-  sprintf(etmp[2], "span/1000 + span*u") ;
+  sprintf(etmp[2], "del + span*u") ;
   expr[2] = etmp[2] ;
   agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, p, expr, 3) ;
   expr[0] = expr[1] = expr[2] = NULL ; 
@@ -196,13 +201,15 @@ static gint parse_test(gchar *s)
 static void bernstein_basis_test(gint n)
 
 {
-  gdouble x, tot, err, S[64] ;
+  gdouble x, tot, err, S[64], dS[64], ee, err_d, dB ;
   gint j ;
   
   fprintf(stderr, "Bernstein basis polynomials\n") ;
   fprintf(stderr, "===========================\n") ;
   fprintf(stderr, "polynomial basis order: %d\n", n) ;
 
+  ee = 1e-6 ;
+  
   err = 0.0 ;
   for ( x = 0.0 ; x <= 1.0 ; x += 1.0/128 ) {
     tot = 0.0 ;
@@ -217,12 +224,25 @@ static void bernstein_basis_test(gint n)
   err = 0.0 ;
   for ( x = 0.0 ; x <= 1.0 ; x += 1.0/128 ) {
     tot = 0.0 ;
-    agg_bernstein_basis(n, x, S, NULL) ;
+    agg_bernstein_basis(n, x, S, dS) ;
     for ( j = 0 ; j <= n ; j ++ ) tot += S[j] ;
     err = MAX(err, fabs(tot-1.0)) ;
   }
 
   fprintf(stderr, "vector maximum deviation from unity: %lg\n", err) ;
+
+  err_d = 0.0 ;
+  for ( x = 1.0/128 ; x < 1.0 ; x += 1.0/128 ) {
+    tot = 0.0 ;
+    agg_bernstein_basis(n, x, S, dS) ;
+    for ( j = 0 ; j <= n ; j ++ ) {
+      dB = (agg_bernstein_basis_eval(n, j, x+ee/2) -
+	    agg_bernstein_basis_eval(n, j, x-ee/2))/ee ;
+      err_d = MAX(err_d, fabs(dS[j]-dB)) ;
+    }
+  }
+
+  fprintf(stderr, "maximum derivative error: %lg\n", err_d) ;
   
   return ;
 }
@@ -394,19 +414,17 @@ static void surface_test(void)
 static void body_test(void)
 
 {
-  gint nsec, nseg, pps, offp, offsp, offs, nsurf, i, j, ninter ;
+  gint nsec, nsp, pps, offp, offsp, offs, nsurf, i, j ;
   gdouble rfuse, yw, zw ;
-  /* gdouble yf, zf, chf, spf, tpf, swf, dhf ; */
   agg_surface_t **S ; 
   agg_surface_workspace_t *w ;
   agg_mesh_t *wf ;
   agg_body_t *b ;
-  agg_intersection_t **inter, **resample ;
   agg_section_t *sc, *sw ;
   agg_patch_t **P ;
   FILE *output ;
 
-  nsurf = 3 ;
+  nsurf = 2 ;
 
   b = agg_body_new(32, 32) ;
   
@@ -417,6 +435,7 @@ static void body_test(void)
   agg_body_global_add(b, "dihedral", "5*pi/180", 0) ;
   agg_body_global_add(b, "sweep", "25*pi/180", 0) ;
   agg_body_global_add(b, "taper", NULL, 0.5) ;
+  agg_body_global_add(b, "del", "span*0", 0) ;
 
   agg_body_globals_compile(b) ;
   
@@ -425,23 +444,17 @@ static void body_test(void)
   
   S = (agg_surface_t **)g_malloc0(nsurf*sizeof(agg_surface_t *)) ;
   P = (agg_patch_t **)g_malloc0(nsurf*sizeof(agg_patch_t *)) ;
-  inter = (agg_intersection_t **)g_malloc0(50*sizeof(agg_intersection_t *)) ;
-  resample = (agg_intersection_t **)g_malloc0(50*sizeof(agg_intersection_t *)) ;
 
   w = agg_surface_workspace_new() ;
   sc = agg_section_new(32, 32) ;
   agg_section_set_circle(sc) ;
   sw = agg_section_new(32, 32) ;
-  agg_section_set_aerofoil(sw, 0.5, 0.1, 0) ;
+  agg_section_set_aerofoil(sw, 0.5, 0.2, 0) ;
 
   for ( i = 0 ; i < nsurf ; i ++ ) {
     S[i] = agg_surface_new(64) ;
     P[i] = agg_patch_new(1024) ;
   }
-  for ( i = 0 ; i < nsurf*(nsurf-1) ; i ++ ) {
-    inter[i] = agg_intersection_new(8192) ;
-    resample[i] = agg_intersection_new(8192) ;
-  }    
   
   rfuse = 0.4 ;
   /* len = 5.0 ; */
@@ -452,14 +465,7 @@ static void body_test(void)
   /* yf = rfuse/8 ; zf = 0.5*len*0.7 ;  chf = 0.4 ; spf = 1.0 ; */
   /* tpf = 0.9 ; swf = 18*M_PI/180 ; dhf = 3.0*M_PI/180.0 ; */
   
-  /* agg_patch_mapping(P[0]) = AGG_PATCH_SPHERICAL ; */
-  agg_patch_mapping(P[0]) = AGG_PATCH_TUBULAR ;
-  agg_patch_wrap_t(P[0]) = TRUE ;
-  surface_tube(S[0], 0.0, 0.0, 0.0,
-	       agg_body_globals(b), agg_body_global_number(b),
-	       sc) ;
-
-  for ( i = 1 ; i < MIN(3,nsurf) ; i ++ ) {
+  for ( i = 0 ; i < nsurf ; i ++ ) {
     agg_patch_mapping(P[i]) = AGG_PATCH_SPHERICAL ;
     agg_patch_wrap_t(P[i]) = TRUE ;
     surface_wing(S[i], zw, yw, 0.0,
@@ -467,48 +473,23 @@ static void body_test(void)
 		 sw) ;
   }
   
-  agg_surface_axes(S[2]) = AGG_AXES_PX_PY_MZ ;  
+  agg_surface_axes(S[1]) = AGG_AXES_PX_PY_MZ ;  
+  agg_patch_invert(P[1]) = TRUE ;
   
-  /* for ( i = 3 ; i < 5 ; i ++ ) { */
-  /*   agg_patch_mapping(P[i]) = AGG_PATCH_SPHERICAL ; */
-  /*   agg_patch_wrap_t(P[i]) = TRUE ; */
-  /*   surface_wing(S[i], zf, yf, 0.0, chf, sgn*spf, tpf, */
-  /* 		 sgn*swf, sgn*dhf, */
-  /* 		 agg_body_globals(b), agg_body_global_number(b), sgn, */
-  /* 		 sw) ; */
-  /*   sgn = -sgn ; */
-  /* } */
-
   wf = agg_mesh_new(65536, 65536, 65536) ;
-  nsec = 8 ; nseg = 65 ; pps = 2 ;
+  nsec = 12 ; nsp = 8 ; pps = 4 ;
   offp = offsp = offs = 1 ;
-
-  ninter = 0 ; 
-  for ( i = 0 ; i < nsurf ; i ++ ) {
-    for ( j = i+1 ; j < nsurf ; j ++ ) {
-      agg_surface_patch_intersection(inter[ninter],
-				     S[i], P[i], S[j], P[j], w) ;
-      if ( agg_intersection_point_number(inter[ninter]) != 0 ) {
-	  fprintf(stderr,
-		  "%d intersection points between surface %d and surface %d\n",
-		  agg_intersection_point_number(inter[ninter]), i, j) ;
-	  ninter ++ ;
-      }
-    }
-  }
-  
-  for ( i = 0 ; i < ninter ; i ++ ) {
-    agg_intersection_resample(inter[i], nseg, pps, resample[i], w) ;
-    agg_intersection_bbox_set(resample[i]) ;
-    agg_mesh_intersection_add(wf, resample[i], nseg, pps) ;
-  }
 
   for ( i = 0 ; i < nsurf ; i ++ ) {
     fprintf(stderr, "adding surface %d\n", i) ;
-    agg_mesh_surface_add(wf, S[i], P[i], nsec, nseg, pps, w) ;
+    agg_mesh_surface(wf, i) = S[i] ; 
+    agg_mesh_patch(wf, i) = P[i] ;
+    agg_mesh_surface_number(wf) ++ ;
   }
 
-  output = fopen("surface1.geo", "w") ;
+  agg_mesh_body_regular(wf, b, nsec, nsp, pps, w) ;  
+  
+  output = fopen("surface.geo", "w") ;
   fprintf(output, "lc = 0.1 ;\n") ;
   agg_mesh_write_gmsh(output, wf, "lc", offp, offsp, offs, FALSE) ;
   fclose(output) ;
@@ -521,9 +502,9 @@ static void parser_test(gchar *file)
 {
   agg_body_t *b ;
   agg_mesh_t *m ;
-  gint i, j, ninter, nsec, nsp, pps, offp, offsp, offs ;
-  agg_intersection_t *inter, *resample ;
+  gint nsec, nsp, pps, offp, offsp, offs ;
   agg_surface_workspace_t *w ;
+  gchar *args = "pzqa0.01" ;
   FILE *output ;
   
   b = agg_body_new(32, 32) ;
@@ -542,37 +523,7 @@ static void parser_test(gchar *file)
   nsec = 8 ; nsp = 65 ; pps = 2 ;
   offp = offsp = offs = 1 ;
 
-  agg_mesh_body(m, b, nsec, nsp, pps, w) ;
-  
-  /* ninter = 0 ; */
-  /* inter    = agg_intersection_new(8192) ; */
-  /* resample = agg_intersection_new(8192) ; */
-  /* for ( i = 0 ; i < agg_body_surface_number(b); i ++ ) { */
-  /*   for ( j = i+1 ; j < agg_body_surface_number(b); j ++ ) { */
-  /*     agg_surface_patch_intersection(inter, */
-  /* 				     agg_body_surface(b,i), */
-  /* 				     agg_body_patch(b,i), */
-  /* 				     agg_body_surface(b,j), */
-  /* 				     agg_body_patch(b,j), w) ; */
-  /*     if ( agg_intersection_point_number(inter) != 0 ) { */
-  /* 	fprintf(stderr, */
-  /* 		"%d intersection points between surface %d and surface %d\n", */
-  /* 		agg_intersection_point_number(inter), i, j) ; */
-  /* 	agg_intersection_resample(inter, nsp, pps, resample, w) ; */
-  /* 	agg_intersection_bbox_set(resample) ; */
-  /* 	agg_mesh_intersection_add(m, resample, nsp, pps) ; */
-  /* 	inter    = agg_intersection_new(8192) ; */
-  /* 	resample = agg_intersection_new(8192) ; */
-  /* 	ninter ++ ; */
-  /*     } */
-  /*   } */
-  /* } */
-  
-  /* for ( i = 0 ; i < agg_body_surface_number(b); i ++ ) { */
-  /*   fprintf(stderr, "adding surface %d\n", i) ; */
-  /*   agg_mesh_surface_add(m, agg_body_surface(b,i), agg_body_patch(b,i), */
-  /* 			 nsec, nsp, pps, w) ; */
-  /* } */
+  agg_mesh_body_triangle(m, b, nsec, nsp, pps, args, w) ;
 
   output = fopen("surface.geo", "w") ;
   fprintf(output, "lc = 0.1 ;\n") ;

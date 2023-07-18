@@ -449,6 +449,7 @@ void _agg_global_read(GScanner *scanner, agg_body_t *b, gboolean echo,
   while ( ( token = g_scanner_peek_next_token(scanner) )
 	  != G_TOKEN_RIGHT_CURLY ) {
     token = g_scanner_get_next_token(scanner) ;
+    def = name = NULL ; val = 0.0 ;
     if ( scanner->token == G_TOKEN_IDENTIFIER ) {
       /*variable assignment*/
       name = g_strdup(scanner->value.v_identifier) ;

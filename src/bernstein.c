@@ -62,10 +62,16 @@ gint agg_bernstein_basis(gint n, gdouble x, gdouble *S, gdouble *dS)
     return 0 ;
   }
 
-  g_assert_not_reached() ; /*derivatives not implemented yet*/
-  
-  for ( r = 0 ; r <= n ; r ++ ) {
+  r = 0 ;
+  S[r] = _binomial(n,r)*pow(x,r)*pow(1-x,n-r) ;
+  dS[r] = -_binomial(n,r)*(n-r)*pow(1-x,n-r-1) ;
+  r = n ;
+  S[r] = _binomial(n,r)*pow(x,r)*pow(1-x,n-r) ;
+  dS[r] = _binomial(n,r)*r*pow(x,r-1) ;
+  for ( r = 1 ; r < n ; r ++ ) {
     S[r] = _binomial(n,r)*pow(x,r)*pow(1-x,n-r) ;
+    dS[r] = _binomial(n,r)*(r*pow(x,r-1)*pow(1-x,n-r) -
+			    (n-r)*pow(x,r)*pow(1-x,n-r-1)) ;
   }
   
   return 0 ;
