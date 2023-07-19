@@ -50,6 +50,29 @@ gdouble agg_bernstein_basis_eval(gint n, gint r, gdouble x)
   return S ;
 }
 
+gdouble agg_bernstein_derivative_eval(gint n, gint r, gdouble x)
+
+{
+  gdouble dS ;
+
+  if ( n == 0 ) return 0 ;
+  
+  if ( r == 0 ) {
+    dS = -_binomial(n,r)*(n-r)*pow(1-x,n-r-1) ;
+    return dS ;
+  }
+
+  if ( r == n ) {
+    dS = _binomial(n,r)*r*pow(x,r-1) ;
+    return dS ;
+  }
+
+  dS = _binomial(n,r)*(r*pow(x,r-1)*pow(1-x,n-r) -
+		       (n-r)*pow(x, r)*pow(1-x,n-r-1)) ;
+  
+  return dS ;
+}
+
 gint agg_bernstein_basis(gint n, gdouble x, gdouble *S, gdouble *dS)
 
 {

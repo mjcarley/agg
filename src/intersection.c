@@ -236,6 +236,8 @@ static void densify_intersection(agg_intersection_t *inter,
  * @param P1 mapping patch for first surface;
  * @param S2 second surface;
  * @param P2 mapping patch for second surface;
+ * @param B if not NULL, initialized with data for blending \a S1 into 
+ * \a S2 across the intersection curve; 
  * @param w workspace for surface evaluation.
  * 
  * @return 0 on success.
@@ -244,6 +246,7 @@ static void densify_intersection(agg_intersection_t *inter,
 gint agg_surface_patch_intersection(agg_intersection_t *inter,
 				    agg_surface_t *S1, agg_patch_t *P1,
 				    agg_surface_t *S2, agg_patch_t *P2,
+				    agg_surface_blend_t *B,
 				    agg_surface_workspace_t *w)
 
 {
@@ -255,7 +258,8 @@ gint agg_surface_patch_intersection(agg_intersection_t *inter,
   gint dmin, dmax, i, j ;
   gdouble scale, tol, u, v ;
   GSList *il ;
-
+  agg_patch_clipping_t *c1, *c2 ;
+  
   dmin = 6 ; dmax = 10 ; scale = 18/16.0 ; tol = 1e-6 ;
   
   wh = hefsi_workspace_new() ;
@@ -312,12 +316,64 @@ gint agg_surface_patch_intersection(agg_intersection_t *inter,
 			   agg_intersection_point(inter,i),
 			   w) ;
   }
+
+  agg_intersection_bbox_set(inter) ;
+  /* (agg_patch_clipping(P1, agg_patch_clipping_number(P1)))->ornt = 1 ; */
+  /* (agg_patch_clipping(P2, agg_patch_clipping_number(P2)))->ornt = 1 ; */
+
+  /*check the two curves and see how they should clip the patches*/
+  c1 = agg_patch_clipping(P1, agg_patch_clipping_number(P1)) ;
+  c2 = agg_patch_clipping(P2, agg_patch_clipping_number(P2)) ;
+  c1->ornt = c2->ornt = 1 ;
   
-  /* for ( i = 0 ; i < agg_intersection_point_number(inter) ; i ++ ) { */
-  /*   hefsi_refine_point(h1, &(inter->st[i*AGG_INTERSECTION_DATA_SIZE+0]), */
-  /* 		       h2, &(inter->st[i*AGG_INTERSECTION_DATA_SIZE+2]), */
-  /* 		       x, tol, 1) ; */
-  /* } */
+  if ( agg_intersection_bbox_s1_min(inter) == 0 &&
+       agg_intersection_bbox_s1_max(inter) == 1 ) {
+    agg_intersection_clip(inter, 0, AGG_CLIP_CONSTANT_T, c1) ;
+    agg_patch_clipping_number(P1) ++ ;
+  } else {
+    if ( agg_intersection_bbox_t1_min(inter) == 0 &&
+	 agg_intersection_bbox_t1_max(inter) == 1 ) {
+      agg_intersection_clip(inter, 0, AGG_CLIP_CONSTANT_S, c1) ;
+
+      agg_patch_clipping_data(c1,0) += 5e-2 ;
+      
+      agg_patch_clipping_number(P1) ++ ;
+    } else {
+      agg_intersection_clip(inter, 0, AGG_CLIP_ELLIPSE, c1) ;
+      agg_patch_clipping_number(P1) ++ ;
+    }
+  }
+
+  if ( agg_intersection_bbox_s2_min(inter) == 0 &&
+       agg_intersection_bbox_s2_max(inter) == 1 ) {
+    agg_intersection_clip(inter, 1, AGG_CLIP_CONSTANT_T, c2) ;
+    agg_patch_clipping_number(P2) ++ ;
+  } else {
+    if ( agg_intersection_bbox_t2_min(inter) == 0 &&
+	 agg_intersection_bbox_t2_max(inter) == 1 ) {
+      agg_intersection_clip(inter, 1, AGG_CLIP_CONSTANT_S, c2) ;
+
+      agg_patch_clipping_data(c2,0) += 5e-2 ;
+
+      agg_patch_clipping_number(P2) ++ ;
+    } else {
+      agg_intersection_clip(inter, 1, AGG_CLIP_ELLIPSE, c2) ;
+      agg_patch_clipping_number(P2) ++ ;
+    }
+
+    agg_clipping_orient(c1, P1, S1, c2, P2, S2, w) ;
+  }
+
+  if ( B == NULL ) return 0 ;
+
+  /*add relevant data to a surface blend for future evaluation*/
+  agg_surface_blend_surface(B,0) = S1 ; 
+  agg_surface_blend_surface(B,1) = S2 ; 
+  agg_surface_blend_patch(B,0) = P1 ; 
+  agg_surface_blend_patch(B,1) = P2 ; 
+
+  B->ic[0] = agg_patch_clipping_number(P1) - 1 ;
+  B->ic[1] = agg_patch_clipping_number(P2) - 1 ;
   
   return 0 ;
 }
@@ -512,9 +568,8 @@ static void interp_st(gdouble *st, gint nst, gint c,
 	(st[( 0)*AGG_INTERSECTION_DATA_SIZE+j] -
 	 st[(i+0)*AGG_INTERSECTION_DATA_SIZE+j])*ti ;
       }
-      return ;
-    }
-
+    return ;
+  }
   
   g_assert_not_reached() ;
   
@@ -605,6 +660,53 @@ gint agg_intersection_resample(agg_intersection_t *inter,
   return 0 ;
 }
 
+gint agg_intersection_clip(agg_intersection_t *inter,
+			   gint c, agg_patch_clip_t cut,
+			   agg_patch_clipping_t *clip)
+
+{
+  agg_intersection_bbox_set(inter) ;
+
+  agg_patch_clipping_type(clip) = cut ;
+  if ( cut == AGG_CLIP_CONSTANT_S ) {
+    agg_patch_clipping_data(clip,0) = inter->bbox[4+2*c+0] ;
+
+    return 0 ;
+  }
+
+  if ( cut == AGG_CLIP_CONSTANT_T ) {
+    g_assert_not_reached() ;
+    agg_patch_clipping_data(clip,0) = inter->bbox[4+2*c+1] ;
+
+    return 0 ;
+  }
+
+  if ( cut == AGG_CLIP_ELLIPSE ) {
+    gdouble th ;
+    /*centre of ellipse is centre of bounding box of intersection
+      curve*/
+    agg_patch_clipping_data(clip,0) =
+      (inter->bbox[2*c+0] + inter->bbox[4+2*c+0])/2 ;
+    agg_patch_clipping_data(clip,1) =
+      (inter->bbox[2*c+1] + inter->bbox[4+2*c+1])/2 ;
+
+    /*angle to corner of bounding box*/
+    th = atan2(inter->bbox[4+2*c+1]-agg_patch_clipping_data(clip,1),
+	       inter->bbox[4+2*c+0]-agg_patch_clipping_data(clip,0)) ;
+
+    /*semi-major and semi-minor axes*/
+    agg_patch_clipping_data(clip,2) =
+      (inter->bbox[4+2*c+0]-agg_patch_clipping_data(clip,0))/cos(th) ;
+    agg_patch_clipping_data(clip,3) =
+      (inter->bbox[4+2*c+1]-agg_patch_clipping_data(clip,1))/sin(th) ;
+    
+    return 0 ;
+  }
+
+  g_assert_not_reached() ;
+  
+  return 0 ;
+}
 
 /**
  * @}

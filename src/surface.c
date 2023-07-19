@@ -333,8 +333,67 @@ gint agg_surface_point_eval(agg_surface_t *S, gdouble u, gdouble v,
   return 0 ;
 }
 
+gint agg_surface_point_diff(agg_surface_t *S, gdouble u, gdouble v,
+			    gdouble *x, gdouble *xu, gdouble *xv,
+			    agg_surface_workspace_t *w)
+
+/*
+ * should do this analytically some day
+ */
+  
+{
+  agg_transform_t *T ;
+  agg_variable_t *var ;
+  agg_section_t *s ;
+  gdouble y[3], ee, sgn ;
+  
+  T = agg_surface_transform(S) ;
+  s = w->s ;
+  ee = 1e-6 ;
+  
+  /*check that the first two variables in T are u and v*/
+  var = agg_transform_variable(T, 0) ;
+  if ( strcmp(agg_variable_name(var), "u") != 0 ) {
+    g_error("%s: first variable in transform must be \"u\"", __FUNCTION__) ;
+  } else {
+    agg_variable_value(var) = u ;
+  }
+  var = agg_transform_variable(T, 1) ;
+  if ( strcmp(agg_variable_name(var), "v") != 0 ) {
+    g_error("%s: second variable in transform must be \"v\"", __FUNCTION__) ;
+  } else {
+    agg_variable_value(var) = v ;
+  }
+
+  agg_surface_point_eval(S, u, v, x, w) ;
+
+  if ( u < agg_surface_umin(S) - ee ) {
+    agg_surface_point_eval(S, u+ee, v, xu, w) ;
+    xu[0] = (xu[0] - x[0])/ee ;
+    xu[1] = (xu[1] - x[1])/ee ;
+    xu[2] = (xu[2] - x[2])/ee ;
+  } else {
+    agg_surface_point_eval(S, u-ee, v, xu, w) ;
+    xu[0] = -(xu[0] - x[0])/ee ;
+    xu[1] = -(xu[1] - x[1])/ee ;
+    xu[2] = -(xu[2] - x[2])/ee ;
+  }
+
+  if ( v < 1 - ee ) {
+    agg_surface_point_eval(S, u, v+ee, xv, w) ;
+    xv[0] = (xv[0] - x[0])/ee ;
+    xv[1] = (xv[1] - x[1])/ee ;
+    xv[2] = (xv[2] - x[2])/ee ;
+  } else {
+    agg_surface_point_eval(S, u, v-ee, xv, w) ;
+    xv[0] = -(xv[0] - x[0])/ee ;
+    xv[1] = -(xv[1] - x[1])/ee ;
+    xv[2] = -(xv[2] - x[2])/ee ;
+  }
+  
+  return 0 ;
+}
+
 /**
  *  @}
  */
-
-

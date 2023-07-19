@@ -139,7 +139,7 @@ libagg_la_LIBADD =
 am_libagg_la_OBJECTS = agg.lo bernstein.lo binomials.lo tinyexpr.lo \
 	section.lo transform.lo variables.lo surface.lo naca.lo \
 	intersection.lo hefsi.lo patch.lo moller-tri.lo mesh.lo \
-	body.lo ico.lo
+	body.lo ico.lo blend.lo
 libagg_la_OBJECTS = $(am_libagg_la_OBJECTS)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
@@ -165,8 +165,8 @@ DEFAULT_INCLUDES = -I. -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/agg.Plo ./$(DEPDIR)/bernstein.Plo \
-	./$(DEPDIR)/binomials.Plo ./$(DEPDIR)/body.Plo \
-	./$(DEPDIR)/hefsi.Plo ./$(DEPDIR)/ico.Plo \
+	./$(DEPDIR)/binomials.Plo ./$(DEPDIR)/blend.Plo \
+	./$(DEPDIR)/body.Plo ./$(DEPDIR)/hefsi.Plo ./$(DEPDIR)/ico.Plo \
 	./$(DEPDIR)/intersection.Plo ./$(DEPDIR)/mesh.Plo \
 	./$(DEPDIR)/moller-tri.Plo ./$(DEPDIR)/naca.Plo \
 	./$(DEPDIR)/patch.Plo ./$(DEPDIR)/section.Plo \
@@ -236,7 +236,7 @@ AWK = gawk
 BLASWRAP = yes
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -O3 -g -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -D_GNU_SOURCE -fopenmp  -mavx -mavx2 -mfma -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/home/michael/Codes/include
+CFLAGS = -O0 -g -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -D_GNU_SOURCE -fopenmp  -mavx -mavx2 -mfma -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/home/michael/Codes/include
 CPP = gcc -E
 CPPFLAGS = 
 CYGPATH_W = echo
@@ -388,7 +388,8 @@ libagg_la_SOURCES = \
 	moller-tri.c \
 	mesh.c \
 	body.c \
-	ico.c
+	ico.c \
+	blend.c
 
 include_HEADERS = \
 	agg.h
@@ -513,6 +514,7 @@ distclean-compile:
 include ./$(DEPDIR)/agg.Plo # am--include-marker
 include ./$(DEPDIR)/bernstein.Plo # am--include-marker
 include ./$(DEPDIR)/binomials.Plo # am--include-marker
+include ./$(DEPDIR)/blend.Plo # am--include-marker
 include ./$(DEPDIR)/body.Plo # am--include-marker
 include ./$(DEPDIR)/hefsi.Plo # am--include-marker
 include ./$(DEPDIR)/ico.Plo # am--include-marker
@@ -716,6 +718,7 @@ distclean: distclean-am
 		-rm -f ./$(DEPDIR)/agg.Plo
 	-rm -f ./$(DEPDIR)/bernstein.Plo
 	-rm -f ./$(DEPDIR)/binomials.Plo
+	-rm -f ./$(DEPDIR)/blend.Plo
 	-rm -f ./$(DEPDIR)/body.Plo
 	-rm -f ./$(DEPDIR)/hefsi.Plo
 	-rm -f ./$(DEPDIR)/ico.Plo
@@ -777,6 +780,7 @@ maintainer-clean: maintainer-clean-am
 		-rm -f ./$(DEPDIR)/agg.Plo
 	-rm -f ./$(DEPDIR)/bernstein.Plo
 	-rm -f ./$(DEPDIR)/binomials.Plo
+	-rm -f ./$(DEPDIR)/blend.Plo
 	-rm -f ./$(DEPDIR)/body.Plo
 	-rm -f ./$(DEPDIR)/hefsi.Plo
 	-rm -f ./$(DEPDIR)/ico.Plo

@@ -60,6 +60,8 @@ agg_patch_t *agg_patch_new(gint nstmax)
   agg_patch_wrap_s(P) = FALSE ;
   agg_patch_wrap_t(P) = FALSE ;
   agg_patch_invert(P) = FALSE ;
+
+  agg_patch_clipping_number(P) = 0 ;
   
   return P ;
 }
@@ -195,7 +197,8 @@ gint agg_patch_parse(agg_patch_t *P, agg_variable_t *p, gint np)
   gint i ;
 
   if ( np < 3 ) {
-    g_error("%s: three parameters required for mapping", __FUNCTION__) ;
+    g_error("%s: at least three parameters required for mapping",
+	    __FUNCTION__) ;
   }
 
   invert = FALSE ;
@@ -234,6 +237,153 @@ gint agg_patch_parse(agg_patch_t *P, agg_variable_t *p, gint np)
   return 0 ;
 }
 
+
+gint agg_patch_clip_eval(agg_patch_clipping_t *c, gdouble u,
+			 gdouble *s, gdouble *t)
+
+{
+  g_assert(agg_patch_clipping_orientation(c) ==  1 ||
+	   agg_patch_clipping_orientation(c) == -1) ;
+  
+  if ( agg_patch_clipping_type(c) == AGG_CLIP_CONSTANT_S ) {
+    *t = u ; *s = agg_patch_clipping_data(c,0) ;
+
+    return 0 ;
+  }
+
+  if ( agg_patch_clipping_type(c) == AGG_CLIP_CONSTANT_T ) {
+    *t = agg_patch_clipping_data(c,0) ; *s = u ;
+
+    return 0 ;
+  }
+
+  if ( agg_patch_clipping_type(c) == AGG_CLIP_ELLIPSE ) {
+    gdouble th = agg_patch_clipping_orientation(c)*2.0*M_PI*u ;
+
+    *s = agg_patch_clipping_data(c,0) + agg_patch_clipping_data(c,2)*cos(th) ;
+    *t = agg_patch_clipping_data(c,1) + agg_patch_clipping_data(c,3)*sin(th) ;
+      
+    return 0 ;
+  }
+
+  g_assert_not_reached() ;
+  
+  return 0 ;
+}
+
+gint agg_patch_surface_diff(agg_patch_t *P,
+			    gdouble s, gdouble t,
+			    gdouble *xu, gdouble *xv,
+			    gdouble *xs, gdouble *xt)
+
+{
+  gdouble xtu[]={xu[0], xu[1], xu[2]}, xtv[]={xv[0], xv[1], xv[2]} ;
+  gdouble us, ut, vs, vt ;
+
+  us = ut = vs = vt = 0 ;
+  switch ( agg_patch_mapping(P) ) {
+  default: g_assert_not_reached() ; break ;
+  case AGG_PATCH_BILINEAR:
+    us = 1.0 ; vt = 2.0 ;
+    break ;
+  case AGG_PATCH_SPHERICAL:
+    us = 0.5*M_PI*sin(M_PI*s) ;
+    if ( t < 0.5 ) {
+      vt = 0.5*2.0*M_PI*(sin(2.0*M_PI*t)) ;
+    } else {
+      vt =  -0.5*2.0*M_PI*(sin(2.0*M_PI*t)) ;
+    }
+    break ;
+  case AGG_PATCH_TUBULAR:
+    us = 1.0 ;
+    if ( t < 0.5 ) {
+      vt = 0.5*2.0*M_PI*(sin(2.0*M_PI*t)) ;
+    } else {
+      vt =  -0.5*2.0*M_PI*(sin(2.0*M_PI*t)) ;
+    }
+    break ;
+  }
+
+  xs[0] = xtu[0]*us + xtv[0]*vs ;
+  xs[1] = xtu[1]*us + xtv[1]*vs ;
+  xs[2] = xtu[2]*us + xtv[2]*vs ;
+
+  xt[0] = xtu[0]*ut + xtv[0]*vt ;
+  xt[1] = xtu[1]*ut + xtv[1]*vt ;
+  xt[2] = xtu[2]*ut + xtv[2]*vt ;
+  
+  return 0 ;
+}
+
+/** 
+ * Set orientation of two clipping curves so that they are traversed
+ * in the same sense in physical space. The test is performed by
+ * evaluating approximate normals to the curve planes (this assumes
+ * that the curves are not too far from planar) and checking the
+ * normals are approximately parallel, using the sign of the scalar
+ * product. If necessary, the orientation of one curve is switched,
+ * with priority given to changing the orientation of a closed curve,
+ * corresponding to a hole in a surface, over a cut on constant
+ * \f$s\f$ or \f$t\f$. If curves are not mutually oriented and are
+ * both constant parameter cuts, execution stops with an error (until
+ * I can decide how best to handle this case).
+ * 
+ * @param c1 first patch clipping;
+ * @param P1 first parametric patch;
+ * @param S1 first physical surface;
+ * @param c2 second patch clipping;  
+ * @param P2 second parametric patch;
+ * @param S2 second physical surface;
+ * @param w workspace for surface point evaluation.
+ * 
+ * @return 0 on success.
+ */
+
+gint agg_clipping_orient(agg_patch_clipping_t *c1, agg_patch_t *P1,
+			 agg_surface_t *S1,
+			 agg_patch_clipping_t *c2, agg_patch_t *P2,
+			 agg_surface_t *S2,
+			 agg_surface_workspace_t *w)
+
+{
+  gdouble u, v, s, t, t0[] = {0.25, 0.5, 0.75}, x1[9], x2[9], N1[3], N2[3] ;
+  gint i ;
+
+  for ( i = 0 ; i < 3 ; i ++ ) {
+    agg_patch_clip_eval(c1, t0[i], &s, &t) ;
+    agg_patch_map(P1, s, t, &u, &v) ;
+    agg_surface_point_eval(S1, u, v, &(x1[3*i]), w) ;
+
+    agg_patch_clip_eval(c2, t0[i], &s, &t) ;
+    agg_patch_map(P2, s, t, &u, &v) ;
+    agg_surface_point_eval(S2, u, v, &(x2[3*i]), w) ;
+  }
+
+  agg_vector_diff(&(x1[3*0]), &(x1[3*0]), &(x1[3*2])) ;
+  agg_vector_diff(&(x1[3*1]), &(x1[3*1]), &(x1[3*2])) ;
+  agg_vector_diff(&(x2[3*0]), &(x2[3*0]), &(x2[3*2])) ;
+  agg_vector_diff(&(x2[3*1]), &(x2[3*1]), &(x2[3*2])) ;
+
+  agg_vector_cross(N1, &(x1[3*0]), &(x1[3*1])) ;
+  agg_vector_cross(N2, &(x2[3*0]), &(x2[3*1])) ;
+
+  /*normals are (about) the same direction*/
+  if ( agg_vector_scalar(N1, N2) > 0 ) return 0 ;
+  
+  if ( agg_patch_clipping_type(c1) == AGG_CLIP_ELLIPSE ) {
+    c1->ornt = -(c1->ornt) ;
+    return 0 ;
+  }
+
+  if ( agg_patch_clipping_type(c2) == AGG_CLIP_ELLIPSE ) {
+    c2->ornt = -(c2->ornt) ;
+    return 0 ;
+  }
+
+  g_assert_not_reached() ;
+  
+  return 0 ;
+}
 
 /**
  * @}

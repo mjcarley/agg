@@ -348,6 +348,12 @@ typedef enum {
   AGG_AXES_PX_PY_MZ = 5,  /**< (x,y,z) -> (x, y,-z) (reflection in x-y)*/
 } agg_axes_t ;
 
+typedef enum {
+  AGG_GRID_UNDEFINED = 0,
+  AGG_GRID_REGULAR   = 1,
+  AGG_GRID_TRIANGLE  = 2
+} agg_grid_t ;
+
 /** @typedef agg_surface_t
  *
  * Data structure to hold surfaces formed by transformation of sections
@@ -360,22 +366,26 @@ typedef struct _agg_surface_t agg_surface_t ;
 struct _agg_surface_t {
   agg_section_t *s ;
   agg_axes_t axes ;
-  gint ns, nsmax ;
-  gdouble umin, umax, *u, *w ;
+  agg_grid_t grid ;
+  gint ns, nsmax, nsec, nsp ;
+  gdouble umin, umax, *u, *w, area ;
   agg_transform_t *T ;
 } ;
 #endif /*DOXYGEN*/
 
-#define agg_surface_section(_s,_i)         (&((_s)->s[(_i)]))
-#define agg_surface_section_number(_s)     ((_s)->ns)
-#define agg_surface_section_number_max(_s) ((_s)->nsmax)
-#define agg_surface_u(_s,_i)               ((_s)->u[(_i)])
-#define agg_surface_weight(_s,_i)          ((_s)->w[(_i)])
-#define agg_surface_umin(_s)               ((_s)->umin)
-#define agg_surface_umax(_s)               ((_s)->umax)
-#define agg_surface_transform(_s)          ((_s)->T)
-#define agg_surface_axes(_s)               ((_s)->axes)
-
+#define agg_surface_section(_s,_i)          (&((_s)->s[(_i)]))
+#define agg_surface_section_number(_s)      ((_s)->ns)
+#define agg_surface_section_number_max(_s)  ((_s)->nsmax)
+#define agg_surface_u(_s,_i)                ((_s)->u[(_i)])
+#define agg_surface_weight(_s,_i)           ((_s)->w[(_i)])
+#define agg_surface_umin(_s)                ((_s)->umin)
+#define agg_surface_umax(_s)                ((_s)->umax)
+#define agg_surface_transform(_s)           ((_s)->T)
+#define agg_surface_axes(_s)                ((_s)->axes)
+#define agg_surface_grid(_s)                ((_s)->grid)
+#define agg_surface_grid_section_number(_s) ((_s)->nsec)
+#define agg_surface_grid_spline_number(_s)  ((_s)->nsp)
+#define agg_surface_grid_element_area(_s)   ((_s)->area)
 /**
  *  @}
  */
@@ -385,6 +395,25 @@ struct _agg_surface_t {
  * @ingroup patches
  * 
  */
+
+
+typedef enum {
+  AGG_CLIP_UNDEFINED  = 0,
+  AGG_CLIP_CONSTANT_S = 1,
+  AGG_CLIP_CONSTANT_T = 2,
+  AGG_CLIP_ELLIPSE    = 3
+} agg_patch_clip_t ;
+
+typedef struct _agg_patch_clipping_t agg_patch_clipping_t ;
+
+struct _agg_patch_clipping_t {
+  agg_patch_clip_t c ;
+  gdouble data[4], ornt ;
+} ;
+
+#define agg_patch_clipping_type(_c)        ((_c)->c)
+#define agg_patch_clipping_data(_c,_i)     ((_c)->data[(_i)])
+#define agg_patch_clipping_orientation(_c) ((_c)->ornt)
 
 #define AGG_PATCH_POINT_SIZE 3
 
@@ -409,8 +438,9 @@ typedef agg_patch_t ;
 typedef struct _agg_patch_t agg_patch_t ;
 struct _agg_patch_t {
   agg_patch_mapping_t map ;
+  agg_patch_clipping_t clip[8] ;
   gdouble *st ;
-  gint nst, nstmax ;
+  gint nst, nstmax, nclip ;
   gboolean swrap, twrap,  /*dealing with s and t out of range*/
     invert ; /*invert triangles to maintain correct normal*/
 } ;
@@ -421,7 +451,23 @@ struct _agg_patch_t {
 #define agg_patch_wrap_s(_P)            ((_P)->swrap)
 #define agg_patch_wrap_t(_P)            ((_P)->twrap)
 #define agg_patch_invert(_P)            ((_P)->invert)
+#define agg_patch_clipping(_P,_i)       (&((_P)->clip[(_i)]))
+#define agg_patch_clipping_number(_P)   ((_P)->nclip)
+
 #endif /*DOXYGEN*/
+
+typedef struct _agg_surface_blend_t agg_surface_blend_t ;
+
+struct _agg_surface_blend_t {
+  agg_surface_t *S[2] ;
+  agg_patch_t *P[2] ;
+  gint nsp, /*number of splines on curve*/
+    ic[2] ; /*index of clipping on each patch*/
+} ;
+
+#define agg_surface_blend_surface(_B,_i)    ((_B)->S[(_i)])
+#define agg_surface_blend_patch(_B,_i)      ((_B)->P[(_i)])
+#define agg_surface_blend_spline_number(_B) ((_B)->nsp)
 
 /**
  * @}
@@ -493,7 +539,6 @@ struct _agg_intersection_t {
  * @}
  */
 
-
 /**
  * @{
  * 
@@ -517,8 +562,9 @@ struct _agg_mesh_t {
   agg_patch_t *P[32] ;
   gdouble *p ;
   gint np, npmax, *sp, nsp, nspmax, *isp, *e, ne, nemax, *ptags,
-    isect[32], ipps[32], insp[32], ni, ns ;
-  agg_intersection_t *inter[32] ; 
+    isect[32], ipps[32], insp[32], ni, ns, nb ;
+  agg_intersection_t *inter[32] ;
+  agg_surface_blend_t B[32] ;
 } ;
 #endif /*DOXYGEN*/
 
@@ -536,9 +582,11 @@ struct _agg_mesh_t {
 #define agg_mesh_spline(_w,_i)  &((_w)->sp[(_w)->isp[(_i)]])
 #define agg_mesh_spline_length(_w,_i)	\
   ((_w)->isp[(_i)+1]-(_w)->isp[(_i)])
-#define agg_mesh_patch(_w,_i)       ((_w)->P[(_i)])
-#define agg_mesh_surface(_w,_i)     ((_w)->S[(_i)])
-#define agg_mesh_surface_number(_w) ((_w)->ns)
+#define agg_mesh_patch(_w,_i)         ((_w)->P[(_i)])
+#define agg_mesh_surface(_w,_i)       ((_w)->S[(_i)])
+#define agg_mesh_surface_number(_w)   ((_w)->ns)
+#define agg_mesh_surface_blend(_w,_i) (&((_w)->B[(_i)]))
+#define agg_mesh_surface_blend_number(_w) ((_w)->nb)
 #define agg_mesh_element_size(_e)			\
   ( ((_e)[4] != 0) ? 5 :				\
     (((_e)[3] != 0) ? 4 : 3) )
@@ -608,9 +656,11 @@ struct _agg_surface_workspace_t {
 
 gint agg_bernstein_basis(gint n, gdouble x, gdouble *S, gdouble *dS) ;
 gdouble agg_bernstein_basis_eval(gint n, gint r, gdouble x) ;
+gdouble agg_bernstein_derivative_eval(gint n, gint r, gdouble x) ;
 
 agg_section_t *agg_section_new(gint oumax, gint olmax) ;
 gdouble agg_section_eval(agg_section_t *s, gdouble x) ;
+gdouble agg_section_diff(agg_section_t *s, gdouble x) ;
 gint agg_section_copy(agg_section_t *dest, agg_section_t *src) ;
 gint agg_section_set_circle(agg_section_t *s) ;
 gint agg_section_set_aerofoil(agg_section_t *s, gdouble eta,
@@ -675,6 +725,9 @@ gint agg_surface_weights_make(agg_surface_t *S) ;
 gint agg_surface_section_interp(agg_surface_t *S, gdouble u, agg_section_t *s) ;
 gint agg_surface_point_eval(agg_surface_t *S, gdouble u, gdouble v,
 			    gdouble *x, agg_surface_workspace_t *w) ;
+gint agg_surface_point_diff(agg_surface_t *S, gdouble u, gdouble v,
+			    gdouble *x, gdouble *xu, gdouble *xv,
+			    agg_surface_workspace_t *w) ;
 agg_surface_workspace_t *agg_surface_workspace_new(void) ;
 
 gdouble agg_naca_four(gdouble t, gdouble p, gdouble m, gdouble x) ;
@@ -684,11 +737,16 @@ gint agg_patch_map(agg_patch_t *p, gdouble s, gdouble t,
 		   gdouble *u, gdouble *v) ;
 gint agg_patch_st_correct(agg_patch_t *P, gdouble *st) ;
 gint agg_patch_parse(agg_patch_t *P, agg_variable_t *p, gint np) ;
+gint agg_patch_surface_diff(agg_patch_t *P,
+			    gdouble s, gdouble t,
+			    gdouble *xu, gdouble *xv,
+			    gdouble *xs, gdouble *xt) ;
 
 agg_intersection_t *agg_intersection_new(gint nstmax) ;
 gint agg_surface_patch_intersection(agg_intersection_t *inter,
 				    agg_surface_t *S1, agg_patch_t *P1,
 				    agg_surface_t *S2, agg_patch_t *P2,
+				    agg_surface_blend_t *B,
 				    agg_surface_workspace_t *w) ;
 gint agg_intersection_curve_write(FILE *f, agg_intersection_t *inter,
 				  agg_surface_workspace_t *w) ;
@@ -697,6 +755,16 @@ gint agg_intersection_resample(agg_intersection_t *inter,
 			       gint nsp, gint pps,
 			       agg_intersection_t *resample,
 			       agg_surface_workspace_t *w) ;
+gint agg_intersection_clip(agg_intersection_t *inter,
+			   gint c, agg_patch_clip_t cut,
+			   agg_patch_clipping_t *clip) ;
+gint agg_patch_clip_eval(agg_patch_clipping_t *c, gdouble u,
+			 gdouble *s, gdouble *t) ;
+gint agg_clipping_orient(agg_patch_clipping_t *c1, agg_patch_t *P1,
+			 agg_surface_t *S1,
+			 agg_patch_clipping_t *c2, agg_patch_t *P2,
+			 agg_surface_t *S2,
+			 agg_surface_workspace_t *w) ;
 
 agg_mesh_t *agg_mesh_new(gint npmax, gint nspmax, gint nemax) ;
 gint agg_mesh_surface_make(agg_mesh_t *w,
@@ -717,22 +785,21 @@ gint agg_mesh_element_add(agg_mesh_t *w, gint s0, gint s1, gint s2, gint s3) ;
 gint agg_mesh_intersection_add(agg_mesh_t *w,
 			       agg_intersection_t *inter,
 			       gint nsp, gint pps) ;
-gint agg_mesh_surface_add(agg_mesh_t *w,
-			  agg_surface_t *S, agg_patch_t *P,
-			  gint nsec, gint nseg, gint pps,
-			  gchar *args,
-			  agg_surface_workspace_t *ws) ;
+gint agg_mesh_surface_add_triangle(agg_mesh_t *msh, gint isurf,
+				   gchar *args, gint pps,
+				   agg_surface_workspace_t *w) ;
+gint agg_mesh_surface_blend_add(agg_mesh_t *m, gint iB,
+				gint nsec, gint nsp, gint pps,
+				agg_surface_workspace_t *w) ;
+gint agg_mesh_surface_add_grid(agg_mesh_t *m, gint iS,
+			       gint nsec, gint nsp, gint pps,
+			       agg_surface_workspace_t *w) ;
 gint agg_mesh_spline_from_endpoints(agg_mesh_t *w, gint p0, gint p1) ;
 gint agg_mesh_surface_point_add(agg_mesh_t *w, gint surf,
 				gdouble s, gdouble t,
 				agg_surface_workspace_t *ws) ;
-gint agg_mesh_body_triangle(agg_mesh_t *m, agg_body_t *b,
-			    gint nsec, gint nsp, gint pps,
-			    gchar *args,		   
-			    agg_surface_workspace_t *w) ;
-gint agg_mesh_body_regular(agg_mesh_t *m, agg_body_t *b,
-			   gint nsec, gint nsp, gint pps,
-			   agg_surface_workspace_t *w) ;
+gint agg_mesh_body(agg_mesh_t *m, agg_body_t *b, gint pps,
+		   agg_surface_workspace_t *w) ;
 gint agg_mesh_element_nodes(agg_mesh_t *m, gint e,
 			    gint *nodes, gint *nnodes, gint *s) ;
 
@@ -748,6 +815,12 @@ gint agg_body_surfaces_list(FILE *f, agg_body_t *b) ;
 gint agg_sphere_ico_base(gdouble *th, gint tstr,
 			 gdouble *ph, gint pstr,
 			 gint *e, gint estr, gboolean convert) ;
+
+agg_surface_blend_t *agg_surface_blend_new(void) ;
+gint agg_surface_blend_evaluate(agg_surface_blend_t *B,
+				gdouble s, gdouble t, gdouble *x,
+				agg_surface_workspace_t *w) ;
+gint agg_hermite_eval(gdouble s, gdouble *H) ;
 
 #endif /*__AGG_H_INCLUDED__*/
 

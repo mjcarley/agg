@@ -139,7 +139,7 @@ libagg_la_LIBADD =
 am_libagg_la_OBJECTS = agg.lo bernstein.lo binomials.lo tinyexpr.lo \
 	section.lo transform.lo variables.lo surface.lo naca.lo \
 	intersection.lo hefsi.lo patch.lo moller-tri.lo mesh.lo \
-	body.lo ico.lo
+	body.lo ico.lo blend.lo
 libagg_la_OBJECTS = $(am_libagg_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -165,8 +165,8 @@ DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/agg.Plo ./$(DEPDIR)/bernstein.Plo \
-	./$(DEPDIR)/binomials.Plo ./$(DEPDIR)/body.Plo \
-	./$(DEPDIR)/hefsi.Plo ./$(DEPDIR)/ico.Plo \
+	./$(DEPDIR)/binomials.Plo ./$(DEPDIR)/blend.Plo \
+	./$(DEPDIR)/body.Plo ./$(DEPDIR)/hefsi.Plo ./$(DEPDIR)/ico.Plo \
 	./$(DEPDIR)/intersection.Plo ./$(DEPDIR)/mesh.Plo \
 	./$(DEPDIR)/moller-tri.Plo ./$(DEPDIR)/naca.Plo \
 	./$(DEPDIR)/patch.Plo ./$(DEPDIR)/section.Plo \
@@ -388,7 +388,8 @@ libagg_la_SOURCES = \
 	moller-tri.c \
 	mesh.c \
 	body.c \
-	ico.c
+	ico.c \
+	blend.c
 
 include_HEADERS = \
 	agg.h
@@ -513,6 +514,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/agg.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/bernstein.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/binomials.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/blend.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/body.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hefsi.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ico.Plo@am__quote@ # am--include-marker
@@ -716,6 +718,7 @@ distclean: distclean-am
 		-rm -f ./$(DEPDIR)/agg.Plo
 	-rm -f ./$(DEPDIR)/bernstein.Plo
 	-rm -f ./$(DEPDIR)/binomials.Plo
+	-rm -f ./$(DEPDIR)/blend.Plo
 	-rm -f ./$(DEPDIR)/body.Plo
 	-rm -f ./$(DEPDIR)/hefsi.Plo
 	-rm -f ./$(DEPDIR)/ico.Plo
@@ -777,6 +780,7 @@ maintainer-clean: maintainer-clean-am
 		-rm -f ./$(DEPDIR)/agg.Plo
 	-rm -f ./$(DEPDIR)/bernstein.Plo
 	-rm -f ./$(DEPDIR)/binomials.Plo
+	-rm -f ./$(DEPDIR)/blend.Plo
 	-rm -f ./$(DEPDIR)/body.Plo
 	-rm -f ./$(DEPDIR)/hefsi.Plo
 	-rm -f ./$(DEPDIR)/ico.Plo

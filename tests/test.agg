@@ -21,7 +21,7 @@ surface {
   transform("shrink", 0, 0, "1+u*(taper-1)")
   transform("yscale", "(1-u)^(1/8)")  
   transform("scale", "root")
-  transform("rotate", 0, 0, "twist*u")
+  ##transform("rotate", 0, 0, "twist*u")
   transform("translate", "xle + span*sin(sweep)*u",
   			 "yle+span*sin(dihedral)*u",
 			 "span/1000 + span*u")

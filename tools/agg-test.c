@@ -210,16 +210,21 @@ static void bernstein_basis_test(gint n)
 
   ee = 1e-6 ;
   
-  err = 0.0 ;
+  err = err_d = 0.0 ;
   for ( x = 0.0 ; x <= 1.0 ; x += 1.0/128 ) {
     tot = 0.0 ;
     for ( j = 0 ; j <= n ; j ++ ) {
       tot += agg_bernstein_basis_eval(n, j, x) ;
+      dS[0] = agg_bernstein_derivative_eval(n, j, x) ;      
+      dB = (agg_bernstein_basis_eval(n, j, x+ee/2) -
+	    agg_bernstein_basis_eval(n, j, x-ee/2))/ee ;
+      err_d = MAX(err_d, fabs(dS[0]-dB)) ;
     }
     err = MAX(err, fabs(tot-1.0)) ;
   }
 
   fprintf(stderr, "termwise maximum deviation from unity: %lg\n", err) ;
+  fprintf(stderr, "maximum derivative error: %lg\n", err_d) ;
 
   err = 0.0 ;
   for ( x = 0.0 ; x <= 1.0 ; x += 1.0/128 ) {
@@ -232,7 +237,7 @@ static void bernstein_basis_test(gint n)
   fprintf(stderr, "vector maximum deviation from unity: %lg\n", err) ;
 
   err_d = 0.0 ;
-  for ( x = 1.0/128 ; x < 1.0 ; x += 1.0/128 ) {
+  for ( x = 0.0 ; x <= 1.0 ; x += 1.0/128 ) {
     tot = 0.0 ;
     agg_bernstein_basis(n, x, S, dS) ;
     for ( j = 0 ; j <= n ; j ++ ) {
@@ -251,7 +256,7 @@ static void circle_test(void)
 
 {
   gint i, nx ;
-  gdouble x, y, r, err ;
+  gdouble x, y, dy, r, err ;
   agg_section_t *s ;
 
   s = agg_section_new(8, 8) ;
@@ -262,7 +267,8 @@ static void circle_test(void)
   for ( i = 0 ; i <= nx ; i ++ ) {
     x = -1.0 + 2.0*i/nx ;
     y = agg_section_eval(s, x) ;
-    fprintf(stdout, "%e %e\n", fabs(x), y) ;
+    dy = agg_section_diff(s, x) ;
+    fprintf(stdout, "%e %e %e\n", fabs(x), y, dy) ;
     r = sqrt((fabs(x)-0.5)*(fabs(x)-0.5) + y*y) ;
     err = MAX(err, fabs(r-0.5)) ;
   }
@@ -276,7 +282,7 @@ static void aerofoil_test(void)
 
 {
   gint i, nx ;
-  gdouble x, y ;
+  gdouble x, y, dy ;
   agg_section_t *s ;
 
   s = agg_section_new(8, 8) ;
@@ -286,7 +292,8 @@ static void aerofoil_test(void)
   for ( i = 0 ; i <= nx ; i ++ ) {
     x = -1.0 + 2.0*i/nx ;
     y = agg_section_eval(s, x) ;
-    fprintf(stdout, "%e %e\n", fabs(x), y) ;
+    dy = agg_section_diff(s, x) ;
+    fprintf(stdout, "%e %e %e\n", fabs(x), y, dy) ;
   }
   
   return ;
@@ -487,7 +494,8 @@ static void body_test(void)
     agg_mesh_surface_number(wf) ++ ;
   }
 
-  agg_mesh_body_regular(wf, b, nsec, nsp, pps, w) ;  
+  /* agg_mesh_body_regular(wf, b, nsec, nsp, pps, w) ;   */
+  g_assert_not_reached() ;
   
   output = fopen("surface.geo", "w") ;
   fprintf(output, "lc = 0.1 ;\n") ;
@@ -504,7 +512,7 @@ static void parser_test(gchar *file)
   agg_mesh_t *m ;
   gint nsec, nsp, pps, offp, offsp, offs ;
   agg_surface_workspace_t *w ;
-  gchar *args = "pzqa0.01" ;
+  gchar *args = "pzqa0.001" ;
   FILE *output ;
   
   b = agg_body_new(32, 32) ;
@@ -523,7 +531,19 @@ static void parser_test(gchar *file)
   nsec = 8 ; nsp = 65 ; pps = 2 ;
   offp = offsp = offs = 1 ;
 
-  agg_mesh_body_triangle(m, b, nsec, nsp, pps, args, w) ;
+  agg_surface_grid(agg_body_surface(b,0)) = AGG_GRID_REGULAR ;
+  agg_surface_grid_section_number(agg_body_surface(b,0)) = nsec ;
+  agg_surface_grid_spline_number(agg_body_surface(b,0)) = nsp ;
+  agg_surface_grid(agg_body_surface(b,1)) = AGG_GRID_REGULAR ;
+  agg_surface_grid_section_number(agg_body_surface(b,1)) = nsec ;
+  agg_surface_grid_spline_number(agg_body_surface(b,1)) = nsp ;
+  agg_surface_grid(agg_body_surface(b,2)) = AGG_GRID_TRIANGLE ;
+  agg_surface_grid_element_area(agg_body_surface(b,2)) = 1e-3 ;
+  
+  
+  /* agg_mesh_body_triangle(m, b, nsec, nsp, pps, args, w) ; */
+  /* agg_mesh_body_regular(m, b, nsec, nsp, pps, w) ; */
+  agg_mesh_body(m, b, pps, w) ;
 
   output = fopen("surface.geo", "w") ;
   fprintf(output, "lc = 0.1 ;\n") ;

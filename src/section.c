@@ -369,6 +369,109 @@ gint agg_sections_list(FILE *f)
   return 0 ;
 }
 
+
+static gdouble agg_section_ellipse_diff(agg_section_t *s, gdouble x)
+
+{
+  gdouble dy, *c, C, dC, sgn, n1, n2 ;
+  gint i, order ;
+  
+  if ( x < 0.0 ) {
+    order = agg_section_order_lower(s) ;
+    c = &(agg_section_coefficient_lower(s,0)) ;
+    x = fabs(x) ;
+    sgn = -1 ;
+  } else {
+    order = agg_section_order_upper(s) ;
+    c = &(agg_section_coefficient_upper(s,0)) ;
+    sgn = 1 ;
+  }
+
+  dy = 0.0 ;
+  n1 = agg_section_eta_left(s) ;
+  n2 = agg_section_eta_right(s) ;
+  C  = pow(x, n1)*pow(1.0-x, n2) ;
+  dC = n1*pow(x, n1-1)*pow(1.0-x, n2) - n2*pow(x, n1)*pow(1.0-x, n2-1) ;
+
+  for ( i = 0 ; i <= order ; i ++ ) {
+    dy += sgn*c[i]*(agg_bernstein_derivative_eval(order, i, x)*C +
+		    agg_bernstein_basis_eval(order, i, x)*dC) ;
+  }
+  
+  return dy ;
+}
+
+static gdouble agg_section_aerofoil_diff(agg_section_t *s, gdouble x)
+
+{
+  gdouble dy, *c, C, dC, yte, sgn, n1, n2 ;
+  gint i, order ;
+  
+  if ( x < 0.0 ) {
+    order = agg_section_order_lower(s) ;
+    c = &(agg_section_coefficient_lower(s,0)) ;
+    yte = agg_section_trailing_edge_lower(s) ;
+    x = fabs(x) ;
+    sgn = -1 ;
+  } else {
+    order = agg_section_order_upper(s) ;
+    c = &(agg_section_coefficient_upper(s,0)) ;
+    yte = agg_section_trailing_edge_upper(s) ;
+    sgn = 1 ;
+  }
+
+  dy = sgn*yte ;
+  n1 = agg_section_eta_left(s) ;
+  n2 = agg_section_eta_right(s) ;
+  C  = pow(x, n1)*pow(1.0-x, n2) ;
+  dC = n1*pow(x, n1-1)*pow(1.0-x, n2) - n2*pow(x, n1)*pow(1.0-x, n2-1) ;
+  for ( i = 0 ; i <= order ; i ++ ) {
+    dy += sgn*c[i]*(agg_bernstein_derivative_eval(order, i, x)*C +
+		    agg_bernstein_basis_eval(order, i, x)*dC) ;
+  }
+
+  return dy ;
+}
+
+/** 
+ * Derivative of a section curve
+ * 
+ * @param s a ::agg_section_t containing the section data;
+ * @param x evaluation point \f$-1\leq x\leq 1\f$. 
+ * 
+ * @return \f$y'=\mathrm{d}f(x)/\mathrm{d}x\f$ on success. An error is
+ * reported and execution ceases if \a x is out of range or the
+ * section type is undefined.
+ */
+
+gdouble agg_section_diff(agg_section_t *s, gdouble x)
+
+{
+  if ( agg_section_type(s) == AGG_SECTION_UNDEFINED )
+    g_error("%s: undefined section type", __FUNCTION__) ;
+
+  /*code not tested for more complex geometries yet*/
+  g_assert(agg_section_order_lower(s) < 1) ;
+  g_assert(agg_section_order_upper(s) < 1) ;
+  
+  if ( x < -1.0 || x > 1.0 ) 
+    g_error("%s: input parameter x (%lg) out of range (-1,1)",
+	    __FUNCTION__, x) ;
+
+  if ( agg_section_type(s) == AGG_SECTION_ELLIPSE ) {
+    return agg_section_ellipse_diff(s, x) ;
+  }
+
+  if ( agg_section_type(s) == AGG_SECTION_AEROFOIL ) {
+    return agg_section_aerofoil_diff(s, x) ;
+  }
+  
+  g_assert_not_reached() ;
+  
+  return 0.0 ;
+}
+
 /**
  * @}
  */
+

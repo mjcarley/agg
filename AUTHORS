@@ -20,12 +20,11 @@ Implementation available from
 
 https://fileadmin.cs.lth.se/cs/Personal/Tomas_Akenine-Moller/code/opttritri.txt
 
-* Triangulation
+* Triangle API library
 
-AGG contains a modified version of Jonathan Shewchuk's Triangle
-code. The original code and relevant publications are available from:
+AGG uses Christian Woltering's API for Triangle:
 
-https://www.cs.cmu.edu/~quake/triangle.html
+https://github.com/wo80/Triangle/
 
-Copyright in the code remains with Jonathan Shewchuck and the code is
-distributed subject to conditions which are given in src/triangle.c
+and some code from that library (for mesh traversal) has been adapted
+for use in the AGG source code. See src/mesh.c
