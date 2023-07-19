@@ -10,6 +10,9 @@ to allow users to supply geometries in a parametric form which allows
 automatic generation of surface geometries which can be used in
 computations.
 
+After installing prerequisites, installation follows the standard
+procedure:
+
 ./configure && make && make install
 
 Prerequisites
