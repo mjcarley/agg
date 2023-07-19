@@ -348,10 +348,15 @@ typedef enum {
   AGG_AXES_PX_PY_MZ = 5,  /**< (x,y,z) -> (x, y,-z) (reflection in x-y)*/
 } agg_axes_t ;
 
+/** @typedef agg_grid_t
+ *
+ * Specification of surface grid generation algorithms
+ */
+
 typedef enum {
-  AGG_GRID_UNDEFINED = 0,
-  AGG_GRID_REGULAR   = 1,
-  AGG_GRID_TRIANGLE  = 2
+  AGG_GRID_UNDEFINED = 0,  /**< undefined (generates an error) */
+  AGG_GRID_REGULAR   = 1,  /**< regular quadrilaterals in parametric space */
+  AGG_GRID_TRIANGLE  = 2   /**< mesh generated using Triangle code */
 } agg_grid_t ;
 
 /** @typedef agg_surface_t
@@ -461,6 +466,7 @@ typedef struct _agg_surface_blend_t agg_surface_blend_t ;
 struct _agg_surface_blend_t {
   agg_surface_t *S[2] ;
   agg_patch_t *P[2] ;
+  gboolean invert ;
   gint nsp, /*number of splines on curve*/
     ic[2] ; /*index of clipping on each patch*/
 } ;
@@ -468,6 +474,7 @@ struct _agg_surface_blend_t {
 #define agg_surface_blend_surface(_B,_i)    ((_B)->S[(_i)])
 #define agg_surface_blend_patch(_B,_i)      ((_B)->P[(_i)])
 #define agg_surface_blend_spline_number(_B) ((_B)->nsp)
+#define agg_surface_blend_invert(_B)        ((_B)->invert)
 
 /**
  * @}
@@ -782,14 +789,10 @@ gint agg_mesh_spline_interp_points(agg_mesh_t *w, gint s,
 gboolean agg_mesh_splines_connected(agg_mesh_t *w,
 				    gint i0, gint i1, gint *p) ;
 gint agg_mesh_element_add(agg_mesh_t *w, gint s0, gint s1, gint s2, gint s3) ;
-gint agg_mesh_intersection_add(agg_mesh_t *w,
-			       agg_intersection_t *inter,
-			       gint nsp, gint pps) ;
 gint agg_mesh_surface_add_triangle(agg_mesh_t *msh, gint isurf,
 				   gchar *args, gint pps,
 				   agg_surface_workspace_t *w) ;
-gint agg_mesh_surface_blend_add(agg_mesh_t *m, gint iB,
-				gint nsec, gint nsp, gint pps,
+gint agg_mesh_surface_blend_add(agg_mesh_t *m, gint iB, gint nsec, gint pps,
 				agg_surface_workspace_t *w) ;
 gint agg_mesh_surface_add_grid(agg_mesh_t *m, gint iS,
 			       gint nsec, gint nsp, gint pps,
@@ -815,6 +818,7 @@ gint agg_body_surfaces_list(FILE *f, agg_body_t *b) ;
 gint agg_sphere_ico_base(gdouble *th, gint tstr,
 			 gdouble *ph, gint pstr,
 			 gint *e, gint estr, gboolean convert) ;
+agg_grid_t agg_grid_parse(gchar *str) ;
 
 agg_surface_blend_t *agg_surface_blend_new(void) ;
 gint agg_surface_blend_evaluate(agg_surface_blend_t *B,

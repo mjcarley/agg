@@ -10,15 +10,8 @@ Patches used to map parts of surfaces and generate meshes.
 gint \textbf{ agg\+\_\+patch\+\_\+map} (\textbf{ agg\+\_\+patch\+\_\+t} $\ast$P, gdouble s, gdouble t, gdouble $\ast$u, gdouble $\ast$v)
 \item 
 gint \textbf{ agg\+\_\+patch\+\_\+parse} (\textbf{ agg\+\_\+patch\+\_\+t} $\ast$P, \textbf{ agg\+\_\+variable\+\_\+t} $\ast$p, gint np)
-\end{DoxyCompactItemize}
-\begin{DoxyCompactItemize}
 \item 
-enum \textbf{ agg\+\_\+patch\+\_\+mapping\+\_\+t} \{ \textbf{ AGG\+\_\+\+PATCH\+\_\+\+BILINEAR} = 0
-, \textbf{ AGG\+\_\+\+PATCH\+\_\+\+SPHERICAL} = 1
-, \textbf{ AGG\+\_\+\+PATCH\+\_\+\+TUBULAR} = 2
- \}
-\item 
-typedef \textbf{ agg\+\_\+patch\+\_\+t}
+gint \textbf{ agg\+\_\+clipping\+\_\+orient} (agg\+\_\+patch\+\_\+clipping\+\_\+t $\ast$c1, \textbf{ agg\+\_\+patch\+\_\+t} $\ast$P1, \textbf{ agg\+\_\+surface\+\_\+t} $\ast$S1, agg\+\_\+patch\+\_\+clipping\+\_\+t $\ast$c2, \textbf{ agg\+\_\+patch\+\_\+t} $\ast$P2, \textbf{ agg\+\_\+surface\+\_\+t} $\ast$S2, agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$w)
 \end{DoxyCompactItemize}
 
 
@@ -27,30 +20,36 @@ Patches used to map parts of surfaces and generate meshes.
 
 
 
-\doxysubsection{Enumeration Type Documentation}
-\mbox{\label{group__patches_gab2dada3ec7e3ef50c701a16f93701ebc}} 
-\index{Surface patches@{Surface patches}!agg\_patch\_mapping\_t@{agg\_patch\_mapping\_t}}
-\index{agg\_patch\_mapping\_t@{agg\_patch\_mapping\_t}!Surface patches@{Surface patches}}
-\doxysubsubsection{agg\_patch\_mapping\_t}
-{\footnotesize\ttfamily enum \textbf{ agg\+\_\+patch\+\_\+mapping\+\_\+t}}
-
-Mappings from $(s,t)$ on a patch to $(u,v)$ on a surface \begin{DoxyEnumFields}{Enumerator}
-\raisebox{\heightof{T}}[0pt][0pt]{\index{AGG\_PATCH\_BILINEAR@{AGG\_PATCH\_BILINEAR}!Surface patches@{Surface patches}}\index{Surface patches@{Surface patches}!AGG\_PATCH\_BILINEAR@{AGG\_PATCH\_BILINEAR}}}\mbox{\label{group__patches_gab2dada3ec7e3ef50c701a16f93701ebca3b4f4c2395e1148d13e7d4b1f8320e49}} 
-AGG\+\_\+\+PATCH\+\_\+\+BILINEAR&bilinear mapping between corners \\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{AGG\_PATCH\_SPHERICAL@{AGG\_PATCH\_SPHERICAL}!Surface patches@{Surface patches}}\index{Surface patches@{Surface patches}!AGG\_PATCH\_SPHERICAL@{AGG\_PATCH\_SPHERICAL}}}\mbox{\label{group__patches_gab2dada3ec7e3ef50c701a16f93701ebcaec086ca8c9ffd8890a01b667bb032794}} 
-AGG\+\_\+\+PATCH\+\_\+\+SPHERICAL&mapping to surface of sphere \\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{AGG\_PATCH\_TUBULAR@{AGG\_PATCH\_TUBULAR}!Surface patches@{Surface patches}}\index{Surface patches@{Surface patches}!AGG\_PATCH\_TUBULAR@{AGG\_PATCH\_TUBULAR}}}\mbox{\label{group__patches_gab2dada3ec7e3ef50c701a16f93701ebca78d8b116b0cd3172683582fd297fdc49}} 
-AGG\+\_\+\+PATCH\+\_\+\+TUBULAR&mapping to surface of open cylinder \\
-\hline
-
-\end{DoxyEnumFields}
-
-
 \doxysubsection{Function Documentation}
+\mbox{\label{group__patches_ga924ac983f741e64ce5812616a8ca56c9}} 
+\index{Surface patches@{Surface patches}!agg\_clipping\_orient@{agg\_clipping\_orient}}
+\index{agg\_clipping\_orient@{agg\_clipping\_orient}!Surface patches@{Surface patches}}
+\doxysubsubsection{agg\_clipping\_orient()}
+{\footnotesize\ttfamily gint agg\+\_\+clipping\+\_\+orient (\begin{DoxyParamCaption}\item[{agg\+\_\+patch\+\_\+clipping\+\_\+t $\ast$}]{c1,  }\item[{\textbf{ agg\+\_\+patch\+\_\+t} $\ast$}]{P1,  }\item[{\textbf{ agg\+\_\+surface\+\_\+t} $\ast$}]{S1,  }\item[{agg\+\_\+patch\+\_\+clipping\+\_\+t $\ast$}]{c2,  }\item[{\textbf{ agg\+\_\+patch\+\_\+t} $\ast$}]{P2,  }\item[{\textbf{ agg\+\_\+surface\+\_\+t} $\ast$}]{S2,  }\item[{agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$}]{w }\end{DoxyParamCaption})}
+
+Set orientation of two clipping curves so that they are traversed in the same sense in physical space. The test is performed by evaluating approximate normals to the curve planes (this assumes that the curves are not too far from planar) and checking the normals are approximately parallel, using the sign of the scalar product. If necessary, the orientation of one curve is switched, with priority given to changing the orientation of a closed curve, corresponding to a hole in a surface, over a cut on constant $s$ or $t$. If curves are not mutually oriented and are both constant parameter cuts, execution stops with an error (until I can decide how best to handle this case).
+
+
+\begin{DoxyParams}{Parameters}
+{\em c1} & first patch clipping; \\
+\hline
+{\em P1} & first parametric patch; \\
+\hline
+{\em S1} & first physical surface; \\
+\hline
+{\em c2} & second patch clipping; ~\newline
+ \\
+\hline
+{\em P2} & second parametric patch; \\
+\hline
+{\em S2} & second physical surface; \\
+\hline
+{\em w} & workspace for surface point evaluation.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
 \mbox{\label{group__patches_gaa07e6a7a89baf7a5a9acd8f2de6ad111}} 
 \index{Surface patches@{Surface patches}!agg\_patch\_map@{agg\_patch\_map}}
 \index{agg\_patch\_map@{agg\_patch\_map}!Surface patches@{Surface patches}}
@@ -85,7 +84,7 @@ References \textbf{ AGG\+\_\+\+PATCH\+\_\+\+BILINEAR}.
 \doxysubsubsection{agg\_patch\_parse()}
 {\footnotesize\ttfamily gint agg\+\_\+patch\+\_\+parse (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+patch\+\_\+t} $\ast$}]{P,  }\item[{\textbf{ agg\+\_\+variable\+\_\+t} $\ast$}]{p,  }\item[{gint}]{np }\end{DoxyParamCaption})}
 
-Parse string data for an \doxyref{agg\+\_\+patch\+\_\+t}{p.}{group__patches_gabdb5fa64575d1f09fb1e68a13a103777}.
+Parse string data for an \doxyref{agg\+\_\+patch\+\_\+t}{p.}{agg_8h_abdb5fa64575d1f09fb1e68a13a103777}.
 
 
 \begin{DoxyParams}{Parameters}
@@ -99,16 +98,3 @@ Parse string data for an \doxyref{agg\+\_\+patch\+\_\+t}{p.}{group__patches_gabd
 \begin{DoxyReturn}{Returns}
 0 on success. 
 \end{DoxyReturn}
-
-
-\doxysubsection{Variable Documentation}
-\mbox{\label{group__patches_gabdb5fa64575d1f09fb1e68a13a103777}} 
-\index{Surface patches@{Surface patches}!agg\_patch\_t@{agg\_patch\_t}}
-\index{agg\_patch\_t@{agg\_patch\_t}!Surface patches@{Surface patches}}
-\doxysubsubsection{agg\_patch\_t}
-{\footnotesize\ttfamily agg\+\_\+patch\+\_\+t}
-
-Data structure for mapping of surfaces 
-
-Referenced by \textbf{ agg\+\_\+body\+\_\+new()}, and \textbf{ agg\+\_\+mesh\+\_\+surface\+\_\+point\+\_\+add()}.
-

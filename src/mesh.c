@@ -428,39 +428,8 @@ gint agg_mesh_element_add(agg_mesh_t *m,
   return 0 ;
 }
 
-/** 
- * Add an intersection to a mesh. This should be done before adding
- * surfaces, so that they can be cut if necessary. 
- * 
- * @param m an ::agg_mesh_t;
- * @param inter a surface-surface intersection;
- * @param nsp number of splines in \a inter;
- * @param pps number of points on each spline in \a inter;
- * 
- * @return 0 on success.
- */
-
-gint agg_mesh_intersection_add(agg_mesh_t *m,
-			       agg_intersection_t *inter,
-			       gint nsp, gint pps)
-
-{
-  gint ni ;
-
-  if ( agg_intersection_point_number(inter) == 0 ) return 0 ;
-
-  /*find limits on intersection*/
-  agg_intersection_bbox_set(inter) ;
-
-  ni = agg_mesh_intersection_number(m) ;
-  agg_mesh_intersection(m, ni) = inter ;
-  
-  agg_mesh_intersection_number(m) ++ ;
-
-  return 0 ;
-}
-
 static void reset_triangleio(triangleio *io)
+
 {
   io->pointlist = (REAL *) NULL;
   io->pointattributelist = (REAL *) NULL;
@@ -740,12 +709,10 @@ gint agg_mesh_surface_add_triangle(agg_mesh_t *msh, gint isurf,
 	tspivot(triangleloop, checkmark);
 	org(triangleloop, p1);
 	dest(triangleloop, p2);
-	i0 = vertexmark(p1) ; i1 = vertexmark(p2) ;
-	j0 = i0 + np0 ; j1 = i1 + np0 ; 
-	/* i0 += np0 ; i1 += np0 ; */
-	agg_mesh_spline_interp_points(msh, isurf, j0, j1, pps, w) ;
+	i0 = np0 + vertexmark(p1) ; i1 = np0 + vertexmark(p2) ;
+	agg_mesh_spline_interp_points(msh, isurf, i0, i1, pps, w) ;
 	sp = agg_mesh_spline(msh,agg_mesh_spline_number(msh)-1) ;
-	sp[0] = j0 ; sp[pps-1] = j1 ;
+	sp[0] = i0 ; sp[pps-1] = i1 ;
 	edgenumber++;
       }
     }
@@ -831,15 +798,37 @@ gint agg_mesh_surface_add_triangle(agg_mesh_t *msh, gint isurf,
   return 0 ;
 }
 
-gint agg_mesh_surface_blend_add(agg_mesh_t *m, gint iB,
-				gint nsec, gint nsp, gint pps,
+/** 
+ * Add elements from a surface blend to a mesh
+ * 
+ * @param m mesh to add surface elements to;
+ * @param iB index of surface blend in \a m;
+ * @param nsec number of sections on blend;
+ * @param pps points per spline on element edges;
+ * @param w workspace for point evaluation
+ * 
+ * @return 0 on success.
+ */
+
+gint agg_mesh_surface_blend_add(agg_mesh_t *m, gint iB, gint nsec, gint pps,
 				agg_surface_workspace_t *w)
 
 {
-  gint i, j, np, np0, tag, nsp0, s0, s1, s2, s3 ;
+  gint i, j, np, np0, tag, nsp0, s0, s1, s2, s3, nsp ;
   gdouble s, t, *p ;
-  agg_surface_blend_t *B = agg_mesh_surface_blend(m,iB) ;
+  agg_surface_blend_t *B ;
 
+  g_assert(iB >= 0 && iB < agg_mesh_surface_blend_number(m)) ;
+  
+  B = agg_mesh_surface_blend(m,iB) ;
+  nsp = agg_surface_blend_spline_number(B) ;
+  agg_surface_blend_invert(B) = FALSE ;
+  i = B->ic[0] ; j = B->ic[1] ; 
+  if ( agg_patch_clipping_orientation(agg_patch_clipping(B->P[0], i)) !=
+       agg_patch_clipping_orientation(agg_patch_clipping(B->P[1], j)) ) {
+    agg_surface_blend_invert(B) = TRUE ;
+  }
+  
   tag = -1-iB ;
   np0 = agg_mesh_point_number(m) ;
   nsp0 = agg_mesh_spline_number(m) ;
@@ -891,11 +880,11 @@ gint agg_mesh_surface_blend_add(agg_mesh_t *m, gint iB,
       s2 = nsp0 + 2*(i+0)*nsp + 2*(j+1) + 0 ;
       s3 = nsp0 + 2*(i+0)*nsp + 2*(j+0) + 1 ;
       
-      /* if ( agg_patch_invert(agg_mesh_patch(m, iS)) ) { */
-      /* 	agg_mesh_element_add(m, s3, s2, -s1, -s0) ; */
-      /* } else { */
+      if ( agg_surface_blend_invert(B) ) {
+	agg_mesh_element_add(m, s3, s2, -s1, -s0) ;
+      } else {
       agg_mesh_element_add(m, s0, s1, -s2, -s3) ;
-      /* } */
+      }
     }
   }
 
@@ -905,12 +894,11 @@ gint agg_mesh_surface_blend_add(agg_mesh_t *m, gint iB,
     s1 = nsp0 + 2*(i+1)*nsp +   (j+0) + 0 ;
     s2 = nsp0 + 2*(i+0)*nsp + 2*(j+1) + 0 ;
     s3 = nsp0 + 2*(i+0)*nsp + 2*(j+0) + 1 ;
-    /* agg_mesh_element_add(m, s0, s1, -s2, -s3) ; */
-    /* if ( agg_patch_invert(agg_mesh_patch(m, iS)) ) { */
-    /*   agg_mesh_element_add(m, s3, s2, -s1, -s0) ; */
-    /* } else { */
+    if ( agg_surface_blend_invert(B) ) {
+      agg_mesh_element_add(m, s3, s2, -s1, -s0) ;
+    } else {
       agg_mesh_element_add(m, s0, s1, -s2, -s3) ;
-    /* } */
+    }
   }
   j = nsp - 1 ;
   for ( i = 0 ; i < nsec - 1 ; i ++ ) {
@@ -919,24 +907,22 @@ gint agg_mesh_surface_blend_add(agg_mesh_t *m, gint iB,
     s2 = nsp0 + 2*nsec*nsp + j + 1 + i ;
     s3 = nsp0 + 2*(i+0)*nsp + 2*(j+0) + 1 ;
     
-    /* agg_mesh_element_add(m, s0, s1, -s2, -s3) ; */
-    /* if ( agg_patch_invert(agg_mesh_patch(m, iS)) ) { */
-    /*   agg_mesh_element_add(m, s3, s2, -s1, -s0) ; */
-    /* } else { */
+    if ( agg_surface_blend_invert(B) ) {
+      agg_mesh_element_add(m, s3, s2, -s1, -s0) ;
+    } else {
       agg_mesh_element_add(m, s0, s1, -s2, -s3) ;
-    /* } */
+    }
   }
   i = nsec - 1 ; j = nsp - 1 ;
   s0 = nsp0 + 2*(i+0)*nsp + 2*(j+0) + 0 ;
   s1 = nsp0 + 2*(i+1)*nsp + (j+0) + 0 ;
   s2 = nsp0 + 2*nsec*nsp + j + 1 + i ;
   s3 = nsp0 + 2*(i+0)*nsp + 2*(j+0) + 1 ;    
-  /* agg_mesh_element_add(m, s0, s1, -s2, -s3) ; */
-  /* if ( agg_patch_invert(agg_mesh_patch(m, iS)) ) { */
-  /*   agg_mesh_element_add(m, s3, s2, -s1, -s0) ; */
-  /* } else { */
+  if ( agg_surface_blend_invert(B) ) {
+    agg_mesh_element_add(m, s3, s2, -s1, -s0) ;
+  } else {
     agg_mesh_element_add(m, s0, s1, -s2, -s3) ;
-  /* } */
+  }
 
   return 0 ;
 }
@@ -946,7 +932,7 @@ gint agg_mesh_surface_blend_add(agg_mesh_t *m, gint iB,
  * 
  * @param m a mesh containing a set of splines;
  * @param p0 index of a point of \a m;
-
+ * @param p1 index of a point of \a m.
  * 
  * @return index of a spline which has endpoints \a p0 and \a p1, or 0
  * if there is no such spline.
@@ -1013,6 +999,19 @@ gint agg_mesh_surface_point_add(agg_mesh_t *m, gint surf,
   
   return np ;
 }
+
+/** 
+ * Add surface elements to a mesh, on a square grid in the parametric space 
+ * 
+ * @param m mesh to add elements to;
+ * @param iS index of surface in surface list of \a m;
+ * @param nsec number of sections on surface;
+ * @param nsp number of splines per section;
+ * @param pps points per spline on sections;
+ * @param w workspace for point evaluation.
+ * 
+ * @return 0 on success.
+ */
 
 gint agg_mesh_surface_add_grid(agg_mesh_t *m, gint iS,
 			       gint nsec, gint nsp, gint pps,
@@ -1097,7 +1096,6 @@ gint agg_mesh_surface_add_grid(agg_mesh_t *m, gint iS,
     s1 = nsp0 + 2*(i+1)*nsp +   (j+0) + 0 ;
     s2 = nsp0 + 2*(i+0)*nsp + 2*(j+1) + 0 ;
     s3 = nsp0 + 2*(i+0)*nsp + 2*(j+0) + 1 ;
-    /* agg_mesh_element_add(m, s0, s1, -s2, -s3) ; */
     if ( agg_patch_invert(agg_mesh_patch(m, iS)) ) {
       agg_mesh_element_add(m, s3, s2, -s1, -s0) ;
     } else {
@@ -1111,7 +1109,6 @@ gint agg_mesh_surface_add_grid(agg_mesh_t *m, gint iS,
     s2 = nsp0 + 2*nsec*nsp + j + 1 + i ;
     s3 = nsp0 + 2*(i+0)*nsp + 2*(j+0) + 1 ;
     
-    /* agg_mesh_element_add(m, s0, s1, -s2, -s3) ; */
     if ( agg_patch_invert(agg_mesh_patch(m, iS)) ) {
       agg_mesh_element_add(m, s3, s2, -s1, -s0) ;
     } else {
@@ -1123,7 +1120,6 @@ gint agg_mesh_surface_add_grid(agg_mesh_t *m, gint iS,
   s1 = nsp0 + 2*(i+1)*nsp + (j+0) + 0 ;
   s2 = nsp0 + 2*nsec*nsp + j + 1 + i ;
   s3 = nsp0 + 2*(i+0)*nsp + 2*(j+0) + 1 ;    
-    /* agg_mesh_element_add(m, s0, s1, -s2, -s3) ; */
   if ( agg_patch_invert(agg_mesh_patch(m, iS)) ) {
     agg_mesh_element_add(m, s3, s2, -s1, -s0) ;
   } else {
@@ -1132,6 +1128,17 @@ gint agg_mesh_surface_add_grid(agg_mesh_t *m, gint iS,
   
   return 0 ;
 }
+
+/** 
+ * Generate a mesh for surfaces and surface blends on a body
+ * 
+ * @param m mesh to generate;
+ * @param b body containing surface data;
+ * @param pps points per spline on element edges;
+ * @param w workspace for point evaluation.
+ * 
+ * @return 0 on success.
+ */
 
 gint agg_mesh_body(agg_mesh_t *m, agg_body_t *b, gint pps,
 		   agg_surface_workspace_t *w)
@@ -1150,7 +1157,7 @@ gint agg_mesh_body(agg_mesh_t *m, agg_body_t *b, gint pps,
     agg_mesh_surface_number(m) ++ ;
   }
   
-  inter    = agg_intersection_new(8192) ;
+  inter = agg_intersection_new(8192) ;
   for ( i = 0 ; i < agg_body_surface_number(b); i ++ ) {
     for ( j = i+1 ; j < agg_body_surface_number(b); j ++ ) {
       agg_surface_patch_intersection(inter,
@@ -1160,9 +1167,7 @@ gint agg_mesh_body(agg_mesh_t *m, agg_body_t *b, gint pps,
 				     agg_body_patch(b,j),
 				     &(m->B[m->nb]), w) ;
       if ( agg_intersection_point_number(inter) != 0 ) {
-	agg_intersection_bbox_set(inter) ;
-	agg_mesh_intersection_add(m, inter, nsp, pps) ;
-	inter    = agg_intersection_new(8192) ;
+	inter = agg_intersection_new(8192) ;
 	m->nb ++ ;
       }
     }
@@ -1183,7 +1188,7 @@ gint agg_mesh_body(agg_mesh_t *m, agg_body_t *b, gint pps,
   }
 
   for ( i = 0 ; i < agg_mesh_surface_blend_number(m) ; i ++ ) {
-    agg_mesh_surface_blend_add(m, i, nsec, nsp, pps, w) ;
+    agg_mesh_surface_blend_add(m, i, 4, pps, w) ;
   }
 
   return 0 ;

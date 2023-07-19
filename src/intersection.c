@@ -255,7 +255,7 @@ gint agg_surface_patch_intersection(agg_intersection_t *inter,
   gpointer data2[] = {S2, P2, w} ;
   hefsi_workspace_t *wh ;
   hefsi_segment_t *seg1, *seg2 ;
-  gint dmin, dmax, i, j ;
+  gint dmin, dmax, i, j, nsp ;
   gdouble scale, tol, u, v ;
   GSList *il ;
   agg_patch_clipping_t *c1, *c2 ;
@@ -318,8 +318,6 @@ gint agg_surface_patch_intersection(agg_intersection_t *inter,
   }
 
   agg_intersection_bbox_set(inter) ;
-  /* (agg_patch_clipping(P1, agg_patch_clipping_number(P1)))->ornt = 1 ; */
-  /* (agg_patch_clipping(P2, agg_patch_clipping_number(P2)))->ornt = 1 ; */
 
   /*check the two curves and see how they should clip the patches*/
   c1 = agg_patch_clipping(P1, agg_patch_clipping_number(P1)) ;
@@ -366,12 +364,24 @@ gint agg_surface_patch_intersection(agg_intersection_t *inter,
 
   if ( B == NULL ) return 0 ;
 
+  nsp = 0 ;
+  if ( agg_surface_grid(S1) == AGG_GRID_REGULAR ) {
+    nsp = agg_surface_grid_spline_number(S1) ;
+  }
+  if ( nsp == 0 && agg_surface_grid(S2) == AGG_GRID_REGULAR ) {
+    nsp = agg_surface_grid_spline_number(S2) ;
+  }
+
+  g_assert(nsp != 0) ;
+  
   /*add relevant data to a surface blend for future evaluation*/
   agg_surface_blend_surface(B,0) = S1 ; 
   agg_surface_blend_surface(B,1) = S2 ; 
   agg_surface_blend_patch(B,0) = P1 ; 
   agg_surface_blend_patch(B,1) = P2 ; 
 
+  agg_surface_blend_spline_number(B) = nsp ;
+  
   B->ic[0] = agg_patch_clipping_number(P1) - 1 ;
   B->ic[1] = agg_patch_clipping_number(P2) - 1 ;
   

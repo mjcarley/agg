@@ -46,6 +46,8 @@ void _agg_patch_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
 		      gpointer data[]) ;
 void _agg_axes_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
 		     gpointer data[]) ;
+void _agg_grid_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
+		     gpointer data[]) ;
 
 typedef void (*block_read_func_t)(GScanner *scanner, agg_body_t *b,
 				  gboolean echo, gpointer data[]) ;
@@ -61,6 +63,7 @@ static const struct {
   {"transform", _agg_transform_parse },
   {"patch",     _agg_patch_parse     },
   {"axes",      _agg_axes_parse      },
+  {"grid",      _agg_grid_parse      },
   {NULL, NULL}
 } ;
 
@@ -425,6 +428,79 @@ void _agg_axes_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
     g_error("%s: unrecognized axes \"%s\" on line %u",
 	    __FUNCTION__, agg_variable_definition(&(params[0])),
 	    g_scanner_cur_line(scanner)) ;
+  
+  return ;
+}
+
+void _agg_grid_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
+		     gpointer data[])
+
+{
+  gint nparams ;
+  agg_variable_t params[64] ;
+  agg_surface_t *S ;
+  agg_grid_t grid ;
+  
+  token_read_and_check(scanner, G_TOKEN_LEFT_PAREN, "missing left bracket") ;
+
+  S = agg_body_surface_last(b) ;
+  
+  parameter_list_parse(scanner, params, &nparams) ;
+
+  if ( nparams < 2 ) {
+    g_error("%s: grid requires at least two parameters, line %u",
+	    __FUNCTION__, g_scanner_cur_line(scanner)) ;
+  }
+  if ( agg_variable_definition(&(params[0])) == NULL )
+    g_error("%s: grid type must be specified by string, line %u",
+	    __FUNCTION__, g_scanner_cur_line(scanner)) ;
+
+  if ( (grid = agg_grid_parse(agg_variable_definition(&(params[0])))) ==
+       AGG_GRID_UNDEFINED) {
+    g_error("%s: unrecognized grid type \"%s\" , line %u",
+	    __FUNCTION__,
+	    agg_variable_definition(&(params[0])),
+	    g_scanner_cur_line(scanner)) ;    
+  }
+
+  agg_surface_grid(S) = grid ;
+
+  if ( grid == AGG_GRID_REGULAR ) {
+    if ( nparams != 3 ) {
+      g_error("%s: regular grid requires two further parameters, line %u",
+	      __FUNCTION__, g_scanner_cur_line(scanner)) ;
+    }
+    
+    if ( agg_variable_definition(&(params[1])) != NULL )
+      g_error("%s: number of grid sections must be constant, line %u",
+	      __FUNCTION__, g_scanner_cur_line(scanner)) ;
+    
+    if ( agg_variable_definition(&(params[2])) != NULL )
+      g_error("%s: number of grid section splines must be constant, line %u",
+	      __FUNCTION__, g_scanner_cur_line(scanner)) ;
+    
+    agg_surface_grid_section_number(S) = (gint)(params[1].val) ;
+    agg_surface_grid_spline_number(S) = (gint)(params[2].val) ;
+  
+    return ;
+  }
+
+  if ( grid == AGG_GRID_TRIANGLE ) {
+    if ( nparams != 2 ) {
+      g_error("%s: regular grid requires one further parameter, line %u",
+	      __FUNCTION__, g_scanner_cur_line(scanner)) ;
+    }
+    
+    if ( agg_variable_definition(&(params[1])) != NULL )
+      g_error("%s: element are must be constant, line %u",
+	      __FUNCTION__, g_scanner_cur_line(scanner)) ;
+    
+    agg_surface_grid_element_area(S) = params[1].val ;
+  
+    return ;
+  }
+  
+  g_assert_not_reached() ;
   
   return ;
 }

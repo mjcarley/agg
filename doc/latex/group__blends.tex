@@ -1,0 +1,67 @@
+\doxysection{Surface blends}
+\label{group__blends}\index{Surface blends@{Surface blends}}
+
+
+Intersecting bodies are joined using smooth surface blends.  
+
+
+\begin{DoxyCompactItemize}
+\item 
+gint \textbf{ agg\+\_\+hermite\+\_\+eval} (gdouble s, gdouble $\ast$H)
+\item 
+gint \textbf{ agg\+\_\+surface\+\_\+blend\+\_\+evaluate} (agg\+\_\+surface\+\_\+blend\+\_\+t $\ast$B, gdouble s, gdouble t, gdouble $\ast$x, agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$w)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Intersecting bodies are joined using smooth surface blends. 
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\label{group__blends_gaa3ec70e3a58cf76c778a005911734a79}} 
+\index{Surface blends@{Surface blends}!agg\_hermite\_eval@{agg\_hermite\_eval}}
+\index{agg\_hermite\_eval@{agg\_hermite\_eval}!Surface blends@{Surface blends}}
+\doxysubsubsection{agg\_hermite\_eval()}
+{\footnotesize\ttfamily gint agg\+\_\+hermite\+\_\+eval (\begin{DoxyParamCaption}\item[{gdouble}]{s,  }\item[{gdouble $\ast$}]{H }\end{DoxyParamCaption})}
+
+Evaluate Hermite smoothing polynomials
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & argument of polynomials; \\
+\hline
+{\em H} & on exit contains $H_{i}(s)$, $1\leq i\leq4$.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+\mbox{\label{group__blends_gaf2bdad79399f4137a466a8d0b02b79fa}} 
+\index{Surface blends@{Surface blends}!agg\_surface\_blend\_evaluate@{agg\_surface\_blend\_evaluate}}
+\index{agg\_surface\_blend\_evaluate@{agg\_surface\_blend\_evaluate}!Surface blends@{Surface blends}}
+\doxysubsubsection{agg\_surface\_blend\_evaluate()}
+{\footnotesize\ttfamily gint agg\+\_\+surface\+\_\+blend\+\_\+evaluate (\begin{DoxyParamCaption}\item[{agg\+\_\+surface\+\_\+blend\+\_\+t $\ast$}]{B,  }\item[{gdouble}]{s,  }\item[{gdouble}]{t,  }\item[{gdouble $\ast$}]{x,  }\item[{agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$}]{w }\end{DoxyParamCaption})}
+
+Evaluate a surface blend, using method of Blending parametric surfaces Daniel J. Filip, ACM Transactions on Graphics, Volume 8, Issue 301, July 1989, pp164-\/173 {\texttt{ https\+://doi.\+org/10.\+1145/77055.\+77057}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em B} & surface blend, containing details of rail curves and surface to join; \\
+\hline
+{\em s} & parameter $s$, $0\leq s\leq 1$ \\
+\hline
+{\em t} & parameter $t$, $0\leq t\leq 1$ \\
+\hline
+{\em x} & on exit, contains surface position at $(s,t)$; \\
+\hline
+{\em w} & workspace for surface evaluation.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+patch\+\_\+t}, and \textbf{ agg\+\_\+surface\+\_\+t}.
+

@@ -46,45 +46,89 @@ $(function() {
 <p>Patches used to map parts of surfaces and generate meshes.  
 <a href="#details">More...</a></p>
 <table class="memberdecls">
-<tr class="memitem:gaa07e6a7a89baf7a5a9acd8f2de6ad111"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__patches.html#gaa07e6a7a89baf7a5a9acd8f2de6ad111">agg_patch_map</a> (<a class="el" href="group__patches.html#gabdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *P, gdouble s, gdouble t, gdouble *u, gdouble *v)</td></tr>
+<tr class="memitem:gaa07e6a7a89baf7a5a9acd8f2de6ad111"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__patches.html#gaa07e6a7a89baf7a5a9acd8f2de6ad111">agg_patch_map</a> (<a class="el" href="agg_8h.html#abdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *P, gdouble s, gdouble t, gdouble *u, gdouble *v)</td></tr>
 <tr class="separator:gaa07e6a7a89baf7a5a9acd8f2de6ad111"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga9bbbda35c5b3b3b8a5da05a50cc3da24"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__patches.html#ga9bbbda35c5b3b3b8a5da05a50cc3da24">agg_patch_parse</a> (<a class="el" href="group__patches.html#gabdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *P, <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a> *p, gint np)</td></tr>
+<tr class="memitem:ga9bbbda35c5b3b3b8a5da05a50cc3da24"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__patches.html#ga9bbbda35c5b3b3b8a5da05a50cc3da24">agg_patch_parse</a> (<a class="el" href="agg_8h.html#abdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *P, <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a> *p, gint np)</td></tr>
 <tr class="separator:ga9bbbda35c5b3b3b8a5da05a50cc3da24"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gab2dada3ec7e3ef50c701a16f93701ebc"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__patches.html#gab2dada3ec7e3ef50c701a16f93701ebc">agg_patch_mapping_t</a> { <a class="el" href="group__patches.html#gab2dada3ec7e3ef50c701a16f93701ebca3b4f4c2395e1148d13e7d4b1f8320e49">AGG_PATCH_BILINEAR</a> = 0
-, <a class="el" href="group__patches.html#gab2dada3ec7e3ef50c701a16f93701ebcaec086ca8c9ffd8890a01b667bb032794">AGG_PATCH_SPHERICAL</a> = 1
-, <a class="el" href="group__patches.html#gab2dada3ec7e3ef50c701a16f93701ebca78d8b116b0cd3172683582fd297fdc49">AGG_PATCH_TUBULAR</a> = 2
- }</td></tr>
-<tr class="separator:gab2dada3ec7e3ef50c701a16f93701ebc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gabdb5fa64575d1f09fb1e68a13a103777"><td class="memItemLeft" align="right" valign="top">typedef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__patches.html#gabdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a></td></tr>
-<tr class="separator:gabdb5fa64575d1f09fb1e68a13a103777"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga924ac983f741e64ce5812616a8ca56c9"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__patches.html#ga924ac983f741e64ce5812616a8ca56c9">agg_clipping_orient</a> (agg_patch_clipping_t *c1, <a class="el" href="agg_8h.html#abdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *P1, <a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *S1, agg_patch_clipping_t *c2, <a class="el" href="agg_8h.html#abdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *P2, <a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *S2, agg_surface_workspace_t *w)</td></tr>
+<tr class="separator:ga924ac983f741e64ce5812616a8ca56c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p >Patches used to map parts of surfaces and generate meshes. </p>
-<h2 class="groupheader">Enumeration Type Documentation</h2>
-<a id="gab2dada3ec7e3ef50c701a16f93701ebc" name="gab2dada3ec7e3ef50c701a16f93701ebc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gab2dada3ec7e3ef50c701a16f93701ebc">&#9670;&nbsp;</a></span>agg_patch_mapping_t</h2>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="ga924ac983f741e64ce5812616a8ca56c9" name="ga924ac983f741e64ce5812616a8ca56c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga924ac983f741e64ce5812616a8ca56c9">&#9670;&nbsp;</a></span>agg_clipping_orient()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="group__patches.html#gab2dada3ec7e3ef50c701a16f93701ebc">agg_patch_mapping_t</a></td>
+          <td class="memname">gint agg_clipping_orient </td>
+          <td>(</td>
+          <td class="paramtype">agg_patch_clipping_t *&#160;</td>
+          <td class="paramname"><em>c1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="agg_8h.html#abdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *&#160;</td>
+          <td class="paramname"><em>P1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *&#160;</td>
+          <td class="paramname"><em>S1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">agg_patch_clipping_t *&#160;</td>
+          <td class="paramname"><em>c2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="agg_8h.html#abdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *&#160;</td>
+          <td class="paramname"><em>P2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *&#160;</td>
+          <td class="paramname"><em>S2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">agg_surface_workspace_t *&#160;</td>
+          <td class="paramname"><em>w</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p >Mappings from <img class="formulaInl" alt="$(s,t)$" src="form_5.png" width="25" height="14"/> on a patch to <img class="formulaInl" alt="$(u,v)$" src="form_6.png" width="28" height="14"/> on a surface </p>
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="gab2dada3ec7e3ef50c701a16f93701ebca3b4f4c2395e1148d13e7d4b1f8320e49" name="gab2dada3ec7e3ef50c701a16f93701ebca3b4f4c2395e1148d13e7d4b1f8320e49"></a>AGG_PATCH_BILINEAR&#160;</td><td class="fielddoc"><p >bilinear mapping between corners </p>
-</td></tr>
-<tr><td class="fieldname"><a id="gab2dada3ec7e3ef50c701a16f93701ebcaec086ca8c9ffd8890a01b667bb032794" name="gab2dada3ec7e3ef50c701a16f93701ebcaec086ca8c9ffd8890a01b667bb032794"></a>AGG_PATCH_SPHERICAL&#160;</td><td class="fielddoc"><p >mapping to surface of sphere </p>
-</td></tr>
-<tr><td class="fieldname"><a id="gab2dada3ec7e3ef50c701a16f93701ebca78d8b116b0cd3172683582fd297fdc49" name="gab2dada3ec7e3ef50c701a16f93701ebca78d8b116b0cd3172683582fd297fdc49"></a>AGG_PATCH_TUBULAR&#160;</td><td class="fielddoc"><p >mapping to surface of open cylinder </p>
-</td></tr>
-</table>
+<p >Set orientation of two clipping curves so that they are traversed in the same sense in physical space. The test is performed by evaluating approximate normals to the curve planes (this assumes that the curves are not too far from planar) and checking the normals are approximately parallel, using the sign of the scalar product. If necessary, the orientation of one curve is switched, with priority given to changing the orientation of a closed curve, corresponding to a hole in a surface, over a cut on constant <img class="formulaInl" alt="$s$" src="form_35.png" width="5" height="6"/> or <img class="formulaInl" alt="$t$" src="form_36.png" width="5" height="9"/>. If curves are not mutually oriented and are both constant parameter cuts, execution stops with an error (until I can decide how best to handle this case).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">c1</td><td>first patch clipping; </td></tr>
+    <tr><td class="paramname">P1</td><td>first parametric patch; </td></tr>
+    <tr><td class="paramname">S1</td><td>first physical surface; </td></tr>
+    <tr><td class="paramname">c2</td><td>second patch clipping; <br  />
+ </td></tr>
+    <tr><td class="paramname">P2</td><td>second parametric patch; </td></tr>
+    <tr><td class="paramname">S2</td><td>second physical surface; </td></tr>
+    <tr><td class="paramname">w</td><td>workspace for surface point evaluation.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
 
 </div>
 </div>
-<h2 class="groupheader">Function Documentation</h2>
 <a id="gaa07e6a7a89baf7a5a9acd8f2de6ad111" name="gaa07e6a7a89baf7a5a9acd8f2de6ad111"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gaa07e6a7a89baf7a5a9acd8f2de6ad111">&#9670;&nbsp;</a></span>agg_patch_map()</h2>
 
@@ -94,7 +138,7 @@ $(function() {
         <tr>
           <td class="memname">gint agg_patch_map </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="group__patches.html#gabdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="agg_8h.html#abdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *&#160;</td>
           <td class="paramname"><em>P</em>, </td>
         </tr>
         <tr>
@@ -141,7 +185,7 @@ $(function() {
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
 
-<p class="reference">References <a class="el" href="agg_8h.html#gab2dada3ec7e3ef50c701a16f93701ebca3b4f4c2395e1148d13e7d4b1f8320e49">AGG_PATCH_BILINEAR</a>.</p>
+<p class="reference">References <a class="el" href="agg_8h.html#ab2dada3ec7e3ef50c701a16f93701ebca3b4f4c2395e1148d13e7d4b1f8320e49">AGG_PATCH_BILINEAR</a>.</p>
 
 </div>
 </div>
@@ -154,7 +198,7 @@ $(function() {
         <tr>
           <td class="memname">gint agg_patch_parse </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="group__patches.html#gabdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="agg_8h.html#abdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *&#160;</td>
           <td class="paramname"><em>P</em>, </td>
         </tr>
         <tr>
@@ -176,7 +220,7 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<p >Parse string data for an <a class="el" href="group__patches.html#gabdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a>.</p>
+<p >Parse string data for an <a class="el" href="agg_8h.html#abdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">P</td><td>on exit, is set according to input variables; </td></tr>
@@ -189,28 +233,10 @@ $(function() {
 
 </div>
 </div>
-<h2 class="groupheader">Variable Documentation</h2>
-<a id="gabdb5fa64575d1f09fb1e68a13a103777" name="gabdb5fa64575d1f09fb1e68a13a103777"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gabdb5fa64575d1f09fb1e68a13a103777">&#9670;&nbsp;</a></span>agg_patch_t</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">agg_patch_t</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p >Data structure for mapping of surfaces </p>
-
-<p class="reference">Referenced by <a class="el" href="group__body.html#ga04a251df56d2d37e276d047231bdda35">agg_body_new()</a>, and <a class="el" href="agg_8h.html#a8337a8e05e56227d9f42ab84d0d89fd4">agg_mesh_surface_point_add()</a>.</p>
-
-</div>
-</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 10 2023 17:58:17 for AGG by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jul 19 2023 18:08:49 for AGG by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

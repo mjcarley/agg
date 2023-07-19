@@ -76,3 +76,10 @@
  * @brief Bodies are made up of collections of elementary surfaces
  *
  */
+
+/**
+ * @defgroup blends Surface blends
+ * 
+ * @brief Intersecting bodies are joined using smooth surface blends
+ *
+ */

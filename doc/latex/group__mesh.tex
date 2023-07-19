@@ -19,13 +19,19 @@ gboolean \textbf{ agg\+\_\+mesh\+\_\+splines\+\_\+connected} (\textbf{ agg\+\_\+
 \item 
 gint \textbf{ agg\+\_\+mesh\+\_\+element\+\_\+add} (\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$m, gint s0, gint s1, gint s2, gint s3)
 \item 
-gint \textbf{ agg\+\_\+mesh\+\_\+intersection\+\_\+add} (\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$m, \textbf{ agg\+\_\+intersection\+\_\+t} $\ast$inter, gint nsp, gint pps)
+gint \textbf{ agg\+\_\+mesh\+\_\+surface\+\_\+add\+\_\+triangle} (\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$msh, gint isurf, gchar $\ast$args, gint pps, agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$w)
 \item 
-gint \textbf{ agg\+\_\+mesh\+\_\+surface\+\_\+add} (\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$msh, \textbf{ agg\+\_\+surface\+\_\+t} $\ast$S, \textbf{ agg\+\_\+patch\+\_\+t} $\ast$P, gint nsec, gint nseg, gint pps, agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$w)
+gint \textbf{ agg\+\_\+mesh\+\_\+surface\+\_\+blend\+\_\+add} (\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$m, gint iB, gint nsec, gint pps, agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$w)
 \item 
 gint \textbf{ agg\+\_\+mesh\+\_\+spline\+\_\+from\+\_\+endpoints} (\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$m, gint p0, gint p1)
 \item 
 gint \textbf{ agg\+\_\+mesh\+\_\+surface\+\_\+point\+\_\+add} (\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$m, gint surf, gdouble s, gdouble t, agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$w)
+\item 
+gint \textbf{ agg\+\_\+mesh\+\_\+surface\+\_\+add\+\_\+grid} (\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$m, gint iS, gint nsec, gint nsp, gint pps, agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$w)
+\item 
+gint \textbf{ agg\+\_\+mesh\+\_\+body} (\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$m, \textbf{ agg\+\_\+body\+\_\+t} $\ast$b, gint pps, agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$w)
+\item 
+gint \textbf{ agg\+\_\+mesh\+\_\+element\+\_\+nodes} (\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$m, gint e, gint $\ast$nodes, gint $\ast$nnodes, gint $\ast$s)
 \end{DoxyCompactItemize}
 \begin{DoxyCompactItemize}
 \item 
@@ -39,6 +45,32 @@ Generation of watertight meshes of collections of surfaces.
 
 
 \doxysubsection{Function Documentation}
+\mbox{\label{group__mesh_ga08744125eecfd040352a07a05bfd7e2a}} 
+\index{Surface meshes@{Surface meshes}!agg\_mesh\_body@{agg\_mesh\_body}}
+\index{agg\_mesh\_body@{agg\_mesh\_body}!Surface meshes@{Surface meshes}}
+\doxysubsubsection{agg\_mesh\_body()}
+{\footnotesize\ttfamily gint agg\+\_\+mesh\+\_\+body (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$}]{m,  }\item[{\textbf{ agg\+\_\+body\+\_\+t} $\ast$}]{b,  }\item[{gint}]{pps,  }\item[{agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$}]{w }\end{DoxyParamCaption})}
+
+Generate a mesh for surfaces and surface blends on a body
+
+
+\begin{DoxyParams}{Parameters}
+{\em m} & mesh to generate; \\
+\hline
+{\em b} & body containing surface data; \\
+\hline
+{\em pps} & points per spline on element edges; \\
+\hline
+{\em w} & workspace for point evaluation.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+intersection\+\_\+t}.
+
 \mbox{\label{group__mesh_ga20d87d3624863ead8a734367418954e6}} 
 \index{Surface meshes@{Surface meshes}!agg\_mesh\_element\_add@{agg\_mesh\_element\_add}}
 \index{agg\_mesh\_element\_add@{agg\_mesh\_element\_add}!Surface meshes@{Surface meshes}}
@@ -63,23 +95,25 @@ Add an element to a mesh.
 \begin{DoxyReturn}{Returns}
 0 on success. 
 \end{DoxyReturn}
-\mbox{\label{group__mesh_ga36e43036ba3bc99c967c4d25a4c6b50c}} 
-\index{Surface meshes@{Surface meshes}!agg\_mesh\_intersection\_add@{agg\_mesh\_intersection\_add}}
-\index{agg\_mesh\_intersection\_add@{agg\_mesh\_intersection\_add}!Surface meshes@{Surface meshes}}
-\doxysubsubsection{agg\_mesh\_intersection\_add()}
-{\footnotesize\ttfamily gint agg\+\_\+mesh\+\_\+intersection\+\_\+add (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$}]{m,  }\item[{\textbf{ agg\+\_\+intersection\+\_\+t} $\ast$}]{inter,  }\item[{gint}]{nsp,  }\item[{gint}]{pps }\end{DoxyParamCaption})}
+\mbox{\label{group__mesh_gaa83a57a1eeb3e953327a9b7221d745e1}} 
+\index{Surface meshes@{Surface meshes}!agg\_mesh\_element\_nodes@{agg\_mesh\_element\_nodes}}
+\index{agg\_mesh\_element\_nodes@{agg\_mesh\_element\_nodes}!Surface meshes@{Surface meshes}}
+\doxysubsubsection{agg\_mesh\_element\_nodes()}
+{\footnotesize\ttfamily gint agg\+\_\+mesh\+\_\+element\+\_\+nodes (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$}]{m,  }\item[{gint}]{e,  }\item[{gint $\ast$}]{nodes,  }\item[{gint $\ast$}]{nnodes,  }\item[{gint $\ast$}]{s }\end{DoxyParamCaption})}
 
-Add an intersection to a mesh. This should be done before adding surfaces, so that they can be cut if necessary.
+Find the oriented nodes of an element in an \doxyref{agg\+\_\+mesh\+\_\+t}{p.}{group__mesh_ga77887f8535b8d608674eb369d758c1cf}
 
 
 \begin{DoxyParams}{Parameters}
-{\em m} & an \doxyref{agg\+\_\+mesh\+\_\+t}{p.}{group__mesh_ga77887f8535b8d608674eb369d758c1cf}; \\
+{\em m} & mesh containing elements to be queried; \\
 \hline
-{\em inter} & a surface-\/surface intersection; \\
+{\em e} & element index; \\
 \hline
-{\em nsp} & number of splines in {\itshape inter}; \\
+{\em nodes} & on exit contains nodes of element {\itshape in} cyclic order; \\
 \hline
-{\em pps} & number of points on each spline in {\itshape inter};\\
+{\em nnodes} & on exit contains number of nodes in {\itshape nodes}; \\
+\hline
+{\em s} & index in {\itshape m} of surface containing nodes.\\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
@@ -149,7 +183,7 @@ Find a spline from its endpoints
 \hline
 {\em p0} & index of a point of {\itshape m}; \\
 \hline
-{\em p1} & index of another point of {\itshape m}.\\
+{\em p1} & index of a point of {\itshape m}.\\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
@@ -207,29 +241,85 @@ TRUE if splines have an end point in common.
 
 References \textbf{ agg\+\_\+mesh\+\_\+spline\+\_\+ends()}.
 
-\mbox{\label{group__mesh_ga76a10b2029984fc570f23e0766a63f55}} 
-\index{Surface meshes@{Surface meshes}!agg\_mesh\_surface\_add@{agg\_mesh\_surface\_add}}
-\index{agg\_mesh\_surface\_add@{agg\_mesh\_surface\_add}!Surface meshes@{Surface meshes}}
-\doxysubsubsection{agg\_mesh\_surface\_add()}
-{\footnotesize\ttfamily gint agg\+\_\+mesh\+\_\+surface\+\_\+add (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$}]{msh,  }\item[{\textbf{ agg\+\_\+surface\+\_\+t} $\ast$}]{S,  }\item[{\textbf{ agg\+\_\+patch\+\_\+t} $\ast$}]{P,  }\item[{gint}]{nsec,  }\item[{gint}]{nseg,  }\item[{gint}]{pps,  }\item[{agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$}]{w }\end{DoxyParamCaption})}
+\mbox{\label{group__mesh_gae485c1768c40935b7d054e29dd684cd2}} 
+\index{Surface meshes@{Surface meshes}!agg\_mesh\_surface\_add\_grid@{agg\_mesh\_surface\_add\_grid}}
+\index{agg\_mesh\_surface\_add\_grid@{agg\_mesh\_surface\_add\_grid}!Surface meshes@{Surface meshes}}
+\doxysubsubsection{agg\_mesh\_surface\_add\_grid()}
+{\footnotesize\ttfamily gint agg\+\_\+mesh\+\_\+surface\+\_\+add\+\_\+grid (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$}]{m,  }\item[{gint}]{iS,  }\item[{gint}]{nsec,  }\item[{gint}]{nsp,  }\item[{gint}]{pps,  }\item[{agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$}]{w }\end{DoxyParamCaption})}
 
-Add a parametric surface to a mesh, cutting on intersections if necessary. This requires that any intersections be added in advance, using \doxyref{agg\+\_\+mesh\+\_\+intersection\+\_\+add}{p.}{group__mesh_ga36e43036ba3bc99c967c4d25a4c6b50c}.
+Add surface elements to a mesh, on a square grid in the parametric space
+
+
+\begin{DoxyParams}{Parameters}
+{\em m} & mesh to add elements to; \\
+\hline
+{\em iS} & index of surface in surface list of {\itshape m}; \\
+\hline
+{\em nsec} & number of sections on surface; \\
+\hline
+{\em nsp} & number of splines per section; \\
+\hline
+{\em pps} & points per spline on sections; \\
+\hline
+{\em w} & workspace for point evaluation.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+patch\+\_\+t}.
+
+\mbox{\label{group__mesh_gaa10f723a8402928eba53b86324595927}} 
+\index{Surface meshes@{Surface meshes}!agg\_mesh\_surface\_add\_triangle@{agg\_mesh\_surface\_add\_triangle}}
+\index{agg\_mesh\_surface\_add\_triangle@{agg\_mesh\_surface\_add\_triangle}!Surface meshes@{Surface meshes}}
+\doxysubsubsection{agg\_mesh\_surface\_add\_triangle()}
+{\footnotesize\ttfamily gint agg\+\_\+mesh\+\_\+surface\+\_\+add\+\_\+triangle (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$}]{msh,  }\item[{gint}]{isurf,  }\item[{gchar $\ast$}]{args,  }\item[{gint}]{pps,  }\item[{agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$}]{w }\end{DoxyParamCaption})}
+
+Add a parametric surface to a mesh, working round clipped parts of patch, using Christian Woltering\textquotesingle{}s library version of Jonathan Shewchuk\textquotesingle{}s Triangle code\+:
+
+{\texttt{ https\+://github.\+com/wo80/\+Triangle/}} {\texttt{ https\+://www.\+cs.\+cmu.\+edu/$\sim$quake/triangle.\+html}}
 
 
 \begin{DoxyParams}{Parameters}
 {\em msh} & a mesh to have a surface added; \\
 \hline
-{\em S} & the surface to add; \\
+{\em isurf} & index of surface in mesh surface list; \\
 \hline
-{\em P} & the patch mapping {\itshape S}; \\
+{\em args} & argument string to pass to triangle; \\
 \hline
-{\em nsec} & number of sections to compute; \\
-\hline
-{\em nseg} & number of segments on each section; \\
-\hline
-{\em pps} & number of points on each segment. \\
+{\em pps} & points per spline; \\
 \hline
 {\em w} & workspace for surface evaluation.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+patch\+\_\+t}.
+
+\mbox{\label{group__mesh_ga250d4886d65fe77f453968ad29051acf}} 
+\index{Surface meshes@{Surface meshes}!agg\_mesh\_surface\_blend\_add@{agg\_mesh\_surface\_blend\_add}}
+\index{agg\_mesh\_surface\_blend\_add@{agg\_mesh\_surface\_blend\_add}!Surface meshes@{Surface meshes}}
+\doxysubsubsection{agg\_mesh\_surface\_blend\_add()}
+{\footnotesize\ttfamily gint agg\+\_\+mesh\+\_\+surface\+\_\+blend\+\_\+add (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$}]{m,  }\item[{gint}]{iB,  }\item[{gint}]{nsec,  }\item[{gint}]{pps,  }\item[{agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$}]{w }\end{DoxyParamCaption})}
+
+Add elements from a surface blend to a mesh
+
+
+\begin{DoxyParams}{Parameters}
+{\em m} & mesh to add surface elements to; \\
+\hline
+{\em iB} & index of surface blend in {\itshape m}; \\
+\hline
+{\em nsec} & number of sections on blend; \\
+\hline
+{\em pps} & points per spline on element edges; \\
+\hline
+{\em w} & workspace for point evaluation\\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}

@@ -344,11 +344,9 @@ gint agg_surface_point_diff(agg_surface_t *S, gdouble u, gdouble v,
 {
   agg_transform_t *T ;
   agg_variable_t *var ;
-  agg_section_t *s ;
-  gdouble y[3], ee, sgn ;
+  gdouble ee ;
   
   T = agg_surface_transform(S) ;
-  s = w->s ;
   ee = 1e-6 ;
   
   /*check that the first two variables in T are u and v*/
@@ -392,6 +390,35 @@ gint agg_surface_point_diff(agg_surface_t *S, gdouble u, gdouble v,
   }
   
   return 0 ;
+}
+
+/** 
+ * Parse a string specifying a surface grid type
+ * 
+ * @param str grid string to parse
+ * 
+ * @return ::agg_grid_t corresponding to \a str, or AGG_GRID_UNDEFINED. 
+ */
+
+agg_grid_t agg_grid_parse(gchar *str)
+
+{
+  gint i ;
+  static const struct {
+    gchar *name ;
+    agg_grid_t grid ;
+  } grid_list[] = {
+    {"regular",  AGG_GRID_REGULAR},
+    {"triangle", AGG_GRID_TRIANGLE},
+    {NULL,       AGG_GRID_UNDEFINED}
+  } ;
+
+  for ( i = 0 ; grid_list[i].name != NULL ; i ++ ) {
+    if ( strcmp(grid_list[i].name, str) == 0 )
+      return grid_list[i].grid ;
+  }
+
+  return AGG_GRID_UNDEFINED ;
 }
 
 /**

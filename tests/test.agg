@@ -26,6 +26,7 @@ surface {
   			 "yle+span*sin(dihedral)*u",
 			 "span/1000 + span*u")
   patch("tubular", "nowrap", "wrap")
+  grid("regular", 16, 24)
 }
 
 surface {
@@ -43,6 +44,7 @@ surface {
   patch("tubular", "nowrap", "wrap", "invert")
   #patch("spherical", "nowrap", "wrap")  
   axes("+x+y-z")
+  grid("regular", 16, 47)
 }
  
 surface {
@@ -54,4 +56,5 @@ surface {
   transform("translate", 0, 0, "len*u")
   patch("spherical", "nowrap", "wrap")
   axes("zxy")
+  grid("triangle", 1e-3)
 }

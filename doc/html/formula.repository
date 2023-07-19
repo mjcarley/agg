@@ -33,3 +33,10 @@
 \_form#32=61x11:$-1\leq x\leq 1$
 \_form#33=48x14:$y=f(x)$
 \_form#34=39x14:$(0,1/2)$
+\_form#35=5x6:$s$
+\_form#36=5x9:$t$
+\_form#37=79x14:$y'=\mathrm{d}f(x)/\mathrm{d}x$
+\_form#38=29x14:$H_{i}(s)$
+\_form#39=50x11:$1\leq i\leq4$
+\_form#40=53x11:$0\leq s\leq 1$
+\_form#41=50x11:$0\leq t\leq 1$

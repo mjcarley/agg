@@ -18,6 +18,8 @@ gint \textbf{ agg\+\_\+surface\+\_\+section\+\_\+interp} (\textbf{ agg\+\_\+surf
 agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$ \textbf{ agg\+\_\+surface\+\_\+workspace\+\_\+new} (void)
 \item 
 gint \textbf{ agg\+\_\+surface\+\_\+point\+\_\+eval} (\textbf{ agg\+\_\+surface\+\_\+t} $\ast$S, gdouble u, gdouble v, gdouble $\ast$x, agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$w)
+\item 
+\textbf{ agg\+\_\+grid\+\_\+t} \textbf{ agg\+\_\+grid\+\_\+parse} (gchar $\ast$str)
 \end{DoxyCompactItemize}
 \begin{DoxyCompactItemize}
 \item 
@@ -62,6 +64,26 @@ AGG\+\_\+\+AXES\+\_\+\+PX\+\_\+\+PY\+\_\+\+MZ&(x,y,z) -\/$>$ (x, y,-\/z) (reflec
 
 
 \doxysubsection{Function Documentation}
+\mbox{\label{group__surfaces_ga0e914f69af6fe6b68c6bb377caca1398}} 
+\index{Surfaces@{Surfaces}!agg\_grid\_parse@{agg\_grid\_parse}}
+\index{agg\_grid\_parse@{agg\_grid\_parse}!Surfaces@{Surfaces}}
+\doxysubsubsection{agg\_grid\_parse()}
+{\footnotesize\ttfamily \textbf{ agg\+\_\+grid\+\_\+t} agg\+\_\+grid\+\_\+parse (\begin{DoxyParamCaption}\item[{gchar $\ast$}]{str }\end{DoxyParamCaption})}
+
+Parse a string specifying a surface grid type
+
+
+\begin{DoxyParams}{Parameters}
+{\em str} & grid string to parse\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\doxyref{agg\+\_\+grid\+\_\+t}{p.}{agg_8h_a156744529fbf4a16155029ba3f442277} corresponding to {\itshape str}, or AGG\+\_\+\+GRID\+\_\+\+UNDEFINED. 
+\end{DoxyReturn}
+
+
+References \textbf{ AGG\+\_\+\+GRID\+\_\+\+REGULAR}, \textbf{ AGG\+\_\+\+GRID\+\_\+\+TRIANGLE}, and \textbf{ AGG\+\_\+\+GRID\+\_\+\+UNDEFINED}.
+
 \mbox{\label{group__surfaces_ga88a861a9c890e62d096a720b67a92797}} 
 \index{Surfaces@{Surfaces}!agg\_surface\_new@{agg\_surface\_new}}
 \index{agg\_surface\_new@{agg\_surface\_new}!Surfaces@{Surfaces}}

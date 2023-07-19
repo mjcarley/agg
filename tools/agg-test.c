@@ -512,7 +512,6 @@ static void parser_test(gchar *file)
   agg_mesh_t *m ;
   gint nsec, nsp, pps, offp, offsp, offs ;
   agg_surface_workspace_t *w ;
-  gchar *args = "pzqa0.001" ;
   FILE *output ;
   
   b = agg_body_new(32, 32) ;
@@ -531,18 +530,9 @@ static void parser_test(gchar *file)
   nsec = 8 ; nsp = 65 ; pps = 2 ;
   offp = offsp = offs = 1 ;
 
-  agg_surface_grid(agg_body_surface(b,0)) = AGG_GRID_REGULAR ;
-  agg_surface_grid_section_number(agg_body_surface(b,0)) = nsec ;
-  agg_surface_grid_spline_number(agg_body_surface(b,0)) = nsp ;
-  agg_surface_grid(agg_body_surface(b,1)) = AGG_GRID_REGULAR ;
-  agg_surface_grid_section_number(agg_body_surface(b,1)) = nsec ;
-  agg_surface_grid_spline_number(agg_body_surface(b,1)) = nsp ;
-  agg_surface_grid(agg_body_surface(b,2)) = AGG_GRID_TRIANGLE ;
-  agg_surface_grid_element_area(agg_body_surface(b,2)) = 1e-3 ;
+  /* m->B[0].invert = TRUE ; */
+  /* m->B[1].invert = TRUE ; */
   
-  
-  /* agg_mesh_body_triangle(m, b, nsec, nsp, pps, args, w) ; */
-  /* agg_mesh_body_regular(m, b, nsec, nsp, pps, w) ; */
   agg_mesh_body(m, b, pps, w) ;
 
   output = fopen("surface.geo", "w") ;

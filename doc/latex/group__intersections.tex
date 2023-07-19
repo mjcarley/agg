@@ -9,7 +9,7 @@ Evaluation of surface intersections.
 \item 
 \textbf{ agg\+\_\+intersection\+\_\+t} $\ast$ \textbf{ agg\+\_\+intersection\+\_\+new} (gint nstmax)
 \item 
-gint \textbf{ agg\+\_\+surface\+\_\+patch\+\_\+intersection} (\textbf{ agg\+\_\+intersection\+\_\+t} $\ast$inter, \textbf{ agg\+\_\+surface\+\_\+t} $\ast$S1, \textbf{ agg\+\_\+patch\+\_\+t} $\ast$P1, \textbf{ agg\+\_\+surface\+\_\+t} $\ast$S2, \textbf{ agg\+\_\+patch\+\_\+t} $\ast$P2, agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$w)
+gint \textbf{ agg\+\_\+surface\+\_\+patch\+\_\+intersection} (\textbf{ agg\+\_\+intersection\+\_\+t} $\ast$inter, \textbf{ agg\+\_\+surface\+\_\+t} $\ast$S1, \textbf{ agg\+\_\+patch\+\_\+t} $\ast$P1, \textbf{ agg\+\_\+surface\+\_\+t} $\ast$S2, \textbf{ agg\+\_\+patch\+\_\+t} $\ast$P2, agg\+\_\+surface\+\_\+blend\+\_\+t $\ast$B, agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$w)
 \item 
 gint \textbf{ agg\+\_\+intersection\+\_\+curve\+\_\+write} (FILE $\ast$f, \textbf{ agg\+\_\+intersection\+\_\+t} $\ast$inter, agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$w)
 \item 
@@ -125,7 +125,7 @@ Correct out of range values of $(s,t)$ to lie in the range $(0,1)\times(0,1)$ wh
 
 
 \begin{DoxyParams}{Parameters}
-{\em P} & an \doxyref{agg\+\_\+patch\+\_\+t}{p.}{group__patches_gabdb5fa64575d1f09fb1e68a13a103777}; \\
+{\em P} & an \doxyref{agg\+\_\+patch\+\_\+t}{p.}{agg_8h_abdb5fa64575d1f09fb1e68a13a103777}; \\
 \hline
 {\em st} & an $(s,t)$ parameter pair on patch {\itshape P}.\\
 \hline
@@ -133,11 +133,11 @@ Correct out of range values of $(s,t)$ to lie in the range $(0,1)\times(0,1)$ wh
 \begin{DoxyReturn}{Returns}
 0 on success. 
 \end{DoxyReturn}
-\mbox{\label{group__intersections_ga8c3d4ec240c81bdb3f551d4411837589}} 
+\mbox{\label{group__intersections_gadf8d1f571a281e326c1e391a59a6f33a}} 
 \index{Surface intersections@{Surface intersections}!agg\_surface\_patch\_intersection@{agg\_surface\_patch\_intersection}}
 \index{agg\_surface\_patch\_intersection@{agg\_surface\_patch\_intersection}!Surface intersections@{Surface intersections}}
 \doxysubsubsection{agg\_surface\_patch\_intersection()}
-{\footnotesize\ttfamily gint agg\+\_\+surface\+\_\+patch\+\_\+intersection (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+intersection\+\_\+t} $\ast$}]{inter,  }\item[{\textbf{ agg\+\_\+surface\+\_\+t} $\ast$}]{S1,  }\item[{\textbf{ agg\+\_\+patch\+\_\+t} $\ast$}]{P1,  }\item[{\textbf{ agg\+\_\+surface\+\_\+t} $\ast$}]{S2,  }\item[{\textbf{ agg\+\_\+patch\+\_\+t} $\ast$}]{P2,  }\item[{agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$}]{w }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily gint agg\+\_\+surface\+\_\+patch\+\_\+intersection (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+intersection\+\_\+t} $\ast$}]{inter,  }\item[{\textbf{ agg\+\_\+surface\+\_\+t} $\ast$}]{S1,  }\item[{\textbf{ agg\+\_\+patch\+\_\+t} $\ast$}]{P1,  }\item[{\textbf{ agg\+\_\+surface\+\_\+t} $\ast$}]{S2,  }\item[{\textbf{ agg\+\_\+patch\+\_\+t} $\ast$}]{P2,  }\item[{agg\+\_\+surface\+\_\+blend\+\_\+t $\ast$}]{B,  }\item[{agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$}]{w }\end{DoxyParamCaption})}
 
 Calculate the intersection of two parametric surfaces.
 
@@ -152,6 +152,8 @@ Calculate the intersection of two parametric surfaces.
 {\em S2} & second surface; \\
 \hline
 {\em P2} & mapping patch for second surface; \\
+\hline
+{\em B} & if not NULL, initialized with data for blending {\itshape S1} into {\itshape S2} across the intersection curve; \\
 \hline
 {\em w} & workspace for surface evaluation.\\
 \hline
@@ -170,5 +172,5 @@ Calculate the intersection of two parametric surfaces.
 
 Data structure to hold intersections of surfaces 
 
-Referenced by \textbf{ agg\+\_\+intersection\+\_\+new()}.
+Referenced by \textbf{ agg\+\_\+intersection\+\_\+new()}, and \textbf{ agg\+\_\+mesh\+\_\+body()}.
 

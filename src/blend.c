@@ -27,6 +27,13 @@
 
 #include "agg-private.h"
 
+/**
+ * @{
+ *  @ingroup blends
+ */
+
+
+
 agg_surface_blend_t *agg_surface_blend_new(void)
 
 {
@@ -36,6 +43,15 @@ agg_surface_blend_t *agg_surface_blend_new(void)
   
   return B ;
 }
+
+/** 
+ * Evaluate Hermite smoothing polynomials
+ * 
+ * @param s argument of polynomials;
+ * @param H on exit contains \f$H_{i}(s)\f$, \f$1\leq i\leq4\f$.
+ * 
+ * @return 0 on success.
+ */
 
 gint agg_hermite_eval(gdouble s, gdouble *H)
 
@@ -48,15 +64,24 @@ gint agg_hermite_eval(gdouble s, gdouble *H)
   return 0 ;
 }
 
+/** 
+ * Evaluate a surface blend, using method of Blending parametric
+ * surfaces Daniel J. Filip, ACM Transactions on Graphics, Volume 8,
+ * Issue 301, July 1989, pp164-173 https://doi.org/10.1145/77055.77057
+ * 
+ * @param B surface blend, containing details of rail curves and surface
+ * to join;
+ * @param s parameter \f$s\f$, \f$0\leq s\leq 1\f$
+ * @param t parameter \f$t\f$, \f$0\leq t\leq 1\f$
+ * @param x on exit, contains surface position at \f$(s,t)\f$;
+ * @param w workspace for surface evaluation.
+ * 
+ * @return 
+ */
+
 gint agg_surface_blend_evaluate(agg_surface_blend_t *B,
 				gdouble s, gdouble t, gdouble *x,
 				agg_surface_workspace_t *w)
-
-/*
- * Blended surface method of Blending parametric surfaces Daniel
- * J. Filip, ACM Transactions on Graphics, Volume 8, Issue 301 July
- * 1989, pp164-173 https://doi.org/10.1145/77055.77057
- */
   
 {
   agg_surface_t *S1, *S2 ;
@@ -155,3 +180,7 @@ gint agg_surface_blend_evaluate(agg_surface_blend_t *B,
   
   return 0 ;
 }
+
+/**
+ *  @}
+ */
