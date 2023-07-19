@@ -21,8 +21,6 @@
 
 #include <glib.h>
 
-#include <blaswrap.h>
-
 #include <agg.h>
 
 #include "agg-private.h"
@@ -237,6 +235,16 @@ gint agg_patch_parse(agg_patch_t *P, agg_variable_t *p, gint np)
   return 0 ;
 }
 
+/** 
+ * Evaluate patch coordinates on a clipping curve
+ * 
+ * @param c contains patch clipping;
+ * @param u parameter on \a c;
+ * @param s on exit contains \f$s(u)\f$ on patch;
+ * @param t on exit contains \f$t(u)\f$ on patch.
+ * 
+ * @return 0 on success.
+ */
 
 gint agg_patch_clip_eval(agg_patch_clipping_t *c, gdouble u,
 			 gdouble *s, gdouble *t)
@@ -270,6 +278,21 @@ gint agg_patch_clip_eval(agg_patch_clipping_t *c, gdouble u,
   
   return 0 ;
 }
+
+/** 
+ * Convert derivatives with respect to surface coordinates \f$(u,v)\f$
+ * to derivatives with respect to patch variables \f$(s,t)\f$.
+ * 
+ * @param P surface patch;
+ * @param s parameter on \a P;
+ * @param t parameter on \a P;
+ * @param xu \f$\partial\mathbf{x}/\partial u\f$ at \f$(u(s,t),v(s,t))\f$;
+ * @param xv \f$\partial\mathbf{x}/\partial v\f$ at \f$(u(s,t),v(s,t))\f$;
+ * @param xs on exit contains \f$\partial\mathbf{x}/\partial s\f$;
+ * @param xt on exit contains \f$\partial\mathbf{x}/\partial t\f$.
+ * 
+ * @return 0 on success.
+ */
 
 gint agg_patch_surface_diff(agg_patch_t *P,
 			    gdouble s, gdouble t,

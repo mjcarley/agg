@@ -58,6 +58,8 @@ $(function() {
 <tr class="separator:ga024e7cbe995df9bc519a77525bf8b639"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gac7fd1a95c34d4b227e46b64fe642efae"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__surfaces.html#gac7fd1a95c34d4b227e46b64fe642efae">agg_surface_point_eval</a> (<a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *S, gdouble u, gdouble v, gdouble *x, agg_surface_workspace_t *w)</td></tr>
 <tr class="separator:gac7fd1a95c34d4b227e46b64fe642efae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3d2c413e37bf8e334d5e8860753556ab"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__surfaces.html#ga3d2c413e37bf8e334d5e8860753556ab">agg_surface_point_diff</a> (<a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *S, gdouble u, gdouble v, gdouble *x, gdouble *xu, gdouble *xv, agg_surface_workspace_t *w)</td></tr>
+<tr class="separator:ga3d2c413e37bf8e334d5e8860753556ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga0e914f69af6fe6b68c6bb377caca1398"><td class="memItemLeft" align="right" valign="top"><a class="el" href="agg_8h.html#a156744529fbf4a16155029ba3f442277">agg_grid_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__surfaces.html#ga0e914f69af6fe6b68c6bb377caca1398">agg_grid_parse</a> (gchar *str)</td></tr>
 <tr class="separator:ga0e914f69af6fe6b68c6bb377caca1398"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga9d96b462257229695d4a34527697d492"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__surfaces.html#ga9d96b462257229695d4a34527697d492">agg_axes_t</a> { <br />
@@ -151,6 +153,80 @@ $(function() {
 
 </div>
 </div>
+<a id="ga3d2c413e37bf8e334d5e8860753556ab" name="ga3d2c413e37bf8e334d5e8860753556ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga3d2c413e37bf8e334d5e8860753556ab">&#9670;&nbsp;</a></span>agg_surface_point_diff()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_surface_point_diff </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *&#160;</td>
+          <td class="paramname"><em>S</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gdouble&#160;</td>
+          <td class="paramname"><em>u</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gdouble&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gdouble *&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gdouble *&#160;</td>
+          <td class="paramname"><em>xu</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gdouble *&#160;</td>
+          <td class="paramname"><em>xv</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">agg_surface_workspace_t *&#160;</td>
+          <td class="paramname"><em>w</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Estimate derivatives on a surface</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">S</td><td>surface on which derivatives are to be evaluated; </td></tr>
+    <tr><td class="paramname">u</td><td>surface parameter; </td></tr>
+    <tr><td class="paramname">v</td><td>surface parameter; </td></tr>
+    <tr><td class="paramname">x</td><td>on exit contains <img class="formulaInl" alt="$\mathbf{x}(u,v)$" src="form_11.png" width="36" height="14"/>; </td></tr>
+    <tr><td class="paramname">xu</td><td>on exit contains <img class="formulaInl" alt="$\partial\mathbf{x}/\partial u$" src="form_44.png" width="35" height="14"/>; </td></tr>
+    <tr><td class="paramname">xv</td><td>on exit contains <img class="formulaInl" alt="$\partial\mathbf{x}/\partial v$" src="form_46.png" width="35" height="14"/>; </td></tr>
+    <tr><td class="paramname">w</td><td>workspace for surface point evaluation.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
+
+<p class="reference">References <a class="el" href="agg_8h.html#ab26de2509de1b8f9b7bc6523852dc6da">agg_transform_t</a>, and <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>.</p>
+
+</div>
+</div>
 <a id="gac7fd1a95c34d4b227e46b64fe642efae" name="gac7fd1a95c34d4b227e46b64fe642efae"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gac7fd1a95c34d4b227e46b64fe642efae">&#9670;&nbsp;</a></span>agg_surface_point_eval()</h2>
 
@@ -209,6 +285,8 @@ $(function() {
 <dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
 
 <p class="reference">References <a class="el" href="agg_8h.html#a8cdd164643b93d05245e9b4976f3f0cb">agg_section_t</a>, <a class="el" href="agg_8h.html#ab26de2509de1b8f9b7bc6523852dc6da">agg_transform_t</a>, and <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="agg_8h.html#a924ac983f741e64ce5812616a8ca56c9">agg_clipping_orient()</a>.</p>
 
 </div>
 </div>
@@ -347,7 +425,7 @@ $(function() {
       </table>
 </div><div class="memdoc">
 <p >Allocate a workspace for evaluation of surfaces</p>
-<dl class="section return"><dt>Returns</dt><dd>newly allocated workspaces </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>newly allocated workspace. </dd></dl>
 
 <p class="reference">References <a class="el" href="group__sections.html#ga105f0353bff693485509f3cf9bb6ae46">agg_section_new()</a>.</p>
 
@@ -356,7 +434,7 @@ $(function() {
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jul 19 2023 18:08:49 for AGG by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Wed Jul 19 2023 18:38:09 for AGG by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

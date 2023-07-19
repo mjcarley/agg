@@ -11,6 +11,10 @@ gint \textbf{ agg\+\_\+patch\+\_\+map} (\textbf{ agg\+\_\+patch\+\_\+t} $\ast$P,
 \item 
 gint \textbf{ agg\+\_\+patch\+\_\+parse} (\textbf{ agg\+\_\+patch\+\_\+t} $\ast$P, \textbf{ agg\+\_\+variable\+\_\+t} $\ast$p, gint np)
 \item 
+gint \textbf{ agg\+\_\+patch\+\_\+clip\+\_\+eval} (agg\+\_\+patch\+\_\+clipping\+\_\+t $\ast$c, gdouble u, gdouble $\ast$s, gdouble $\ast$t)
+\item 
+gint \textbf{ agg\+\_\+patch\+\_\+surface\+\_\+diff} (\textbf{ agg\+\_\+patch\+\_\+t} $\ast$P, gdouble s, gdouble t, gdouble $\ast$xu, gdouble $\ast$xv, gdouble $\ast$xs, gdouble $\ast$xt)
+\item 
 gint \textbf{ agg\+\_\+clipping\+\_\+orient} (agg\+\_\+patch\+\_\+clipping\+\_\+t $\ast$c1, \textbf{ agg\+\_\+patch\+\_\+t} $\ast$P1, \textbf{ agg\+\_\+surface\+\_\+t} $\ast$S1, agg\+\_\+patch\+\_\+clipping\+\_\+t $\ast$c2, \textbf{ agg\+\_\+patch\+\_\+t} $\ast$P2, \textbf{ agg\+\_\+surface\+\_\+t} $\ast$S2, agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$w)
 \end{DoxyCompactItemize}
 
@@ -50,6 +54,36 @@ Set orientation of two clipping curves so that they are traversed in the same se
 \begin{DoxyReturn}{Returns}
 0 on success. 
 \end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+patch\+\_\+clip\+\_\+eval()}, \textbf{ agg\+\_\+patch\+\_\+map()}, and \textbf{ agg\+\_\+surface\+\_\+point\+\_\+eval()}.
+
+\mbox{\label{group__patches_ga2ebb955f001e9176fe14128bace8aaf3}} 
+\index{Surface patches@{Surface patches}!agg\_patch\_clip\_eval@{agg\_patch\_clip\_eval}}
+\index{agg\_patch\_clip\_eval@{agg\_patch\_clip\_eval}!Surface patches@{Surface patches}}
+\doxysubsubsection{agg\_patch\_clip\_eval()}
+{\footnotesize\ttfamily gint agg\+\_\+patch\+\_\+clip\+\_\+eval (\begin{DoxyParamCaption}\item[{agg\+\_\+patch\+\_\+clipping\+\_\+t $\ast$}]{c,  }\item[{gdouble}]{u,  }\item[{gdouble $\ast$}]{s,  }\item[{gdouble $\ast$}]{t }\end{DoxyParamCaption})}
+
+Evaluate patch coordinates on a clipping curve
+
+
+\begin{DoxyParams}{Parameters}
+{\em c} & contains patch clipping; \\
+\hline
+{\em u} & parameter on {\itshape c}; \\
+\hline
+{\em s} & on exit contains $s(u)$ on patch; \\
+\hline
+{\em t} & on exit contains $t(u)$ on patch.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+Referenced by \textbf{ agg\+\_\+clipping\+\_\+orient()}.
+
 \mbox{\label{group__patches_gaa07e6a7a89baf7a5a9acd8f2de6ad111}} 
 \index{Surface patches@{Surface patches}!agg\_patch\_map@{agg\_patch\_map}}
 \index{agg\_patch\_map@{agg\_patch\_map}!Surface patches@{Surface patches}}
@@ -78,6 +112,10 @@ Apply mapping in a patch to find parametric variables on surface.
 
 References \textbf{ AGG\+\_\+\+PATCH\+\_\+\+BILINEAR}.
 
+
+
+Referenced by \textbf{ agg\+\_\+clipping\+\_\+orient()}.
+
 \mbox{\label{group__patches_ga9bbbda35c5b3b3b8a5da05a50cc3da24}} 
 \index{Surface patches@{Surface patches}!agg\_patch\_parse@{agg\_patch\_parse}}
 \index{agg\_patch\_parse@{agg\_patch\_parse}!Surface patches@{Surface patches}}
@@ -98,3 +136,35 @@ Parse string data for an \doxyref{agg\+\_\+patch\+\_\+t}{p.}{agg_8h_abdb5fa64575
 \begin{DoxyReturn}{Returns}
 0 on success. 
 \end{DoxyReturn}
+\mbox{\label{group__patches_ga368751f3d1d66e24717aafbc4eb9873a}} 
+\index{Surface patches@{Surface patches}!agg\_patch\_surface\_diff@{agg\_patch\_surface\_diff}}
+\index{agg\_patch\_surface\_diff@{agg\_patch\_surface\_diff}!Surface patches@{Surface patches}}
+\doxysubsubsection{agg\_patch\_surface\_diff()}
+{\footnotesize\ttfamily gint agg\+\_\+patch\+\_\+surface\+\_\+diff (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+patch\+\_\+t} $\ast$}]{P,  }\item[{gdouble}]{s,  }\item[{gdouble}]{t,  }\item[{gdouble $\ast$}]{xu,  }\item[{gdouble $\ast$}]{xv,  }\item[{gdouble $\ast$}]{xs,  }\item[{gdouble $\ast$}]{xt }\end{DoxyParamCaption})}
+
+Convert derivatives with respect to surface coordinates $(u,v)$ to derivatives with respect to patch variables $(s,t)$.
+
+
+\begin{DoxyParams}{Parameters}
+{\em P} & surface patch; \\
+\hline
+{\em s} & parameter on {\itshape P}; \\
+\hline
+{\em t} & parameter on {\itshape P}; \\
+\hline
+{\em xu} & $\partial\mathbf{x}/\partial u$ at $(u(s,t),v(s,t))$; \\
+\hline
+{\em xv} & $\partial\mathbf{x}/\partial v$ at $(u(s,t),v(s,t))$; \\
+\hline
+{\em xs} & on exit contains $\partial\mathbf{x}/\partial s$; \\
+\hline
+{\em xt} & on exit contains $\partial\mathbf{x}/\partial t$.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ AGG\+\_\+\+PATCH\+\_\+\+BILINEAR}, \textbf{ AGG\+\_\+\+PATCH\+\_\+\+SPHERICAL}, and \textbf{ AGG\+\_\+\+PATCH\+\_\+\+TUBULAR}.
+

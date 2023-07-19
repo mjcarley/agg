@@ -71,6 +71,8 @@ gint \textbf{ agg\+\_\+surface\+\_\+section\+\_\+interp} (\textbf{ agg\+\_\+surf
 \item 
 gint \textbf{ agg\+\_\+surface\+\_\+point\+\_\+eval} (\textbf{ agg\+\_\+surface\+\_\+t} $\ast$S, gdouble u, gdouble v, gdouble $\ast$x, agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$w)
 \item 
+gint \textbf{ agg\+\_\+surface\+\_\+point\+\_\+diff} (\textbf{ agg\+\_\+surface\+\_\+t} $\ast$S, gdouble u, gdouble v, gdouble $\ast$x, gdouble $\ast$xu, gdouble $\ast$xv, agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$w)
+\item 
 agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$ \textbf{ agg\+\_\+surface\+\_\+workspace\+\_\+new} (void)
 \item 
 gdouble \textbf{ agg\+\_\+naca\+\_\+four} (gdouble t, gdouble p, gdouble m, gdouble x)
@@ -81,6 +83,8 @@ gint \textbf{ agg\+\_\+patch\+\_\+st\+\_\+correct} (\textbf{ agg\+\_\+patch\+\_\
 \item 
 gint \textbf{ agg\+\_\+patch\+\_\+parse} (\textbf{ agg\+\_\+patch\+\_\+t} $\ast$P, \textbf{ agg\+\_\+variable\+\_\+t} $\ast$p, gint np)
 \item 
+gint \textbf{ agg\+\_\+patch\+\_\+surface\+\_\+diff} (\textbf{ agg\+\_\+patch\+\_\+t} $\ast$P, gdouble s, gdouble t, gdouble $\ast$xu, gdouble $\ast$xv, gdouble $\ast$xs, gdouble $\ast$xt)
+\item 
 \textbf{ agg\+\_\+intersection\+\_\+t} $\ast$ \textbf{ agg\+\_\+intersection\+\_\+new} (gint nstmax)
 \item 
 gint \textbf{ agg\+\_\+surface\+\_\+patch\+\_\+intersection} (\textbf{ agg\+\_\+intersection\+\_\+t} $\ast$inter, \textbf{ agg\+\_\+surface\+\_\+t} $\ast$S1, \textbf{ agg\+\_\+patch\+\_\+t} $\ast$P1, \textbf{ agg\+\_\+surface\+\_\+t} $\ast$S2, \textbf{ agg\+\_\+patch\+\_\+t} $\ast$P2, agg\+\_\+surface\+\_\+blend\+\_\+t $\ast$B, agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$w)
@@ -90,6 +94,8 @@ gint \textbf{ agg\+\_\+intersection\+\_\+curve\+\_\+write} (FILE $\ast$f, \textb
 gint \textbf{ agg\+\_\+intersection\+\_\+bbox\+\_\+set} (\textbf{ agg\+\_\+intersection\+\_\+t} $\ast$inter)
 \item 
 gint \textbf{ agg\+\_\+intersection\+\_\+resample} (\textbf{ agg\+\_\+intersection\+\_\+t} $\ast$inter, gint nsp, gint pps, \textbf{ agg\+\_\+intersection\+\_\+t} $\ast$resample, agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$w)
+\item 
+gint \textbf{ agg\+\_\+patch\+\_\+clip\+\_\+eval} (agg\+\_\+patch\+\_\+clipping\+\_\+t $\ast$c, gdouble u, gdouble $\ast$s, gdouble $\ast$t)
 \item 
 gint \textbf{ agg\+\_\+clipping\+\_\+orient} (agg\+\_\+patch\+\_\+clipping\+\_\+t $\ast$c1, \textbf{ agg\+\_\+patch\+\_\+t} $\ast$P1, \textbf{ agg\+\_\+surface\+\_\+t} $\ast$S1, agg\+\_\+patch\+\_\+clipping\+\_\+t $\ast$c2, \textbf{ agg\+\_\+patch\+\_\+t} $\ast$P2, \textbf{ agg\+\_\+surface\+\_\+t} $\ast$S2, agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$w)
 \item 
@@ -505,6 +511,10 @@ Set orientation of two clipping curves so that they are traversed in the same se
 \begin{DoxyReturn}{Returns}
 0 on success. 
 \end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+patch\+\_\+clip\+\_\+eval()}, \textbf{ agg\+\_\+patch\+\_\+map()}, and \textbf{ agg\+\_\+surface\+\_\+point\+\_\+eval()}.
+
 \mbox{\label{agg_8h_a80416f24e969b55310b8a47b9f0100e9}} 
 \index{agg.h@{agg.h}!agg\_expression\_compile@{agg\_expression\_compile}}
 \index{agg\_expression\_compile@{agg\_expression\_compile}!agg.h@{agg.h}}
@@ -1043,6 +1053,32 @@ Write a \doxyref{agg\+\_\+mesh\+\_\+t}{p.}{group__mesh_ga77887f8535b8d608674eb36
 \begin{DoxyReturn}{Returns}
 0 on success. 
 \end{DoxyReturn}
+\mbox{\label{agg_8h_a2ebb955f001e9176fe14128bace8aaf3}} 
+\index{agg.h@{agg.h}!agg\_patch\_clip\_eval@{agg\_patch\_clip\_eval}}
+\index{agg\_patch\_clip\_eval@{agg\_patch\_clip\_eval}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_patch\_clip\_eval()}
+{\footnotesize\ttfamily gint agg\+\_\+patch\+\_\+clip\+\_\+eval (\begin{DoxyParamCaption}\item[{agg\+\_\+patch\+\_\+clipping\+\_\+t $\ast$}]{c,  }\item[{gdouble}]{u,  }\item[{gdouble $\ast$}]{s,  }\item[{gdouble $\ast$}]{t }\end{DoxyParamCaption})}
+
+Evaluate patch coordinates on a clipping curve
+
+
+\begin{DoxyParams}{Parameters}
+{\em c} & contains patch clipping; \\
+\hline
+{\em u} & parameter on {\itshape c}; \\
+\hline
+{\em s} & on exit contains $s(u)$ on patch; \\
+\hline
+{\em t} & on exit contains $t(u)$ on patch.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+Referenced by \textbf{ agg\+\_\+clipping\+\_\+orient()}.
+
 \mbox{\label{agg_8h_a91915491c1aed07991188269140680ce}} 
 \index{agg.h@{agg.h}!agg\_patch\_map@{agg\_patch\_map}}
 \index{agg\_patch\_map@{agg\_patch\_map}!agg.h@{agg.h}}
@@ -1070,6 +1106,10 @@ Apply mapping in a patch to find parametric variables on surface.
 
 
 References \textbf{ AGG\+\_\+\+PATCH\+\_\+\+BILINEAR}.
+
+
+
+Referenced by \textbf{ agg\+\_\+clipping\+\_\+orient()}.
 
 \mbox{\label{agg_8h_a9bbbda35c5b3b3b8a5da05a50cc3da24}} 
 \index{agg.h@{agg.h}!agg\_patch\_parse@{agg\_patch\_parse}}
@@ -1109,6 +1149,38 @@ Correct out of range values of $(s,t)$ to lie in the range $(0,1)\times(0,1)$ wh
 \begin{DoxyReturn}{Returns}
 0 on success. 
 \end{DoxyReturn}
+\mbox{\label{agg_8h_a368751f3d1d66e24717aafbc4eb9873a}} 
+\index{agg.h@{agg.h}!agg\_patch\_surface\_diff@{agg\_patch\_surface\_diff}}
+\index{agg\_patch\_surface\_diff@{agg\_patch\_surface\_diff}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_patch\_surface\_diff()}
+{\footnotesize\ttfamily gint agg\+\_\+patch\+\_\+surface\+\_\+diff (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+patch\+\_\+t} $\ast$}]{P,  }\item[{gdouble}]{s,  }\item[{gdouble}]{t,  }\item[{gdouble $\ast$}]{xu,  }\item[{gdouble $\ast$}]{xv,  }\item[{gdouble $\ast$}]{xs,  }\item[{gdouble $\ast$}]{xt }\end{DoxyParamCaption})}
+
+Convert derivatives with respect to surface coordinates $(u,v)$ to derivatives with respect to patch variables $(s,t)$.
+
+
+\begin{DoxyParams}{Parameters}
+{\em P} & surface patch; \\
+\hline
+{\em s} & parameter on {\itshape P}; \\
+\hline
+{\em t} & parameter on {\itshape P}; \\
+\hline
+{\em xu} & $\partial\mathbf{x}/\partial u$ at $(u(s,t),v(s,t))$; \\
+\hline
+{\em xv} & $\partial\mathbf{x}/\partial v$ at $(u(s,t),v(s,t))$; \\
+\hline
+{\em xs} & on exit contains $\partial\mathbf{x}/\partial s$; \\
+\hline
+{\em xt} & on exit contains $\partial\mathbf{x}/\partial t$.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ AGG\+\_\+\+PATCH\+\_\+\+BILINEAR}, \textbf{ AGG\+\_\+\+PATCH\+\_\+\+SPHERICAL}, and \textbf{ AGG\+\_\+\+PATCH\+\_\+\+TUBULAR}.
+
 \mbox{\label{agg_8h_a1245fe64e54485282fb358081f20f2f4}} 
 \index{agg.h@{agg.h}!agg\_section\_copy@{agg\_section\_copy}}
 \index{agg\_section\_copy@{agg\_section\_copy}!agg.h@{agg.h}}
@@ -1315,6 +1387,38 @@ Calculate the intersection of two parametric surfaces.
 \begin{DoxyReturn}{Returns}
 0 on success. 
 \end{DoxyReturn}
+\mbox{\label{agg_8h_a3d2c413e37bf8e334d5e8860753556ab}} 
+\index{agg.h@{agg.h}!agg\_surface\_point\_diff@{agg\_surface\_point\_diff}}
+\index{agg\_surface\_point\_diff@{agg\_surface\_point\_diff}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_surface\_point\_diff()}
+{\footnotesize\ttfamily gint agg\+\_\+surface\+\_\+point\+\_\+diff (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+surface\+\_\+t} $\ast$}]{S,  }\item[{gdouble}]{u,  }\item[{gdouble}]{v,  }\item[{gdouble $\ast$}]{x,  }\item[{gdouble $\ast$}]{xu,  }\item[{gdouble $\ast$}]{xv,  }\item[{agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$}]{w }\end{DoxyParamCaption})}
+
+Estimate derivatives on a surface
+
+
+\begin{DoxyParams}{Parameters}
+{\em S} & surface on which derivatives are to be evaluated; \\
+\hline
+{\em u} & surface parameter; \\
+\hline
+{\em v} & surface parameter; \\
+\hline
+{\em x} & on exit contains $\mathbf{x}(u,v)$; \\
+\hline
+{\em xu} & on exit contains $\partial\mathbf{x}/\partial u$; \\
+\hline
+{\em xv} & on exit contains $\partial\mathbf{x}/\partial v$; \\
+\hline
+{\em w} & workspace for surface point evaluation.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+transform\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+t}.
+
 \mbox{\label{agg_8h_ac7fd1a95c34d4b227e46b64fe642efae}} 
 \index{agg.h@{agg.h}!agg\_surface\_point\_eval@{agg\_surface\_point\_eval}}
 \index{agg\_surface\_point\_eval@{agg\_surface\_point\_eval}!agg.h@{agg.h}}
@@ -1344,6 +1448,10 @@ Evaluate a point on a surface. The surface must have been initialized with \doxy
 
 
 References \textbf{ agg\+\_\+section\+\_\+t}, \textbf{ agg\+\_\+transform\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+t}.
+
+
+
+Referenced by \textbf{ agg\+\_\+clipping\+\_\+orient()}.
 
 \mbox{\label{agg_8h_a60be5dbdee4c909c663de55a86616da8}} 
 \index{agg.h@{agg.h}!agg\_surface\_section\_add@{agg\_surface\_section\_add}}
@@ -1420,7 +1528,7 @@ Generate interpolation weights for sections on a surface, the preprocessing stag
 Allocate a workspace for evaluation of surfaces
 
 \begin{DoxyReturn}{Returns}
-newly allocated workspaces 
+newly allocated workspace. 
 \end{DoxyReturn}
 
 
@@ -1795,5 +1903,5 @@ Referenced by \textbf{ agg\+\_\+transform\+\_\+expressions\+\_\+compile()}, \tex
 
 Data structure for transformations converting sections into surfaces 
 
-Referenced by \textbf{ agg\+\_\+surface\+\_\+point\+\_\+eval()}, and \textbf{ agg\+\_\+transform\+\_\+new()}.
+Referenced by \textbf{ agg\+\_\+surface\+\_\+point\+\_\+diff()}, \textbf{ agg\+\_\+surface\+\_\+point\+\_\+eval()}, and \textbf{ agg\+\_\+transform\+\_\+new()}.
 

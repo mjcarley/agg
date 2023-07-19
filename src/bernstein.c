@@ -21,8 +21,6 @@
 
 #include <glib.h>
 
-#include <blaswrap.h>
-
 #include <agg.h>
 
 #include "binomials.h"

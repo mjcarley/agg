@@ -21,8 +21,6 @@
 
 #include <glib.h>
 
-#include <blaswrap.h>
-
 #include <agg.h>
 
 static const struct {

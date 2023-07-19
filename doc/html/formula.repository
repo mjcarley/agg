@@ -40,3 +40,10 @@
 \_form#39=50x11:$1\leq i\leq4$
 \_form#40=53x11:$0\leq s\leq 1$
 \_form#41=50x11:$0\leq t\leq 1$
+\_form#42=21x14:$s(u)$
+\_form#43=21x14:$t(u)$
+\_form#44=35x14:$\partial\mathbf{x}/\partial u$
+\_form#45=79x14:$(u(s,t),v(s,t))$
+\_form#46=35x14:$\partial\mathbf{x}/\partial v$
+\_form#47=34x14:$\partial\mathbf{x}/\partial s$
+\_form#48=33x14:$\partial\mathbf{x}/\partial t$

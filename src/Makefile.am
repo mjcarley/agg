@@ -13,7 +13,6 @@ libagg_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)\
 	-release $(LT_RELEASE) -export-dynamic
 
 libagg_la_SOURCES = \
-	agg.c \
 	bernstein.c \
 	binomials.h \
 	binomials.c \

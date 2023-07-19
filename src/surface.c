@@ -21,8 +21,6 @@
 
 #include <glib.h>
 
-#include <blaswrap.h>
-
 #include <agg.h>
 
 #include "agg-private.h"
@@ -256,7 +254,7 @@ gint agg_surface_section_interp(agg_surface_t *S, gdouble u, agg_section_t *s)
  * Allocate a workspace for evaluation of surfaces
  * 
  * 
- * @return newly allocated workspaces
+ * @return newly allocated workspace.
  */
 
 agg_surface_workspace_t *agg_surface_workspace_new(void)
@@ -333,6 +331,20 @@ gint agg_surface_point_eval(agg_surface_t *S, gdouble u, gdouble v,
   return 0 ;
 }
 
+/** 
+ * Estimate derivatives on a surface
+ * 
+ * @param S surface on which derivatives are to be evaluated;
+ * @param u surface parameter;
+ * @param v surface parameter;
+ * @param x on exit contains \f$\mathbf{x}(u,v)\f$;
+ * @param xu on exit contains \f$\partial\mathbf{x}/\partial u\f$;
+ * @param xv on exit contains \f$\partial\mathbf{x}/\partial v\f$;
+ * @param w workspace for surface point evaluation.
+ * 
+ * @return 0 on success.
+ */
+
 gint agg_surface_point_diff(agg_surface_t *S, gdouble u, gdouble v,
 			    gdouble *x, gdouble *xu, gdouble *xv,
 			    agg_surface_workspace_t *w)
@@ -367,9 +379,9 @@ gint agg_surface_point_diff(agg_surface_t *S, gdouble u, gdouble v,
 
   if ( u < agg_surface_umin(S) - ee ) {
     agg_surface_point_eval(S, u+ee, v, xu, w) ;
-    xu[0] = (xu[0] - x[0])/ee ;
-    xu[1] = (xu[1] - x[1])/ee ;
-    xu[2] = (xu[2] - x[2])/ee ;
+    xu[0] =  (xu[0] - x[0])/ee ;
+    xu[1] =  (xu[1] - x[1])/ee ;
+    xu[2] =  (xu[2] - x[2])/ee ;
   } else {
     agg_surface_point_eval(S, u-ee, v, xu, w) ;
     xu[0] = -(xu[0] - x[0])/ee ;
@@ -379,9 +391,9 @@ gint agg_surface_point_diff(agg_surface_t *S, gdouble u, gdouble v,
 
   if ( v < 1 - ee ) {
     agg_surface_point_eval(S, u, v+ee, xv, w) ;
-    xv[0] = (xv[0] - x[0])/ee ;
-    xv[1] = (xv[1] - x[1])/ee ;
-    xv[2] = (xv[2] - x[2])/ee ;
+    xv[0] =  (xv[0] - x[0])/ee ;
+    xv[1] =  (xv[1] - x[1])/ee ;
+    xv[2] =  (xv[2] - x[2])/ee ;
   } else {
     agg_surface_point_eval(S, u, v-ee, xv, w) ;
     xv[0] = -(xv[0] - x[0])/ee ;

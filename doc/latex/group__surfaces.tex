@@ -19,6 +19,8 @@ agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$ \textbf{ agg\+\_\+surface\+\_\+wor
 \item 
 gint \textbf{ agg\+\_\+surface\+\_\+point\+\_\+eval} (\textbf{ agg\+\_\+surface\+\_\+t} $\ast$S, gdouble u, gdouble v, gdouble $\ast$x, agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$w)
 \item 
+gint \textbf{ agg\+\_\+surface\+\_\+point\+\_\+diff} (\textbf{ agg\+\_\+surface\+\_\+t} $\ast$S, gdouble u, gdouble v, gdouble $\ast$x, gdouble $\ast$xu, gdouble $\ast$xv, agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$w)
+\item 
 \textbf{ agg\+\_\+grid\+\_\+t} \textbf{ agg\+\_\+grid\+\_\+parse} (gchar $\ast$str)
 \end{DoxyCompactItemize}
 \begin{DoxyCompactItemize}
@@ -104,6 +106,38 @@ newly allocated surface.
 
 References \textbf{ agg\+\_\+section\+\_\+t}, and \textbf{ agg\+\_\+surface\+\_\+t}.
 
+\mbox{\label{group__surfaces_ga3d2c413e37bf8e334d5e8860753556ab}} 
+\index{Surfaces@{Surfaces}!agg\_surface\_point\_diff@{agg\_surface\_point\_diff}}
+\index{agg\_surface\_point\_diff@{agg\_surface\_point\_diff}!Surfaces@{Surfaces}}
+\doxysubsubsection{agg\_surface\_point\_diff()}
+{\footnotesize\ttfamily gint agg\+\_\+surface\+\_\+point\+\_\+diff (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+surface\+\_\+t} $\ast$}]{S,  }\item[{gdouble}]{u,  }\item[{gdouble}]{v,  }\item[{gdouble $\ast$}]{x,  }\item[{gdouble $\ast$}]{xu,  }\item[{gdouble $\ast$}]{xv,  }\item[{agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$}]{w }\end{DoxyParamCaption})}
+
+Estimate derivatives on a surface
+
+
+\begin{DoxyParams}{Parameters}
+{\em S} & surface on which derivatives are to be evaluated; \\
+\hline
+{\em u} & surface parameter; \\
+\hline
+{\em v} & surface parameter; \\
+\hline
+{\em x} & on exit contains $\mathbf{x}(u,v)$; \\
+\hline
+{\em xu} & on exit contains $\partial\mathbf{x}/\partial u$; \\
+\hline
+{\em xv} & on exit contains $\partial\mathbf{x}/\partial v$; \\
+\hline
+{\em w} & workspace for surface point evaluation.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+transform\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+t}.
+
 \mbox{\label{group__surfaces_gac7fd1a95c34d4b227e46b64fe642efae}} 
 \index{Surfaces@{Surfaces}!agg\_surface\_point\_eval@{agg\_surface\_point\_eval}}
 \index{agg\_surface\_point\_eval@{agg\_surface\_point\_eval}!Surfaces@{Surfaces}}
@@ -133,6 +167,10 @@ Evaluate a point on a surface. The surface must have been initialized with \doxy
 
 
 References \textbf{ agg\+\_\+section\+\_\+t}, \textbf{ agg\+\_\+transform\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+t}.
+
+
+
+Referenced by \textbf{ agg\+\_\+clipping\+\_\+orient()}.
 
 \mbox{\label{group__surfaces_ga60be5dbdee4c909c663de55a86616da8}} 
 \index{Surfaces@{Surfaces}!agg\_surface\_section\_add@{agg\_surface\_section\_add}}
@@ -209,7 +247,7 @@ Generate interpolation weights for sections on a surface, the preprocessing stag
 Allocate a workspace for evaluation of surfaces
 
 \begin{DoxyReturn}{Returns}
-newly allocated workspaces 
+newly allocated workspace. 
 \end{DoxyReturn}
 
 
