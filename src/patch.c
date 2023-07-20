@@ -408,6 +408,46 @@ gint agg_clipping_orient(agg_patch_clipping_t *c1, agg_patch_t *P1,
   return 0 ;
 }
 
+gint agg_patch_point_diff(agg_surface_t *S, agg_patch_t *P,
+			  gdouble s, gdouble t,
+			  gdouble *x, gdouble *xs, gdouble *xt,
+			  agg_surface_workspace_t *w)
+
+{
+  gdouble ee, u, v ;
+
+  ee = 1e-6 ;
+
+  agg_patch_map(P, s, t, &u, &v) ;
+  agg_surface_point_eval(S, u, v, x, w) ;
+
+  if ( s > ee ) {
+    agg_patch_map(P, s-ee, t, &u, &v) ;
+    agg_surface_point_eval(S, u, v, xs, w) ;
+    agg_vector_diff(xs, x, xs) ;
+  } else {
+    agg_patch_map(P, s+ee, t, &u, &v) ;
+    agg_surface_point_eval(S, u, v, xs, w) ;
+    agg_vector_diff(xs, xs, x) ;
+  }
+
+  xs[0] /= ee ; xs[1] /= ee ; xs[2] /= ee ; 
+
+  if ( t > ee ) {
+    agg_patch_map(P, s, t-ee, &u, &v) ;
+    agg_surface_point_eval(S, u, v, xt, w) ;
+    agg_vector_diff(xt, x, xt) ;
+  } else {
+    agg_patch_map(P, s, t+ee, &u, &v) ;
+    agg_surface_point_eval(S, u, v, xt, w) ;
+    agg_vector_diff(xt, xt, x) ;
+  }
+
+  xt[0] /= ee ; xt[1] /= ee ; xt[2] /= ee ; 
+  
+  return 0 ;
+}
+
 /**
  * @}
  */

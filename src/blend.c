@@ -86,7 +86,8 @@ gint agg_surface_blend_evaluate(agg_surface_blend_t *B,
   agg_patch_t *P1, *P2 ;
   agg_patch_clipping_t *c1, *c2 ;
   gdouble xu[3], xv[3], u, v, Z1[3], Z2[3], K[3], C1[3], C2[3] ;
-  gdouble V1[3], V2[3], N1[3], N2[3], T1[3], T2[3], g, l, wt ;
+  gdouble V1[3], V2[3], N1[3], N2[3], T1[3], T2[3] ;
+  gdouble g1, l1, w1, g2, l2, w2 ;
   gdouble S1s[3], S1t[3], S2s[3], S2t[3] ;
   gdouble s1, t1, s2, t2, tmp1, tmp2, H[4] ;
   gint i ;
@@ -95,7 +96,7 @@ gint agg_surface_blend_evaluate(agg_surface_blend_t *B,
   g_assert(B->S[0] != NULL) ; g_assert(B->S[1] != NULL) ;
   g_assert(B->P[0] != NULL) ; g_assert(B->P[1] != NULL) ;
 
-  wt = 1.0 ;
+  w1 = 1.0 ; w2 = 1.0 ;
   
   S1 = agg_surface_blend_surface(B,0) ;
   S2 = agg_surface_blend_surface(B,1) ;
@@ -114,16 +115,13 @@ gint agg_surface_blend_evaluate(agg_surface_blend_t *B,
 
   use1 = use2 = TRUE ;
   
-  agg_patch_map(P1, s1, t1, &u, &v) ;
-  agg_surface_point_diff(S1, u, v, C1, xu, xv, w) ;
-  agg_patch_surface_diff(P1, s1, t1, xu, xv, S1s, S1t) ;
+  agg_patch_point_diff(S1, P1, s1, t1, C1, S1s, S1t, w) ;
+  
   if ( agg_vector_length(S1s) == 0 || agg_vector_length(S1t) == 0 )
     use1 = FALSE ;
   agg_vector_cross(Z1, S1s, S1t) ;
 
-  agg_patch_map(P2, s2, t2, &u, &v) ;
-  agg_surface_point_diff(S2, u, v, C2, xu, xv, w) ;
-  agg_patch_surface_diff(P2, s2, t2, xu, xv, S2s, S2t) ;
+  agg_patch_point_diff(S2, P2, s2, t2, C2, S2s, S2t, w) ;
   if ( agg_vector_length(S2s) == 0 || agg_vector_length(S2t) == 0 )
     use2 = FALSE ;
   agg_vector_cross(Z2, S2s, S2t) ;
@@ -132,31 +130,36 @@ gint agg_surface_blend_evaluate(agg_surface_blend_t *B,
 
   tmp1 = agg_vector_scalar(Z1,Z1) ;
   tmp2 = agg_vector_scalar(K,Z1) ;
-  V1[0] = tmp1*K[0] - tmp2*Z1[0] ;
-  V1[1] = tmp1*K[1] - tmp2*Z1[1] ;
-  V1[2] = tmp1*K[2] - tmp2*Z1[2] ;
+  V1[0] = K[0] - tmp2*Z1[0]/tmp1 ;
+  V1[1] = K[1] - tmp2*Z1[1]/tmp1 ;
+  V1[2] = K[2] - tmp2*Z1[2]/tmp1 ;
   tmp1 = agg_vector_scalar(Z2,Z2) ;
   tmp2 = agg_vector_scalar(K,Z2) ;
-  V2[0] = tmp1*K[0] - tmp2*Z2[0] ;
-  V2[1] = tmp1*K[1] - tmp2*Z2[1] ;
-  V2[2] = tmp1*K[2] - tmp2*Z2[2] ;
-
-  tmp1 = agg_vector_length(V1) ;
-  tmp2 = agg_vector_length(V2) ;
+  V2[0] = K[0] - tmp2*Z2[0]/tmp1 ;
+  V2[1] = K[1] - tmp2*Z2[1]/tmp1 ;
+  V2[2] = K[2] - tmp2*Z2[2]/tmp1 ;
+  
+  tmp1 = agg_vector_length(V1) ; tmp2 = agg_vector_length(V2) ;
   N1[0] = V1[0]/tmp1 ; N1[1] = V1[1]/tmp1 ; N1[2] = V1[2]/tmp1 ; 
   N2[0] = V2[0]/tmp2 ; N2[1] = V2[1]/tmp2 ; N2[2] = V2[2]/tmp2 ; 
 
-  /*check for valid tangent vectors*/
-  if ( use1 ) {
-    g = agg_vector_length(K) + agg_vector_scalar(N1, K) ;
-    l = 2.0*agg_vector_scalar(K,K)/g ;
-  } else {
-    g = agg_vector_length(K) + agg_vector_scalar(N2, K) ;
-    l = 2.0*agg_vector_scalar(K,K)/g ;
+  g_assert(agg_patch_clipping_type(c1) != AGG_CLIP_CONSTANT_T ) ;
+  g_assert(agg_patch_clipping_type(c2) != AGG_CLIP_CONSTANT_T ) ;
+  if ( agg_patch_clipping_type(c1) == AGG_CLIP_CONSTANT_S ) {
+    N1[0] = -S1s[0] ; N1[1] = -S1s[1] ; N1[2] = -S1s[2] ;
   }
+  if ( agg_patch_clipping_type(c2) == AGG_CLIP_CONSTANT_S ) {
+    N2[0] = -S2s[0] ; N2[1] = -S2s[1] ; N2[2] = -S2s[2] ;
+  }
+
+  /*check for valid tangent vectors*/
+  g1 = agg_vector_length(K) + agg_vector_scalar(N1, K) ;
+  l1 = 2.0*agg_vector_scalar(K,K)/g1 ;
+  g2 = agg_vector_length(K) + agg_vector_scalar(N2, K) ;
+  l2 = 2.0*agg_vector_scalar(K,K)/g2 ;
   
-  T1[0] = wt*l*N1[0] ; T1[1] = wt*l*N1[1] ; T1[2] = wt*l*N1[2] ; 
-  T2[0] = wt*l*N2[0] ; T2[1] = wt*l*N2[1] ; T2[2] = wt*l*N2[2] ; 
+  T1[0] = w1*l1*N1[0] ; T1[1] = w1*l1*N1[1] ; T1[2] = w1*l1*N1[2] ; 
+  T2[0] = w2*l2*N2[0] ; T2[1] = w2*l2*N2[1] ; T2[2] = w2*l2*N2[2] ; 
   
   agg_hermite_eval(s, H) ;
 
@@ -164,6 +167,10 @@ gint agg_surface_blend_evaluate(agg_surface_blend_t *B,
   x[1] = H[0]*C1[1] + H[1]*C2[1] ;
   x[2] = H[0]*C1[2] + H[1]*C2[2] ;
 
+  /* return 0 ; */
+  
+  if ( !use1 || !use2 ) return 0 ;
+  
   if ( use1 ) {
     x[0] += H[2]*T1[0] ;
     x[1] += H[2]*T1[1] ;

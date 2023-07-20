@@ -30,6 +30,7 @@ typedef void (*section_parse_func_t)(agg_section_t *s,
 
 void _agg_aerofoil_parse(agg_section_t *s, agg_variable_t *p, gint np) ;
 void _agg_circle_parse(agg_section_t *s, agg_variable_t *p, gint np) ;
+void _agg_ellipse_parse(agg_section_t *s, agg_variable_t *p, gint np) ;
 
 static const struct {
   gchar *name ;
@@ -38,6 +39,7 @@ static const struct {
 } parse_data[] = {
   {"aerofoil", 3, _agg_aerofoil_parse},
   {"circle",   0, _agg_circle_parse  },
+  {"ellipse",  1, _agg_ellipse_parse},
   {NULL, 0, NULL}
 } ;
 
@@ -155,13 +157,43 @@ gdouble agg_section_eval(agg_section_t *s, gdouble x)
 }
 
 /** 
+ * Set a section to an ellipse of maximum vertical thickness \a th,
+ * centred at \f$(0,1/2)\f$, as in Kulfan, B. (2010). Recent
+ * extensions and applications of the `CST' universal parametric
+ * geometry representation method. The Aeronautical Journal,
+ * 114(1153), 157-176 https://doi.org/10.1017/S0001924000003614
+ * 
+ * @param s ::agg_section_t to be initialized;
+ * @param th section "thickness".
+ * 
+ * @return 0 on success. 
+ */
+
+gint agg_section_set_ellipse(agg_section_t *s, gdouble th)
+
+{
+  agg_section_type(s) = AGG_SECTION_ELLIPSE ;
+
+  /*basic elliptical section*/
+  agg_section_eta_left(s) = 0.5 ;
+  agg_section_eta_right(s) = 0.5 ;
+
+  agg_section_order_upper(s) = 0 ;
+  agg_section_coefficient_upper(s,0) = th ;
+  agg_section_order_lower(s) = 0 ;
+  agg_section_coefficient_lower(s,0) = -th ;
+  
+  return 0 ;
+}
+
+/** 
  * Set a section to a circle of radius 1/2 centred at \f$(0,1/2)\f$,
  * as in Kulfan, B. (2010). Recent extensions and applications of the
  * `CST' universal parametric geometry representation method. The
  * Aeronautical Journal, 114(1153), 157-176
  * https://doi.org/10.1017/S0001924000003614
  * 
- * @param s ::agg_section_t to be initialized;
+ * @param s ::agg_section_t to be initialized.
  * 
  * @return 0 on success. 
  */
@@ -298,10 +330,21 @@ void _agg_aerofoil_parse(agg_section_t *s, agg_variable_t *p, gint np)
 void _agg_circle_parse(agg_section_t *s, agg_variable_t *p, gint np)
 
 {
-  if ( np > 0 ) 
-    g_error("%s: circular section has no parameters", __FUNCTION__) ;
-
   agg_section_set_circle(s) ;
+  
+  return ;
+}
+
+void _agg_ellipse_parse(agg_section_t *s, agg_variable_t *p, gint np)
+
+{
+  gdouble th ;
+  
+  if ( agg_variable_definition(&(p[0])) != NULL )
+    g_error("%s: th must be a numerical constant", __FUNCTION__) ;
+  th = agg_variable_value(&(p[0])) ;
+
+  agg_section_set_ellipse(s, th) ;
   
   return ;
 }

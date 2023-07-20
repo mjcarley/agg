@@ -670,6 +670,7 @@ gdouble agg_section_eval(agg_section_t *s, gdouble x) ;
 gdouble agg_section_diff(agg_section_t *s, gdouble x) ;
 gint agg_section_copy(agg_section_t *dest, agg_section_t *src) ;
 gint agg_section_set_circle(agg_section_t *s) ;
+gint agg_section_set_ellipse(agg_section_t *s, gdouble th) ;
 gint agg_section_set_aerofoil(agg_section_t *s, gdouble eta,
 			      gdouble th, gdouble yte) ;
 gint agg_section_parse(agg_section_t *s, gchar *name,
@@ -748,6 +749,10 @@ gint agg_patch_surface_diff(agg_patch_t *P,
 			    gdouble s, gdouble t,
 			    gdouble *xu, gdouble *xv,
 			    gdouble *xs, gdouble *xt) ;
+gint agg_patch_point_diff(agg_surface_t *S, agg_patch_t *P,
+			  gdouble s, gdouble t,
+			  gdouble *x, gdouble *xs, gdouble *xt,
+			  agg_surface_workspace_t *w) ;
 
 agg_intersection_t *agg_intersection_new(gint nstmax) ;
 gint agg_surface_patch_intersection(agg_intersection_t *inter,
