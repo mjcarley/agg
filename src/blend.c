@@ -85,7 +85,7 @@ gint agg_surface_blend_evaluate(agg_surface_blend_t *B,
   agg_surface_t *S1, *S2 ;
   agg_patch_t *P1, *P2 ;
   agg_patch_clipping_t *c1, *c2 ;
-  gdouble xu[3], xv[3], u, v, Z1[3], Z2[3], K[3], C1[3], C2[3] ;
+  gdouble Z1[3], Z2[3], K[3], C1[3], C2[3] ;
   gdouble V1[3], V2[3], N1[3], N2[3], T1[3], T2[3] ;
   gdouble g1, l1, w1, g2, l2, w2 ;
   gdouble S1s[3], S1t[3], S2s[3], S2t[3] ;
@@ -128,16 +128,15 @@ gint agg_surface_blend_evaluate(agg_surface_blend_t *B,
 
   agg_vector_diff(K, C2, C1) ;
 
-  tmp1 = agg_vector_scalar(Z1,Z1) ;
-  tmp2 = agg_vector_scalar(K,Z1) ;
-  V1[0] = K[0] - tmp2*Z1[0]/tmp1 ;
-  V1[1] = K[1] - tmp2*Z1[1]/tmp1 ;
-  V1[2] = K[2] - tmp2*Z1[2]/tmp1 ;
-  tmp1 = agg_vector_scalar(Z2,Z2) ;
-  tmp2 = agg_vector_scalar(K,Z2) ;
-  V2[0] = K[0] - tmp2*Z2[0]/tmp1 ;
-  V2[1] = K[1] - tmp2*Z2[1]/tmp1 ;
-  V2[2] = K[2] - tmp2*Z2[2]/tmp1 ;
+  tmp1 = agg_vector_scalar(K,Z1)/agg_vector_scalar(Z1,Z1) ;
+  V1[0] = K[0] - tmp1*Z1[0] ;
+  V1[1] = K[1] - tmp1*Z1[1] ;
+  V1[2] = K[2] - tmp1*Z1[2] ;
+
+  tmp1 = agg_vector_scalar(K,Z2)/agg_vector_scalar(Z2,Z2) ;
+  V2[0] = K[0] - tmp1*Z2[0] ;
+  V2[1] = K[1] - tmp1*Z2[1] ;
+  V2[2] = K[2] - tmp1*Z2[2] ;
   
   tmp1 = agg_vector_length(V1) ; tmp2 = agg_vector_length(V2) ;
   N1[0] = V1[0]/tmp1 ; N1[1] = V1[1]/tmp1 ; N1[2] = V1[2]/tmp1 ; 

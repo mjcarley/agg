@@ -312,35 +312,12 @@ gint agg_mesh_spline_interp_points(agg_mesh_t *m, gint s,
   }
 
   /*negative s means we are looking at a blended surface*/
-  b = -s - 1 ;
+  b =-s - 1 ;
   g_assert(b < agg_mesh_surface_blend_number(m)) ;
   
-  mesh_spline_surface_blend_interp(m, s, p0, p1, pps, w) ;
+  mesh_spline_surface_blend_interp(m, b, p0, p1, pps, w) ;
   
   return 0 ;
-  
-  /* nsp = agg_mesh_spline_number(m) ; */
-  /* sp = agg_mesh_spline(m, nsp) ; */
-
-  /* sp[0] = p0 ; sp[pps-1] = p1 ; */
-
-  /* s0 = agg_mesh_point_s(m, p0) ; */
-  /* t0 = agg_mesh_point_t(m, p0) ; */
-  /* s1 = agg_mesh_point_s(m, p1) ; */
-  /* t1 = agg_mesh_point_t(m, p1) ; */
-  
-  /* for ( i = 1 ; i < pps-1 ; i ++ ) { */
-  /*   np = agg_mesh_surface_point_add(m, s, */
-  /* 				    s0 + (s1 - s0)*i/(pps-1), */
-  /* 				    t0 + (t1 - t0)*i/(pps-1), w) ; */
-  /*   sp[i] = np ; */
-  /*   agg_mesh_point_tag(m,np) = s ; */
-  /* } */
-
-  /* agg_mesh_spline_number(m) ++ ; */
-  /* m->isp[nsp+1] = m->isp[nsp] + pps ; */
-  
-  /* return 0 ; */
 }
 
 /** 
