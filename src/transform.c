@@ -686,6 +686,18 @@ gint agg_transform_parse(agg_transform_t *T, gchar *name,
   return 0 ;
 }
 
+gint agg_transforms_list(FILE *f)
+
+{
+  gint i ;
+
+  for ( i = 1 ;	transform_list[i].name != NULL ; i ++ ) {
+    fprintf(f, "  %s\n", transform_list[i].name) ;
+  }
+  
+  return 0 ;
+}
+
 /**
  * @}
  */

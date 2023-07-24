@@ -675,6 +675,7 @@ gint agg_section_set_aerofoil(agg_section_t *s, gdouble eta,
 			      gdouble th, gdouble yte) ;
 gint agg_section_parse(agg_section_t *s, gchar *name,
 		       agg_variable_t *p, gint np) ;
+gint agg_section_write(FILE *f, agg_section_t *s, gint npts) ;
 gint agg_sections_list(FILE *f) ;
 
 agg_transform_operator_t *agg_transform_operator_new(void) ;
@@ -691,6 +692,7 @@ gint agg_transform_operator_add(agg_transform_t *T, agg_operation_t op,
 				gdouble *p, gchar **expr, gint np) ;
 gint agg_transform_operators_write(FILE *f, agg_transform_t *T) ;
 gint agg_transform_apply(agg_transform_t *T, gdouble *xin, gdouble *xout) ;
+gint agg_transforms_list(FILE *f) ;
 
 gint agg_transform_operator_apply(agg_transform_operator_t *op,
 				  gdouble *xin, gdouble *xout) ;

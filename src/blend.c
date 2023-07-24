@@ -144,6 +144,13 @@ gint agg_surface_blend_evaluate(agg_surface_blend_t *B,
 
   g_assert(agg_patch_clipping_type(c1) != AGG_CLIP_CONSTANT_T ) ;
   g_assert(agg_patch_clipping_type(c2) != AGG_CLIP_CONSTANT_T ) ;
+  /*
+   * if a surface is cut on a constant parameter line, we use a
+   * different definition of the tangent vector
+   * 
+   * don't know why these need to be negative, but they do (sign
+   * convention for projection in Filip's paper?)
+   */
   if ( agg_patch_clipping_type(c1) == AGG_CLIP_CONSTANT_S ) {
     N1[0] = -S1s[0] ; N1[1] = -S1s[1] ; N1[2] = -S1s[2] ;
   }

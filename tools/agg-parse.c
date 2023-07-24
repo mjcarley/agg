@@ -24,88 +24,139 @@
 
 #include <agg.h>
 
+gchar *progname ;
+
+static void print_help_message(FILE *f, gint pps)
+
+{
+  fprintf(f, "Usage: %s [options] input\n\n", progname) ;
+
+  fprintf(f,
+	  "Options:\n\n"
+	  "  -h print this message and exit;\n"
+	  "  -G # GMSH .geo output file name\n"
+	  "  -p # number of points per spline in parsed geometry mesh (%d)\n"
+	  "  -s # parse and write a section to stdout\n"
+	  "  -T list available transforms\n",
+	  pps) ;
+  
+  return ;
+}  
+
+static void section_write(FILE *f, gchar *str, gint npts)
+
+{
+  agg_section_t *s ;
+  gchar **tokens, *name ;
+  agg_variable_t p[32] = {0} ;
+  gint i, np ;
+  
+  s = agg_section_new(128, 128) ;
+
+  g_strdelimit (str, "(),", ' ') ;
+
+  tokens = g_strsplit(str, " ", 0) ;
+
+  name = NULL ; np = 0 ;
+  for ( i = 0 ; tokens[i] != NULL ; i ++ ) {
+    if ( strlen(tokens[i]) != 0 ) {
+      if ( name == NULL ) {
+	name = g_strdup(tokens[i]) ;
+      } else {
+	p[np].val = atof(tokens[i]) ; np ++ ;
+      }
+    }
+  }
+
+  /* fprintf(stderr, "name: %s\n", name) ; */
+  /* for ( i = 0 ; i < np ; i ++ ) { */
+  /*   fprintf(stderr, "arg %d: %lg\n", i, p[i].val) ; */
+  /* } */
+
+  agg_section_parse(s, name, p, np) ;
+
+  agg_section_write(f, s, npts) ;
+  
+  return ;
+}
+
 gint main(gint argc, gchar **argv)
 
 {
-#if 0
-  gint fid = 0, i, j, k, npts, ntri ;
-  agg_parser_t *p ;
   agg_body_t *b ;
-  agg_crowd_t c ;
-  agg_distribution_t *d ;
-  agg_workspace_t *w ;
-  agg_adaptive_grid_workspace_t *wg ;
   agg_mesh_t *m ;
-  GScanner *scanner ;  
-  gchar ch, *progname ;
-
-  progname = g_strdup(g_path_get_basename(argv[0])) ;
+  gchar *file, *gfile, ch, *section ;
+  gint pps, offp, offsp, offs ;
+  agg_surface_workspace_t *w ;
+  FILE *output ;
+  gboolean echo ;
   
-  while ( (ch = getopt(argc, argv, "T:")) != EOF ) {
+  progname = g_strdup(g_path_get_basename(argv[0])) ;
+
+  echo = FALSE ;
+
+  pps = 2 ;
+  offp = offsp = offs = 1 ;
+  gfile = NULL ;
+  section = NULL ;
+  
+  while ( (ch = getopt(argc, argv, "hG:s:T")) != EOF ) {
     switch (ch) {
     default: g_assert_not_reached() ; break ;
-    /* case 'T': test = parse_test(optarg) ; break ; */
+    case 'h': print_help_message(stderr, pps) ; return 0 ; break ;
+    case 'G': gfile = g_strdup(optarg) ; break ;
+    case 'p': pps = atoi(optarg) ; break ;
+    case 's': section = g_strdup(optarg) ; break ;
+    case 'T':
+      fprintf(stderr, "%s: available transforms\n\n", progname) ;
+      agg_transforms_list(stderr) ;
+      return 0 ;
+      break ;
     }
   }
-  w = agg_workspace_alloc(32) ;
-  p = agg_parser_alloc() ;
-  scanner = agg_scanner_alloc() ;
-  g_scanner_input_file(scanner, fid) ;
 
-  c.p = p ;
-
-  agg_parser_crowd_read(scanner, &c) ;
-
-  agg_crowd_list_bodies(stderr, &c) ;
-
-  fprintf(stderr, "%s: %d bod%s in crowd\n",
-	  progname,
-	  agg_crowd_body_number(&c),
-	  (agg_crowd_body_number(&c) == 1 ? "y" : "ies")) ;
-  for ( i = 0 ; i < agg_crowd_body_number(&c) ; i ++ ) {
-    b = agg_crowd_body(&c, i) ;
-    fprintf(stderr, "%s: gridding body %d\n", progname, i) ;
-    if ( agg_body_grid(b)->t == AGG_GRID_ADAPTIVE ) {
-      for ( j = 0 ; j < agg_body_distribution_number(b) ; j ++ ) {
-	d = agg_body_distribution(b,j) ;
-	agg_distribution_interpolation_weights(d) ;
-      }
-      wg = agg_adaptive_grid_workspace_alloc(32768, 8192, 32768) ;  
-      agg_adaptive_grid_make(c.b[i]->g, b, w, wg) ;
-    }
+  if ( section != NULL ) {
+    section_write(stdout, section, 128) ;
+		  
+    return 0 ;
   }
   
-  npts = ntri = 0 ;
-  for ( i = 0 ; i < agg_crowd_body_number(&c) ; i ++ ) {
-    if ( c.b[i]->g != NULL ) {
-      fprintf(stderr, "  body %d: %d grid points; %d triangles\n", i,
-	      agg_grid_point_number_max(c.b[i]->g),
-	      agg_grid_triangle_number_max(c.b[i]->g)) ;
-      npts += agg_grid_point_number_max(c.b[i]->g) ;
-      ntri += agg_grid_triangle_number_max(c.b[i]->g) ;
-    }
+  if ( optind >= argc ) {
+    fprintf(stderr, "%s: input file name required\n", progname) ;
+    exit(1) ;
   }
 
-  fprintf(stderr, "   total: %d grid points; %d triangles\n", npts, ntri) ;
+  file = g_strdup(argv[optind]) ;
 
-  agg_parser_expressions_evaluate(c.p) ;
-  
-  m = agg_mesh_alloc(npts, ntri, 1, 0, 0) ;
-  for ( i = 0 ; i < agg_crowd_body_number(&c) ; i ++ ) {
-    fprintf(stderr, "%s: meshing body %d\n", progname, i) ;
-    b = agg_crowd_body(&c, i) ;
-    for ( j = 0 ; j < agg_body_distribution_number(b) ; j ++ ) {
-      d = agg_body_distribution(b,j) ;
-      agg_distribution_interpolation_weights(d) ;
-    }
-    if ( b->g != NULL ) agg_body_mesh_grid(b, b->g, m, i, w) ;
+  fprintf(stderr, "%s: parsing \"%s\"\n", progname, file) ;
+
+  b = agg_body_new(32, 32) ;
+  w = agg_surface_workspace_new() ;
+  agg_body_read(b, file, echo) ;
+  agg_body_globals_compile(b) ;
+  agg_body_globals_eval(b) ;
+  agg_body_globals_write(stderr, b) ;
+  if ( echo ) {
+    fprintf(stderr, "%d surface%s\n", agg_body_surface_number(b),
+	    (agg_body_surface_number(b) > 1 ? "s" : "")) ;
+    agg_body_surfaces_list(stderr, b) ;
   }
 
-  agg_mesh_trim(m, &c, w) ;
-  
-  agg_mesh_points_write(stdout, m) ;
-  agg_mesh_tri_write(stdout, m) ;
-#endif
+  m = agg_mesh_new(65536, 65536, 65536) ;
+  agg_mesh_body(m, b, pps, w) ;
+
+  if ( gfile != NULL ) {
+    output = fopen(gfile, "w") ;
+    if ( output == NULL ) {
+      fprintf(stderr, "%s: cannot open GMSH file \"%s\"\n", progname, gfile) ;
+      return 1 ;
+    }
+
+    fprintf(output, "lc = 0.1 ;\n") ;
+    agg_mesh_write_gmsh(output, m, "lc", offp, offsp, offs, FALSE) ;
+
+    fclose(output) ;
+  }
   
   return 0 ;
 }

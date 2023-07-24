@@ -12,6 +12,7 @@ global {
  yle = "-0.3*radius"
  del = "span/1000"
 }
+ 
 
 surface {
   name("wing:right")
@@ -46,7 +47,7 @@ surface {
   axes("+x+y-z")
   grid("regular", 16, 47)
 }
- 
+
 surface {
   name("fuselage")
   section(0, "circle")

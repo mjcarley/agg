@@ -506,10 +506,36 @@ gdouble agg_section_diff(agg_section_t *s, gdouble x)
   if ( agg_section_type(s) == AGG_SECTION_AEROFOIL ) {
     return agg_section_aerofoil_diff(s, x) ;
   }
-  
+
   g_assert_not_reached() ;
   
   return 0.0 ;
+}
+
+/** 
+ * Write a section to file as a list of points \f$(|x|, y(x))\f$,
+ * \f$-\leq x\leq 1\f$.
+ * 
+ * @param f output file stream;
+ * @param s the section to write;
+ * @param npts number of points on section.
+ * 
+ * @return 0 on success.
+ */
+
+gint agg_section_write(FILE *f, agg_section_t *s, gint npts)
+
+{
+  gint i ;
+  gdouble x, y ;
+
+  for ( i = 0 ; i < npts ; i ++ ) {
+    x = -1 + 2.0*(gdouble)i/(npts-1) ;
+    y = agg_section_eval(s, x) ;
+    fprintf(f, "%lg %lg\n", ABS(x), y) ;
+  }
+  
+  return 0 ;
 }
 
 /**
