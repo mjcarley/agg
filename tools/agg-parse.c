@@ -43,7 +43,7 @@ static void print_help_message(FILE *f, gint pps)
   return ;
 }  
 
-static void section_write(FILE *f, gchar *str, gint npts)
+static void section_write(FILE *f, gchar *str, gint npts, gchar *opfmt)
 
 {
   agg_section_t *s ;
@@ -68,14 +68,22 @@ static void section_write(FILE *f, gchar *str, gint npts)
     }
   }
 
-  /* fprintf(stderr, "name: %s\n", name) ; */
-  /* for ( i = 0 ; i < np ; i ++ ) { */
-  /*   fprintf(stderr, "arg %d: %lg\n", i, p[i].val) ; */
-  /* } */
-
   agg_section_parse(s, name, p, np) ;
 
-  agg_section_write(f, s, npts) ;
+  if ( opfmt == NULL ) {
+    agg_section_write(f, s, npts) ;
+    return ;
+  }
+
+  if ( strcmp(opfmt, "mpost") == 0 ) {
+    agg_section_format_write(f, s,
+			     "(%1.3lgu,%1.3lgu)--",
+			     "(%1.3lgu,%1.3lgu) ;\n", npts) ;
+    
+    return ;
+  }
+
+  fprintf(stderr, "%s: unrecognized output format %s\n", progname, opfmt) ;
   
   return ;
 }
@@ -85,7 +93,7 @@ gint main(gint argc, gchar **argv)
 {
   agg_body_t *b ;
   agg_mesh_t *m ;
-  gchar *file, *gfile, ch, *section ;
+  gchar *file, *gfile, ch, *section, *opfmt ;
   gint pps, offp, offsp, offs ;
   agg_surface_workspace_t *w ;
   FILE *output ;
@@ -99,12 +107,14 @@ gint main(gint argc, gchar **argv)
   offp = offsp = offs = 1 ;
   gfile = NULL ;
   section = NULL ;
+  opfmt = NULL ;
   
-  while ( (ch = getopt(argc, argv, "hG:s:T")) != EOF ) {
+  while ( (ch = getopt(argc, argv, "hG:o:p:s:T")) != EOF ) {
     switch (ch) {
     default: g_assert_not_reached() ; break ;
     case 'h': print_help_message(stderr, pps) ; return 0 ; break ;
     case 'G': gfile = g_strdup(optarg) ; break ;
+    case 'o': opfmt = g_strdup(optarg) ; break ;
     case 'p': pps = atoi(optarg) ; break ;
     case 's': section = g_strdup(optarg) ; break ;
     case 'T':
@@ -116,7 +126,7 @@ gint main(gint argc, gchar **argv)
   }
 
   if ( section != NULL ) {
-    section_write(stdout, section, 128) ;
+    section_write(stdout, section, 128, opfmt) ;
 		  
     return 0 ;
   }

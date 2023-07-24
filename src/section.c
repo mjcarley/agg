@@ -538,6 +538,31 @@ gint agg_section_write(FILE *f, agg_section_t *s, gint npts)
   return 0 ;
 }
 
+gint agg_section_format_write(FILE *f, agg_section_t *s,
+			      gchar *fstr, gchar *estr, gint npts)
+
+{
+  gint i ;
+  gdouble x, y ;
+
+  for ( i = 0 ; i < npts-1 ; i ++ ) {
+    x = -1 + 2.0*(gdouble)i/(npts-1) ;
+    y = agg_section_eval(s, x) ;
+    fprintf(f, fstr, ABS(x), y) ;
+  }
+
+  i = npts-1 ; 
+  x = -1 + 2.0*(gdouble)i/(npts-1) ;
+  y = agg_section_eval(s, x) ;
+  
+  if ( estr == NULL ) 
+    fprintf(f, fstr, ABS(x), y) ;
+  else
+    fprintf(f, estr, ABS(x), y) ;
+  
+  return 0 ;
+}
+
 /**
  * @}
  */
