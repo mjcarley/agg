@@ -30,7 +30,7 @@ static const struct {
   gint np ;
 } transform_list[] =
   {
-    {"undefined", NULL, AGG_TRANSFORM_UNDEFINED, 0},
+    {"undefined", NULL,                             AGG_TRANSFORM_UNDEFINED, 0},
     {"rotate",    agg_transform_operator_rotate,    AGG_TRANSFORM_ROTATE   , 3},
     {"shrink",    agg_transform_operator_shrink,    AGG_TRANSFORM_SHRINK   , 3},
     {"translate", agg_transform_operator_translate, AGG_TRANSFORM_TRANSLATE, 3},
@@ -692,7 +692,10 @@ gint agg_transforms_list(FILE *f)
   gint i ;
 
   for ( i = 1 ;	transform_list[i].name != NULL ; i ++ ) {
-    fprintf(f, "  %s\n", transform_list[i].name) ;
+    fprintf(f, "  %s(%d paramete%s)\n",
+	    transform_list[i].name,
+	    transform_list[i].np,
+	    (transform_list[i].np == 1 ? "r" : "rs")) ;
   }
   
   return 0 ;

@@ -87,17 +87,6 @@ struct _agg_variable_t {
  * 
  */
 
-/** @typedef agg_section_type_t
- * 
- * Types of section
- */
-
-typedef enum {
-  AGG_SECTION_UNDEFINED = 0,	/**< undefined section type */
-  AGG_SECTION_AEROFOIL  = 1,	/**< thickness distribution plus camber */
-  AGG_SECTION_ELLIPSE   = 2	/**< generic closed curve */
-} agg_section_type_t ;
-
 /** @typedef agg_section_t
  * 
  * Data structure holding information for evaluation of a section
@@ -109,7 +98,6 @@ typedef agg_section_t ;
 typedef struct _agg_section_t agg_section_t ;
 
 struct _agg_section_t {
-  agg_section_type_t type ; 
   gboolean close ;
   gdouble nl, nr, *cu, *cl, ytu, ytl ;
   gint ou, ol, oumax, olmax ;
@@ -117,10 +105,6 @@ struct _agg_section_t {
 #endif /*DOXYGEN*/
 
 #ifdef DOXYGEN
-/**
- *  @brief ::agg_section_type_t of an ::agg_section_t
- */
-#define agg_section_type(s)                
 /**
  * @brief TRUE if an ::agg_section_t needs to be closed
  */
@@ -168,7 +152,6 @@ struct _agg_section_t {
  */
 #define agg_section_trailing_edge_lower(s)
 #else /*DOXYGEN*/
-#define agg_section_type(_s)                 ((_s)->type)
 #define agg_section_close(_s)                ((_s)->close)
 #define agg_section_eta_left(_s)             ((_s)->nl)
 #define agg_section_eta_right(_s)            ((_s)->nr)

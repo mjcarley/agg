@@ -36,6 +36,7 @@ static void print_help_message(FILE *f, gint pps)
 	  "  -h print this message and exit;\n"
 	  "  -G # GMSH .geo output file name\n"
 	  "  -p # number of points per spline in parsed geometry mesh (%d)\n"
+	  "  -S list available sections\n"
 	  "  -s # parse and write a section to stdout\n"
 	  "  -T list available transforms\n",
 	  pps) ;
@@ -109,7 +110,7 @@ gint main(gint argc, gchar **argv)
   section = NULL ;
   opfmt = NULL ;
   
-  while ( (ch = getopt(argc, argv, "hG:o:p:s:T")) != EOF ) {
+  while ( (ch = getopt(argc, argv, "hG:o:p:Ss:T")) != EOF ) {
     switch (ch) {
     default: g_assert_not_reached() ; break ;
     case 'h': print_help_message(stderr, pps) ; return 0 ; break ;
@@ -117,6 +118,10 @@ gint main(gint argc, gchar **argv)
     case 'o': opfmt = g_strdup(optarg) ; break ;
     case 'p': pps = atoi(optarg) ; break ;
     case 's': section = g_strdup(optarg) ; break ;
+    case 'S':
+      fprintf(stderr, "%s: available sections\n\n", progname) ;
+      agg_sections_list(stderr) ;
+      return 0 ;
     case 'T':
       fprintf(stderr, "%s: available transforms\n\n", progname) ;
       agg_transforms_list(stderr) ;

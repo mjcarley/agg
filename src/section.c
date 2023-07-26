@@ -73,31 +73,17 @@ agg_section_t *agg_section_new(gint oumax, gint olmax)
   return s ;
 }
 
-static gdouble agg_section_ellipse_eval(agg_section_t *s, gdouble x)
+/** 
+ * Evaluate a section geometry
+ * 
+ * @param s a ::agg_section_t containing the section data;
+ * @param x evaluation point \f$-1\leq x\leq 1\f$. 
+ * 
+ * @return \f$y=f(x)\f$ on success. An error is reported and execution
+ * ceases if \a x is out of range or the section type is undefined.
+ */
 
-{
-  gdouble y, *c, C ;
-  gint i, order ;
-  
-  if ( x < 0.0 ) {
-    order = agg_section_order_lower(s) ;
-    c = &(agg_section_coefficient_lower(s,0)) ;
-    x = fabs(x) ;
-  } else {
-    order = agg_section_order_upper(s) ;
-    c = &(agg_section_coefficient_upper(s,0)) ;
-  }
-
-  y = 0.0 ;
-  C = pow(x, agg_section_eta_left(s))*pow(1.0-x, agg_section_eta_right(s)) ;
-  for ( i = 0 ; i <= order ; i ++ ) {
-    y += c[i]*agg_bernstein_basis_eval(order, i, x)*C ;
-  }
-  
-  return y ;
-}
-
-static gdouble agg_section_aerofoil_eval(agg_section_t *s, gdouble x)
+gdouble agg_section_eval(agg_section_t *s, gdouble x)
 
 {
   gdouble y, *c, C, yte ;
@@ -124,39 +110,6 @@ static gdouble agg_section_aerofoil_eval(agg_section_t *s, gdouble x)
 }
 
 /** 
- * Evaluate a section geometry
- * 
- * @param s a ::agg_section_t containing the section data;
- * @param x evaluation point \f$-1\leq x\leq 1\f$. 
- * 
- * @return \f$y=f(x)\f$ on success. An error is reported and execution
- * ceases if \a x is out of range or the section type is undefined.
- */
-
-gdouble agg_section_eval(agg_section_t *s, gdouble x)
-
-{
-  if ( agg_section_type(s) == AGG_SECTION_UNDEFINED )
-    g_error("%s: undefined section type", __FUNCTION__) ;
-
-  if ( x < -1.0 || x > 1.0 ) 
-    g_error("%s: input parameter x (%lg) out of range (-1,1)",
-	    __FUNCTION__, x) ;
-
-  if ( agg_section_type(s) == AGG_SECTION_ELLIPSE ) {
-    return agg_section_ellipse_eval(s, x) ;
-  }
-
-  if ( agg_section_type(s) == AGG_SECTION_AEROFOIL ) {
-    return agg_section_aerofoil_eval(s, x) ;
-  }
-  
-  g_assert_not_reached() ;
-  
-  return 0.0 ;
-}
-
-/** 
  * Set a section to an ellipse of maximum vertical thickness \a th,
  * centred at \f$(0,1/2)\f$, as in Kulfan, B. (2010). Recent
  * extensions and applications of the `CST' universal parametric
@@ -172,8 +125,6 @@ gdouble agg_section_eval(agg_section_t *s, gdouble x)
 gint agg_section_set_ellipse(agg_section_t *s, gdouble th)
 
 {
-  agg_section_type(s) = AGG_SECTION_ELLIPSE ;
-
   /*basic elliptical section*/
   agg_section_eta_left(s) = 0.5 ;
   agg_section_eta_right(s) = 0.5 ;
@@ -182,6 +133,9 @@ gint agg_section_set_ellipse(agg_section_t *s, gdouble th)
   agg_section_coefficient_upper(s,0) = th ;
   agg_section_order_lower(s) = 0 ;
   agg_section_coefficient_lower(s,0) = -th ;
+
+  agg_section_trailing_edge_upper(s) = 0 ;
+  agg_section_trailing_edge_lower(s) = 0 ;
   
   return 0 ;
 }
@@ -201,8 +155,6 @@ gint agg_section_set_ellipse(agg_section_t *s, gdouble th)
 gint agg_section_set_circle(agg_section_t *s)
 
 {
-  agg_section_type(s) = AGG_SECTION_ELLIPSE ;
-
   /*basic elliptical section*/
   agg_section_eta_left(s) = 0.5 ;
   agg_section_eta_right(s) = 0.5 ;
@@ -235,8 +187,6 @@ gint agg_section_set_aerofoil(agg_section_t *s, gdouble eta,
 			      gdouble th, gdouble yte)
 
 {
-  agg_section_type(s) = AGG_SECTION_AEROFOIL ;
-
   /*basic elliptical section*/
   agg_section_eta_left(s) = eta ;
   agg_section_eta_right(s) = 1.0 ;
@@ -282,7 +232,6 @@ gint agg_section_copy(agg_section_t *dest, agg_section_t *src)
     g_error("%s: dest does not have enough space (%d) for lower coefficients",
 	    __FUNCTION__, agg_section_order_lower(src)) ;
 
-  agg_section_type(dest) = agg_section_type(src) ;
   agg_section_close(dest) = agg_section_close(src) ;
   agg_section_eta_left(dest) = agg_section_eta_left(src) ;
   agg_section_eta_right(dest) = agg_section_eta_right(src) ;
@@ -410,44 +359,31 @@ gint agg_sections_list(FILE *f)
   return 0 ;
 }
 
+/** 
+ * Derivative of a section curve
+ * 
+ * @param s a ::agg_section_t containing the section data;
+ * @param x evaluation point \f$-1\leq x\leq 1\f$. 
+ * 
+ * @return \f$y'=\mathrm{d}f(x)/\mathrm{d}x\f$ on success. An error is
+ * reported and execution ceases if \a x is out of range or the
+ * section type is undefined.
+ */
 
-static gdouble agg_section_ellipse_diff(agg_section_t *s, gdouble x)
-
-{
-  gdouble dy, *c, C, dC, sgn, n1, n2 ;
-  gint i, order ;
-  
-  if ( x < 0.0 ) {
-    order = agg_section_order_lower(s) ;
-    c = &(agg_section_coefficient_lower(s,0)) ;
-    x = fabs(x) ;
-    sgn = -1 ;
-  } else {
-    order = agg_section_order_upper(s) ;
-    c = &(agg_section_coefficient_upper(s,0)) ;
-    sgn = 1 ;
-  }
-
-  dy = 0.0 ;
-  n1 = agg_section_eta_left(s) ;
-  n2 = agg_section_eta_right(s) ;
-  C  = pow(x, n1)*pow(1.0-x, n2) ;
-  dC = n1*pow(x, n1-1)*pow(1.0-x, n2) - n2*pow(x, n1)*pow(1.0-x, n2-1) ;
-
-  for ( i = 0 ; i <= order ; i ++ ) {
-    dy += sgn*c[i]*(agg_bernstein_derivative_eval(order, i, x)*C +
-		    agg_bernstein_basis_eval(order, i, x)*dC) ;
-  }
-  
-  return dy ;
-}
-
-static gdouble agg_section_aerofoil_diff(agg_section_t *s, gdouble x)
+gdouble agg_section_diff(agg_section_t *s, gdouble x)
 
 {
   gdouble dy, *c, C, dC, yte, sgn, n1, n2 ;
   gint i, order ;
   
+  /*code not tested for more complex geometries yet*/
+  g_assert(agg_section_order_lower(s) < 1) ;
+  g_assert(agg_section_order_upper(s) < 1) ;
+  
+  if ( x < -1.0 || x > 1.0 ) 
+    g_error("%s: input parameter x (%lg) out of range (-1,1)",
+	    __FUNCTION__, x) ;
+
   if ( x < 0.0 ) {
     order = agg_section_order_lower(s) ;
     c = &(agg_section_coefficient_lower(s,0)) ;
@@ -472,44 +408,6 @@ static gdouble agg_section_aerofoil_diff(agg_section_t *s, gdouble x)
   }
 
   return dy ;
-}
-
-/** 
- * Derivative of a section curve
- * 
- * @param s a ::agg_section_t containing the section data;
- * @param x evaluation point \f$-1\leq x\leq 1\f$. 
- * 
- * @return \f$y'=\mathrm{d}f(x)/\mathrm{d}x\f$ on success. An error is
- * reported and execution ceases if \a x is out of range or the
- * section type is undefined.
- */
-
-gdouble agg_section_diff(agg_section_t *s, gdouble x)
-
-{
-  if ( agg_section_type(s) == AGG_SECTION_UNDEFINED )
-    g_error("%s: undefined section type", __FUNCTION__) ;
-
-  /*code not tested for more complex geometries yet*/
-  g_assert(agg_section_order_lower(s) < 1) ;
-  g_assert(agg_section_order_upper(s) < 1) ;
-  
-  if ( x < -1.0 || x > 1.0 ) 
-    g_error("%s: input parameter x (%lg) out of range (-1,1)",
-	    __FUNCTION__, x) ;
-
-  if ( agg_section_type(s) == AGG_SECTION_ELLIPSE ) {
-    return agg_section_ellipse_diff(s, x) ;
-  }
-
-  if ( agg_section_type(s) == AGG_SECTION_AEROFOIL ) {
-    return agg_section_aerofoil_diff(s, x) ;
-  }
-
-  g_assert_not_reached() ;
-  
-  return 0.0 ;
 }
 
 /** 

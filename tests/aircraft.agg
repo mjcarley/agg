@@ -5,17 +5,17 @@ global {
  root = 1.5
  span = "len*0.7"
  dihedral = "5*pi/180"
- sweep = "25*pi/180"
+ sweep = "10*pi/180"
  taper = 0.5
- twist = "15*pi/180"
+ twist = "5*pi/180"
  xle = "0.35*len"
- yle = "-0.3*radius"
- del = "span/1000"
+ yle = "-0.0*radius"
+ del = "span/100"
 }
-
+ 
 surface {
-  name("wing:right")
-  #section(0, "aerofoil", 0.5, 0.2, 0.0)
+  name("wing:left")
+  #section(0.0, "aerofoil", 0.5, 0.2, 0.0)
   #section(0.3, "aerofoil", 0.5, 0.12, 0.0)
   #section(0.9, "aerofoil", 0.5, 0.08, 0.0)
   section(0, "ellipse", 0.2)
@@ -27,13 +27,25 @@ surface {
   ##transform("rotate", 0, 0, "twist*u")
   transform("translate", "xle + span*sin(sweep)*u",
   			 "yle+span*sin(dihedral)*u",
-			 "span/1000 + span*u")
+			 "del + span*u")
   patch("tubular", "nowrap", "wrap")
   grid("regular", 24, 32)
 }
 
 surface {
-  name("wing:left")
+  name("fuselage")
+  section(0, "circle")
+  transform("translate", -0.5, 0, 0)
+  transform("scale", "2*radius")
+  transform("scale", "u^(0.5)*(1-u)^0.5")
+  transform("translate", 0, 0, "len*u")
+  patch("tubular", "nowrap", "wrap")
+  axes("zxy")
+  grid("triangle", 5e-4)
+}
+
+surface {
+  name("wing:right")
   #section(0, "aerofoil", 0.5, 0.2, 0.0)
   #section(0.3, "aerofoil", 0.5, 0.12, 0.0)
   #section(0.9, "aerofoil", 0.5, 0.08, 0.0)
@@ -45,22 +57,10 @@ surface {
   transform("scale", "root")
   transform("translate", "xle + span*sin(sweep)*u",
   			 "yle + span*sin(dihedral)*u",
-  	    		 "span/1000 + span*u")
-  # patch requires inversion because of the axis transformation below
+  	    		 "del + span*u")
+  # patch requires inversion because of the axis transformation
   patch("tubular", "nowrap", "wrap", "invert")
   #patch("spherical", "nowrap", "wrap")  
   axes("+x+y-z")
   grid("regular", 24, 32)
-}
- 
-surface {
-  name("fuselage")
-  section(0, "circle")
-  transform("translate", -0.5, 0, 0)
-  transform("scale", "2*radius")
-  transform("scale", "u^(0.25)*(1-u)^0.125")
-  transform("translate", 0, 0, "len*u")
-  patch("spherical", "nowrap", "wrap")
-  axes("zxy")
-  grid("triangle", 2.5e-4)
 }

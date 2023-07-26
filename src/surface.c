@@ -188,7 +188,6 @@ gint agg_surface_section_interp(agg_surface_t *S, gdouble u, agg_section_t *s)
     return 0 ;
   }
 
-  agg_section_type(s)  = agg_section_type(su) ;
   agg_section_close(s) = agg_section_close(su) ;
 
   for ( j = 0 ; j <= agg_section_order_upper(su) ; j ++ ) {

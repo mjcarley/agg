@@ -1134,6 +1134,7 @@ gint agg_mesh_body(agg_mesh_t *m, agg_body_t *b, gint pps,
   
   inter = agg_intersection_new(8192) ;
   for ( i = 0 ; i < agg_body_surface_number(b); i ++ ) {
+  /* for ( i = 1 ; i < 2 ; i ++ ) { */
     for ( j = i+1 ; j < agg_body_surface_number(b); j ++ ) {
       agg_surface_patch_intersection(inter,
 				     agg_body_surface(b,i),
