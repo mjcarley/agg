@@ -34,6 +34,7 @@ const gchar *tests[] = {"bernstein",
 			"body",
 			"parser",
 			"ico",
+			"fit",
 			""} ;
 
 static void surface_sphere(agg_surface_t *S, gdouble x, gdouble y, gdouble z,
@@ -595,6 +596,42 @@ static void ico_test(void)
   return ;
 }
 
+static void fit_test(void)
+
+{
+  gint i, nxu, nxl, nl, nu ;
+  gdouble x, y, dy, r, err, xu[64], yu[64], xl[64], yl[64] ;
+  gdouble t, p, m ;
+  agg_section_t *s ;
+
+  t = 0.2 ; p = 0.1 ; m = 0.3 ;
+  s = agg_section_new(32, 32) ;
+
+  nxu = 37 ;
+  for ( i = 0 ; i < nxu ; i ++ ) {
+    xu[i] = (gdouble)i/(nxu-1) ;
+    yu[i] = agg_naca_four(t, p, m, xu[i]) ;
+  }
+  nxl = 50 ;
+  for ( i = 0 ; i < nxl ; i ++ ) {
+    xl[i] = (gdouble)i/(nxl-1) ;
+    yl[i] = agg_naca_four(t, p, m, -xl[i]) ;
+  }
+
+  agg_section_fit(s, xu, 1, yu, 1, nxu, xl, 1, yl, 1, nxl, 0.5, 0, 7, 10) ;
+
+  for ( i = 0 ; i <= 128 ; i ++ ) {
+    x = -1 + 2.0*(gdouble)i/128 ;
+    y = agg_section_eval(s, x) ;
+    fprintf(stdout, "%lg %lg ", ABS(x), y) ;
+    y = agg_naca_four(t, p, m, x) ;
+    fprintf(stdout, "%lg\n", y) ;
+  }
+  
+  return ;
+}
+
+
 gint main(gint argc, gchar **argv)
 
 {
@@ -661,6 +698,12 @@ gint main(gint argc, gchar **argv)
 
   if ( test == 7 ) {
     ico_test() ;
+    
+    return 0 ;
+  }
+
+  if ( test == 8 ) {
+    fit_test() ;
     
     return 0 ;
   }

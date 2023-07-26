@@ -1,4 +1,4 @@
-section.lo: section.c /usr/include/stdc-predef.h /usr/include/stdio.h \
+lsqr.lo: lsqr.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/bits/libc-header-start.h /usr/include/features.h \
  /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h \
  /usr/include/bits/long-double.h /usr/include/gnu/stubs.h \
@@ -135,8 +135,7 @@ section.lo: section.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/bits/types/struct_sched_param.h /usr/include/bits/cpu-set.h \
  /usr/include/bits/setjmp.h \
  /usr/include/bits/types/struct___jmp_buf_tag.h \
- /usr/include/glib-2.0/glib/glib-autocleanups.h agg.h \
- /home/michael/Codes/include/blaswrap.h agg-private.h
+ /usr/include/glib-2.0/glib/glib-autocleanups.h agg.h agg-private.h
 /usr/include/stdc-predef.h:
 /usr/include/stdio.h:
 /usr/include/bits/libc-header-start.h:
@@ -344,5 +343,4 @@ section.lo: section.c /usr/include/stdc-predef.h /usr/include/stdio.h \
 /usr/include/bits/types/struct___jmp_buf_tag.h:
 /usr/include/glib-2.0/glib/glib-autocleanups.h:
 agg.h:
-/home/michael/Codes/include/blaswrap.h:
 agg-private.h:

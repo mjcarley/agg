@@ -23,6 +23,8 @@
 
 #include <agg.h>
 
+#include <blaswrap.h>
+
 #include "agg-private.h"
 
 typedef void (*section_parse_func_t)(agg_section_t *s,
@@ -416,47 +418,148 @@ gdouble agg_section_diff(agg_section_t *s, gdouble x)
  * 
  * @param f output file stream;
  * @param s the section to write;
+ * @param T if not NULL, a transform applied to points before writing;
  * @param npts number of points on section.
  * 
  * @return 0 on success.
  */
 
-gint agg_section_write(FILE *f, agg_section_t *s, gint npts)
+gint agg_section_write(FILE *f, agg_section_t *s, agg_transform_t *T,
+		       gint npts)
 
 {
   gint i ;
-  gdouble x, y ;
+  gdouble t, x[3] ;
 
   for ( i = 0 ; i < npts ; i ++ ) {
-    x = -1 + 2.0*(gdouble)i/(npts-1) ;
-    y = agg_section_eval(s, x) ;
-    fprintf(f, "%lg %lg\n", ABS(x), y) ;
+    t = -1 + 2.0*(gdouble)i/(npts-1) ;
+    x[0] = ABS(t) ;
+    x[1] = agg_section_eval(s, t) ;
+    if ( T != NULL ) agg_transform_apply(T, x, x) ;
+    fprintf(f, "%lg %lg\n", x[0], x[1]) ;
   }
   
   return 0 ;
 }
 
-gint agg_section_format_write(FILE *f, agg_section_t *s,
+/** 
+ * Write a section to file as a list of points \f$(|x|, y(x))\f$,
+ * \f$-\leq x\leq 1\f$, using a C printf format string
+ * 
+ * @param f output file stream;
+ * @param s the section to write;
+ * @param T if not NULL, a transform applied to points before writing;
+ * @param fstr format string for output;
+ * @param estr if not NULL, format string used for final point of output;
+ * @param npts number of points on section.
+ * 
+ * @return 0 on success.
+ */
+
+gint agg_section_format_write(FILE *f, agg_section_t *s, agg_transform_t *T,
 			      gchar *fstr, gchar *estr, gint npts)
 
 {
   gint i ;
-  gdouble x, y ;
+  gdouble t, x[3] ;
 
-  for ( i = 0 ; i < npts-1 ; i ++ ) {
-    x = -1 + 2.0*(gdouble)i/(npts-1) ;
-    y = agg_section_eval(s, x) ;
-    fprintf(f, fstr, ABS(x), y) ;
+  for ( i = 0 ; i < npts ; i ++ ) {
+    t = -1 + 2.0*(gdouble)i/(npts-1) ;
+    x[0] = ABS(t) ;
+    x[1] = agg_section_eval(s, t) ;
+    if ( T != NULL ) agg_transform_apply(T, x, x) ;
+    fprintf(f, fstr, x[0], x[1]) ;
   }
 
   i = npts-1 ; 
-  x = -1 + 2.0*(gdouble)i/(npts-1) ;
-  y = agg_section_eval(s, x) ;
+  t = -1 + 2.0*(gdouble)i/(npts-1) ;
+  x[0] = ABS(t) ;
+  x[1] = agg_section_eval(s, t) ;
+  if ( T != NULL ) agg_transform_apply(T, x, x) ;
   
   if ( estr == NULL ) 
-    fprintf(f, fstr, ABS(x), y) ;
+    fprintf(f, fstr, x[0], x[1]) ;
   else
-    fprintf(f, estr, ABS(x), y) ;
+    fprintf(f, estr, x[0], x[1]) ;
+  
+  return 0 ;
+}
+
+/** 
+ * Fit CST form to section data.
+ * 
+ * @param s ::agg_section_t to contain fitted section data;
+ * @param xu \f$x\f$ coordinates of points on upper surface;
+ * @param xustr stride of data in \a xu;
+ * @param yu \f$y\f$ coordinates of points on upper surface;
+ * @param yustr stride of data in \a yu;
+ * @param npu number of points on upper surface;
+ * @param xl \f$x\f$ coordinates of points on lower surface;
+ * @param xlstr stride of data in \a xu;
+ * @param yl \f$y\f$ coordinates of points on lower surface;
+ * @param ylstr stride of data in \a yu;
+ * @param npl number of points on lower surface;
+ * @param n1 exponent at \f$x=0\f$;
+ * @param n2 exponent at \f$x=1\f$;
+ * @param nu number of coefficients to compute in upper surface expansion;
+ * @param nl number of coefficients to compute in lower surface expansion;
+ * 
+ * @return 0 on success.
+ */
+
+gint agg_section_fit(agg_section_t *s,
+		     gdouble *xu, gint xustr, gdouble *yu, gint yustr, gint npu,
+		     gdouble *xl, gint xlstr, gdouble *yl, gint ylstr, gint npl,
+		     gdouble n1, gdouble n2, gint nu, gint nl)
+
+{
+  gdouble yteU, yteL, A[2048], work[4096], b[256], C ;
+  gint i, j, m, n, i1 = 1, lwork, info, ldb ;
+
+  yteU = yteL = 0 ;
+  for ( i = 0 ; i < npu ; i ++ ) {
+    if ( xu[i*xustr] == 1.0 ) yteU = yu[i*yustr] ;
+  }
+  for ( i = 0 ; i < npl ; i ++ ) {
+    if ( xl[i*xlstr] == 1.0 ) yteL = yl[i*ylstr] ;
+  }
+
+  /*form equations for upper surface*/
+  for ( i = 0 ; i < npu ; i ++ ) {
+    C = pow(xu[i*xustr], n1)*pow(1.0-xu[i*xustr], n2) ;
+    agg_bernstein_basis(nu, xu[i*xustr], work, NULL) ;
+    for ( j = 0 ; j <= nu ; j ++ ) {
+      A[j*npu + i] = work[j]*C ;
+    }
+    b[i] = yu[i*yustr] - xu[i*xustr]*yteU ;
+  }
+
+  /*solve least squares problem (note this is transposed in Fortran sense)*/
+  m = npu ; n = nu + 1 ; lwork = 4096 ; ldb = MAX(m, n) ;
+  dgels_("N", &m, &n, &i1, A, &m, b, &ldb, work, &lwork, &info) ;
+  for ( i = 0 ; i <= nu ; i ++ ) agg_section_coefficient_upper(s,i) = b[i] ;
+
+  /*form equations for lower surface*/
+  for ( i = 0 ; i < npl ; i ++ ) {
+    C = pow(xl[i*xlstr], n1)*pow(1.0-xl[i*xlstr], n2) ;
+    agg_bernstein_basis(nl, xl[i*xlstr], work, NULL) ;
+    for ( j = 0 ; j <= nl ; j ++ ) {
+      A[j*npl + i] = work[j]*C ;
+    }
+    b[i] = yl[i*ylstr] - xl[i*xlstr]*yteL ;
+  }
+
+  /*solve least squares problem (note this is transposed in Fortran sense)*/
+  m = npl ; n = nl + 1 ; lwork = 4096 ; ldb = MAX(m, n) ;
+  dgels_("N", &m, &n, &i1, A, &m, b, &ldb, work, &lwork, &info) ;
+  for ( i = 0 ; i <= nl ; i ++ ) agg_section_coefficient_lower(s,i) = b[i] ;  
+  
+  agg_section_order_upper(s) = nu ;
+  agg_section_order_lower(s) = nl ;
+  agg_section_eta_left(s) = n1 ;
+  agg_section_eta_right(s) = n2 ;
+  agg_section_trailing_edge_upper(s) = yteU ;  
+  agg_section_trailing_edge_lower(s) = yteL ;  
   
   return 0 ;
 }

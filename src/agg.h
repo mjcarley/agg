@@ -658,10 +658,15 @@ gint agg_section_set_aerofoil(agg_section_t *s, gdouble eta,
 			      gdouble th, gdouble yte) ;
 gint agg_section_parse(agg_section_t *s, gchar *name,
 		       agg_variable_t *p, gint np) ;
-gint agg_section_write(FILE *f, agg_section_t *s, gint npts) ;
-gint agg_section_format_write(FILE *f, agg_section_t *s,
+gint agg_section_write(FILE *f, agg_section_t *s, agg_transform_t *T,
+		       gint npts) ;
+gint agg_section_format_write(FILE *f, agg_section_t *s, agg_transform_t *T,
 			      gchar *fstr, gchar *estr, gint npts) ;
 gint agg_sections_list(FILE *f) ;
+gint agg_section_fit(agg_section_t *s,
+		     gdouble *xu, gint xustr, gdouble *yu, gint yustr, gint npu,
+		     gdouble *xl, gint xlstr, gdouble *yl, gint ylstr, gint npl,
+		     gdouble n1, gdouble n2, gint nu, gint nl) ;
 
 agg_transform_operator_t *agg_transform_operator_new(void) ;
 agg_transform_t *agg_transform_new(gint nopmax) ;

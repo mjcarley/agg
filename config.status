@@ -600,7 +600,7 @@ old_postuninstall_cmds=''
 old_archive_cmds='$AR $AR_FLAGS $oldlib$oldobjs~$RANLIB $tool_oldlib'
 lock_old_archive_extraction='no'
 CC='gcc'
-CFLAGS='-O3 -g -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -D_GNU_SOURCE -fopenmp  -mavx -mavx2 -mfma -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include'
+CFLAGS='-O3 -g -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -D_GNU_SOURCE -fopenmp  -mavx -mavx2 -mfma -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/home/michael/Codes/include'
 compiler='g77'
 GCC='yes'
 lt_cv_sys_global_symbol_pipe='sed -n -e '\''s/^.*[	 ]\([ABCDGIRSTW][ABCDGIRSTW]*\)[	 ][	 ]*\([_A-Za-z][_A-Za-z0-9]*\)$/\1 \2 \2/p'\'' | sed '\''/ __gnu_lto/d'\'''
@@ -875,6 +875,7 @@ S["ac_ct_F77"]="g77"
 S["FFLAGS"]="-g -O2"
 S["F77"]="g77"
 S["OPENMP_CFLAGS"]="-fopenmp"
+S["BLASWRAP"]="yes"
 S["GLIB_CONFIG"]=""
 S["GLIB_COMPILE_RESOURCES"]="/usr/bin/glib-compile-resources"
 S["GLIB_MKENUMS"]="/usr/bin/glib-mkenums"
@@ -921,9 +922,11 @@ S["OBJEXT"]="o"
 S["EXEEXT"]=""
 S["ac_ct_CC"]="gcc"
 S["CPPFLAGS"]=""
-S["LDFLAGS"]="-L/home/michael/Codes/lib -lglib-2.0 -lstdc++"
+S["LDFLAGS"]="-L/home/michael/Codes/lib -lglib-2.0 -lblas -L/home/michael/Codes/lib -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0 -L/usr/lib64/gcc/x86_64-slackwa"\
+"re-linux/11.2.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../.. -lgfortran -lquadmath "\
+"-lm -lglib-2.0 -lstdc++"
 S["CFLAGS"]="-O3 -g -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -D_GNU_SOURCE -fopenmp  -mavx -ma"\
-"vx2 -mfma -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include"
+"vx2 -mfma -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/home/michael/Codes/include"
 S["CC"]="gcc"
 S["host_os"]="linux-gnu"
 S["host_vendor"]="pc"
@@ -1072,6 +1075,7 @@ D["HAVE_UNISTD_H"]=" 1"
 D["HAVE_DLFCN_H"]=" 1"
 D["LT_OBJDIR"]=" \".libs/\""
 D["STDC_HEADERS"]=" 1"
+D["HAVE_BLASWRAP"]=" 1"
 D["HAVE_TRIANGLE_API_H"]=" 1"
 D["HAVE_AVX_INSTRUCTIONS"]=" 1"
 D["HAVE_AVX2_INSTRUCTIONS"]=" 1"

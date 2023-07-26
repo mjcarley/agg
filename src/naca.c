@@ -75,10 +75,8 @@ gdouble agg_naca_four(gdouble t, gdouble p, gdouble m, gdouble x)
   if ( p == 0.0 || m == 0.0 ) return y ;
   /*camber distribution*/
   if ( x <= m ) {
-    /* y += p/m/m*(2*m*x - x*x) ; */
     y += p/m/m*(x*(2*m - x)) ;
   } else {
-    /* y += p/(1.0-m)/(1.0-m)*((1.0-2*m) + 2*m*x - x*x) ; */
     y += p/(1.0-m)/(1.0-m)*((1.0-2*m) + x*(2*m - x)) ;
   }
   

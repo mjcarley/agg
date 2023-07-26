@@ -38,13 +38,45 @@ static void print_help_message(FILE *f, gint pps)
 	  "  -p # number of points per spline in parsed geometry mesh (%d)\n"
 	  "  -S list available sections\n"
 	  "  -s # parse and write a section to stdout\n"
-	  "  -T list available transforms\n",
+	  "  -T list available transforms\n"
+	  "  -t # apply a transform to a section and write to stdout",
 	  pps) ;
   
   return ;
 }  
 
-static void section_write(FILE *f, gchar *str, gint npts, gchar *opfmt)
+static agg_transform_t *transform_parse(gchar *str)
+
+{
+  agg_transform_t *T ;
+  gchar **tokens, *name ;
+  agg_variable_t p[32] = {0} ;
+  gint i, np ;
+
+  T = agg_transform_new(8) ;
+
+  g_strdelimit (str, "(),", ' ') ;
+
+  tokens = g_strsplit(str, " ", 0) ;
+
+  name = NULL ; np = 0 ;
+  for ( i = 0 ; tokens[i] != NULL ; i ++ ) {
+    if ( strlen(tokens[i]) != 0 ) {
+      if ( name == NULL ) {
+	name = g_strdup(tokens[i]) ;
+      } else {
+	p[np].val = atof(tokens[i]) ; np ++ ;
+      }
+    }
+  }
+
+  agg_transform_parse(T, name, p, np) ;
+  
+  return T ;
+}
+
+static void section_write(FILE *f, gchar *str, agg_transform_t *T,
+			  gint npts, gchar *opfmt)
 
 {
   agg_section_t *s ;
@@ -72,12 +104,12 @@ static void section_write(FILE *f, gchar *str, gint npts, gchar *opfmt)
   agg_section_parse(s, name, p, np) ;
 
   if ( opfmt == NULL ) {
-    agg_section_write(f, s, npts) ;
+    agg_section_write(f, s, T, npts) ;
     return ;
   }
 
   if ( strcmp(opfmt, "mpost") == 0 ) {
-    agg_section_format_write(f, s,
+    agg_section_format_write(f, s, T,
 			     "(%1.3lgu,%1.3lgu)--",
 			     "(%1.3lgu,%1.3lgu) ;\n", npts) ;
     
@@ -94,9 +126,10 @@ gint main(gint argc, gchar **argv)
 {
   agg_body_t *b ;
   agg_mesh_t *m ;
-  gchar *file, *gfile, ch, *section, *opfmt ;
+  gchar *file, *gfile, ch, *section, *transform, *opfmt ;
   gint pps, offp, offsp, offs ;
   agg_surface_workspace_t *w ;
+  agg_transform_t *T ;
   FILE *output ;
   gboolean echo ;
   
@@ -108,9 +141,11 @@ gint main(gint argc, gchar **argv)
   offp = offsp = offs = 1 ;
   gfile = NULL ;
   section = NULL ;
+  transform = NULL ;
   opfmt = NULL ;
+  T = NULL ;
   
-  while ( (ch = getopt(argc, argv, "hG:o:p:Ss:T")) != EOF ) {
+  while ( (ch = getopt(argc, argv, "hG:o:p:Ss:Tt:")) != EOF ) {
     switch (ch) {
     default: g_assert_not_reached() ; break ;
     case 'h': print_help_message(stderr, pps) ; return 0 ; break ;
@@ -127,11 +162,16 @@ gint main(gint argc, gchar **argv)
       agg_transforms_list(stderr) ;
       return 0 ;
       break ;
+    case 't': transform = g_strdup(optarg) ; break ;
     }
   }
 
+  if ( transform != NULL ) {
+    T = transform_parse(transform) ;
+  }
+  
   if ( section != NULL ) {
-    section_write(stdout, section, 128, opfmt) ;
+    section_write(stdout, section, T, 128, opfmt) ;
 		  
     return 0 ;
   }

@@ -120,6 +120,22 @@ else
   fi
 fi
 
+AC_CHECK_PROG(BLASWRAP, blaswrap-config, yes, no)
+if test x$BLASWRAP = xyes ; then
+   AC_DEFINE(HAVE_BLASWRAP, 1, [BLAS wrapper header available])
+   blaswrap_cflags=`blaswrap-config --cflags`
+   blaswrap_libs=`blaswrap-config --libs`
+else
+  echo \#################################################################
+  echo \#
+  echo \# BLAS wrapper library not installed or not properly installed.
+  echo \# You can get it from
+  echo \#
+  echo \# https://github.com/mjcarley/blaswrap
+  echo \#
+  echo \#################################################################
+  exit
+fi
 
 # Checks for header files.
 AC_CHECK_HEADERS([triangle_api.h])
@@ -151,8 +167,8 @@ AC_F77_LIBRARY_LDFLAGS
 AC_F77_DUMMY_MAIN
 AC_F77_WRAPPERS
 
-CFLAGS="$CFLAGS $OPENMP_CFLAGS $SIMD_FLAGS $glib_cflags"
-LDFLAGS="$LDFLAGS $glib_libs -lstdc++"
+CFLAGS="$CFLAGS $OPENMP_CFLAGS $SIMD_FLAGS $glib_cflags $blaswrap_cflags"
+LDFLAGS="$LDFLAGS $blaswrap_libs $glib_libs -lstdc++"
 
 AC_SUBST(CFLAGS)
 AC_SUBST(LDFLAGS)
