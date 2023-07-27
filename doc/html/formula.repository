@@ -47,3 +47,5 @@
 \_form#46=35x14:$\partial\mathbf{x}/\partial v$
 \_form#47=34x14:$\partial\mathbf{x}/\partial s$
 \_form#48=33x14:$\partial\mathbf{x}/\partial t$
+\_form#49=51x14:$(|x|, y(x))$
+\_form#50=55x11:$-\leq x\leq 1$

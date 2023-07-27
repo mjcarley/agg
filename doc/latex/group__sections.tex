@@ -11,39 +11,13 @@ Evaluation of (cross-\/) sections such as ellipses and aerofoils.
 \end{DoxyCompactItemize}
 \begin{DoxyCompactItemize}
 \item 
-enum \textbf{ agg\+\_\+section\+\_\+type\+\_\+t} \{ \textbf{ AGG\+\_\+\+SECTION\+\_\+\+UNDEFINED} = 0
-, \textbf{ AGG\+\_\+\+SECTION\+\_\+\+AEROFOIL} = 1
-, \textbf{ AGG\+\_\+\+SECTION\+\_\+\+ELLIPSE} = 2
- \}
+typedef \textbf{ agg\+\_\+section\+\_\+t}
 \end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
 Evaluation of (cross-\/) sections such as ellipses and aerofoils. 
 
-
-
-\doxysubsection{Enumeration Type Documentation}
-\mbox{\label{group__sections_gaf4798d9cfc37c3818fc2f3a2208bfb82}} 
-\index{Section geometries@{Section geometries}!agg\_section\_type\_t@{agg\_section\_type\_t}}
-\index{agg\_section\_type\_t@{agg\_section\_type\_t}!Section geometries@{Section geometries}}
-\doxysubsubsection{agg\_section\_type\_t}
-{\footnotesize\ttfamily enum \textbf{ agg\+\_\+section\+\_\+type\+\_\+t}}
-
-Types of section \begin{DoxyEnumFields}{Enumerator}
-\raisebox{\heightof{T}}[0pt][0pt]{\index{AGG\_SECTION\_UNDEFINED@{AGG\_SECTION\_UNDEFINED}!Section geometries@{Section geometries}}\index{Section geometries@{Section geometries}!AGG\_SECTION\_UNDEFINED@{AGG\_SECTION\_UNDEFINED}}}\mbox{\label{group__sections_gaf4798d9cfc37c3818fc2f3a2208bfb82af1bfd785432453c479b9859537467b0e}} 
-AGG\+\_\+\+SECTION\+\_\+\+UNDEFINED&undefined section type \\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{AGG\_SECTION\_AEROFOIL@{AGG\_SECTION\_AEROFOIL}!Section geometries@{Section geometries}}\index{Section geometries@{Section geometries}!AGG\_SECTION\_AEROFOIL@{AGG\_SECTION\_AEROFOIL}}}\mbox{\label{group__sections_gaf4798d9cfc37c3818fc2f3a2208bfb82a6cb226964b1603cd710ae92956340cf5}} 
-AGG\+\_\+\+SECTION\+\_\+\+AEROFOIL&thickness distribution plus camber \\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{AGG\_SECTION\_ELLIPSE@{AGG\_SECTION\_ELLIPSE}!Section geometries@{Section geometries}}\index{Section geometries@{Section geometries}!AGG\_SECTION\_ELLIPSE@{AGG\_SECTION\_ELLIPSE}}}\mbox{\label{group__sections_gaf4798d9cfc37c3818fc2f3a2208bfb82a1f2658f00e6fa1163027b28209a40cc1}} 
-AGG\+\_\+\+SECTION\+\_\+\+ELLIPSE&generic closed curve \\
-\hline
-
-\end{DoxyEnumFields}
 
 
 \doxysubsection{Function Documentation}
@@ -53,7 +27,7 @@ AGG\+\_\+\+SECTION\+\_\+\+ELLIPSE&generic closed curve \\
 \doxysubsubsection{agg\_section\_new()}
 {\footnotesize\ttfamily \textbf{ agg\+\_\+section\+\_\+t} $\ast$ agg\+\_\+section\+\_\+new (\begin{DoxyParamCaption}\item[{gint}]{oumax,  }\item[{gint}]{olmax }\end{DoxyParamCaption})}
 
-Allocate a new \doxyref{agg\+\_\+section\+\_\+t}{p.}{agg_8h_a8cdd164643b93d05245e9b4976f3f0cb}
+Allocate a new \doxyref{agg\+\_\+section\+\_\+t}{p.}{group__sections_ga8cdd164643b93d05245e9b4976f3f0cb}
 
 
 \begin{DoxyParams}{Parameters}
@@ -63,7 +37,7 @@ Allocate a new \doxyref{agg\+\_\+section\+\_\+t}{p.}{agg_8h_a8cdd164643b93d05245
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-newly allocated \doxyref{agg\+\_\+section\+\_\+t}{p.}{agg_8h_a8cdd164643b93d05245e9b4976f3f0cb} 
+newly allocated \doxyref{agg\+\_\+section\+\_\+t}{p.}{group__sections_ga8cdd164643b93d05245e9b4976f3f0cb} 
 \end{DoxyReturn}
 
 
@@ -72,4 +46,17 @@ References \textbf{ agg\+\_\+section\+\_\+order\+\_\+lower\+\_\+max}, \textbf{ a
 
 
 Referenced by \textbf{ agg\+\_\+body\+\_\+read()}, and \textbf{ agg\+\_\+surface\+\_\+workspace\+\_\+new()}.
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\label{group__sections_ga8cdd164643b93d05245e9b4976f3f0cb}} 
+\index{Section geometries@{Section geometries}!agg\_section\_t@{agg\_section\_t}}
+\index{agg\_section\_t@{agg\_section\_t}!Section geometries@{Section geometries}}
+\doxysubsubsection{agg\_section\_t}
+{\footnotesize\ttfamily agg\+\_\+section\+\_\+t}
+
+Data structure holding information for evaluation of a section 
+
+Referenced by \textbf{ agg\+\_\+section\+\_\+new()}, \textbf{ agg\+\_\+surface\+\_\+new()}, \textbf{ agg\+\_\+surface\+\_\+point\+\_\+eval()}, and \textbf{ agg\+\_\+surface\+\_\+section\+\_\+interp()}.
 

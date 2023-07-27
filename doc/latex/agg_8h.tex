@@ -15,11 +15,19 @@ gint \textbf{ agg\+\_\+section\+\_\+copy} (\textbf{ agg\+\_\+section\+\_\+t} $\a
 \item 
 gint \textbf{ agg\+\_\+section\+\_\+set\+\_\+circle} (\textbf{ agg\+\_\+section\+\_\+t} $\ast$s)
 \item 
+gint \textbf{ agg\+\_\+section\+\_\+set\+\_\+ellipse} (\textbf{ agg\+\_\+section\+\_\+t} $\ast$s, gdouble th)
+\item 
 gint \textbf{ agg\+\_\+section\+\_\+set\+\_\+aerofoil} (\textbf{ agg\+\_\+section\+\_\+t} $\ast$s, gdouble eta, gdouble th, gdouble yte)
 \item 
 gint \textbf{ agg\+\_\+section\+\_\+parse} (\textbf{ agg\+\_\+section\+\_\+t} $\ast$s, gchar $\ast$name, \textbf{ agg\+\_\+variable\+\_\+t} $\ast$p, gint np)
 \item 
+gint \textbf{ agg\+\_\+section\+\_\+write} (FILE $\ast$f, \textbf{ agg\+\_\+section\+\_\+t} $\ast$s, \textbf{ agg\+\_\+transform\+\_\+t} $\ast$T, gint npts)
+\item 
+gint \textbf{ agg\+\_\+section\+\_\+format\+\_\+write} (FILE $\ast$f, \textbf{ agg\+\_\+section\+\_\+t} $\ast$s, \textbf{ agg\+\_\+transform\+\_\+t} $\ast$T, gchar $\ast$fstr, gchar $\ast$estr, gint npts)
+\item 
 gint \textbf{ agg\+\_\+sections\+\_\+list} (FILE $\ast$f)
+\item 
+gint \textbf{ agg\+\_\+section\+\_\+fit} (\textbf{ agg\+\_\+section\+\_\+t} $\ast$s, gdouble $\ast$xu, gint xustr, gdouble $\ast$yu, gint yustr, gint npu, gdouble $\ast$xl, gint xlstr, gdouble $\ast$yl, gint ylstr, gint npl, gdouble n1, gdouble n2, gint nu, gint nl)
 \item 
 \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t} $\ast$ \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+new} (void)
 \item 
@@ -170,12 +178,9 @@ typedef \textbf{ agg\+\_\+variable\+\_\+t}
 \end{DoxyCompactItemize}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\label{agg_8h_a77956769442ada427d64c740062b911a}} 
-\#define {\bfseries agg\+\_\+section\+\_\+type}(s)
-\begin{DoxyCompactList}\small\item\em \doxyref{agg\+\_\+section\+\_\+type\+\_\+t}{p.}{group__sections_gaf4798d9cfc37c3818fc2f3a2208bfb82} of an \doxyref{agg\+\_\+section\+\_\+t}{p.}{agg_8h_a8cdd164643b93d05245e9b4976f3f0cb} \end{DoxyCompactList}\item 
 \mbox{\label{agg_8h_a5378fa853984c8f6b4eab5447e1b89b7}} 
 \#define {\bfseries agg\+\_\+section\+\_\+close}(s)
-\begin{DoxyCompactList}\small\item\em TRUE if an \doxyref{agg\+\_\+section\+\_\+t}{p.}{agg_8h_a8cdd164643b93d05245e9b4976f3f0cb} needs to be closed. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em TRUE if an \doxyref{agg\+\_\+section\+\_\+t}{p.}{group__sections_ga8cdd164643b93d05245e9b4976f3f0cb} needs to be closed. \end{DoxyCompactList}\item 
 \mbox{\label{agg_8h_ae30718f98a4e084775819bebfb7cdb01}} 
 \#define {\bfseries agg\+\_\+section\+\_\+eta\+\_\+left}(s)
 \begin{DoxyCompactList}\small\item\em value of $\eta_{1}$ controlling curvature around $x=0$ \end{DoxyCompactList}\item 
@@ -206,11 +211,6 @@ typedef \textbf{ agg\+\_\+variable\+\_\+t}
 \mbox{\label{agg_8h_ad48b2ab0dbe46e279e115dd3d50294b2}} 
 \#define {\bfseries agg\+\_\+section\+\_\+trailing\+\_\+edge\+\_\+lower}(s)
 \begin{DoxyCompactList}\small\item\em semi-\/thickness of lower part of trailing edge on aerofoil section \end{DoxyCompactList}\item 
-enum \textbf{ agg\+\_\+section\+\_\+type\+\_\+t} \{ \textbf{ AGG\+\_\+\+SECTION\+\_\+\+UNDEFINED} = 0
-, \textbf{ AGG\+\_\+\+SECTION\+\_\+\+AEROFOIL} = 1
-, \textbf{ AGG\+\_\+\+SECTION\+\_\+\+ELLIPSE} = 2
- \}
-\item 
 typedef \textbf{ agg\+\_\+section\+\_\+t}
 \item 
 typedef \textbf{ agg\+\_\+expression\+\_\+data\+\_\+t}
@@ -1201,7 +1201,7 @@ Copy one surface section into another
 \end{DoxyReturn}
 
 
-References \textbf{ agg\+\_\+section\+\_\+close}, \textbf{ agg\+\_\+section\+\_\+coefficient\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+coefficient\+\_\+upper}, \textbf{ agg\+\_\+section\+\_\+eta\+\_\+left}, \textbf{ agg\+\_\+section\+\_\+eta\+\_\+right}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+lower\+\_\+max}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+upper}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+upper\+\_\+max}, \textbf{ agg\+\_\+section\+\_\+trailing\+\_\+edge\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+trailing\+\_\+edge\+\_\+upper}, and \textbf{ agg\+\_\+section\+\_\+type}.
+References \textbf{ agg\+\_\+section\+\_\+close}, \textbf{ agg\+\_\+section\+\_\+coefficient\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+coefficient\+\_\+upper}, \textbf{ agg\+\_\+section\+\_\+eta\+\_\+left}, \textbf{ agg\+\_\+section\+\_\+eta\+\_\+right}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+lower\+\_\+max}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+upper}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+upper\+\_\+max}, \textbf{ agg\+\_\+section\+\_\+trailing\+\_\+edge\+\_\+lower}, and \textbf{ agg\+\_\+section\+\_\+trailing\+\_\+edge\+\_\+upper}.
 
 \mbox{\label{agg_8h_a13063b70d41d180a3386185f458a89ce}} 
 \index{agg.h@{agg.h}!agg\_section\_diff@{agg\_section\_diff}}
@@ -1213,7 +1213,7 @@ Derivative of a section curve
 
 
 \begin{DoxyParams}{Parameters}
-{\em s} & a \doxyref{agg\+\_\+section\+\_\+t}{p.}{agg_8h_a8cdd164643b93d05245e9b4976f3f0cb} containing the section data; \\
+{\em s} & a \doxyref{agg\+\_\+section\+\_\+t}{p.}{group__sections_ga8cdd164643b93d05245e9b4976f3f0cb} containing the section data; \\
 \hline
 {\em x} & evaluation point $-1\leq x\leq 1$.\\
 \hline
@@ -1223,7 +1223,7 @@ $y\textnormal{\textquotesingle}=\mathrm{d}f(x)/\mathrm{d}x$ on success. An error
 \end{DoxyReturn}
 
 
-References \textbf{ AGG\+\_\+\+SECTION\+\_\+\+AEROFOIL}, \textbf{ AGG\+\_\+\+SECTION\+\_\+\+ELLIPSE}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+upper}, \textbf{ agg\+\_\+section\+\_\+type}, and \textbf{ AGG\+\_\+\+SECTION\+\_\+\+UNDEFINED}.
+References \textbf{ agg\+\_\+section\+\_\+coefficient\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+coefficient\+\_\+upper}, \textbf{ agg\+\_\+section\+\_\+eta\+\_\+left}, \textbf{ agg\+\_\+section\+\_\+eta\+\_\+right}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+upper}, \textbf{ agg\+\_\+section\+\_\+trailing\+\_\+edge\+\_\+lower}, and \textbf{ agg\+\_\+section\+\_\+trailing\+\_\+edge\+\_\+upper}.
 
 \mbox{\label{agg_8h_aa057ef58299424703a8cc0d8a16ebf03}} 
 \index{agg.h@{agg.h}!agg\_section\_eval@{agg\_section\_eval}}
@@ -1235,7 +1235,7 @@ Evaluate a section geometry
 
 
 \begin{DoxyParams}{Parameters}
-{\em s} & a \doxyref{agg\+\_\+section\+\_\+t}{p.}{agg_8h_a8cdd164643b93d05245e9b4976f3f0cb} containing the section data; \\
+{\em s} & a \doxyref{agg\+\_\+section\+\_\+t}{p.}{group__sections_ga8cdd164643b93d05245e9b4976f3f0cb} containing the section data; \\
 \hline
 {\em x} & evaluation point $-1\leq x\leq 1$.\\
 \hline
@@ -1245,7 +1245,85 @@ $y=f(x)$ on success. An error is reported and execution ceases if {\itshape x} i
 \end{DoxyReturn}
 
 
-References \textbf{ AGG\+\_\+\+SECTION\+\_\+\+AEROFOIL}, \textbf{ AGG\+\_\+\+SECTION\+\_\+\+ELLIPSE}, \textbf{ agg\+\_\+section\+\_\+type}, and \textbf{ AGG\+\_\+\+SECTION\+\_\+\+UNDEFINED}.
+References \textbf{ agg\+\_\+bernstein\+\_\+basis\+\_\+eval()}, \textbf{ agg\+\_\+section\+\_\+coefficient\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+coefficient\+\_\+upper}, \textbf{ agg\+\_\+section\+\_\+eta\+\_\+left}, \textbf{ agg\+\_\+section\+\_\+eta\+\_\+right}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+upper}, \textbf{ agg\+\_\+section\+\_\+trailing\+\_\+edge\+\_\+lower}, and \textbf{ agg\+\_\+section\+\_\+trailing\+\_\+edge\+\_\+upper}.
+
+
+
+Referenced by \textbf{ agg\+\_\+section\+\_\+format\+\_\+write()}, and \textbf{ agg\+\_\+section\+\_\+write()}.
+
+\mbox{\label{agg_8h_a647f4fab190b42a358c4b2ba44495716}} 
+\index{agg.h@{agg.h}!agg\_section\_fit@{agg\_section\_fit}}
+\index{agg\_section\_fit@{agg\_section\_fit}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_section\_fit()}
+{\footnotesize\ttfamily gint agg\+\_\+section\+\_\+fit (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+section\+\_\+t} $\ast$}]{s,  }\item[{gdouble $\ast$}]{xu,  }\item[{gint}]{xustr,  }\item[{gdouble $\ast$}]{yu,  }\item[{gint}]{yustr,  }\item[{gint}]{npu,  }\item[{gdouble $\ast$}]{xl,  }\item[{gint}]{xlstr,  }\item[{gdouble $\ast$}]{yl,  }\item[{gint}]{ylstr,  }\item[{gint}]{npl,  }\item[{gdouble}]{n1,  }\item[{gdouble}]{n2,  }\item[{gint}]{nu,  }\item[{gint}]{nl }\end{DoxyParamCaption})}
+
+Fit CST form to section data.
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & \doxyref{agg\+\_\+section\+\_\+t}{p.}{group__sections_ga8cdd164643b93d05245e9b4976f3f0cb} to contain fitted section data; \\
+\hline
+{\em xu} & $x$ coordinates of points on upper surface; \\
+\hline
+{\em xustr} & stride of data in {\itshape xu}; \\
+\hline
+{\em yu} & $y$ coordinates of points on upper surface; \\
+\hline
+{\em yustr} & stride of data in {\itshape yu}; \\
+\hline
+{\em npu} & number of points on upper surface; \\
+\hline
+{\em xl} & $x$ coordinates of points on lower surface; \\
+\hline
+{\em xlstr} & stride of data in {\itshape xu}; \\
+\hline
+{\em yl} & $y$ coordinates of points on lower surface; \\
+\hline
+{\em ylstr} & stride of data in {\itshape yu}; \\
+\hline
+{\em npl} & number of points on lower surface; \\
+\hline
+{\em n1} & exponent at $x=0$; \\
+\hline
+{\em n2} & exponent at $x=1$; \\
+\hline
+{\em nu} & number of coefficients to compute in upper surface expansion; \\
+\hline
+{\em nl} & number of coefficients to compute in lower surface expansion;\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+\mbox{\label{agg_8h_a543e81b244ebba5ae6ffb2b8a33a4465}} 
+\index{agg.h@{agg.h}!agg\_section\_format\_write@{agg\_section\_format\_write}}
+\index{agg\_section\_format\_write@{agg\_section\_format\_write}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_section\_format\_write()}
+{\footnotesize\ttfamily gint agg\+\_\+section\+\_\+format\+\_\+write (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f,  }\item[{\textbf{ agg\+\_\+section\+\_\+t} $\ast$}]{s,  }\item[{\textbf{ agg\+\_\+transform\+\_\+t} $\ast$}]{T,  }\item[{gchar $\ast$}]{fstr,  }\item[{gchar $\ast$}]{estr,  }\item[{gint}]{npts }\end{DoxyParamCaption})}
+
+Write a section to file as a list of points $(|x|, y(x))$, $-\leq x\leq 1$, using a C printf format string
+
+
+\begin{DoxyParams}{Parameters}
+{\em f} & output file stream; \\
+\hline
+{\em s} & the section to write; \\
+\hline
+{\em T} & if not NULL, a transform applied to points before writing; \\
+\hline
+{\em fstr} & format string for output; \\
+\hline
+{\em estr} & if not NULL, format string used for final point of output; \\
+\hline
+{\em npts} & number of points on section.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+section\+\_\+eval()}, and \textbf{ agg\+\_\+transform\+\_\+apply()}.
 
 \mbox{\label{agg_8h_a2116c909ff8359c7c5f449180c710cd5}} 
 \index{agg.h@{agg.h}!agg\_section\_parse@{agg\_section\_parse}}
@@ -1253,11 +1331,11 @@ References \textbf{ AGG\+\_\+\+SECTION\+\_\+\+AEROFOIL}, \textbf{ AGG\+\_\+\+SEC
 \doxysubsubsection{agg\_section\_parse()}
 {\footnotesize\ttfamily gint agg\+\_\+section\+\_\+parse (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+section\+\_\+t} $\ast$}]{s,  }\item[{gchar $\ast$}]{name,  }\item[{\textbf{ agg\+\_\+variable\+\_\+t} $\ast$}]{p,  }\item[{gint}]{np }\end{DoxyParamCaption})}
 
-Parse an \doxyref{agg\+\_\+section\+\_\+t}{p.}{agg_8h_a8cdd164643b93d05245e9b4976f3f0cb} description given as a name and list of variable parameters
+Parse an \doxyref{agg\+\_\+section\+\_\+t}{p.}{group__sections_ga8cdd164643b93d05245e9b4976f3f0cb} description given as a name and list of variable parameters
 
 
 \begin{DoxyParams}{Parameters}
-{\em s} & \doxyref{agg\+\_\+section\+\_\+t}{p.}{agg_8h_a8cdd164643b93d05245e9b4976f3f0cb} to set; \\
+{\em s} & \doxyref{agg\+\_\+section\+\_\+t}{p.}{group__sections_ga8cdd164643b93d05245e9b4976f3f0cb} to set; \\
 \hline
 {\em name} & name of section; \\
 \hline
@@ -1279,7 +1357,7 @@ Set a section to a simple aerofoil shape of specified leading edge exponent, max
 
 
 \begin{DoxyParams}{Parameters}
-{\em s} & \doxyref{agg\+\_\+section\+\_\+t}{p.}{agg_8h_a8cdd164643b93d05245e9b4976f3f0cb} to be initialized; \\
+{\em s} & \doxyref{agg\+\_\+section\+\_\+t}{p.}{group__sections_ga8cdd164643b93d05245e9b4976f3f0cb} to be initialized; \\
 \hline
 {\em eta} & leading edge exponent $\eta_{1}$; \\
 \hline
@@ -1293,7 +1371,7 @@ Set a section to a simple aerofoil shape of specified leading edge exponent, max
 \end{DoxyReturn}
 
 
-References \textbf{ AGG\+\_\+\+SECTION\+\_\+\+AEROFOIL}, \textbf{ agg\+\_\+section\+\_\+close}, \textbf{ agg\+\_\+section\+\_\+coefficient\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+coefficient\+\_\+upper}, \textbf{ agg\+\_\+section\+\_\+eta\+\_\+left}, \textbf{ agg\+\_\+section\+\_\+eta\+\_\+right}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+upper}, \textbf{ agg\+\_\+section\+\_\+trailing\+\_\+edge\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+trailing\+\_\+edge\+\_\+upper}, and \textbf{ agg\+\_\+section\+\_\+type}.
+References \textbf{ agg\+\_\+section\+\_\+close}, \textbf{ agg\+\_\+section\+\_\+coefficient\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+coefficient\+\_\+upper}, \textbf{ agg\+\_\+section\+\_\+eta\+\_\+left}, \textbf{ agg\+\_\+section\+\_\+eta\+\_\+right}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+upper}, \textbf{ agg\+\_\+section\+\_\+trailing\+\_\+edge\+\_\+lower}, and \textbf{ agg\+\_\+section\+\_\+trailing\+\_\+edge\+\_\+upper}.
 
 \mbox{\label{agg_8h_af083c3db44dc8c3d3666e8ade6f0e9ef}} 
 \index{agg.h@{agg.h}!agg\_section\_set\_circle@{agg\_section\_set\_circle}}
@@ -1305,7 +1383,7 @@ Set a section to a circle of radius 1/2 centred at $(0,1/2)$, as in Kulfan, B. (
 
 
 \begin{DoxyParams}{Parameters}
-{\em s} & \doxyref{agg\+\_\+section\+\_\+t}{p.}{agg_8h_a8cdd164643b93d05245e9b4976f3f0cb} to be initialized;\\
+{\em s} & \doxyref{agg\+\_\+section\+\_\+t}{p.}{group__sections_ga8cdd164643b93d05245e9b4976f3f0cb} to be initialized.\\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
@@ -1313,7 +1391,55 @@ Set a section to a circle of radius 1/2 centred at $(0,1/2)$, as in Kulfan, B. (
 \end{DoxyReturn}
 
 
-References \textbf{ agg\+\_\+section\+\_\+coefficient\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+coefficient\+\_\+upper}, \textbf{ AGG\+\_\+\+SECTION\+\_\+\+ELLIPSE}, \textbf{ agg\+\_\+section\+\_\+eta\+\_\+left}, \textbf{ agg\+\_\+section\+\_\+eta\+\_\+right}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+upper}, and \textbf{ agg\+\_\+section\+\_\+type}.
+References \textbf{ agg\+\_\+section\+\_\+coefficient\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+coefficient\+\_\+upper}, \textbf{ agg\+\_\+section\+\_\+eta\+\_\+left}, \textbf{ agg\+\_\+section\+\_\+eta\+\_\+right}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+lower}, and \textbf{ agg\+\_\+section\+\_\+order\+\_\+upper}.
+
+\mbox{\label{agg_8h_a3b9057f9737980f7c84ed0141f6189e0}} 
+\index{agg.h@{agg.h}!agg\_section\_set\_ellipse@{agg\_section\_set\_ellipse}}
+\index{agg\_section\_set\_ellipse@{agg\_section\_set\_ellipse}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_section\_set\_ellipse()}
+{\footnotesize\ttfamily gint agg\+\_\+section\+\_\+set\+\_\+ellipse (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+section\+\_\+t} $\ast$}]{s,  }\item[{gdouble}]{th }\end{DoxyParamCaption})}
+
+Set a section to an ellipse of maximum vertical thickness {\itshape th}, centred at $(0,1/2)$, as in Kulfan, B. (2010). Recent extensions and applications of the `CST' universal parametric geometry representation method. The Aeronautical Journal, 114(1153), 157-\/176 {\texttt{ https\+://doi.\+org/10.\+1017/\+S0001924000003614}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & \doxyref{agg\+\_\+section\+\_\+t}{p.}{group__sections_ga8cdd164643b93d05245e9b4976f3f0cb} to be initialized; \\
+\hline
+{\em th} & section \char`\"{}thickness\char`\"{}.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+section\+\_\+coefficient\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+coefficient\+\_\+upper}, \textbf{ agg\+\_\+section\+\_\+eta\+\_\+left}, \textbf{ agg\+\_\+section\+\_\+eta\+\_\+right}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+lower}, \textbf{ agg\+\_\+section\+\_\+order\+\_\+upper}, \textbf{ agg\+\_\+section\+\_\+trailing\+\_\+edge\+\_\+lower}, and \textbf{ agg\+\_\+section\+\_\+trailing\+\_\+edge\+\_\+upper}.
+
+\mbox{\label{agg_8h_a13c3475f231a6b7796415318471d82a2}} 
+\index{agg.h@{agg.h}!agg\_section\_write@{agg\_section\_write}}
+\index{agg\_section\_write@{agg\_section\_write}!agg.h@{agg.h}}
+\doxysubsubsection{agg\_section\_write()}
+{\footnotesize\ttfamily gint agg\+\_\+section\+\_\+write (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f,  }\item[{\textbf{ agg\+\_\+section\+\_\+t} $\ast$}]{s,  }\item[{\textbf{ agg\+\_\+transform\+\_\+t} $\ast$}]{T,  }\item[{gint}]{npts }\end{DoxyParamCaption})}
+
+Write a section to file as a list of points $(|x|, y(x))$, $-\leq x\leq 1$.
+
+
+\begin{DoxyParams}{Parameters}
+{\em f} & output file stream; \\
+\hline
+{\em s} & the section to write; \\
+\hline
+{\em T} & if not NULL, a transform applied to points before writing; \\
+\hline
+{\em npts} & number of points on section.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+section\+\_\+eval()}, and \textbf{ agg\+\_\+transform\+\_\+apply()}.
 
 \mbox{\label{agg_8h_a6c28eb8d25611f3cba1f9fe1ac66659f}} 
 \index{agg.h@{agg.h}!agg\_sections\_list@{agg\_sections\_list}}
@@ -1467,7 +1593,7 @@ Add a section to a surface at a given value of parameter $u$. The section data a
 \begin{DoxyParams}{Parameters}
 {\em S} & an \doxyref{agg\+\_\+surface\+\_\+t}{p.}{agg_8h_a1c502e562486827063a7169cd79b5cc0}; \\
 \hline
-{\em s} & an \doxyref{agg\+\_\+section\+\_\+t}{p.}{agg_8h_a8cdd164643b93d05245e9b4976f3f0cb}; \\
+{\em s} & an \doxyref{agg\+\_\+section\+\_\+t}{p.}{group__sections_ga8cdd164643b93d05245e9b4976f3f0cb}; \\
 \hline
 {\em u} & parameter value where section is to be added.\\
 \hline
@@ -1581,6 +1707,10 @@ Apply a transform to a point
 
 
 References \textbf{ agg\+\_\+transform\+\_\+operator}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+apply()}, and \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+number}.
+
+
+
+Referenced by \textbf{ agg\+\_\+section\+\_\+format\+\_\+write()}, and \textbf{ agg\+\_\+section\+\_\+write()}.
 
 \mbox{\label{agg_8h_aff5f7e15c699e9e6b874df084150f08a}} 
 \index{agg.h@{agg.h}!agg\_transform\_axes@{agg\_transform\_axes}}
@@ -1864,16 +1994,6 @@ Referenced by \textbf{ agg\+\_\+body\+\_\+globals\+\_\+compile()}, \textbf{ agg\
 Data structure for mapping of surfaces 
 
 Referenced by \textbf{ agg\+\_\+body\+\_\+new()}, \textbf{ agg\+\_\+mesh\+\_\+surface\+\_\+add\+\_\+grid()}, \textbf{ agg\+\_\+mesh\+\_\+surface\+\_\+add\+\_\+triangle()}, \textbf{ agg\+\_\+mesh\+\_\+surface\+\_\+point\+\_\+add()}, and \textbf{ agg\+\_\+surface\+\_\+blend\+\_\+evaluate()}.
-
-\mbox{\label{agg_8h_a8cdd164643b93d05245e9b4976f3f0cb}} 
-\index{agg.h@{agg.h}!agg\_section\_t@{agg\_section\_t}}
-\index{agg\_section\_t@{agg\_section\_t}!agg.h@{agg.h}}
-\doxysubsubsection{agg\_section\_t}
-{\footnotesize\ttfamily agg\+\_\+section\+\_\+t}
-
-Data structure holding information for evaluation of a section 
-
-Referenced by \textbf{ agg\+\_\+section\+\_\+new()}, \textbf{ agg\+\_\+surface\+\_\+new()}, \textbf{ agg\+\_\+surface\+\_\+point\+\_\+eval()}, and \textbf{ agg\+\_\+surface\+\_\+section\+\_\+interp()}.
 
 \mbox{\label{agg_8h_a1c502e562486827063a7169cd79b5cc0}} 
 \index{agg.h@{agg.h}!agg\_surface\_t@{agg\_surface\_t}}

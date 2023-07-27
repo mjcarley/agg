@@ -618,15 +618,22 @@ static void fit_test(void)
     yl[i] = agg_naca_four(t, p, m, -xl[i]) ;
   }
 
-  agg_section_fit(s, xu, 1, yu, 1, nxu, xl, 1, yl, 1, nxl, 0.5, 0, 7, 10) ;
+  agg_section_fit(s, xu, 1, yu, 1, nxu, xl, 1, yl, 1, nxl, 0.5, 0, 10, 10) ;
 
+  /* agg_section_trailing_edge_upper(s) = 0 ; */
+  /* agg_section_trailing_edge_lower(s) = 0 ; */
+
+  err = 0 ;
   for ( i = 0 ; i <= 128 ; i ++ ) {
     x = -1 + 2.0*(gdouble)i/128 ;
     y = agg_section_eval(s, x) ;
     fprintf(stdout, "%lg %lg ", ABS(x), y) ;
     y = agg_naca_four(t, p, m, x) ;
     fprintf(stdout, "%lg\n", y) ;
+    err = MAX(err, ABS(y-agg_section_eval(s, x))) ;
   }
+
+  fprintf(stderr, "maximum error: %lg\n", err) ;
   
   return ;
 }

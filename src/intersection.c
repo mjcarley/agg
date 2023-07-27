@@ -396,18 +396,30 @@ gint agg_surface_patch_intersection(agg_intersection_t *inter,
   }
 
   g_assert(nsp != 0) ;
-  
-  /*add relevant data to a surface blend for future evaluation*/
-  agg_surface_blend_surface(B,0) = S1 ; 
-  agg_surface_blend_surface(B,1) = S2 ; 
-  agg_surface_blend_patch(B,0) = P1 ; 
-  agg_surface_blend_patch(B,1) = P2 ; 
 
   agg_surface_blend_spline_number(B) = nsp ;
   
-  B->ic[0] = agg_patch_clipping_number(P1) - 1 ;
-  B->ic[1] = agg_patch_clipping_number(P2) - 1 ;
+  /*add relevant data to a surface blend for future evaluation*/
+  if ( agg_patch_clipping_type(c1) != AGG_CLIP_ELLIPSE ) {
+    agg_surface_blend_surface(B,0) = S1 ; 
+    agg_surface_blend_surface(B,1) = S2 ; 
+    agg_surface_blend_patch(B,0) = P1 ; 
+    agg_surface_blend_patch(B,1) = P2 ; 
+    
+    B->ic[0] = agg_patch_clipping_number(P1) - 1 ;
+    B->ic[1] = agg_patch_clipping_number(P2) - 1 ;
+
+    return 0 ;
+  }
+
+  agg_surface_blend_surface(B,0) = S2 ; 
+  agg_surface_blend_surface(B,1) = S1 ; 
+  agg_surface_blend_patch(B,0) = P2 ; 
+  agg_surface_blend_patch(B,1) = P1 ; 
   
+  B->ic[0] = agg_patch_clipping_number(P2) - 1 ;
+  B->ic[1] = agg_patch_clipping_number(P1) - 1 ;
+
   return 0 ;
 }
 
