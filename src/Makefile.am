@@ -31,7 +31,8 @@ libagg_la_SOURCES = \
 	mesh.c \
 	body.c \
 	ico.c \
-	blend.c
+	blend.c \
+	library.c
 
 include_HEADERS = \
 	agg.h

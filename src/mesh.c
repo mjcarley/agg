@@ -1134,7 +1134,6 @@ gint agg_mesh_body(agg_mesh_t *m, agg_body_t *b, gint pps,
   
   inter = agg_intersection_new(8192) ;
   for ( i = 0 ; i < agg_body_surface_number(b); i ++ ) {
-  /* for ( i = 1 ; i < 2 ; i ++ ) { */
     for ( j = i+1 ; j < agg_body_surface_number(b); j ++ ) {
       agg_surface_patch_intersection(inter,
 				     agg_body_surface(b,i),
@@ -1160,6 +1159,14 @@ gint agg_mesh_body(agg_mesh_t *m, agg_body_t *b, gint pps,
       area = agg_surface_grid_element_area(agg_body_surface(b,i)) ;
       sprintf(args, "pzqa%lg", area) ;
       agg_mesh_surface_add_triangle(m, i, args, pps, w) ;
+    }
+    if ( agg_surface_grid(agg_body_surface(b,i)) == AGG_GRID_SPHERE_ICO ) {
+      agg_mesh_icosahedron(m, i, w) ;
+      /* agg_mesh_refine_loop(m, w) ; */
+      for ( j = 0 ; j < agg_surface_grid_subdivision(agg_body_surface(b,i)) ;
+	    j ++ ) {
+	agg_mesh_refine_loop(m, w) ;
+      }
     }
   }
 
@@ -1214,6 +1221,165 @@ gint agg_mesh_element_nodes(agg_mesh_t *m, gint e,
     if ( ABS(sc) != ABS(el[i]) ) {
       g_error("%s: nodes do not match spline endpoints", __FUNCTION__) ;
     }
+  }
+  
+  return 0 ;
+}
+
+gint agg_mesh_icosahedron(agg_mesh_t *m, gint surf, agg_surface_workspace_t *w)
+
+{
+  gint np0, ne0, nt0, *edges, *elements, np, ne, nt, i ;
+  gdouble *st, u, v ;
+  agg_surface_t *S ;
+  agg_patch_t *P ;
+  
+  np0 = agg_mesh_point_number(m) ;
+  ne0 = agg_mesh_spline_number(m) ;
+  nt0 = agg_mesh_element_number(m) ;
+  
+  st = &(agg_mesh_point_s(m, np0)) ;
+  edges = agg_mesh_spline(m, ne0) ; edges = &(edges[-2]) ;
+  elements = agg_mesh_element(m, nt0) ;
+
+  agg_sphere_ico_base(&(st[1]), AGG_MESH_POINT_SIZE,
+		      &(st[0]), AGG_MESH_POINT_SIZE,
+		      edges, 2, elements, AGG_MESH_ELEMENT_SIZE,
+		      &np, &ne, &nt, TRUE, FALSE) ;
+
+  agg_mesh_point_number(m) += np ;
+  agg_mesh_spline_number(m) += ne-1 ;
+  agg_mesh_element_number(m) += nt ;
+
+  if ( ( S = agg_mesh_surface(m, surf)) == NULL ) return 0 ;
+  P = agg_mesh_patch(m, surf) ;
+  
+  for ( i = np0 ; i < agg_mesh_point_number(m) ; i ++ ) {
+    agg_patch_map(P,
+		  agg_mesh_point_s(m,i), agg_mesh_point_t(m,i),
+		  &u, &v) ;
+    agg_surface_point_eval(S, u, v, agg_mesh_point(m,i), w) ;    
+  }
+  
+  for ( i = ne0 ; i < agg_mesh_spline_number(m) ; i ++ ) {
+    m->isp[i+1] = m->isp[i] + 2 ;
+  }
+
+  return 0 ;
+}
+
+gint agg_mesh_refine_loop(agg_mesh_t *m, agg_surface_workspace_t *w)
+
+{
+  gint ne0, nt0, np, i, i0, i1 ;
+  gint *e, *enew, surf, *emid ;
+  gdouble u, v, s, t ;
+  agg_surface_t *S ;
+  agg_patch_t *P ;
+  
+  ne0 = agg_mesh_spline_number(m) ;
+  nt0 = agg_mesh_element_number(m) ;
+
+  for ( i = 1 ; i < ne0 ; i ++ ) {
+    e = agg_mesh_spline(m, i) ;
+    g_assert(agg_mesh_spline_length(m, i) == 2) ;
+    i0 = e[0] ; i1 = e[1] ;
+    surf = agg_mesh_point_tag(m,i0) ;
+    S = agg_mesh_surface(m, surf) ;
+    P = agg_mesh_patch(m, surf) ;
+
+    if ( agg_mesh_point_s(m, i0)==0 &&
+	 agg_mesh_point_t(m, i0)==0 &&
+	 agg_mesh_point_s(m, i1)==0 &&
+	 agg_mesh_point_t(m, i1)==0 ) {
+      fprintf(stderr, "Hello %d, %d\n", i0, i1) ;
+    }
+	 
+    agg_patch_edge_split(P,
+			 agg_mesh_point_s(m, i0), agg_mesh_point_t(m, i0),
+			 agg_mesh_point_s(m, i1), agg_mesh_point_t(m, i1),
+			 0.5, &s, &t) ;
+    
+    agg_patch_map(P, s, t, &u, &v) ;
+    np = agg_mesh_point_number(m) ;
+    agg_surface_point_eval(S, u, v, agg_mesh_point(m,np), w) ;
+    agg_mesh_point_s(m,np) = s ; agg_mesh_point_t(m,np) = t ;
+
+    enew = agg_mesh_spline(m, agg_mesh_spline_number(m)) ;
+    enew[0] = i1 ; enew[1] = np ; e[1] = np ;
+    m->isp[agg_mesh_spline_number(m)+1] =
+      m->isp[agg_mesh_spline_number(m)] + 2 ;
+    g_assert(agg_mesh_spline_number(m) == i + ne0 - 1) ;
+    agg_mesh_spline_number(m) ++ ;
+    agg_mesh_point_number(m) ++ ;
+  }
+
+  for ( i = 0 ; i < nt0 ; i ++ ) {
+    gint s0, s1, s2, s3, s4, s5, p0, p1, p2 ;
+    e = agg_mesh_element(m, i) ;
+    s0 = e[0] ; s1 = e[1] ; s2 = e[2] ;
+    enew = agg_mesh_spline(m, ABS(s0)) ;
+    p0 = MAX(enew[0], enew[1]) ;
+    enew = agg_mesh_spline(m, ABS(s1)) ;
+    p1 = MAX(enew[0], enew[1]) ;
+    enew = agg_mesh_spline(m, ABS(s2)) ;
+    p2 = MAX(enew[0], enew[1]) ;
+
+    emid = agg_mesh_element(m, agg_mesh_element_number(m)) ;
+    
+    /*new internal splines*/
+    s3 = agg_mesh_spline_number(m) ;
+    m->isp[s3+1] = m->isp[s3] + 2 ;
+    enew = agg_mesh_spline(m, s3) ;
+    if ( p0 < p1 ) {
+      enew[0] = p0 ; enew[1] = p1 ;
+    } else {
+      enew[0] = p1 ; enew[1] = p0 ; s3 = -s3 ;
+    }	
+    emid[0] = s3 ;
+    agg_mesh_spline_number(m) ++ ;    
+
+    s4 = agg_mesh_spline_number(m) ;
+    m->isp[s4+1] = m->isp[s4] + 2 ;
+    enew = agg_mesh_spline(m, s4) ;
+    if ( p1 < p2 ) {
+      enew[0] = p1 ; enew[1] = p2 ;
+    } else {
+      enew[0] = p2 ; enew[1] = p1 ; s4 = -s4 ;
+    }	
+    emid[1] = s4 ;
+    agg_mesh_spline_number(m) ++ ;    
+
+    s5 = agg_mesh_spline_number(m) ;
+    m->isp[s5+1] = m->isp[s5] + 2 ;
+    enew = agg_mesh_spline(m, s5) ;
+    if ( p2 < p0 ) {
+      enew[0] = p2 ; enew[1] = p0 ;
+    } else {
+      enew[0] = p0 ; enew[1] = p2 ; s5 = -s5 ;
+    }	
+    emid[2] = s5 ;
+    agg_mesh_spline_number(m) ++ ;
+    agg_mesh_element_number(m) ++ ;
+
+    e = agg_mesh_element(m, agg_mesh_element_number(m)) ;
+    if ( s1 > 0 ) e[0] = s1 ; else e[0] = ABS(s1) + ne0 - 1 ;
+    e[1] = -s3 ;
+    if ( s0 > 0 ) e[2] = -(s0 + ne0 - 1) ; else e[2] = s0 ;
+    agg_mesh_element_number(m) ++ ;
+
+    e = agg_mesh_element(m, agg_mesh_element_number(m)) ;
+    if ( s2 > 0 ) e[0] = s2 ; else e[0] = ABS(s2) + ne0 - 1 ;
+    e[1] = -s4 ;
+    if ( s1 > 0 ) e[2] = -(s1 + ne0 - 1) ; else e[2] = s1 ;
+    agg_mesh_element_number(m) ++ ;
+
+    /* e = agg_mesh_element(m, agg_mesh_element_number(m)) ; */
+    e = agg_mesh_element(m, i) ;
+    if ( s0 > 0 ) e[0] = s0 ; else e[0] = ABS(s0) + ne0 - 1 ;
+    e[1] = -s5 ;
+    if ( s2 > 0 ) e[2] = -(s2 + ne0 - 1) ; else e[2] = s2 ;
+    /* agg_mesh_element_number(m) ++ ; */
   }
   
   return 0 ;

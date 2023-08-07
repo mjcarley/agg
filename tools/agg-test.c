@@ -51,22 +51,22 @@ static void surface_sphere(agg_surface_t *S, gdouble x, gdouble y, gdouble z,
   agg_surface_section_add(S, s, u) ;
   /*centre on (0,0): circle of radius 1/2*/
   p[0] = -0.5 ; p[1] = 0 ; p[2] = 0 ;
-  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, p, expr, 3) ;
+  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, 0, 1, p, expr, 3) ;
   /*scale circle radius along z axis: circle of radius 1/2 at u=1/2 */
   p[0] =  0.0 ; p[1] = 0.0 ;
   expr[2] = "2*sqrt(u*(1-u))" ;
-  agg_transform_operator_add(T, AGG_TRANSFORM_SHRINK, p, expr, 3) ;
+  agg_transform_operator_add(T, AGG_TRANSFORM_SHRINK, 0, 1, p, expr, 3) ;
   /*shift centre to z=0*/
   p[0] =  0.0 ; p[1] = 0 ; p[2] = 0 ;
   expr[2] = "-1+u" ;
-  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, p, expr, 3) ;
+  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, 0, 1, p, expr, 3) ;
   /*scale to required radius: sphere of radius r*/
   p[0] = 2*r ;
   /*shift to required centre*/
-  agg_transform_operator_add(T, AGG_TRANSFORM_SCALE, p, expr, 1) ;
+  agg_transform_operator_add(T, AGG_TRANSFORM_SCALE, 0, 1, p, expr, 1) ;
   p[0] = x ; p[1] = y ; p[2] = z ;
   expr[2] = NULL ;
-  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, p, expr, 3) ;
+  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, 0, 1, p, expr, 3) ;
 
   agg_surface_umin(S) = 0.0 ; 
   agg_surface_umax(S) = 1.0 ; 
@@ -96,10 +96,10 @@ static void surface_tube(agg_surface_t *S, gdouble x, gdouble y, gdouble z,
   agg_surface_section_add(S, s, u) ;
   /*centre on (0,0): circle of radius 1/2*/
   p[0] = -0.5 ; p[1] = 0 ; p[2] = 0 ;
-  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, p, expr, 3) ;
+  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, 0, 1, p, expr, 3) ;
   /*scale on radius*/
   expr[0] = "2*radius" ;
-  agg_transform_operator_add(T, AGG_TRANSFORM_SCALE, p, expr, 1) ;
+  agg_transform_operator_add(T, AGG_TRANSFORM_SCALE, 0, 1, p, expr, 1) ;
   expr[0] = NULL ;
   /*translate in space to form cylinder*/
   p[0] = 0 ; p[1] = 0 ; p[2] = 0 ;
@@ -107,12 +107,12 @@ static void surface_tube(agg_surface_t *S, gdouble x, gdouble y, gdouble z,
   sprintf(etmp, "-len/2 + len*u") ;
   expr[2] = etmp ;
   /* expr[2] = "-len/2 + len*u" ; */
-  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, p, expr, 3) ;
+  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, 0, 1, p, expr, 3) ;
 
   /*translate to appropriate centre*/
   p[0] = x ; p[1] = y ; p[2] = z ;
   expr[2] = NULL ;
-  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, p, expr, 3) ;
+  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, 0, 1, p, expr, 3) ;
 
   agg_surface_axes(S) = AGG_AXES_PZ_PX_PY ;
   
@@ -147,18 +147,18 @@ static void surface_wing(agg_surface_t *S, gdouble x, gdouble y, gdouble z,
   p[0] = 0.0 ; p[1] = 0 ; p[2] = 0 ;
   sprintf(etmp[2], "1 + u*(taper-1)") ;
   expr[2] = etmp[2] ;
-  agg_transform_operator_add(T, AGG_TRANSFORM_SHRINK, p, expr, 3) ;
+  agg_transform_operator_add(T, AGG_TRANSFORM_SHRINK, 0, 1, p, expr, 3) ;
   expr[0] = expr[1] = expr[2] = NULL ; 
   /*scale on root chord*/
   p[0] = 0 ;
   sprintf(etmp[0], "root") ;
   expr[0] = etmp[0] ;
-  agg_transform_operator_add(T, AGG_TRANSFORM_SCALE, p, expr, 1) ;
+  agg_transform_operator_add(T, AGG_TRANSFORM_SCALE, 0, 1, p, expr, 1) ;
   expr[0] = expr[1] = expr[2] = NULL ; 
 
   sprintf(etmp[0], "(1-u)^(1/8)") ;
   expr[0] = etmp[0] ;
-  agg_transform_operator_add(T, AGG_TRANSFORM_SCALE_Y, p, expr, 1) ;
+  agg_transform_operator_add(T, AGG_TRANSFORM_SCALE_Y, 0, 1, p, expr, 1) ;
   expr[0] = expr[1] = expr[2] = NULL ; 
   
   /*translate along span and sweep; add del to stop wings
@@ -170,10 +170,10 @@ static void surface_wing(agg_surface_t *S, gdouble x, gdouble y, gdouble z,
   expr[1] = etmp[1] ;
   sprintf(etmp[2], "del + span*u") ;
   expr[2] = etmp[2] ;
-  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, p, expr, 3) ;
+  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, 0, 1, p, expr, 3) ;
   expr[0] = expr[1] = expr[2] = NULL ; 
   p[0] = x ; p[1] = y ; p[2] = z ;
-  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, p, expr, 3) ;
+  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, 0, 1, p, expr, 3) ;
   expr[0] = expr[1] = expr[2] = NULL ; 
 
   agg_surface_umin(S) = 0.0 ; 
@@ -332,14 +332,14 @@ static void transform_test(void)
   args[0] = NULL ; args[1] = "0" ; args[2] = "0.5*u+(1-u)^2" ;
   p[0] = 0.5 ; p[1] = 0 ; p[2] = 0 ;
   /*linear twist*/
-  agg_transform_operator_add(T, AGG_TRANSFORM_SHRINK, p, args, 3) ;
+  agg_transform_operator_add(T, AGG_TRANSFORM_SHRINK, 0, 1, p, args, 3) ;
   args[0] = NULL ; args[1] = "0" ; args[2] = "twist*u" ;
   p[0] = 0.5 ; p[1] = 0 ; p[2] = 0 ;
   /*translate in z to generate "wing"*/
-  agg_transform_operator_add(T, AGG_TRANSFORM_ROTATE, p, args, 3) ;
+  agg_transform_operator_add(T, AGG_TRANSFORM_ROTATE, 0, 1, p, args, 3) ;
   args[0] = NULL ; args[1] = NULL ; args[2] = "u*3.0" ;
   p[0] = 0.0 ; p[1] = 0 ; p[2] = 0 ;
-  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, p, args, 3) ;
+  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, 0, 1, p, args, 3) ;
 
   /* agg_transform_operators_write(stderr, T) ; */
   
@@ -547,14 +547,17 @@ static void parser_test(gchar *file)
 static void ico_test(void)
 
 {
-  gdouble st[24], u, v, p[3], x[3] ;
-  gint e[60], i ;
+  gdouble st[1024], u, v, p[3], x[3] ;
+  gint e[2000], t[1024], i, nt, np, ne, nl, offp, offsp, offs ;
+  agg_mesh_t *m ;
   agg_patch_t *P ;
   agg_surface_t *S ;
   agg_transform_t *T ;
   agg_section_t *s ;
   gchar *expr[8] = {NULL} ;
   agg_surface_workspace_t *w ;
+  gboolean physical_points ;
+  FILE *output ;
   
   S = agg_surface_new(64) ;
   P = agg_patch_new(1024) ;
@@ -564,19 +567,25 @@ static void ico_test(void)
   s = agg_section_new(32, 32) ;
   agg_section_set_circle(s) ;
 
+  physical_points = TRUE ;
+  
   agg_surface_section_add(S, s, 0) ;
   T = agg_surface_transform(S) ;
   /*centre on (0,0): circle of radius 1/2*/
   p[0] = -0.5 ; p[1] = 0 ; p[2] = 0 ;
-  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, p, expr, 3) ;
+  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, 0, 1, p, expr, 3) ;
   /*scale circle radius along z axis: circle of radius 1/2 at u=1/2 */
   p[0] =  0.0 ; p[1] = 0.0 ;
   expr[2] = "2*sqrt(u*(1-u))" ;
-  agg_transform_operator_add(T, AGG_TRANSFORM_SHRINK, p, expr, 3) ;
-  /*shift centre to z=0*/
+  agg_transform_operator_add(T, AGG_TRANSFORM_SHRINK, 0, 1, p, expr, 3) ;
+  /*flatten the shape */
+  /* p[0] =  0.0 ; p[1] = 0.0 ; */
+  /* expr[0] = "sqrt(u*(1-u))" ; */
+  /* agg_transform_operator_add(T, AGG_TRANSFORM_SCALE_Y, p, expr, 1) ; */
+  /*translate circle in z to form sphere*/
   p[0] =  0.0 ; p[1] = 0 ; p[2] = 0 ;
   expr[2] = "u" ;
-  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, p, expr, 3) ;
+  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, 0, 1, p, expr, 3) ;
 
   agg_surface_umin(S) = 0.0 ; 
   agg_surface_umax(S) = 1.0 ; 
@@ -584,15 +593,25 @@ static void ico_test(void)
   agg_transform_expressions_compile(T) ;
 
   agg_surface_weights_make(S) ;
-  
-  agg_sphere_ico_base(&(st[1]), 2, &(st[0]), 2, e, 2, TRUE) ;
 
-  for ( i = 0 ; i < 12 ; i ++ ) {
-    agg_patch_map(P, st[2*i+0], st[2*i+1], &u, &v) ;
-    agg_surface_point_eval(S, u, v, x, w) ;
-    fprintf(stdout, "%e %e %e\n", x[0], x[1], x[2]) ;
-  }
+  m = agg_mesh_new(65536, 65536, 65536) ;
+
+  agg_mesh_surface(m, 0) = S ;
+  agg_mesh_patch(m, 0) = P ;
+  agg_mesh_surface_number(m) == 1 ;
+
+  agg_mesh_icosahedron(m, 0, w) ;
   
+  agg_mesh_refine_loop(m, w) ;
+  agg_mesh_refine_loop(m, w) ;
+  agg_mesh_refine_loop(m, w) ;
+  
+  offp = 1 ; offsp = 0 ; offs = 0 ;
+  output = fopen("surface.geo", "w") ;
+  fprintf(output, "lc = 0.1 ;\n") ;
+  agg_mesh_write_gmsh(output, m, "lc", offp, offsp, offs, FALSE) ;
+  fclose(output) ;
+
   return ;
 }
 

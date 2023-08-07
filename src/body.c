@@ -359,13 +359,15 @@ void _agg_transform_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
 	    __FUNCTION__, g_scanner_cur_line(scanner)) ;
   }
   
-  /*first parameter is name of transform*/
-  if ( agg_variable_definition(&(params[0])) == NULL ) {
+  /*first parameter is name of transform or first two parameters are
+    limits*/
+  if ( agg_variable_definition(&(params[0])) == NULL &&
+       agg_variable_definition(&(params[1])) != NULL ) {
     g_error("%s: transform definition must be a string, line %u",
-	    __FUNCTION__, g_scanner_cur_line(scanner)) ;    
+	    __FUNCTION__, g_scanner_cur_line(scanner)) ;
   }
-  agg_transform_parse(T, agg_variable_definition(&(params[0])),
-		      &(params[1]), nparams-1) ;
+
+  agg_transform_parse(T, params, nparams) ;
   
   if ( echo ) {
     fprintf(stderr, "line %u: transform \"%s\" added to surface %d\n",
@@ -485,16 +487,35 @@ void _agg_grid_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
 
   if ( grid == AGG_GRID_TRIANGLE ) {
     if ( nparams != 2 ) {
-      g_error("%s: regular grid requires one further parameter, line %u",
+      g_error("%s: triangle grid requires one further parameter, line %u",
 	      __FUNCTION__, g_scanner_cur_line(scanner)) ;
     }
     
     if ( agg_variable_definition(&(params[1])) != NULL )
-      g_error("%s: element are must be constant, line %u",
+      g_error("%s: element area must be constant, line %u",
 	      __FUNCTION__, g_scanner_cur_line(scanner)) ;
     
     agg_surface_grid_element_area(S) = params[1].val ;
   
+    return ;
+  }
+
+  if ( grid == AGG_GRID_SPHERE_ICO ) {
+    if ( nparams != 2 ) {
+      g_error("%s: icosahedron grid requires one further parameter, line %u",
+	      __FUNCTION__, g_scanner_cur_line(scanner)) ;
+    }
+    
+    if ( agg_variable_definition(&(params[1])) != NULL )
+      g_error("%s: surface subdivision must be constant, line %u",
+	      __FUNCTION__, g_scanner_cur_line(scanner)) ;
+    
+    agg_surface_grid_subdivision(S) = (gint)(params[1].val) ;
+
+    if ( agg_surface_grid_subdivision(S) < 0 ) 
+      g_error("%s: invalid surface subdivision (%lg), line %u",
+	      __FUNCTION__, params[1].val, g_scanner_cur_line(scanner)) ;
+    
     return ;
   }
   

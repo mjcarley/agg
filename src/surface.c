@@ -419,8 +419,9 @@ agg_grid_t agg_grid_parse(gchar *str)
     gchar *name ;
     agg_grid_t grid ;
   } grid_list[] = {
-    {"regular",  AGG_GRID_REGULAR},
-    {"triangle", AGG_GRID_TRIANGLE},
+    {"regular",    AGG_GRID_REGULAR},
+    {"triangle",   AGG_GRID_TRIANGLE},
+    {"sphere-ico", AGG_GRID_SPHERE_ICO},
     {NULL,       AGG_GRID_UNDEFINED}
   } ;
 

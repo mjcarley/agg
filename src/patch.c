@@ -36,6 +36,15 @@ static const struct {
     {NULL,        -1}
   } ;
 
+static void shapefunc(gdouble s, gdouble t, gdouble L[])
+
+{
+  L[0] = 1.0 - s - t ;
+  L[1] =       s     ;
+  L[2] =           t ;
+    
+  return ;
+}
 
 /** 
  * @{ 
@@ -447,6 +456,87 @@ gint agg_patch_point_diff(agg_surface_t *S, agg_patch_t *P,
   
   return 0 ;
 }
+
+static void spherical_st_to_x(gdouble s, gdouble t, gdouble *x)
+
+{
+  gdouble th, ph ;
+
+  th = (1.0 - t)*2.0*M_PI ; ph = (1.0 - s)*M_PI ;
+  x[0] = cos(th)*sin(ph) ; x[1] = sin(th)*sin(ph) ; x[2] = cos(ph) ;
+
+  return ;
+}
+
+static void spherical_x_to_st(gdouble *x, gdouble *s, gdouble *t)
+
+{
+  gdouble r ;
+
+  r = sqrt(x[0]*x[0] + x[1]*x[1] + x[2]*x[2]) ;
+  *t = atan2(x[1], x[0]) ;
+  if ( (*t) < 0 ) (*t) += 2.0*M_PI ;
+  *s = 1.0 - acos(x[2]/r)/M_PI ;
+  *t = 1.0 - (*t)*0.5/M_PI ;
+
+  return ;
+}
+
+gint agg_patch_edge_split(agg_patch_t *P,
+			  gdouble s0, gdouble t0, gdouble s1, gdouble t1, 
+			  gdouble a, gdouble *s, gdouble *t)
+
+{
+  switch ( agg_patch_mapping(P) ) {
+  default: g_assert_not_reached() ; break ;
+  case AGG_PATCH_SPHERICAL:
+    gdouble x0[3], x1[3], x[3] ;
+
+    spherical_st_to_x(s0, t0, x0) ;
+    spherical_st_to_x(s1, t1, x1) ;
+
+    x[0] = x0[0] + a*(x1[0] - x0[0]) ;
+    x[1] = x0[1] + a*(x1[1] - x0[1]) ;
+    x[2] = x0[2] + a*(x1[2] - x0[2]) ;
+
+    spherical_x_to_st(x, s, t) ;
+
+    break ;
+  }
+  
+  return 0 ;
+}
+
+gint agg_patch_triangle_interp(agg_patch_t *P,
+			       gdouble s0, gdouble t0,
+			       gdouble s1, gdouble t1, 
+			       gdouble s2, gdouble t2, 
+			       gdouble u,  gdouble v,
+			       gdouble *s, gdouble *t)
+
+{
+  switch ( agg_patch_mapping(P) ) {
+  default: g_assert_not_reached() ; break ;
+  case AGG_PATCH_SPHERICAL:
+    gdouble x0[3], x1[3], x2[3], x[3], L[3] ;
+
+    spherical_st_to_x(s0, t0, x0) ;
+    spherical_st_to_x(s1, t1, x1) ;
+    spherical_st_to_x(s2, t2, x2) ;
+
+    shapefunc(u, v, L) ;
+    x[0] = L[0]*x0[0] + L[1]*x1[0] + L[2]*x2[0] ; 
+    x[1] = L[0]*x0[1] + L[1]*x1[1] + L[2]*x2[1] ; 
+    x[2] = L[0]*x0[2] + L[1]*x1[2] + L[2]*x2[2] ; 
+
+    spherical_x_to_st(x, s, t) ;
+
+    break ;
+  }
+  
+  return 0 ;
+}
+
 
 /**
  * @}

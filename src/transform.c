@@ -88,7 +88,9 @@ agg_transform_operator_t *agg_transform_operator_new(void)
   for ( i = 0 ; i < AGG_OPERATOR_PARAMETER_SIZE ; i ++ ) {
     agg_transform_operator_parameter(op,i)->eval = NULL ;
   }
-  
+  agg_transform_operator_umin(op) =  G_MAXDOUBLE ;
+  agg_transform_operator_umax(op) = -G_MAXDOUBLE ;
+
   return op ;
 }
 
@@ -314,6 +316,8 @@ gint agg_transform_variables_write(FILE *f, agg_transform_t *T,
  * 
  * @param T an ::agg_transform_t allocated with ::agg_transform_new;
  * @param op a basic transform operation of type ::agg_operation_t;
+ * @param umin lower parameter limit for applying transform operation;
+ * @param umax upper parameter limit for applying transform operation;
  * @param p array of parameter values to pass to transform calculation;
  * @param expr expressions to be used in evaluating transform parameters;
  * @param np number of parameters to pass to transform.
@@ -322,6 +326,7 @@ gint agg_transform_variables_write(FILE *f, agg_transform_t *T,
  */
 
 gint agg_transform_operator_add(agg_transform_t *T, agg_operation_t op,
+				gdouble umin, gdouble umax,
 				gdouble *p, gchar **expr, gint np)
 
 {
@@ -348,7 +353,9 @@ gint agg_transform_operator_add(agg_transform_t *T, agg_operation_t op,
   agg_transform_operator_operation(tr) = op ;
   agg_transform_operator_parameter_number(tr) = np ;
   agg_transform_operator_func(tr) = transform_list[i].func ;
-  
+  agg_transform_operator_umin(tr) = umin ; 
+  agg_transform_operator_umax(tr) = umax ; 
+
   for ( i = 0 ; i < np ; i ++ ) {
     v = agg_transform_operator_parameter(tr,i) ;
     agg_variable_name(v) = NULL ;
@@ -560,6 +567,17 @@ gint agg_transform_operator_apply(agg_transform_operator_t *op,
   return 0 ;
 }
 
+static gboolean parameter_in_range(gdouble umin, gdouble umax, gdouble u)
+
+{
+  g_assert(umin < umax) ;
+  if ( umax == 1 && u == 1 ) return TRUE ;
+
+  if ( umin <= u && u < umax ) return TRUE ;
+
+  return FALSE ;
+}
+
 /** 
  * Apply a transform to a point
  * 
@@ -574,17 +592,28 @@ gint agg_transform_apply(agg_transform_t *T, gdouble *xin, gdouble *xout)
 
 {
   gint i ;
-  gdouble xt[3] ;
-
+  gdouble xt[3], u ;
+  agg_variable_t *var ;
+  agg_transform_operator_t *op ;
+  
   /*empty transform: pass input to output*/
   if ( agg_transform_operator_number(T) == 0 ) {
     xout[0] = xin[0] ; xout[1] = xin[1] ; xout[2] = xin[2] ; 
   }
 
+  /*extract parameter from T*/
+  var = agg_transform_variable(T, 0) ;
+  g_assert( strcmp(agg_variable_name(var), "u") == 0 ) ;
+  u = agg_variable_value(var) ;
+  
   xt[0] = xin[0] ; xt[1] = xin[1] ; xt[2] = xin[2] ;
   for ( i = 0 ; i < agg_transform_operator_number(T) ; i ++ ) {
-    agg_transform_operator_apply(agg_transform_operator(T,i), xt, xout) ;
-    xt[0] = xout[0] ; xt[1] = xout[1] ; xt[2] = xout[2] ;
+    op = agg_transform_operator(T,i) ;
+    if ( parameter_in_range(agg_transform_operator_umin(op),
+			    agg_transform_operator_umax(op), u) ) {
+      agg_transform_operator_apply(op, xt, xout) ;
+      xt[0] = xout[0] ; xt[1] = xout[1] ; xt[2] = xout[2] ;
+    }
   }
 
   return 0 ;
@@ -653,30 +682,48 @@ agg_axes_t agg_axes_parse(gchar *str)
  * ::agg_transform_t
  * 
  * @param T ::agg_transform_t to have an operation added;
- * @param name name of transform operation (see 
- * ::agg_transform_operators_write); 
- * @param p array of ::agg_variable_t holding parameters of transform;
+ * @param p array of ::agg_variable_t holding parameters of transform, 
+ * including transform name;
  * @param np number of entries in \a p.
  * 
  * @return 0 on success.
  */
 
-gint agg_transform_parse(agg_transform_t *T, gchar *name,
-			 agg_variable_t *p, gint np)
+/* gint agg_transform_parse(agg_transform_t *T, gchar *name, */
+/* 			 agg_variable_t *p, gint np) */
+gint agg_transform_parse(agg_transform_t *T, agg_variable_t *p, gint np)
 
 {
-  gchar *expr[32] ;
-  gdouble args[32] ;
-  gint i ;
+  gchar *expr[32], *name ;
+  gdouble args[32], umin, umax ;
+  gint i, i0 ;
 
+  umin = 0 ; umax = 1 ;
+  if ( agg_variable_definition(&(p[0])) != NULL ) {
+    /*first parameter is transform name, use default umin, umax*/
+    name = agg_variable_definition(&(p[0])) ;
+    i0 = 1 ; np -- ;
+  } else {
+    /*first two parameters must be numerical*/
+    if ( agg_variable_definition(&(p[1])) != NULL ) {
+      g_error("%s: both parameter limits must be specified", __FUNCTION__) ;
+    }
+    umin = agg_variable_value(&(p[0])) ;
+    umax = agg_variable_value(&(p[1])) ;
+    g_assert( agg_variable_definition(&(p[2])) != NULL ) ;
+    name = agg_variable_definition(&(p[2])) ;
+    i0 = 3 ; np -= 3 ;
+  }
+  
   for ( i = 0 ; i < np ; i ++ ) {
-    args[i] = agg_variable_value(&(p[i])) ;
-    expr[i] = agg_variable_definition((&p[i])) ;
+    args[i] = agg_variable_value(&(p[i0+i])) ;
+    expr[i] = agg_variable_definition((&p[i0+i])) ;
   }
 
   for ( i = 0 ;	(transform_list[i].name != NULL) ; i ++ ) {
     if ( strcmp(transform_list[i].name, name) == 0 ) {
-      agg_transform_operator_add(T, transform_list[i].op, args, expr, np) ;
+      agg_transform_operator_add(T, transform_list[i].op, umin, umax,
+				 args, expr, np) ;
       return 0 ;
     }
   }

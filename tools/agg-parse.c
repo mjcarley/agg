@@ -70,7 +70,8 @@ static agg_transform_t *transform_parse(gchar *str)
     }
   }
 
-  agg_transform_parse(T, name, p, np) ;
+  /* agg_transform_parse(T, name, p, np) ; */
+  agg_transform_parse(T, p, np) ;
   
   return T ;
 }

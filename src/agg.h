@@ -226,6 +226,7 @@ struct _agg_transform_operator_t {
   agg_variable_t p[AGG_OPERATOR_PARAMETER_SIZE] ;
   gint np ;
   agg_transform_operator_func_t func ;
+  gdouble umin, umax ;
 } ;
 #endif /*DOXYGEN*/
 
@@ -250,12 +251,22 @@ struct _agg_transform_operator_t {
  *  @brief function called to execute the transform operation
  */
 #define agg_transform_operator_func(op)             
+/**
+ *  @brief lower limit of parameter range for operation
+ */
+#define agg_transform_operator_umin(op)
+/**
+ *  @brief upper limit of parameter range for operation
+ */
+#define agg_transform_operator_umax(op)
 #else /*DOXYGEN*/
 #define agg_transform_operator_operation(_op)        ((_op)->op)
 #define agg_transform_operator_parameters(_op)       ((_op)->p)
 #define agg_transform_operator_parameter(_op,_i)     (&((_op)->p[(_i)]))
 #define agg_transform_operator_parameter_number(_op) ((_op)->np)
 #define agg_transform_operator_func(_op)             ((_op)->func)
+#define agg_transform_operator_umin(_op)             ((_op)->umin)
+#define agg_transform_operator_umax(_op)             ((_op)->umax)
 #endif /*DOXYGEN*/
 
 #define AGG_TRANSFORM_VARIABLE_NUMBER_MAX 128
@@ -337,9 +348,10 @@ typedef enum {
  */
 
 typedef enum {
-  AGG_GRID_UNDEFINED = 0,  /**< undefined (generates an error) */
-  AGG_GRID_REGULAR   = 1,  /**< regular quadrilaterals in parametric space */
-  AGG_GRID_TRIANGLE  = 2   /**< mesh generated using Triangle code */
+  AGG_GRID_UNDEFINED  = 0,  /**< undefined (generates an error) */
+  AGG_GRID_REGULAR    = 1,  /**< regular quadrilaterals in parametric space */
+  AGG_GRID_TRIANGLE   = 2,  /**< mesh generated using Triangle code */
+  AGG_GRID_SPHERE_ICO = 3   /**< mesh generated using icosahedron subdivision */
 } agg_grid_t ;
 
 /** @typedef agg_surface_t
@@ -355,7 +367,7 @@ struct _agg_surface_t {
   agg_section_t *s ;
   agg_axes_t axes ;
   agg_grid_t grid ;
-  gint ns, nsmax, nsec, nsp ;
+  gint ns, nsmax, nsec, nsp, sub ;
   gdouble umin, umax, *u, *w, area ;
   agg_transform_t *T ;
 } ;
@@ -374,6 +386,8 @@ struct _agg_surface_t {
 #define agg_surface_grid_section_number(_s) ((_s)->nsec)
 #define agg_surface_grid_spline_number(_s)  ((_s)->nsp)
 #define agg_surface_grid_element_area(_s)   ((_s)->area)
+#define agg_surface_grid_subdivision(_s)    ((_s)->sub)
+
 /**
  *  @}
  */
@@ -679,6 +693,7 @@ gint agg_transform_variables_eval(agg_transform_t *T) ;
 gint agg_transform_variables_write(FILE *f, agg_transform_t *T,
 				   gboolean write_defs) ;
 gint agg_transform_operator_add(agg_transform_t *T, agg_operation_t op,
+				gdouble umin, gdouble umax,
 				gdouble *p, gchar **expr, gint np) ;
 gint agg_transform_operators_write(FILE *f, agg_transform_t *T) ;
 gint agg_transform_apply(agg_transform_t *T, gdouble *xin, gdouble *xout) ;
@@ -705,8 +720,7 @@ gint agg_transform_operator_yscale(agg_operation_t op,
 				   agg_variable_t *p, gint np,
 				   gdouble *xin, gdouble *xout) ;
 gint agg_transform_axes(agg_axes_t axes, gdouble *xin, gdouble *xout) ;
-gint agg_transform_parse(agg_transform_t *T,  gchar *name,
-			 agg_variable_t *p, gint np) ;
+gint agg_transform_parse(agg_transform_t *T, agg_variable_t *p, gint np) ;
 agg_axes_t agg_axes_parse(gchar *str) ;
 
 gint agg_variable_write(FILE *f, agg_variable_t *v) ;
@@ -745,6 +759,15 @@ gint agg_patch_point_diff(agg_surface_t *S, agg_patch_t *P,
 			  gdouble s, gdouble t,
 			  gdouble *x, gdouble *xs, gdouble *xt,
 			  agg_surface_workspace_t *w) ;
+gint agg_patch_edge_split(agg_patch_t *P,
+			  gdouble s0, gdouble t0, gdouble s1, gdouble t1, 
+			  gdouble a, gdouble *s, gdouble *t) ;
+gint agg_patch_triangle_interp(agg_patch_t *P,
+			       gdouble s0, gdouble t0,
+			       gdouble s1, gdouble t1, 
+			       gdouble s2, gdouble t2, 
+			       gdouble u,  gdouble v,
+			       gdouble *s, gdouble *t) ;
 
 agg_intersection_t *agg_intersection_new(gint nstmax) ;
 gint agg_surface_patch_intersection(agg_intersection_t *inter,
@@ -802,6 +825,9 @@ gint agg_mesh_body(agg_mesh_t *m, agg_body_t *b, gint pps,
 		   agg_surface_workspace_t *w) ;
 gint agg_mesh_element_nodes(agg_mesh_t *m, gint e,
 			    gint *nodes, gint *nnodes, gint *s) ;
+gint agg_mesh_icosahedron(agg_mesh_t *m, gint surf,
+			  agg_surface_workspace_t *w) ;
+gint agg_mesh_refine_loop(agg_mesh_t *m, agg_surface_workspace_t *w) ;
 
 agg_body_t *agg_body_new(gint ngmax, gint nsmax) ;
 gint agg_body_global_add(agg_body_t *b, gchar *var, gchar *def, gdouble val) ;
@@ -814,7 +840,11 @@ gint agg_body_surfaces_list(FILE *f, agg_body_t *b) ;
 
 gint agg_sphere_ico_base(gdouble *th, gint tstr,
 			 gdouble *ph, gint pstr,
-			 gint *e, gint estr, gboolean convert) ;
+			 gint *edges, gint edstr,
+			 gint *elements, gint elstr,
+			 gint *np, gint *ne, gint *nt,
+			 gboolean convert,
+			 gboolean unwrap) ;
 agg_grid_t agg_grid_parse(gchar *str) ;
 
 agg_surface_blend_t *agg_surface_blend_new(void) ;

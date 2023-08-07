@@ -139,7 +139,7 @@ libagg_la_LIBADD =
 am_libagg_la_OBJECTS = bernstein.lo binomials.lo tinyexpr.lo \
 	section.lo transform.lo variables.lo surface.lo naca.lo \
 	intersection.lo hefsi.lo patch.lo moller-tri.lo mesh.lo \
-	body.lo ico.lo blend.lo
+	body.lo ico.lo blend.lo library.lo
 libagg_la_OBJECTS = $(am_libagg_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -167,11 +167,12 @@ am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/bernstein.Plo \
 	./$(DEPDIR)/binomials.Plo ./$(DEPDIR)/blend.Plo \
 	./$(DEPDIR)/body.Plo ./$(DEPDIR)/hefsi.Plo ./$(DEPDIR)/ico.Plo \
-	./$(DEPDIR)/intersection.Plo ./$(DEPDIR)/mesh.Plo \
-	./$(DEPDIR)/moller-tri.Plo ./$(DEPDIR)/naca.Plo \
-	./$(DEPDIR)/patch.Plo ./$(DEPDIR)/section.Plo \
-	./$(DEPDIR)/surface.Plo ./$(DEPDIR)/tinyexpr.Plo \
-	./$(DEPDIR)/transform.Plo ./$(DEPDIR)/variables.Plo
+	./$(DEPDIR)/intersection.Plo ./$(DEPDIR)/library.Plo \
+	./$(DEPDIR)/mesh.Plo ./$(DEPDIR)/moller-tri.Plo \
+	./$(DEPDIR)/naca.Plo ./$(DEPDIR)/patch.Plo \
+	./$(DEPDIR)/section.Plo ./$(DEPDIR)/surface.Plo \
+	./$(DEPDIR)/tinyexpr.Plo ./$(DEPDIR)/transform.Plo \
+	./$(DEPDIR)/variables.Plo
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -388,7 +389,8 @@ libagg_la_SOURCES = \
 	mesh.c \
 	body.c \
 	ico.c \
-	blend.c
+	blend.c \
+	library.c
 
 include_HEADERS = \
 	agg.h
@@ -517,6 +519,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hefsi.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ico.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/intersection.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/library.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mesh.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moller-tri.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/naca.Plo@am__quote@ # am--include-marker
@@ -720,6 +723,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/hefsi.Plo
 	-rm -f ./$(DEPDIR)/ico.Plo
 	-rm -f ./$(DEPDIR)/intersection.Plo
+	-rm -f ./$(DEPDIR)/library.Plo
 	-rm -f ./$(DEPDIR)/mesh.Plo
 	-rm -f ./$(DEPDIR)/moller-tri.Plo
 	-rm -f ./$(DEPDIR)/naca.Plo
@@ -781,6 +785,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/hefsi.Plo
 	-rm -f ./$(DEPDIR)/ico.Plo
 	-rm -f ./$(DEPDIR)/intersection.Plo
+	-rm -f ./$(DEPDIR)/library.Plo
 	-rm -f ./$(DEPDIR)/mesh.Plo
 	-rm -f ./$(DEPDIR)/moller-tri.Plo
 	-rm -f ./$(DEPDIR)/naca.Plo
