@@ -39,7 +39,7 @@ static void print_help_message(FILE *f, gint pps)
 	  "  -S list available sections\n"
 	  "  -s # parse and write a section to stdout\n"
 	  "  -T list available transforms\n"
-	  "  -t # apply a transform to a section and write to stdout",
+	  "  -t # apply a transform to a section and write to stdout\n",
 	  pps) ;
   
   return ;

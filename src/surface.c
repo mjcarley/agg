@@ -422,6 +422,7 @@ agg_grid_t agg_grid_parse(gchar *str)
     {"regular",    AGG_GRID_REGULAR},
     {"triangle",   AGG_GRID_TRIANGLE},
     {"sphere-ico", AGG_GRID_SPHERE_ICO},
+    {"hemisphere-ico", AGG_GRID_HEMISPHERE_ICO},
     {NULL,       AGG_GRID_UNDEFINED}
   } ;
 

@@ -518,6 +518,25 @@ void _agg_grid_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
     
     return ;
   }
+
+  if ( grid == AGG_GRID_HEMISPHERE_ICO ) {
+    if ( nparams != 2 ) {
+      g_error("%s: icosahedron grid requires one further parameter, line %u",
+	      __FUNCTION__, g_scanner_cur_line(scanner)) ;
+    }
+    
+    if ( agg_variable_definition(&(params[1])) != NULL )
+      g_error("%s: surface subdivision must be constant, line %u",
+	      __FUNCTION__, g_scanner_cur_line(scanner)) ;
+    
+    agg_surface_grid_subdivision(S) = (gint)(params[1].val) ;
+
+    if ( agg_surface_grid_subdivision(S) < 0 ) 
+      g_error("%s: invalid surface subdivision (%lg), line %u",
+	      __FUNCTION__, params[1].val, g_scanner_cur_line(scanner)) ;
+    
+    return ;
+  }
   
   g_assert_not_reached() ;
   

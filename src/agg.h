@@ -26,6 +26,24 @@
 #else /*DOXYGEN*/
 #endif /*DOXYGEN*/
 
+typedef enum {
+  AGG_CURVE_POLYNOMIAL = 0, /**< polynomial */
+  AGG_CURVE_ELLIPSE    = 1, /**< axis-aligned ellipse with arbitrary centre */
+  AGG_CURVE_FOURIER    = 2  /**< Fourier series */
+} agg_curve_type_t ;
+
+#define AGG_CURVE_DATA_SIZE 35
+  
+typedef struct _agg_curve_t agg_curve_t ;
+struct _agg_curve_t {
+  agg_curve_type_t type ;
+  gint n ;
+  gdouble data[AGG_CURVE_DATA_SIZE] ;
+} ;
+
+#define agg_curve_type(_c)        ((_c)->type)
+#define agg_curve_order(_c)       ((_c)->n)
+#define agg_curve_data(_c)        ((_c)->data)
 
 /**
  * @{
@@ -348,10 +366,13 @@ typedef enum {
  */
 
 typedef enum {
-  AGG_GRID_UNDEFINED  = 0,  /**< undefined (generates an error) */
-  AGG_GRID_REGULAR    = 1,  /**< regular quadrilaterals in parametric space */
-  AGG_GRID_TRIANGLE   = 2,  /**< mesh generated using Triangle code */
-  AGG_GRID_SPHERE_ICO = 3   /**< mesh generated using icosahedron subdivision */
+  AGG_GRID_UNDEFINED  = 0,    /**< undefined (generates an error) */
+  AGG_GRID_REGULAR    = 1,    /**< regular quadrilaterals in parametric space */
+  AGG_GRID_TRIANGLE   = 2,    /**< mesh generated using Triangle code */
+  AGG_GRID_SPHERE_ICO = 3,    /**< spherical mesh generated using icosahedron 
+				 subdivision */
+  AGG_GRID_HEMISPHERE_ICO = 4  /**< hemispherical mesh generated using 
+				  icosahedron subdivision */
 } agg_grid_t ;
 
 /** @typedef agg_surface_t
@@ -398,26 +419,25 @@ struct _agg_surface_t {
  * 
  */
 
+/* typedef enum { */
+/*   AGG_CLIP_UNDEFINED  = 0, */
+/*   AGG_CLIP_CONSTANT_S = 1, */
+/*   AGG_CLIP_CONSTANT_T = 2, */
+/*   AGG_CLIP_ELLIPSE    = 3 */
+/* } agg_patch_clip_t ; */
 
-typedef enum {
-  AGG_CLIP_UNDEFINED  = 0,
-  AGG_CLIP_CONSTANT_S = 1,
-  AGG_CLIP_CONSTANT_T = 2,
-  AGG_CLIP_ELLIPSE    = 3
-} agg_patch_clip_t ;
+/* typedef struct _agg_patch_clipping_t agg_patch_clipping_t ; */
 
-typedef struct _agg_patch_clipping_t agg_patch_clipping_t ;
+/* struct _agg_patch_clipping_t { */
+/*   agg_patch_clip_t c ; */
+/*   gdouble data[4], ornt ; */
+/* } ; */
 
-struct _agg_patch_clipping_t {
-  agg_patch_clip_t c ;
-  gdouble data[4], ornt ;
-} ;
+/* #define agg_patch_clipping_type(_c)        ((_c)->c) */
+/* #define agg_patch_clipping_data(_c,_i)     ((_c)->data[(_i)]) */
+/* #define agg_patch_clipping_orientation(_c) ((_c)->ornt) */
 
-#define agg_patch_clipping_type(_c)        ((_c)->c)
-#define agg_patch_clipping_data(_c,_i)     ((_c)->data[(_i)])
-#define agg_patch_clipping_orientation(_c) ((_c)->ornt)
-
-#define AGG_PATCH_POINT_SIZE 3
+/* #define AGG_PATCH_POINT_SIZE 3 */
 
 /** @typedef agg_patch_mapping_t
  * 
@@ -425,10 +445,13 @@ struct _agg_patch_clipping_t {
  */
 
 typedef enum {
-  AGG_PATCH_BILINEAR  = 0, /**< bilinear mapping between corners */
-  AGG_PATCH_SPHERICAL = 1, /**< mapping to surface of sphere */
-  AGG_PATCH_TUBULAR   = 2  /**< mapping to surface of open cylinder */
+  AGG_PATCH_BILINEAR      = 0, /**< bilinear mapping between corners */
+  AGG_PATCH_SPHERICAL     = 1, /**< mapping to surface of sphere */
+  AGG_PATCH_HEMISPHERICAL = 2, /**< mapping to surface of hemisphere */
+  AGG_PATCH_TUBULAR       = 3  /**< mapping to surface of open cylinder */
 } agg_patch_mapping_t ;
+
+#define AGG_PATCH_HOLE_NUMBER_MAX 8
 
 /** @typedef agg_patch_t
  *
@@ -440,9 +463,8 @@ typedef agg_patch_t ;
 typedef struct _agg_patch_t agg_patch_t ;
 struct _agg_patch_t {
   agg_patch_mapping_t map ;
-  agg_patch_clipping_t clip[8] ;
-  gdouble *st ;
-  gint nst, nstmax, nclip ;
+  agg_curve_t curves[AGG_PATCH_HOLE_NUMBER_MAX+2] ;
+  gint nholes ;
   gboolean swrap, twrap,  /*dealing with s and t out of range*/
     invert ; /*invert triangles to maintain correct normal*/
 } ;
@@ -455,6 +477,10 @@ struct _agg_patch_t {
 #define agg_patch_invert(_P)            ((_P)->invert)
 #define agg_patch_clipping(_P,_i)       (&((_P)->clip[(_i)]))
 #define agg_patch_clipping_number(_P)   ((_P)->nclip)
+#define agg_patch_hole_number(_P)       ((_P)->nholes)
+#define agg_patch_curve_smin(_P)        (&((_P)->curves[0]))
+#define agg_patch_curve_smax(_P)        (&((_P)->curves[1]))
+#define agg_patch_hole(_P,_i)           (&((_P)->curves[(_i)+2]))
 
 #endif /*DOXYGEN*/
 
@@ -666,6 +692,7 @@ agg_section_t *agg_section_new(gint oumax, gint olmax) ;
 gdouble agg_section_eval(agg_section_t *s, gdouble x) ;
 gdouble agg_section_diff(agg_section_t *s, gdouble x) ;
 gint agg_section_copy(agg_section_t *dest, agg_section_t *src) ;
+agg_section_t *agg_section_duplicate(agg_section_t *s) ;
 gint agg_section_set_circle(agg_section_t *s) ;
 gint agg_section_set_ellipse(agg_section_t *s, gdouble th) ;
 gint agg_section_set_aerofoil(agg_section_t *s, gdouble eta,
@@ -770,11 +797,11 @@ gint agg_patch_triangle_interp(agg_patch_t *P,
 			       gdouble *s, gdouble *t) ;
 
 agg_intersection_t *agg_intersection_new(gint nstmax) ;
-gint agg_surface_patch_intersection(agg_intersection_t *inter,
-				    agg_surface_t *S1, agg_patch_t *P1,
-				    agg_surface_t *S2, agg_patch_t *P2,
-				    agg_surface_blend_t *B,
-				    agg_surface_workspace_t *w) ;
+gint agg_surface_patch_trim(agg_intersection_t *inter,
+			    agg_surface_t *S1, agg_patch_t *P1, gdouble d1,
+			    agg_surface_t *S2, agg_patch_t *P2, gdouble d2,
+			    agg_surface_blend_t *B,
+			    agg_surface_workspace_t *w) ;
 gint agg_intersection_curve_write(FILE *f, agg_intersection_t *inter,
 				  agg_surface_workspace_t *w) ;
 gint agg_intersection_bbox_set(agg_intersection_t *inter) ;
@@ -782,16 +809,16 @@ gint agg_intersection_resample(agg_intersection_t *inter,
 			       gint nsp, gint pps,
 			       agg_intersection_t *resample,
 			       agg_surface_workspace_t *w) ;
-gint agg_intersection_clip(agg_intersection_t *inter,
-			   gint c, agg_patch_clip_t cut,
-			   agg_patch_clipping_t *clip) ;
-gint agg_patch_clip_eval(agg_patch_clipping_t *c, gdouble u,
-			 gdouble *s, gdouble *t) ;
-gint agg_clipping_orient(agg_patch_clipping_t *c1, agg_patch_t *P1,
-			 agg_surface_t *S1,
-			 agg_patch_clipping_t *c2, agg_patch_t *P2,
-			 agg_surface_t *S2,
-			 agg_surface_workspace_t *w) ;
+/* gint agg_intersection_clip(agg_intersection_t *inter, */
+/* 			   gint c, agg_patch_clip_t cut, */
+/* 			   agg_patch_clipping_t *clip) ; */
+/* gint agg_patch_clip_eval(agg_patch_clipping_t *c, gdouble u, */
+/* 			 gdouble *s, gdouble *t) ; */
+/* gint agg_clipping_orient(agg_patch_clipping_t *c1, agg_patch_t *P1, */
+/* 			 agg_surface_t *S1, */
+/* 			 agg_patch_clipping_t *c2, agg_patch_t *P2, */
+/* 			 agg_surface_t *S2, */
+/* 			 agg_surface_workspace_t *w) ; */
 
 agg_mesh_t *agg_mesh_new(gint npmax, gint nspmax, gint nemax) ;
 gint agg_mesh_surface_make(agg_mesh_t *w,
@@ -825,8 +852,6 @@ gint agg_mesh_body(agg_mesh_t *m, agg_body_t *b, gint pps,
 		   agg_surface_workspace_t *w) ;
 gint agg_mesh_element_nodes(agg_mesh_t *m, gint e,
 			    gint *nodes, gint *nnodes, gint *s) ;
-gint agg_mesh_icosahedron(agg_mesh_t *m, gint surf,
-			  agg_surface_workspace_t *w) ;
 gint agg_mesh_refine_loop(agg_mesh_t *m, agg_surface_workspace_t *w) ;
 
 agg_body_t *agg_body_new(gint ngmax, gint nsmax) ;
@@ -838,13 +863,6 @@ gint agg_body_read(agg_body_t *b, gchar *file, gboolean echo) ;
 gint agg_body_surface_add(agg_body_t *b, agg_surface_t *S, agg_patch_t *P) ;
 gint agg_body_surfaces_list(FILE *f, agg_body_t *b) ;
 
-gint agg_sphere_ico_base(gdouble *th, gint tstr,
-			 gdouble *ph, gint pstr,
-			 gint *edges, gint edstr,
-			 gint *elements, gint elstr,
-			 gint *np, gint *ne, gint *nt,
-			 gboolean convert,
-			 gboolean unwrap) ;
 agg_grid_t agg_grid_parse(gchar *str) ;
 
 agg_surface_blend_t *agg_surface_blend_new(void) ;
@@ -852,6 +870,19 @@ gint agg_surface_blend_evaluate(agg_surface_blend_t *B,
 				gdouble s, gdouble t, gdouble *x,
 				agg_surface_workspace_t *w) ;
 gint agg_hermite_eval(gdouble s, gdouble *H) ;
+
+gint agg_library_section_add(gchar *name, gchar *description,
+			     agg_section_t *s) ;
+agg_section_t *agg_library_section_lookup(gchar *name, gchar **description) ;
+gint agg_library_sections_list(FILE *f, gboolean write_description) ;
+gint agg_library_section_write(FILE *f, gchar *name, gchar *description,
+			       agg_section_t *s) ;
+gint agg_library_read(FILE *f) ;
+gint agg_library_write(FILE *f) ;
+
+gint agg_curve_eval(agg_curve_t *c, gdouble x, gdouble *s, gdouble *t) ;
+gboolean agg_curve_point_orientation(agg_curve_t *c, gdouble del,
+				     gdouble s, gdouble t) ;
 
 #endif /*__AGG_H_INCLUDED__*/
 

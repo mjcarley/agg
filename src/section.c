@@ -257,6 +257,19 @@ gint agg_section_copy(agg_section_t *dest, agg_section_t *src)
   return 0 ;
 }
 
+agg_section_t *agg_section_duplicate(agg_section_t *s)
+
+{
+  agg_section_t *d ;
+
+  d = agg_section_new(agg_section_order_upper(s),
+		      agg_section_order_lower(s)) ;
+
+  agg_section_copy(d, s) ;
+  
+  return d ;
+}
+
 void _agg_aerofoil_parse(agg_section_t *s, agg_variable_t *p, gint np)
 
 {

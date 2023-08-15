@@ -23,6 +23,8 @@
 
 #include <agg.h>
 
+#include <blaswrap.h>
+
 #include "agg-private.h"
 
 #include "hefsi.h"
@@ -71,16 +73,6 @@ agg_intersection_t *agg_intersection_new(gint nstmax)
   agg_intersection_point_number_max(inter) = nstmax ;
   
   return inter ;
-}
-
-
-static gboolean duplicate_points(hefsi_segment_t *seg1, hefsi_segment_t *seg2)
-
-{
-  if ( seg1->x1[3] != seg2->x1[3] ) return FALSE ;
-  if ( seg1->x1[4] != seg2->x1[4] ) return FALSE ;
-  
-  return TRUE ;
 }
 
 static gboolean boundary_crossed(agg_patch_t *P1, agg_patch_t *P2, 
@@ -155,112 +147,144 @@ static gboolean boundary_crossed(agg_patch_t *P1, agg_patch_t *P2,
   return crossed ;
 }
 
-static void densify_intersection(agg_intersection_t *inter,
-				 hefsi_surface_t *h1, hefsi_surface_t *h2,
-				 hefsi_segment_t *s1, hefsi_segment_t *s2, 
-				 gint np, gdouble tol,
-				 agg_surface_workspace_t *w)
+
+static void fit_patch_end_cut(hefsi_workspace_t *wh, gint idx,
+			      gdouble del, gint N, gdouble *C)
+
+/*
+ * fit a Fourier series to the trimming curve on a patch
+ */
 
 {
-  gint i, j, ns, nst ;
-  gdouble t, u, v, st[16], *sti, x[3] ;
-  agg_patch_t *P1, *P2 ;
-  agg_surface_t *S1 ;
+  gdouble A[16384], t, s, rhs[2048], work[1024] ;
+  gint i, j, m, n, lwork, info, i1 = 1, ldb ;
+  GSList *il ;
+  hefsi_segment_t *seg ;
 
-  P1 = agg_intersection_patch1(inter) ;
-  P2 = agg_intersection_patch2(inter) ;
-  S1 = agg_intersection_surface1(inter) ;
-  
-  i = 0 ; ns = 1 ;
-  st[i*4+0] = s1->x1[3] ; st[i*4+1] = s1->x1[4] ;
-  st[i*4+2] = s1->x1[5] ; st[i*4+3] = s1->x1[6] ; 
-  if ( boundary_crossed(P1, P2, s1, s2, &(st[1*4]), &(st[2*4])) ) {
-    ns += 2 ;
-  }
-  st[ns*4+0] = s2->x1[3] ; st[ns*4+1] = s2->x1[4] ;
-  st[ns*4+2] = s2->x1[5] ; st[ns*4+3] = s2->x1[6] ; 
-  ns ++ ;
-
-  for ( i = 0 ; i < np ; i ++ ) {
-    t = (gdouble)i/np ;
-    nst = agg_intersection_point_number(inter) ;
-    sti = &(inter->st[nst*AGG_INTERSECTION_DATA_SIZE]) ;
-    for ( j = 0 ; j < 4 ; j ++ ) {
-      sti[j] = st[0*4+j] + t*(st[1*4+j] - st[0*4+j]) ;
+  /*matrix size*/
+  n = 2*N + 1 ;
+  m = 0 ;
+  for ( i = 0 ; i < wh->c->len ; i ++ ) {
+    for ( il = hefsi_workspace_curve(wh,i) ; il != NULL ;
+	  il = il->next ) {
+      j = GPOINTER_TO_INT(il->data) ;
+      seg = hefsi_workspace_segment(wh,j) ;
+      /*parameter values at this intersection*/
+      s = seg->x1[3+2*idx+0] ; t = seg->x1[3+2*idx+1] ;
+      rhs[m] = s + del ;
+      A[m*n+0] = 1.0 ;
+      for ( j = 1 ; j <= N ; j ++ ) {
+	A[m*n+2*j-1] = cos(2.0*M_PI*j*t) ;
+	A[m*n+2*j-0] = sin(2.0*M_PI*j*t) ;
+      }
+      m ++ ;
     }
-    g_assert(sti[1] >= 0) ;
-    agg_patch_map(P1, sti[0], sti[1], &u, &v) ;
-    agg_surface_point_eval(S1, u, v, x, w) ;
-    hefsi_refine_point(h1, &(sti[0]), h2, &(sti[2]), x, tol, 8) ;
-    agg_patch_st_correct(P1, &(sti[0])) ;
-    agg_patch_st_correct(P2, &(sti[2])) ;
-    agg_intersection_point_number(inter) ++ ;
   }
 
-  if ( ns < 3 ) return ;
-  /*wrapping over a boundary, need to add the last point from the
-    previous interval*/  
-  nst = agg_intersection_point_number(inter) ;
-  sti = &(inter->st[nst*AGG_INTERSECTION_DATA_SIZE]) ;
-  for ( j = 0 ; j < 4 ; j ++ ) {
-    sti[j] = st[1*4+j] ;
-  }
-  agg_patch_map(P1, sti[0], sti[1], &u, &v) ;
-  agg_surface_point_eval(S1, u, v, x, w) ;
-  agg_intersection_point_number(inter) ++ ;
+  lwork = 1024 ; info = 0 ; ldb = m ;
+  dgels_("T", &n, &m, &i1, A, &n, rhs, &ldb, work, &lwork, &info) ;
 
-  for ( i = 0 ; i < np ; i ++ ) {
-    t = (gdouble)i/np ;
-    nst = agg_intersection_point_number(inter) ;
-    sti = &(inter->st[nst*AGG_INTERSECTION_DATA_SIZE]) ;
-    for ( j = 0 ; j < 4 ; j ++ ) {
-      sti[j] = st[2*4+j] + t*(st[3*4+j] - st[2*4+j]) ;
-    }
-    g_assert(sti[1] >= 0) ;
-    agg_patch_map(P1, sti[0], sti[1], &u, &v) ;
-    agg_surface_point_eval(S1, u, v, x, w) ;
-    /* hefsi_refine_point(h1, &(sti[0]), h2, &(sti[2]), x, tol, 8) ; */
-    agg_intersection_point_number(inter) ++ ;
-  }
+  for ( i = 0 ; i <= n ; i ++ ) C[i] = rhs[i] ;
   
   return ;
 }
 
-/** 
- * Calculate the intersection of two parametric surfaces. 
- * 
- * @param inter on exit contains the intersection curve data;
- * @param S1 first surface;
- * @param P1 mapping patch for first surface;
- * @param S2 second surface;
- * @param P2 mapping patch for second surface;
- * @param B if not NULL, initialized with data for blending \a S1 into 
- * \a S2 across the intersection curve; 
- * @param w workspace for surface evaluation.
- * 
- * @return 0 on success.
+static void fit_patch_hole(hefsi_workspace_t *wh, gint idx,
+			   gdouble del, gdouble *C)
+
+/*
+ * fit an ellipse to a hole in a patch; for now this just uses the
+ * bounding box, will implement 
+ *
+ * Least-squares orthogonal distances fitting of circle, sphere,
+ * ellipse, hyperbola, and parabola, Sung Joon Ahn, Wolfgang Rauh,
+ * Hans-Juergen Warnecke
  */
 
-gint agg_surface_patch_intersection(agg_intersection_t *inter,
-				    agg_surface_t *S1, agg_patch_t *P1,
-				    agg_surface_t *S2, agg_patch_t *P2,
-				    agg_surface_blend_t *B,
-				    agg_surface_workspace_t *w)
+{
+  gdouble s0, t0, smin, smax, tmin, tmax, s, t ;
+  gint i, j, m ;
+  GSList *il ;
+  hefsi_segment_t *seg ;
+
+  /*find hole centre*/
+  s0 = t0 = 0 ; m = 0 ;
+  smin = tmin =  G_MAXDOUBLE ;
+  smax = tmax = -G_MAXDOUBLE ;
+  for ( i = 0 ; i < wh->c->len ; i ++ ) {
+    for ( il = hefsi_workspace_curve(wh,i) ; il != NULL ;
+	  il = il->next ) {
+      j = GPOINTER_TO_INT(il->data) ;
+      seg = hefsi_workspace_segment(wh,j) ;
+      /*parameter values at this intersection*/
+      s = seg->x1[3+2*idx+0] ;
+      t = seg->x1[3+2*idx+1] ;
+
+      smin = MIN(smin, s) ; tmin = MIN(tmin, t) ;
+      smax = MAX(smax, s) ; tmax = MAX(tmax, t) ;
+      
+      s0 += s ; t0 += t ;
+      m ++ ;
+    }
+  }
+
+  s0 /= m ; t0 /= m ;
+  /*ellipse centre*/
+  C[0] = s0 ; C[1] = t0 ;
+  /*semi-major and semi-minor axes*/
+  C[2] = MAX(smax-s0,s0-smin) + del ;
+  C[3] = MAX(tmax-t0,t0-tmin) + del ;
+
+  return ;
+}
+
+static void fit_patch_trim(agg_patch_t *P, hefsi_workspace_t *wh, gint idx,
+			   gdouble del, gint N)
+
+/*
+ * fit a Fourier series to the trimming curve on a patch
+ */
+
+{
+  gint nh ;
+  agg_curve_t *c ;
+  
+  if ( agg_patch_mapping(P) == AGG_PATCH_HEMISPHERICAL ) {
+    c = agg_patch_curve_smin(P) ;
+    g_assert(2*N+1 < AGG_CURVE_DATA_SIZE) ;
+    fit_patch_end_cut(wh, idx, del, N, c->data) ;
+
+    agg_curve_type(c) = AGG_CURVE_FOURIER ;
+    agg_curve_order(c) = N ;
+    return ;
+  }
+
+  nh = agg_patch_hole_number(P) ;
+  c = agg_patch_hole(P,nh) ;
+  fit_patch_hole(wh, idx, del, c->data) ;
+  agg_curve_type(c) = AGG_CURVE_ELLIPSE ;
+  agg_patch_hole_number(P) ++ ;
+  
+  return ;
+}
+
+gint agg_surface_patch_trim(agg_intersection_t *inter,
+			    agg_surface_t *S1, agg_patch_t *P1, gdouble d1,
+			    agg_surface_t *S2, agg_patch_t *P2, gdouble d2,
+			    agg_surface_blend_t *B,
+			    agg_surface_workspace_t *w)
 
 {
   hefsi_surface_t *h1, *h2 ;
   gpointer data1[] = {S1, P1, w} ;
   gpointer data2[] = {S2, P2, w} ;
   hefsi_workspace_t *wh ;
-  hefsi_segment_t *seg1, *seg2 ;
-  gint dmin, dmax, i, j, nsp, ilong ;
-  gdouble scale, tol, u, v ;
+  hefsi_segment_t *seg1 ;
+  gint dmin, dmax, i, j, nsp ;
+  gdouble scale, tol ;
   GSList *il ;
-  agg_patch_clipping_t *c1, *c2 ;
-  gdouble del_clip ;
   
   dmin = 6 ; dmax = 10 ; scale = 18/16.0 ; tol = 1e-6 ;
-  del_clip = 1e-1 ;
   
   wh = hefsi_workspace_new() ;
 
@@ -280,145 +304,21 @@ gint agg_surface_patch_intersection(agg_intersection_t *inter,
   hefsi_surface_intersections(h1, h2, tol, wh) ;
 
   if ( wh->c->len == 0 ) return 0 ;
-  /*set the segment points to their midpoints and refine*/
-
-  /* il = hefsi_workspace_curve(wh,0) ; */
-  /* fprintf(stderr, "length: %d\n", g_slist_length(il)) ; */
-  /* j = g_slist_length(il) ; */
-  /* ilong = 0 ; */
-
-  /* for ( i = 1 ; i < wh->c->len ; i ++ ) { */
-  /*   il = hefsi_workspace_curve(wh,i) ; */
-  /* fprintf(stderr, "length: %d\n", g_slist_length(il)) ; */
-  /*   if ( g_slist_length(il) > j ) { */
-  /*     j = g_slist_length(il) ; */
-  /*     ilong = i ; */
-  /*   } */
-  /* } */
-
-  /* i = 1 ; */
   for ( i = 0 ; i < wh->c->len ; i ++ ) {
     for ( il = hefsi_workspace_curve(wh,i) ; il != NULL ;
 	  il = il->next ) {
       j = GPOINTER_TO_INT(il->data) ;
       seg1 = hefsi_workspace_segment(wh,j) ;
       for ( j = 0 ; j < 7 ; j ++ ) {
-	seg1->x1[j] = seg1->x1[j] ;
-	/* 0.5*(seg1->x1[j] + seg1->x2[j]) ; */
+	seg1->x1[j] = 	0.5*(seg1->x1[j] + seg1->x2[j]) ;
       }
-      
-      /* fprintf(stdout, "Point(%d) = {%lg, %lg, %lg, 1} ;\n", */
-      /* 	      i, seg1->x1[0], seg1->x1[1], seg1->x1[2]) ; */
-      /* i ++ ; */
-      /* fflush(stdout) ; */
-      /* hefsi_refine_point(h1, &(seg1->x1[3]), h2, &(seg1->x1[5]), seg1->x1, */
-      /* 		       tol, 8) ; */
       agg_patch_st_correct(P1, &(seg1->x1[3])) ;
       agg_patch_st_correct(P2, &(seg1->x1[5])) ;
     }
   }
 
-  for ( i = 0 ; i < wh->c->len ; i ++ ) {
-  for ( il = hefsi_workspace_curve(wh,i) ; il->next != NULL ;
-	il = il->next ) {  
-    j = GPOINTER_TO_INT(il->data) ;
-    seg1 = hefsi_workspace_segment(wh,j) ;
-    j = GPOINTER_TO_INT(il->next->data) ;
-    seg2 = hefsi_workspace_segment(wh,j) ;
-    if ( !duplicate_points(seg1, seg2) ) {
-      densify_intersection(inter, h1, h2, seg1, seg2, 2, tol, w) ;
-    }
-  }
-  }
-  for ( i = 0 ; i < agg_intersection_point_number(inter) ; i ++ ) {
-    agg_patch_map(P1,
-		  agg_intersection_point_s1(inter,i),
-		  agg_intersection_point_t1(inter,i),
-		  &u, &v) ;
-    agg_surface_point_eval(S1, u, v,
-			   agg_intersection_point(inter,i),
-			   w) ;
-  }
-
-  agg_intersection_bbox_set(inter) ;
-
-  /*check the two curves and see how they should clip the patches*/
-  c1 = agg_patch_clipping(P1, agg_patch_clipping_number(P1)) ;
-  c2 = agg_patch_clipping(P2, agg_patch_clipping_number(P2)) ;
-  c1->ornt = c2->ornt = 1 ;
-  
-  if ( agg_intersection_bbox_s1_min(inter) == 0 &&
-       agg_intersection_bbox_s1_max(inter) == 1 ) {
-    agg_intersection_clip(inter, 0, AGG_CLIP_CONSTANT_T, c1) ;
-    agg_patch_clipping_number(P1) ++ ;
-  } else {
-    if ( agg_intersection_bbox_t1_min(inter) == 0 &&
-	 agg_intersection_bbox_t1_max(inter) == 1 ) {
-      agg_intersection_clip(inter, 0, AGG_CLIP_CONSTANT_S, c1) ;
-
-      agg_patch_clipping_data(c1,0) += del_clip ;
-      
-      agg_patch_clipping_number(P1) ++ ;
-    } else {
-      agg_intersection_clip(inter, 0, AGG_CLIP_ELLIPSE, c1) ;
-      agg_patch_clipping_number(P1) ++ ;
-    }
-  }
-
-  if ( agg_intersection_bbox_s2_min(inter) == 0 &&
-       agg_intersection_bbox_s2_max(inter) == 1 ) {
-    agg_intersection_clip(inter, 1, AGG_CLIP_CONSTANT_T, c2) ;
-    agg_patch_clipping_number(P2) ++ ;
-  } else {
-    if ( agg_intersection_bbox_t2_min(inter) == 0 &&
-	 agg_intersection_bbox_t2_max(inter) == 1 ) {
-      agg_intersection_clip(inter, 1, AGG_CLIP_CONSTANT_S, c2) ;
-
-      agg_patch_clipping_data(c2,0) += del_clip ;
-
-      agg_patch_clipping_number(P2) ++ ;
-    } else {
-      agg_intersection_clip(inter, 1, AGG_CLIP_ELLIPSE, c2) ;
-      agg_patch_clipping_number(P2) ++ ;
-    }
-
-    agg_clipping_orient(c1, P1, S1, c2, P2, S2, w) ;
-  }
-
-  if ( B == NULL ) return 0 ;
-
-  nsp = 0 ;
-  if ( agg_surface_grid(S1) == AGG_GRID_REGULAR ) {
-    nsp = agg_surface_grid_spline_number(S1) ;
-  }
-  if ( nsp == 0 && agg_surface_grid(S2) == AGG_GRID_REGULAR ) {
-    nsp = agg_surface_grid_spline_number(S2) ;
-  }
-
-  g_assert(nsp != 0) ;
-
-  agg_surface_blend_spline_number(B) = nsp ;
-  
-  /*add relevant data to a surface blend for future evaluation*/
-  if ( agg_patch_clipping_type(c1) != AGG_CLIP_ELLIPSE ) {
-    agg_surface_blend_surface(B,0) = S1 ; 
-    agg_surface_blend_surface(B,1) = S2 ; 
-    agg_surface_blend_patch(B,0) = P1 ; 
-    agg_surface_blend_patch(B,1) = P2 ; 
-    
-    B->ic[0] = agg_patch_clipping_number(P1) - 1 ;
-    B->ic[1] = agg_patch_clipping_number(P2) - 1 ;
-
-    return 0 ;
-  }
-
-  agg_surface_blend_surface(B,0) = S2 ; 
-  agg_surface_blend_surface(B,1) = S1 ; 
-  agg_surface_blend_patch(B,0) = P2 ; 
-  agg_surface_blend_patch(B,1) = P1 ; 
-  
-  B->ic[0] = agg_patch_clipping_number(P2) - 1 ;
-  B->ic[1] = agg_patch_clipping_number(P1) - 1 ;
+  fit_patch_trim(P1, wh, 0, d1, 8) ;
+  fit_patch_trim(P2, wh, 1, d2, 16) ;
 
   return 0 ;
 }
@@ -705,6 +605,7 @@ gint agg_intersection_resample(agg_intersection_t *inter,
   return 0 ;
 }
 
+#if 0
 gint agg_intersection_clip(agg_intersection_t *inter,
 			   gint c, agg_patch_clip_t cut,
 			   agg_patch_clipping_t *clip)
@@ -752,6 +653,7 @@ gint agg_intersection_clip(agg_intersection_t *inter,
   
   return 0 ;
 }
+#endif
 
 /**
  * @}

@@ -30,9 +30,9 @@ libagg_la_SOURCES = \
 	moller-tri.c \
 	mesh.c \
 	body.c \
-	ico.c \
 	blend.c \
-	library.c
+	library.c \
+	curve.c
 
 include_HEADERS = \
 	agg.h

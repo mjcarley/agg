@@ -312,7 +312,7 @@ gint agg_mesh_spline_interp_points(agg_mesh_t *m, gint s,
   }
 
   /*negative s means we are looking at a blended surface*/
-  b =-s - 1 ;
+  b = -s - 1 ;
   g_assert(b < agg_mesh_surface_blend_number(m)) ;
   
   mesh_spline_surface_blend_interp(m, b, p0, p1, pps, w) ;
@@ -436,132 +436,482 @@ static void reset_triangleio(triangleio *io)
   return ;
 }
 
-static void add_point(gdouble *st, gint *nst, gdouble s, gdouble t)
+/* static void add_point(gdouble *st, gint *nst, gdouble s, gdouble t) */
 
-{
-  st[2*(*nst)+0] = s ; st[2*(*nst)+1] = t ;
+/* { */
+/*   st[2*(*nst)+0] = s ; st[2*(*nst)+1] = t ; */
 
-  (*nst) ++ ;
+/*   (*nst) ++ ; */
   
-  return ;
-}
+/*   return ; */
+/* } */
 
-static void set_corners(gdouble *st, gint *nst,
-			gint *segments, gint *nseg,
-			gdouble smin, gdouble tmin,
-			gdouble smax, gdouble tmax)
+/* static void set_corners(gdouble *st, gint *nst, */
+/* 			gint *segments, gint *nseg, */
+/* 			gdouble smin, gdouble tmin, */
+/* 			gdouble smax, gdouble tmax) */
 
-{
-  gint nst0 = (*nst) ;
+/* { */
+/*   gint nst0 = (*nst) ; */
   
-  add_point(st, nst, smin, tmin) ; add_point(st, nst, smax, tmin) ;
-  add_point(st, nst, smax, tmax) ; add_point(st, nst, smin, tmax) ;
-  segments[2*(*nseg)+0] = nst0+0 ; segments[2*(*nseg)+1] = nst0+1 ;
-  (*nseg)++ ;
-  segments[2*(*nseg)+0] = nst0+1 ; segments[2*(*nseg)+1] = nst0+2 ; 
-  (*nseg)++ ;
-  segments[2*(*nseg)+0] = nst0+2 ; segments[2*(*nseg)+1] = nst0+3 ; 
-  (*nseg)++ ;
-  segments[2*(*nseg)+0] = nst0+3 ; segments[2*(*nseg)+1] = nst0+0 ; 
-  (*nseg)++ ;
+/*   add_point(st, nst, smin, tmin) ; add_point(st, nst, smax, tmin) ; */
+/*   add_point(st, nst, smax, tmax) ; add_point(st, nst, smin, tmax) ; */
+/*   segments[2*(*nseg)+0] = nst0+0 ; segments[2*(*nseg)+1] = nst0+1 ; */
+/*   (*nseg)++ ; */
+/*   segments[2*(*nseg)+0] = nst0+1 ; segments[2*(*nseg)+1] = nst0+2 ;  */
+/*   (*nseg)++ ; */
+/*   segments[2*(*nseg)+0] = nst0+2 ; segments[2*(*nseg)+1] = nst0+3 ;  */
+/*   (*nseg)++ ; */
+/*   segments[2*(*nseg)+0] = nst0+3 ; segments[2*(*nseg)+1] = nst0+0 ;  */
+/*   (*nseg)++ ; */
 
-  return ;
-}
+/*   return ; */
+/* } */
 
-static void set_boundary(agg_mesh_t *m, gint isurf,
-			 gdouble *st, gint *nst,
-			 gint *segments, gint *nseg,
-			 gint *segmentmarkers,
-			 gdouble *holes, gint *nholes,
-			 gdouble del)
-
-/*
- * m:        mesh
- * isurf:    index of surface in mesh surface list
- * st:       list of points in patch coordinate system (s,t)
- * nst:      number of points
- * segments: segment list, two ints per segment (indices of points)
- * nseg:     number of segments
- * idxlist:  indices of mesh points lying on intersection curve
- * nidx:     number of points in idxlist
- * del:      offset from patch ends (to leave clear space for singular points)
- */
-  
-{
-  gint i, j, nst0 ;
-  agg_patch_t *P ;
-  gboolean corners_set ;
-  agg_patch_clipping_t *clip ;
-  
-  corners_set = FALSE ;
-  
-  /*check for clipped patch*/
-  P = agg_mesh_patch(m, isurf) ;
-  if ( agg_patch_clipping_number(P) == 0 ) {
-    set_corners(st, nst, segments, nseg, 0, 0, 1, 1) ;
-    return ;
-  }
-
-  for ( i = 0 ; i < agg_patch_clipping_number(P) ; i ++ ) {
-    clip = agg_patch_clipping(P,i) ;
-    if ( agg_patch_clipping_type(clip) == AGG_CLIP_CONSTANT_T ) {
-      set_corners(st, nst, segments, nseg,
-		  0, agg_patch_clipping_data(clip,0),
-		  1, 1) ;
-      corners_set = TRUE ;
-    }
-    if ( agg_patch_clipping_type(clip) == AGG_CLIP_CONSTANT_S ) {
-      set_corners(st, nst, segments, nseg,
-		  agg_patch_clipping_data(clip,0), 0,
-		  1, 1) ;
-      corners_set = TRUE ;
-    }
-    if ( agg_patch_clipping_type(clip) == AGG_CLIP_ELLIPSE ) {
-      gint nc = 33 ;
-      gdouble s, t ;
-      nst0 = (*nst) ;
-      for ( j = 0 ; j < nc ; j ++ ) {
-	agg_patch_clip_eval(agg_patch_clipping(P,i), (gdouble)j/nc, &s, &t) ;
-	add_point(st, nst, s, t) ;
-      }
-      
-      for ( j = 0 ; j < nc - 1 ; j ++ ) {
-	segments[2*(*nseg)+0] = nst0 + j + 0 ; 
-	segments[2*(*nseg)+1] = nst0 + j + 1 ; 
-	(*nseg) ++ ;      
-      }    
-      segments[2*(*nseg)+0] = nst0 + nc - 1 ;
-      segments[2*(*nseg)+1] = nst0 ; 
-      (*nseg) ++ ;
-
-      /*centre of hole in mesh is centre of ellipse*/
-      holes[(*nholes)*2+0] =
-	agg_patch_clipping_data(agg_patch_clipping(P,i),0) ;
-      holes[(*nholes)*2+1] = 
-	agg_patch_clipping_data(agg_patch_clipping(P,i),1) ;
-      (*nholes) ++ ;
-    }
-  }
-
-  if ( !corners_set ) {
-    set_corners(st, nst, segments, nseg, 0, 0, 1, 1) ;
-  }
-
-  return ;
-}
-
-static gboolean boundary_point(gint *b, gint nb, gint p)
+static gboolean in_patch_hole(agg_patch_t *P, gdouble *st, gdouble del)
 
 {
   gint i ;
+  agg_curve_t *c ;
 
-  for ( i = 0 ; i < nb ; i ++ ) { if ( b[i] == p ) return TRUE ; }
+  for ( i = 0 ; i < agg_patch_hole_number(P) ; i ++ ) {
+    c = agg_patch_hole(P, i) ;
+    if ( agg_curve_point_orientation(c, del, st[0], st[1]) == TRUE )
+      return TRUE ;
+  }
   
   return FALSE ;
 }
 
+static void insert_grid_segments(gdouble *st, gint *nst,
+				 gint *segments, gint *nseg,
+				 gint ns, gint nt)
+{
+  gint i, j, nst0 ;
+
+  nst0 = *nst ;
+  for ( i = 0 ; i <= ns ; i ++ ) {
+    for ( j = 0 ; j <= nt ; j ++ ) {
+      st[2*(*nst) + 0] = (gdouble)i/ns ;
+      st[2*(*nst) + 1] = (gdouble)j/nt ;
+      (*nst) ++ ;
+    }
+  }
+
+  for ( i = 0 ; i <= ns ; i ++ ) {
+    for ( j = 0 ; j < nt ; j ++ ) {      
+      segments[2*(*nseg)+0] = nst0 + i*(nt+1) + j + 0 ; 
+      segments[2*(*nseg)+1] = nst0 + i*(nt+1) + j + 1 ;
+      (*nseg) ++ ;
+    }
+  }
+
+  for ( j = 0 ; j <= nt ; j ++ ) {
+    for ( i = 0 ; i < ns ; i ++ ) {
+      segments[2*(*nseg)+0] = nst0 + (i+0)*(nt+1) + j ;
+      segments[2*(*nseg)+1] = nst0 + (i+1)*(nt+1) + j ;
+      (*nseg) ++ ;
+    }
+  }
+  
+  return ;
+}
+
+static gboolean edges_connected(gint *e, gint i, gint j,
+				gint *p0, gint *p1)
+
+{
+  if ( e[2*i+0] == e[2*j+0] ) {
+    *p0 = e[2*i+1] ; *p1 = e[2*j+1] ;
+    
+    return TRUE ;
+  }
+
+  if ( e[2*i+0] == e[2*j+1] ) {
+    *p0 = e[2*i+1] ; *p1 = e[2*j+0] ;
+    
+    return TRUE ;
+  }
+
+  if ( e[2*i+1] == e[2*j+0] ) {
+    *p0 = e[2*i+0] ; *p1 = e[2*j+1] ;
+    
+    return TRUE ;
+  }
+
+  if ( e[2*i+1] == e[2*j+1] ) {
+    *p0 = e[2*i+0] ; *p1 = e[2*j+0] ;
+    
+    return TRUE ;
+  }
+  
+  return FALSE ;
+}
+
+static void split_triangle(gint *e, gint *ne, gint ne0,
+			   gint *t, gint *nt, gint t0)
+
+{
+  gint i0, i1, j0, j1, k0, k1, tri[12], ntri, p[6], np ;
+
+  /*triangle split edges*/
+  i0 = t[3*t0+0] ; i1 = i0 + ne0 ; 
+  j0 = t[3*t0+1] ; j1 = j0 + ne0 ; 
+  k0 = t[3*t0+2] ; k1 = k0 + ne0 ; 
+
+  ntri = 0 ; np = 0 ;
+
+  if ( edges_connected(e, i0, j0, &(p[2*np+0]), &(p[2*np+1])) ) {
+    tri[3*ntri+0] = i0 ; tri[3*ntri+1] = j0 ; ntri ++ ; np ++ ;
+  }
+  if ( edges_connected(e, i0, j1, &(p[2*np+0]), &(p[2*np+1])) ) {
+    tri[3*ntri+0] = i0 ; tri[3*ntri+1] = j1 ; ntri ++ ; np ++ ;
+  }
+  if ( edges_connected(e, i0, k0, &(p[2*np+0]), &(p[2*np+1])) ) {
+    tri[3*ntri+0] = i0 ; tri[3*ntri+1] = k0 ; ntri ++ ; np ++ ;
+  }
+  if ( edges_connected(e, i0, k1, &(p[2*np+0]), &(p[2*np+1])) ) {
+    tri[3*ntri+0] = i0 ; tri[3*ntri+1] = k1 ; ntri ++ ; np ++ ;
+  }
+  if ( edges_connected(e, i1, j0, &(p[2*np+0]), &(p[2*np+1])) ) {
+    tri[3*ntri+0] = i1 ; tri[3*ntri+1] = j0 ; ntri ++ ; np ++ ;
+  }
+  if ( edges_connected(e, i1, j1, &(p[2*np+0]), &(p[2*np+1])) ) {
+    tri[3*ntri+0] = i1 ; tri[3*ntri+1] = j1 ; ntri ++ ; np ++ ;
+  }
+  if ( edges_connected(e, i1, k0, &(p[2*np+0]), &(p[2*np+1])) ) {
+    tri[3*ntri+0] = i1 ; tri[3*ntri+1] = k0 ; ntri ++ ; np ++ ;
+  }
+  if ( edges_connected(e, i1, k1, &(p[2*np+0]), &(p[2*np+1])) ) {
+    tri[3*ntri+0] = i1 ; tri[3*ntri+1] = k1 ; ntri ++ ; np ++ ;
+  }
+
+  if ( edges_connected(e, j0, k0, &(p[2*np+0]), &(p[2*np+1])) ) {
+    tri[3*ntri+0] = j0 ; tri[3*ntri+1] = k0 ; ntri ++ ; np ++ ;
+  }
+  if ( edges_connected(e, j0, k1, &(p[2*np+0]), &(p[2*np+1])) ) {
+    tri[3*ntri+0] = j0 ; tri[3*ntri+1] = k1 ; ntri ++ ; np ++ ;
+  }
+  if ( edges_connected(e, j1, k0, &(p[2*np+0]), &(p[2*np+1])) ) {
+    tri[3*ntri+0] = j1 ; tri[3*ntri+1] = k0 ; ntri ++ ; np ++ ;
+  }
+  if ( edges_connected(e, j1, k1, &(p[2*np+0]), &(p[2*np+1])) ) {
+    tri[3*ntri+0] = j1 ; tri[3*ntri+1] = k1 ; ntri ++ ; np ++ ;
+  }
+
+  if ( ntri != 3 )
+    g_error("%s: invalid triangle number %d", __FUNCTION__, t0) ;
+
+  g_assert(np == ntri) ;
+
+  /*three new edges from the open jaws*/
+  e[2*((*ne)+0)+0] = p[0] ; e[2*((*ne)+0)+1] = p[1] ; 
+  e[2*((*ne)+1)+0] = p[2] ; e[2*((*ne)+1)+1] = p[3] ; 
+  e[2*((*ne)+2)+0] = p[4] ; e[2*((*ne)+2)+1] = p[5] ; 
+
+  t[3*(*nt)+0] = tri[3*0+0] ; t[3*(*nt)+1] = tri[3*0+1] ;
+  t[3*(*nt)+2] = (*ne)+0 ; (*nt) ++ ;
+  t[3*(*nt)+0] = tri[3*1+0] ; t[3*(*nt)+1] = tri[3*1+1] ;
+  t[3*(*nt)+2] = (*ne)+1 ; (*nt) ++ ;
+  t[3*(*nt)+0] = tri[3*2+0] ; t[3*(*nt)+1] = tri[3*2+1] ;
+  t[3*(*nt)+2] = (*ne)+2 ; (*nt) ++ ;
+
+  t[3*t0+0] = (*ne) + 0 ; 
+  t[3*t0+1] = (*ne) + 1 ; 
+  t[3*t0+2] = (*ne) + 2 ; 
+  
+  (*ne) += 3 ;
+  
+  return ;
+}
+
+static void subdivide_loop(agg_patch_t *P,
+			   gdouble *st, gint *nst,
+			   gint *e, gint *ne,
+			   gint *tri, gint *nt)
+
+{
+  gint i, j, k, ne0, nt0 ;
+
+  ne0 = *ne ; nt0 = *nt ;
+  /*split triangle edges with new points*/
+  for ( i = 0 ; i < ne0 ; i ++ ) {
+    j = e[2*i+0] ; k = e[2*i+1] ;
+    /* st[2*(*nst)+0] = 0.5*(st[2*j+0] + st[2*k+0]) ; */
+    /* st[2*(*nst)+1] = 0.5*(st[2*j+1] + st[2*k+1]) ; */
+
+    agg_patch_edge_split(P, st[2*j+0], st[2*j+1], st[2*k+0], st[2*k+1],
+			 0.5, &(st[2*(*nst)+0]), &(st[2*(*nst)+1])) ;
+    
+    e[2*i+1] = (*nst) ;
+    e[2*(*ne)+0] = (*nst) ; e[2*(*ne)+1] = k ;
+    g_assert((*ne) == i+ne0) ;
+    (*nst) ++ ; (*ne) ++ ;
+  }
+
+  /*split triangles and add new internal edges*/
+  for ( i = 0 ; i < nt0 ; i ++ ) {
+    split_triangle(e, ne, ne0, tri, nt, i) ;
+  }
+  
+  return ;
+}
+
+static void cartesian_to_unit_sphere(gdouble *x, gdouble *ph, gdouble *th)
+
+{
+  gdouble r ;
+
+  r = sqrt(x[0]*x[0] + x[1]*x[1] + x[2]*x[2]) ;
+  *ph = acos(x[2]/r) ;
+  *th = atan2(x[1], x[0]) ;
+
+  if ( *th < 0 ) (*th) += 2.0*M_PI ;
+
+  return ;
+}
+
+/*
+ * icosahedron data taken from:
+ * 
+ * https://danielsieger.com/blog/2021/01/03/generating-platonic-solids.html
+ * 
+ */
+static void sphere_ico_base(gdouble *st, gint *ed, gint *tr,
+			    gint offp, gint offe,
+			    gint *np, gint *ne, gint *nt)
+
+{
+  gdouble x[3], phi, a, b, r ;
+  gint i ;
+  const gint edges[] = {
+    0, 1,   0,  2,    0, 18,    0,  7,    0,  9,   0, 19,    1,  2,
+    1, 3,   1,  7,    1,  8,    2,  3,    2,  5,   2,  9,    3, 16,
+    3, 5,   3,  8,    3, 17,    4,  5,    4, 10,   4, 11,    4, 13,
+    5, 9,   5, 11,    6,  9,    6, 10,    6, 11,   6, 12,    7,  8,
+    7, 15,  8, 14,    9, 11,   10, 11,   10, 12,  10, 13,   12, 13,
+    4, 16,  5, 16,   14, 17,    8, 17,    6, 18,   9, 18,   15, 19,
+    7, 19
+  } ;
+  const gint tri[] = {
+    41, 42, 28,     5,  3, 42,     4,  2, 40,    39, 23, 40,
+    8,   9, 27,     0,  8,  3,     1,  6,  0,    12,  1,  4,
+    21, 11, 12,    22, 21, 30,    23, 25, 30,    24, 31, 25,
+    32, 24, 26,    34, 33, 32,     7, 15,  9,    10,  7,  6,
+    11, 14, 10,    19, 17, 22,    18, 19, 31,    33, 20, 18,
+    38, 37, 29,    15, 16, 38,    36, 13, 14,    17, 35, 36
+  } ;
+  phi = 0.5*(1.0 + sqrt(5.0)) ;
+  a = 1.0 ; b = 1.0/phi ;
+  r = sqrt(a*a + b*b) ;
+
+  a /= r ; b /= r ;
+
+  (*np) = 0 ;
+  x[0] =  0 ; x[1] =  b ; x[2] = -a ;
+  cartesian_to_unit_sphere(x, &(st[2*(*np)+0]), &(st[2*(*np)+1])) ; (*np) ++ ;
+  x[0] =  b ; x[1] =  a ; x[2] =  0 ;
+  cartesian_to_unit_sphere(x, &(st[2*(*np)+0]), &(st[2*(*np)+1])) ; (*np) ++ ;
+  x[0] = -b ; x[1] =  a ; x[2] =  0 ;
+  cartesian_to_unit_sphere(x, &(st[2*(*np)+0]), &(st[2*(*np)+1])) ; (*np) ++ ;
+  x[0] =  0 ; x[1] =  b ; x[2] =  a ;
+  cartesian_to_unit_sphere(x, &(st[2*(*np)+0]), &(st[2*(*np)+1])) ; (*np) ++ ;
+  x[0] =  0 ; x[1] = -b ; x[2] =  a ;
+  cartesian_to_unit_sphere(x, &(st[2*(*np)+0]), &(st[2*(*np)+1])) ; (*np) ++ ;
+  x[0] = -a ; x[1] =  0 ; x[2] =  b ;
+  cartesian_to_unit_sphere(x, &(st[2*(*np)+0]), &(st[2*(*np)+1])) ; (*np) ++ ;
+  x[0] =  0 ; x[1] = -b ; x[2] = -a ;
+  cartesian_to_unit_sphere(x, &(st[2*(*np)+0]), &(st[2*(*np)+1])) ; (*np) ++ ;
+  x[0] =  a ; x[1] =  0 ; x[2] = -b ;
+  cartesian_to_unit_sphere(x, &(st[2*(*np)+0]), &(st[2*(*np)+1])) ; (*np) ++ ;
+  x[0] =  a ; x[1] =  0 ; x[2] =  b ;
+  cartesian_to_unit_sphere(x, &(st[2*(*np)+0]), &(st[2*(*np)+1])) ; (*np) ++ ;
+  x[0] = -a ; x[1] =  0 ; x[2] = -b ;
+  cartesian_to_unit_sphere(x, &(st[2*(*np)+0]), &(st[2*(*np)+1])) ; (*np) ++ ;
+  x[0] =  b ; x[1] = -a ; x[2] =  0 ;
+  cartesian_to_unit_sphere(x, &(st[2*(*np)+0]), &(st[2*(*np)+1])) ; (*np) ++ ;
+  x[0] = -b ; x[1] = -a ; x[2] =  0 ;
+  cartesian_to_unit_sphere(x, &(st[2*(*np)+0]), &(st[2*(*np)+1])) ; (*np) ++ ;
+
+  /*12 points in regular icosahedron at this stage*/  
+  for ( i = 0 ; i < (*np) ; i ++ ) {
+    st[2*i+0] = 1.0 - st[2*i+0]/M_PI ;
+    st[2*i+1] = 1.0 - st[2*i+1]*0.5/M_PI ;
+  }
+
+  /*extra points to wrap around patch boundaries in parametric space*/
+  st[2*(*np)+0] = st[2*7+0] ; st[2*(*np)+1] = 0 ; (*np) ++ ;
+  st[2*(*np)+0] = st[2*8+0] ; st[2*(*np)+1] = 0 ; (*np) ++ ;
+  st[2*(*np)+0] = st[2*4+0] ; st[2*(*np)+1] = st[2*4+1] + 1.0 ; (*np) ++ ;
+  st[2*(*np)+0] = st[2*6+0] ; st[2*(*np)+1] = st[2*6+1] + 1.0 ; (*np) ++ ;
+
+  st[2*(*np)+0] = 1.0 ; st[2*(*np)+1] = 0.5 ; (*np) ++ ;
+  st[2*(*np)+0] = 1.0 ; st[2*(*np)+1] = 1.0 ; (*np) ++ ;
+  st[2*(*np)+0] = 0.0 ; st[2*(*np)+1] = 0.5 ; (*np) ++ ;
+  st[2*(*np)+0] = 0.0 ; st[2*(*np)+1] = 1.0 ; (*np) ++ ;
+  
+  *ne = 43 ;
+  for ( i = 0 ; i < (*ne) ; i ++ ) {
+    ed[2*i+0] = edges[2*i+0] + offp ;
+    ed[2*i+1] = edges[2*i+1] + offp ;
+  }
+
+  *nt = 24 ;
+  for ( i = 0 ; i < (*nt) ; i ++ ) {
+    tr[3*i+0] = tri[3*i+0] + offe ;
+    tr[3*i+1] = tri[3*i+1] + offe ;
+    tr[3*i+2] = tri[3*i+2] + offe ;
+  }
+  
+  return ;
+}
+
+static void insert_sphere_ico_segments(agg_patch_t *P,
+				       gdouble *st, gint *nst,
+				       gint *segments, gint *nseg, gint sub)
+
+{
+  gint i, nst0, nseg0, ne, np, nt, tri[8192*3] ;
+
+  nst0 = *nst ; nseg0 = *nseg ;
+  sphere_ico_base(&(st[2*nst0]), &(segments[2*nseg0]), tri, nst0, nseg0,
+		  &np, &ne, &nt) ;
+  (*nst) += np ; (*nseg) += ne ;
+
+  for ( i = 0 ; i < sub ; i ++ ) {
+    subdivide_loop(P, &(st[2*nst0]), &np, &(segments[2*nseg0]), &ne, tri, &nt) ;
+  }
+
+  (*nst) = nst0 + np ;
+  (*nseg) = nseg0 + ne ;
+    
+  return ;
+}
+
+static void hemisphere_ico_base(gdouble *st, gint *ed, gint *tr,
+				gint offp, gint offe,
+				gint *np, gint *ne, gint *nt)
+
+{
+  gdouble x[3], phi, a, b, r ;
+  gint i ;
+  const gint edges[] = {
+    0,  1,    0,  2,    0,  5,    0,  6,    1,  2,    1,  4,
+    1,  7,    2,  4,    2,  6,    2, 13,    2, 14,    3,  4,
+    3,  8,    3,  9,    3, 10,    3, 13,    4,  7,    4,  9,
+    4, 13,    5,  6,    6, 12,    6, 14,    7,  9,    8,  9,
+    8, 10,    8, 11,   10, 11,   12, 14
+  } ;
+  gint tri[] = {
+     2,  3, 19,     1,  8,  3,     0,  4,  1,    5,  7,  4,
+    16,  5,  6,    22, 17, 16,    13, 11, 17,   12, 13, 23,
+    24, 14, 12,    26, 24, 25,    15, 18, 11,   18,  9,  7,
+    10, 21,  8,    21, 27, 20
+  } ;
+  phi = 0.5*(1.0 + sqrt(5.0)) ;
+  a = 1.0 ; b = 1.0/phi ;
+  r = sqrt(a*a + b*b) ;
+
+  a /= r ; b /= r ;
+  
+  (*np) = 0 ;
+  x[0] =  b ; x[1] =  a ; x[2] =  0 ;
+  cartesian_to_unit_sphere(x, &(st[2*(*np)+0]), &(st[2*(*np)+1])) ; (*np) ++ ;
+  x[0] = -b ; x[1] =  a ; x[2] =  0 ;
+  cartesian_to_unit_sphere(x, &(st[2*(*np)+0]), &(st[2*(*np)+1])) ; (*np) ++ ;
+  x[0] =  0 ; x[1] =  b ; x[2] =  a ;
+  cartesian_to_unit_sphere(x, &(st[2*(*np)+0]), &(st[2*(*np)+1])) ; (*np) ++ ;
+  x[0] =  0 ; x[1] = -b ; x[2] =  a ;
+  cartesian_to_unit_sphere(x, &(st[2*(*np)+0]), &(st[2*(*np)+1])) ; (*np) ++ ;
+  x[0] = -a ; x[1] =  0 ; x[2] =  b ;
+  cartesian_to_unit_sphere(x, &(st[2*(*np)+0]), &(st[2*(*np)+1])) ; (*np) ++ ;
+  x[0] =  a ; x[1] =  0 ; x[2] = -b*0 ;
+  cartesian_to_unit_sphere(x, &(st[2*(*np)+0]), &(st[2*(*np)+1])) ; (*np) ++ ;
+  x[0] =  a ; x[1] =  0 ; x[2] =  b ;
+  cartesian_to_unit_sphere(x, &(st[2*(*np)+0]), &(st[2*(*np)+1])) ; (*np) ++ ;
+  x[0] = -a ; x[1] =  0 ; x[2] = -b*0 ;
+  cartesian_to_unit_sphere(x, &(st[2*(*np)+0]), &(st[2*(*np)+1])) ; (*np) ++ ;
+  x[0] =  b ; x[1] = -a ; x[2] =  0 ;
+  cartesian_to_unit_sphere(x, &(st[2*(*np)+0]), &(st[2*(*np)+1])) ; (*np) ++ ;
+  x[0] = -b ; x[1] = -a ; x[2] =  0 ;
+  cartesian_to_unit_sphere(x, &(st[2*(*np)+0]), &(st[2*(*np)+1])) ; (*np) ++ ;
+
+  for ( i = 0 ; i < (*np) ; i ++ ) {
+    st[2*i+0] = 1.0 - st[2*i+0]/M_PI*2 ;
+    st[2*i+1] = 1.0 - st[2*i+1]*0.5/M_PI ;
+  }
+
+  /*extra points to wrap around patch boundaries in parametric space*/  
+  st[2*(*np)+0] = st[2*6+0] ; st[2*(*np)+1] = 0 ; (*np) ++ ;
+  st[2*(*np)+0] = st[2*7+0] ; st[2*(*np)+1] = 0 ; (*np) ++ ;
+  st[2*(*np)+0] = st[2*3+0] ; st[2*(*np)+1] = st[2*3+1] + 1.0 ; (*np) ++ ;
+  
+  st[2*(*np)+0] = 1.0 ; st[2*(*np)+1] = 0.5 ; (*np) ++ ;
+  st[2*(*np)+0] = 1.0 ; st[2*(*np)+1] = 1.0 ;
+  (*np) ++ ;
+
+  *ne = 28 ;
+  for ( i = 0 ; i < (*ne) ; i ++ ) {
+    ed[2*i+0] = edges[2*i+0] + offp ;
+    ed[2*i+1] = edges[2*i+1] + offp ;
+  }
+
+  *nt = 14 ;
+  for ( i = 0 ; i < (*nt) ; i ++ ) {
+    tr[3*i+0] = tri[3*i+0] + offe ;
+    tr[3*i+1] = tri[3*i+1] + offe ;
+    tr[3*i+2] = tri[3*i+2] + offe ;
+  }
+  
+  return ;
+}
+
+static void insert_hemisphere_ico_segments(agg_patch_t *P,
+					   gdouble *st, gint *nst,
+					   gint *segments, gint *nseg, gint sub)
+
+{
+  gint i, nst0, nseg0, ne, np, nt, tri[8192*3] ;
+
+  nst0 = *nst ; nseg0 = *nseg ;
+
+  hemisphere_ico_base(&(st[2*nst0]), &(segments[2*nseg0]), tri, nst0, nseg0,
+		      &np, &ne, &nt) ;
+  (*nst) += np ; (*nseg) += ne ;
+
+  for ( i = 0 ; i < sub ; i ++ ) {
+    subdivide_loop(P, &(st[2*nst0]), &np, &(segments[2*nseg0]), &ne, tri, &nt) ;
+  }
+
+  (*nst) = nst0 + np ;
+  (*nseg) = nseg0 + ne ;
+  
+  return ;
+}
+
+static void trim_to_holes(gdouble *st, gint *nst,
+			  gint *segments, gint *nseg,
+			  gdouble del, agg_patch_t *P)
+
+{
+  gint i, idx0, idx1 ;
+
+  for ( i = 0 ; i < (*nseg) ; i ++ ) {
+    idx0 = segments[2*i+0] ; idx1 = segments[2*i+1] ; 
+    if ( in_patch_hole(P, &(st[2*idx0]), del) ||
+	 in_patch_hole(P, &(st[2*idx1]), del) ) {
+      /*replace the segment with one from the end of the list*/
+      segments[2*i+0] = segments[2*(*nseg)+0] ;
+      segments[2*i+1] = segments[2*(*nseg)+1] ;
+      (*nseg) -- ; i -- ;
+    }
+  }
+  
+  return ;
+}
+
 /** 
- * Add a parametric surface to a mesh, working round clipped parts of
+ * Add a parametric surface to a mesh, working round holes in the
  * patch, using Christian Woltering's library version of Jonathan
  * Shewchuk's Triangle code:
  * 
@@ -577,7 +927,6 @@ static gboolean boundary_point(gint *b, gint nb, gint p)
  * @return 0 on success.
  */
 
-
 gint agg_mesh_surface_add_triangle(agg_mesh_t *msh, gint isurf,
 				   gchar *args, gint pps,
 				   agg_surface_workspace_t *w)
@@ -590,33 +939,33 @@ gint agg_mesh_surface_add_triangle(agg_mesh_t *msh, gint isurf,
   mesh *m ;
   behavior *b ;
   statistics s ;
-  gint np, np0, i0, i1, i2, j0, j1, j2, nbpts ;
-  gint *sp, *e, i, vertexnumber ;
-  gint boundary[8192], nbound, tag ;
+  gint np, np0, ns0, i0, i1, i2, j0, j1, j2, nbpts ;
+  gint *sp, *e, i, j, vertexnumber ;
   struct otri triangleloop, trisym;
   struct osub checkmark;
   vertex p1, p2, p3, vertexloop ;
   glong edgenumber, elementnumber ;
   triangle ptr; 
-  subseg sptr;  
-  gdouble del = 0.0625 ;
-  gdouble s0, t0, s1, t1, s2, t2 ;
+  subseg sptr;
+  gdouble s0, t0, t ;
+  gint nseg = 64 ;
+  agg_curve_t *c ;
   agg_patch_t *P ;
-  del = 0 ;
-  
-  P = agg_mesh_patch(msh,isurf) ;
+  agg_surface_t *S ;
 
+  P = agg_mesh_patch(msh, isurf) ;
+  S = agg_mesh_surface(msh, isurf) ;
+  
   /*maximum number of boundary points*/
   nbpts = 1024 ;
   for ( i = 0 ; i < agg_mesh_intersection_number(msh) ; i ++ ) {
     nbpts += agg_mesh_intersection_points_end(msh, i) -
       agg_mesh_intersection_points_start(msh, i) ;
   }
-  nbpts = MAX(nbpts, 2048) ;
+  nbpts = MAX(nbpts, 16384) ;
   
   ctx = triangle_context_create() ;
   triangle_context_options(ctx, args) ;
-  /* triangle_context_options(ctx, "czqa0.001"); */
   reset_triangleio(&in);
 
   in.pointlist = (gdouble *)g_malloc0(nbpts*2*sizeof(gdouble)) ;
@@ -628,15 +977,52 @@ gint agg_mesh_surface_add_triangle(agg_mesh_t *msh, gint isurf,
   in.numberofpoints = in.numberofsegments = 0 ;
   in.numberofholes = 0 ;
 
-  set_boundary(msh, isurf,
-	       in.pointlist, &(in.numberofpoints),
-	       in.segmentlist, &(in.numberofsegments),
-	       in.segmentmarkerlist,
-	       in.holelist, &(in.numberofholes),
-	       del) ;
+  if ( agg_surface_grid(S) == AGG_GRID_REGULAR ) {
+    insert_grid_segments(in.pointlist, &(in.numberofpoints),
+			 in.segmentlist, &(in.numberofsegments),
+			 agg_surface_grid_section_number(S),
+			 agg_surface_grid_spline_number(S)) ;
+  }
+  
+  if ( agg_surface_grid(S) == AGG_GRID_SPHERE_ICO ) {
+    insert_sphere_ico_segments(P, in.pointlist, &(in.numberofpoints),
+			       in.segmentlist, &(in.numberofsegments),
+			       agg_surface_grid_subdivision(S)) ;
+  }
+
+  if ( agg_surface_grid(S) == AGG_GRID_HEMISPHERE_ICO ) {
+    insert_hemisphere_ico_segments(P, in.pointlist, &(in.numberofpoints),
+				   in.segmentlist, &(in.numberofsegments),
+				   agg_surface_grid_subdivision(S)) ;
+  }
+
+  trim_to_holes(in.pointlist, &(in.numberofpoints),
+		in.segmentlist, &(in.numberofsegments),
+		0.01, P) ;
+  
+  for ( i = 0 ; i < agg_patch_hole_number(P) ; i ++ ) {
+    np0 = in.numberofpoints ;
+    ns0 = in.numberofsegments ;
+
+    c = agg_patch_hole(P,i) ;    
+    for ( j = 0 ; j < nseg ; j ++ ) {
+      t = (gdouble)j/nseg ;
+      agg_curve_eval(c, t, &s0, &t0) ;
+      
+      in.pointlist[2*np0+2*j+0] = s0 ;
+      in.pointlist[2*np0+2*j+1] = t0 ;
+      in.segmentlist[2*ns0+2*j+0] = np0+j+0 ; 
+      in.segmentlist[2*ns0+2*j+1] = np0+j+1 ; 
+    }
+    in.segmentlist[2*ns0+2*(nseg-1)+1] = np0 ;    
+    in.holelist[2*i+0] = c->data[0] ;
+    in.holelist[2*i+1] = c->data[1] ; 
+    in.numberofholes ++ ;
+    in.numberofpoints += nseg ;
+    in.numberofsegments += nseg ;
+  }
   
   np0 = in.numberofpoints ;
-
   triangle_mesh_create(ctx, &in) ;
   m = ctx->m ;
   b = ctx->b ;
@@ -652,15 +1038,12 @@ gint agg_mesh_surface_add_triangle(agg_mesh_t *msh, gint isurf,
   g_assert(vertexnumber == 0) ;
   vertexloop = vertextraverse(m);
   np0 = agg_mesh_point_number(msh) ;
-  nbound = 0 ;
   while (vertexloop != (vertex) NULL) {
     if (!b->jettison || (vertextype(vertexloop) != UNDEADVERTEX)) {
       s0 = vertexloop[0] ; t0 = vertexloop[1] ;
       np = agg_mesh_surface_point_add(msh, isurf, s0, t0, w) ;
       agg_mesh_point_tag(msh,np) = isurf ;
-      tag = vertexmark(vertexloop) ;
       setvertexmark(vertexloop, vertexnumber) ;
-      if ( tag == 1 ) { boundary[nbound] = np ; nbound ++ ; }
       vertexnumber++ ;
     }
     vertexloop = vertextraverse(m);
@@ -732,44 +1115,6 @@ gint agg_mesh_surface_add_triangle(agg_mesh_t *msh, gint isurf,
   
   triangle_context_destroy(ctx) ;
   /*** adapted code ends here ****/
-  
-  if ( agg_patch_mapping(P) == AGG_PATCH_TUBULAR ||
-       agg_patch_mapping(P) == AGG_PATCH_BILINEAR ) return 0 ;
-
-  if ( del == 0 ) return 0 ;
-  
-  /*add the end cap to deal with singularity on surfaces*/
-  for ( i = 1 ; i < agg_mesh_spline_number(msh) ; i ++ ) {
-    agg_mesh_spline_ends(msh, i, &i0, &i1) ;
-    
-    if ( boundary_point(boundary, nbound, i0) &&
-	 boundary_point(boundary, nbound, i1) ) {
-      s0 = agg_mesh_point_s(msh, i0) ;
-      t0 = agg_mesh_point_t(msh, i0) ;
-      s1 = agg_mesh_point_s(msh, i1) ;
-      t1 = agg_mesh_point_t(msh, i1) ;
-      if ( s0 == 1.0-del && s1 == 1.0-del ) {
-	s2 = 1 ; t2 = 0.5*(t0+t1) ;
-	np = agg_mesh_surface_point_add(msh, isurf, s2, t2, w) ;
-	agg_mesh_spline_interp_points(msh, isurf, i0 , np, pps, w) ;
-	i0 = agg_mesh_spline_number(msh) - 1 ;
-	agg_mesh_spline_interp_points(msh, isurf, i1, np, pps, w) ;
-	i1 = agg_mesh_spline_number(msh) - 1 ;
-	agg_mesh_element_add(msh, -i, i0, -i1, 0) ;
-      }
-      if ( s0 == del && s1 == del ) {
-	s2 = 0 ; t2 = 0.5*(t0+t1) ;
-	np = agg_mesh_surface_point_add(msh, isurf, s2, t2, w) ;
-	agg_mesh_spline_interp_points(msh, isurf, i0 , np, pps, w) ;
-	i0 = agg_mesh_spline_number(msh) - 1 ;
-	agg_mesh_spline_interp_points(msh, isurf, i1, np, pps, w) ;
-	i1 = agg_mesh_spline_number(msh) - 1 ;
-	agg_mesh_element_add(msh, -i, i0, -i1, 0) ;
-      }
-      
-    }
-  }
-  
   return 0 ;
 }
 
@@ -784,7 +1129,7 @@ gint agg_mesh_surface_add_triangle(agg_mesh_t *msh, gint isurf,
  * 
  * @return 0 on success.
  */
-
+#if 0
 gint agg_mesh_surface_blend_add(agg_mesh_t *m, gint iB, gint nsec, gint pps,
 				agg_surface_workspace_t *w)
 
@@ -901,6 +1246,7 @@ gint agg_mesh_surface_blend_add(agg_mesh_t *m, gint iB, gint nsec, gint pps,
 
   return 0 ;
 }
+#endif
 
 /** 
  * Find a spline from its endpoints
@@ -995,23 +1341,11 @@ gint agg_mesh_surface_add_grid(agg_mesh_t *m, gint iS,
 {
   gint i, j, np0, nsp0, s0, s1, s2, s3 ;
   gdouble s, t, tmin, tmax, smin, smax ;
-  agg_patch_t *P ;
   
   np0 = agg_mesh_point_number(m) ;
   nsp0 = agg_mesh_spline_number(m) ;
 
   smin = tmin = 0.0 ; smax = tmax = 1.0 ;
-  P = agg_mesh_patch(m, iS) ;
-  if ( agg_patch_clipping_number(P) > 0 ) {
-    if ( agg_patch_clipping_type(agg_patch_clipping(P,0)) ==
-	 AGG_CLIP_CONSTANT_S ) {
-      smin = agg_patch_clipping_data(agg_patch_clipping(P,0),0) ;
-    }
-    if ( agg_patch_clipping_type(agg_patch_clipping(P,0)) ==
-	 AGG_CLIP_CONSTANT_T ) {
-      tmin = agg_patch_clipping_data(agg_patch_clipping(P,0),0) ;
-    }
-  }
   
   for ( i = 0 ; i <= nsec ; i ++ ) {
     for ( j = 0 ; j <= nsp ; j ++ ) {
@@ -1119,12 +1453,11 @@ gint agg_mesh_body(agg_mesh_t *m, agg_body_t *b, gint pps,
 		   agg_surface_workspace_t *w)
 
 {
-  gint i, j, nsec, nsp ;
+  gint i, j ;
   gdouble area ;
   gchar args[64] ;
   agg_intersection_t *inter ;
 
-  nsp = 0 ;
   agg_mesh_surface_number(m) = 0 ;
   for ( i = 0 ; i < agg_body_surface_number(b); i ++ ) {
     agg_mesh_surface(m,i) = agg_body_surface(b,i) ;
@@ -1135,25 +1468,28 @@ gint agg_mesh_body(agg_mesh_t *m, agg_body_t *b, gint pps,
   inter = agg_intersection_new(8192) ;
   for ( i = 0 ; i < agg_body_surface_number(b); i ++ ) {
     for ( j = i+1 ; j < agg_body_surface_number(b); j ++ ) {
-      agg_surface_patch_intersection(inter,
-				     agg_body_surface(b,i),
-				     agg_body_patch(b,i),
-				     agg_body_surface(b,j),
-				     agg_body_patch(b,j),
-				     &(m->B[m->nb]), w) ;
+      agg_surface_patch_trim(inter,
+			     agg_body_surface(b,i), agg_body_patch(b,i), 0.01,
+			     agg_body_surface(b,j), agg_body_patch(b,j), 0.01,
+			     &(m->B[m->nb]), w) ;
       if ( agg_intersection_point_number(inter) != 0 ) {
 	inter = agg_intersection_new(8192) ;
 	m->nb ++ ;
       }
     }
   }
-
+  
+  
   for ( i = 0 ; i < agg_mesh_surface_number(m) ; i ++ ) {
     g_assert(agg_surface_grid(agg_body_surface(b,i)) != AGG_GRID_UNDEFINED) ;
     if ( agg_surface_grid(agg_body_surface(b,i)) == AGG_GRID_REGULAR ) {
-      nsec = agg_surface_grid_section_number(agg_body_surface(b,i)) ;
-      nsp = agg_surface_grid_spline_number(agg_body_surface(b,i)) ;      
-      agg_mesh_surface_add_grid(m, i, nsec, nsp, pps, w) ;
+      area = agg_surface_grid_element_area(agg_body_surface(b,i)) ;
+      area = 0.01 ;
+      sprintf(args, "pzqa%lg", area) ;
+      agg_mesh_surface_add_triangle(m, i, args, pps, w) ;
+      /* nsec = agg_surface_grid_section_number(agg_body_surface(b,i)) ; */
+      /* nsp = agg_surface_grid_spline_number(agg_body_surface(b,i)) ;       */
+      /* agg_mesh_surface_add_grid(m, i, nsec, nsp, pps, w) ; */
     }
     if ( agg_surface_grid(agg_body_surface(b,i)) == AGG_GRID_TRIANGLE ) {
       area = agg_surface_grid_element_area(agg_body_surface(b,i)) ;
@@ -1161,18 +1497,23 @@ gint agg_mesh_body(agg_mesh_t *m, agg_body_t *b, gint pps,
       agg_mesh_surface_add_triangle(m, i, args, pps, w) ;
     }
     if ( agg_surface_grid(agg_body_surface(b,i)) == AGG_GRID_SPHERE_ICO ) {
-      agg_mesh_icosahedron(m, i, w) ;
-      /* agg_mesh_refine_loop(m, w) ; */
-      for ( j = 0 ; j < agg_surface_grid_subdivision(agg_body_surface(b,i)) ;
-	    j ++ ) {
-	agg_mesh_refine_loop(m, w) ;
-      }
+      area = agg_surface_grid_element_area(agg_body_surface(b,i)) ;
+      area = 2 ;
+      sprintf(args, "pza%lg", area) ;
+      agg_mesh_surface_add_triangle(m, i, args, pps, w) ;
+    }
+    if ( agg_surface_grid(agg_body_surface(b,i)) == AGG_GRID_HEMISPHERE_ICO ) {
+      area = agg_surface_grid_element_area(agg_body_surface(b,i)) ;
+      area = 0.01 ;
+      sprintf(args, "pza%lg", area) ;
+      /* sprintf(args, "pzYYS0") ; */
+      agg_mesh_surface_add_triangle(m, i, args, pps, w) ;
     }
   }
 
-  for ( i = 0 ; i < agg_mesh_surface_blend_number(m) ; i ++ ) {
-    agg_mesh_surface_blend_add(m, i, 4, pps, w) ;
-  }
+  /* for ( i = 0 ; i < agg_mesh_surface_blend_number(m) ; i ++ ) { */
+  /*   agg_mesh_surface_blend_add(m, i, 4, pps, w) ; */
+  /* } */
 
   return 0 ;
 }
@@ -1223,48 +1564,6 @@ gint agg_mesh_element_nodes(agg_mesh_t *m, gint e,
     }
   }
   
-  return 0 ;
-}
-
-gint agg_mesh_icosahedron(agg_mesh_t *m, gint surf, agg_surface_workspace_t *w)
-
-{
-  gint np0, ne0, nt0, *edges, *elements, np, ne, nt, i ;
-  gdouble *st, u, v ;
-  agg_surface_t *S ;
-  agg_patch_t *P ;
-  
-  np0 = agg_mesh_point_number(m) ;
-  ne0 = agg_mesh_spline_number(m) ;
-  nt0 = agg_mesh_element_number(m) ;
-  
-  st = &(agg_mesh_point_s(m, np0)) ;
-  edges = agg_mesh_spline(m, ne0) ; edges = &(edges[-2]) ;
-  elements = agg_mesh_element(m, nt0) ;
-
-  agg_sphere_ico_base(&(st[1]), AGG_MESH_POINT_SIZE,
-		      &(st[0]), AGG_MESH_POINT_SIZE,
-		      edges, 2, elements, AGG_MESH_ELEMENT_SIZE,
-		      &np, &ne, &nt, TRUE, FALSE) ;
-
-  agg_mesh_point_number(m) += np ;
-  agg_mesh_spline_number(m) += ne-1 ;
-  agg_mesh_element_number(m) += nt ;
-
-  if ( ( S = agg_mesh_surface(m, surf)) == NULL ) return 0 ;
-  P = agg_mesh_patch(m, surf) ;
-  
-  for ( i = np0 ; i < agg_mesh_point_number(m) ; i ++ ) {
-    agg_patch_map(P,
-		  agg_mesh_point_s(m,i), agg_mesh_point_t(m,i),
-		  &u, &v) ;
-    agg_surface_point_eval(S, u, v, agg_mesh_point(m,i), w) ;    
-  }
-  
-  for ( i = ne0 ; i < agg_mesh_spline_number(m) ; i ++ ) {
-    m->isp[i+1] = m->isp[i] + 2 ;
-  }
-
   return 0 ;
 }
 

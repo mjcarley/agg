@@ -30,9 +30,10 @@ static const struct {
   agg_patch_mapping_t map ;
 } mapping_list[] =
   {
-    {"bilinear",  AGG_PATCH_BILINEAR},
-    {"spherical", AGG_PATCH_SPHERICAL},
-    {"tubular",   AGG_PATCH_TUBULAR},
+    {"bilinear",      AGG_PATCH_BILINEAR},
+    {"spherical",     AGG_PATCH_SPHERICAL},
+    {"hemispherical", AGG_PATCH_HEMISPHERICAL},
+    {"tubular",       AGG_PATCH_TUBULAR},
     {NULL,        -1}
   } ;
 
@@ -59,16 +60,18 @@ agg_patch_t *agg_patch_new(gint nstmax)
 
   P = (agg_patch_t *)g_malloc0(sizeof(agg_patch_t)) ;
 
-  P->st = (gdouble *)g_malloc0(AGG_PATCH_POINT_SIZE*nstmax*sizeof(gdouble)) ;
-  agg_patch_point_number(P) = 0 ;
-  agg_patch_point_number_max(P) = nstmax ;
-
   agg_patch_mapping(P) = AGG_PATCH_BILINEAR ;
   agg_patch_wrap_s(P) = FALSE ;
   agg_patch_wrap_t(P) = FALSE ;
   agg_patch_invert(P) = FALSE ;
 
-  agg_patch_clipping_number(P) = 0 ;
+  agg_patch_hole_number(P) = 0 ;
+  agg_curve_type(agg_patch_curve_smin(P))  = AGG_CURVE_POLYNOMIAL ;
+  agg_curve_order(agg_patch_curve_smin(P)) = 0 ;
+  (agg_curve_data(agg_patch_curve_smin(P)))[0] = 0 ;
+  agg_curve_type(agg_patch_curve_smax(P))  = AGG_CURVE_POLYNOMIAL ;
+  agg_curve_order(agg_patch_curve_smax(P)) = 0 ;
+  (agg_curve_data(agg_patch_curve_smax(P)))[0] = 1 ;
   
   return P ;
 }
@@ -109,7 +112,40 @@ static gint agg_spherical_map(agg_patch_t *P, gdouble s, gdouble t,
 			      gdouble *u, gdouble *v)
 
 {
+
+  if ( t > 1.0 ) t -= 1.0 ;
+  if ( t < 0.0 ) t += 1.0 ;
+  g_assert(0.0 <= t && t <= 1.0) ;
+
   *u = 0.5*(1.0-cos(M_PI*s)) ;
+  
+  if ( t < 0.5 ) {
+    *v = -0.5*(1.0 + cos(2.0*M_PI*t)) ;
+  } else {
+    *v =  0.5*(1.0 + cos(2.0*M_PI*t)) ;
+  }
+  
+  return 0 ;
+}
+
+
+static gint agg_hemispherical_map(agg_patch_t *P, gdouble s, gdouble t,
+				  gdouble *u, gdouble *v)
+
+{
+  agg_curve_t *cmin, *cmax ;
+  gdouble smin, smax, tmp ;
+
+  if ( t > 1.0 ) t -= 1.0 ;
+  if ( t < 0.0 ) t += 1.0 ;
+  g_assert(0.0 <= t && t <= 1.0) ;
+
+  cmin = agg_patch_curve_smin(P) ;
+  cmax = agg_patch_curve_smax(P) ;
+  agg_curve_eval(cmin, t, &smin, &tmp) ;
+  agg_curve_eval(cmax, t, &smax, &tmp) ;
+
+  *u = sin(0.5*M_PI*(smin + s*(smax-smin))) ;
 
   if ( t < 0.5 ) {
     *v = -0.5*(1.0 + cos(2.0*M_PI*t)) ;
@@ -124,6 +160,10 @@ static gint agg_tubular_map(agg_patch_t *P, gdouble s, gdouble t,
 			    gdouble *u, gdouble *v)
 
 {
+  if ( t > 1.0 ) t -= 1.0 ;
+  if ( t < 0.0 ) t += 1.0 ;
+  g_assert(0.0 <= t && t <= 1.0) ;
+
   *u = s ;
 
   if ( t < 0.5 ) {
@@ -167,6 +207,10 @@ gint agg_patch_map(agg_patch_t *P, gdouble s, gdouble t,
 
   if ( agg_patch_mapping(P) == AGG_PATCH_SPHERICAL ) {
     return agg_spherical_map(P, s, t, u, v) ;
+  }
+
+  if ( agg_patch_mapping(P) == AGG_PATCH_HEMISPHERICAL ) {
+    return agg_hemispherical_map(P, s, t, u, v) ;
   }
 
   if ( agg_patch_mapping(P) == AGG_PATCH_TUBULAR ) {
@@ -244,6 +288,7 @@ gint agg_patch_parse(agg_patch_t *P, agg_variable_t *p, gint np)
   return 0 ;
 }
 
+#if 0
 /** 
  * Evaluate patch coordinates on a clipping curve
  * 
@@ -287,6 +332,7 @@ gint agg_patch_clip_eval(agg_patch_clipping_t *c, gdouble u,
   
   return 0 ;
 }
+#endif
 
 /** 
  * Convert derivatives with respect to surface coordinates \f$(u,v)\f$
@@ -347,6 +393,7 @@ gint agg_patch_surface_diff(agg_patch_t *P,
   return 0 ;
 }
 
+#if 0
 /** 
  * Set orientation of two clipping curves so that they are traversed
  * in the same sense in physical space. The test is performed by
@@ -416,6 +463,7 @@ gint agg_clipping_orient(agg_patch_clipping_t *c1, agg_patch_t *P1,
   
   return 0 ;
 }
+#endif
 
 gint agg_patch_point_diff(agg_surface_t *S, agg_patch_t *P,
 			  gdouble s, gdouble t,
@@ -462,6 +510,9 @@ static void spherical_st_to_x(gdouble s, gdouble t, gdouble *x)
 {
   gdouble th, ph ;
 
+  if ( t > 1 ) t -= 1 ;
+  if ( t < 0 ) t += 1 ;
+  
   th = (1.0 - t)*2.0*M_PI ; ph = (1.0 - s)*M_PI ;
   x[0] = cos(th)*sin(ph) ; x[1] = sin(th)*sin(ph) ; x[2] = cos(ph) ;
 
@@ -482,16 +533,46 @@ static void spherical_x_to_st(gdouble *x, gdouble *s, gdouble *t)
   return ;
 }
 
+static void hemispherical_st_to_x(gdouble s, gdouble t, gdouble *x)
+
+{
+  gdouble th, ph ;
+
+  if ( t > 1 ) t -= 1 ;
+  if ( t < 0 ) t += 1 ;
+  
+  th = (1.0 - t)*2.0*M_PI ; ph = 0.5*(1.0 - s)*M_PI ;
+  x[0] = cos(th)*sin(ph) ; x[1] = sin(th)*sin(ph) ; x[2] = cos(ph) ;
+
+  return ;
+}
+
+static void hemispherical_x_to_st(gdouble *x, gdouble *s, gdouble *t)
+
+{
+  gdouble r ;
+
+  r = sqrt(x[0]*x[0] + x[1]*x[1] + x[2]*x[2]) ;
+  *t = atan2(x[1], x[0]) ;
+  if ( (*t) < 0 ) (*t) += 2.0*M_PI ;
+  *s = 1.0 - 2.0*acos(x[2]/r)/M_PI ;
+  *t = 1.0 - (*t)*0.5/M_PI ;
+
+  return ;
+}
+
 gint agg_patch_edge_split(agg_patch_t *P,
 			  gdouble s0, gdouble t0, gdouble s1, gdouble t1, 
 			  gdouble a, gdouble *s, gdouble *t)
 
 {
-  switch ( agg_patch_mapping(P) ) {
-  default: g_assert_not_reached() ; break ;
-  case AGG_PATCH_SPHERICAL:
-    gdouble x0[3], x1[3], x[3] ;
+  gdouble x0[3], x1[3], x[3] ;
 
+  switch ( agg_patch_mapping(P) ) {
+  default:
+    g_assert_not_reached() ;
+    break ;
+  case AGG_PATCH_SPHERICAL:
     spherical_st_to_x(s0, t0, x0) ;
     spherical_st_to_x(s1, t1, x1) ;
 
@@ -501,6 +582,23 @@ gint agg_patch_edge_split(agg_patch_t *P,
 
     spherical_x_to_st(x, s, t) ;
 
+    if ( t0 > 1 || t1 > 1 ) (*t) += 1 ;
+    if ( t0 < 0 || t1 < 0 ) (*t) -= 1 ;
+    
+    break ;
+  case AGG_PATCH_HEMISPHERICAL:
+    hemispherical_st_to_x(s0, t0, x0) ;
+    hemispherical_st_to_x(s1, t1, x1) ;
+
+    x[0] = x0[0] + a*(x1[0] - x0[0]) ;
+    x[1] = x0[1] + a*(x1[1] - x0[1]) ;
+    x[2] = x0[2] + a*(x1[2] - x0[2]) ;
+
+    hemispherical_x_to_st(x, s, t) ;
+
+    if ( t0 > 1 || t1 > 1 ) (*t) += 1 ;
+    if ( t0 < 0 || t1 < 0 ) (*t) -= 1 ;
+    
     break ;
   }
   

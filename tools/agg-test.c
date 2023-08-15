@@ -544,6 +544,7 @@ static void parser_test(gchar *file)
   return ;
 }
 
+#if 0
 static void ico_test(void)
 
 {
@@ -614,6 +615,7 @@ static void ico_test(void)
 
   return ;
 }
+#endif
 
 static void fit_test(void)
 
@@ -722,11 +724,11 @@ gint main(gint argc, gchar **argv)
     return 0 ;
   }
 
-  if ( test == 7 ) {
-    ico_test() ;
+  /* if ( test == 7 ) { */
+  /*   ico_test() ; */
     
-    return 0 ;
-  }
+  /*   return 0 ; */
+  /* } */
 
   if ( test == 8 ) {
     fit_test() ;
