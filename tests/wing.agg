@@ -25,5 +25,5 @@ surface {
   transform(0.9, 1, "yscale", "root*sqrt((1-u)/0.1)")
   ##transform("yscale", "2*root*sqrt(u*(1-u))")
   transform("translate", 0, 0, "span*(u-1/2)")
-  grid("sphere-ico", 4)
+  grid("sphere-uv", 16, 32)
 }

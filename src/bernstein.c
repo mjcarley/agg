@@ -26,8 +26,12 @@
 #include "binomials.h"
 
 /** 
- * @ingroup bernstein
+ * @{ 
  *
+ * @ingroup bernstein
+ */
+
+/** 
  * Evaluate a Bernstein basis monomial, 
  * \f$B_{r}^{(n)}(x)=\binom{n}{r}x^{r}(1-x)^{n-r}\f$
  * 
@@ -47,6 +51,17 @@ gdouble agg_bernstein_basis_eval(gint n, gint r, gdouble x)
   
   return S ;
 }
+
+/** 
+ * Evaluate the derivative of a Bernstein monomial 
+ * \f$\mathrm{d}B_{r}^{(n)}(x)/\mathrm{d}x\f$
+ * 
+ * @param n degree of Bernstein basis;
+ * @param r mononomial from basis to evaluate;
+ * @param x argument of monomial
+ * 
+ * @return \f$\mathrm{d}B_{r}^{(n)}(x)/\mathrm{d}x\f$
+ */
 
 gdouble agg_bernstein_derivative_eval(gint n, gint r, gdouble x)
 
@@ -70,6 +85,19 @@ gdouble agg_bernstein_derivative_eval(gint n, gint r, gdouble x)
   
   return dS ;
 }
+
+/** 
+ * Evaluate all monomials of a Bernstein basis of specified degree
+ * and, optionally, their derivatives.
+ * 
+ * @param n degree of Bernstein basis;
+ * @param x argument of monomials;
+ * @param S on exit contains \f$B_{r}^{(n)}(x)\f$, \f$0\leq r\leq n\f$;
+ * @param dS if not NULL, on exit contains 
+ * \f$\mathrm{d}B_{r}^{(n)}(x)/\mathrm{d}x\f$, \f$0\leq r\leq n\f$.
+ * 
+ * @return 0 on success
+ */
 
 gint agg_bernstein_basis(gint n, gdouble x, gdouble *S, gdouble *dS)
 
@@ -97,3 +125,7 @@ gint agg_bernstein_basis(gint n, gdouble x, gdouble *S, gdouble *dS)
   
   return 0 ;
 }
+
+/**
+ * @}
+ */

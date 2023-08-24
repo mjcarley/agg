@@ -14298,8 +14298,22 @@ _ACEOF
 
   LIBS="-ltriangle-api $LIBS"
 
+else
+
+  echo \#################################################################
+  echo \#
+  echo \# triangle-api library not installed or not in library path
+  echo \# You can get it from
+  echo \#
+  echo \# https://github.com/wo80/Triangle/
+  echo \#
+  echo \#################################################################
+  exit
+
 fi
 
+
+##AC_CHECK_LIB(triangle-api, triangle_mesh_create)
 
 
 

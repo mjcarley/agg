@@ -257,6 +257,14 @@ gint agg_section_copy(agg_section_t *dest, agg_section_t *src)
   return 0 ;
 }
 
+/** 
+ * Allocate a new ::agg_section_t and copy an existing section into it.
+ * 
+ * @param s an ::agg_section_t to copy.
+ * 
+ * @return a newly allocated ::agg_section_t containing a copy of \a s.
+ */
+
 agg_section_t *agg_section_duplicate(agg_section_t *s)
 
 {
@@ -378,14 +386,14 @@ gint agg_sections_list(FILE *f)
  * Derivative of a section curve
  * 
  * @param s a ::agg_section_t containing the section data;
- * @param x evaluation point \f$-1\leq x\leq 1\f$. 
+ * @param v evaluation point \f$-1\leq x\leq 1\f$. 
  * 
  * @return \f$y'=\mathrm{d}f(x)/\mathrm{d}x\f$ on success. An error is
  * reported and execution ceases if \a x is out of range or the
  * section type is undefined.
  */
 
-gdouble agg_section_diff(agg_section_t *s, gdouble x)
+gdouble agg_section_diff(agg_section_t *s, gdouble v)
 
 {
   gdouble dy, *c, C, dC, yte, sgn, n1, n2 ;
@@ -395,15 +403,15 @@ gdouble agg_section_diff(agg_section_t *s, gdouble x)
   g_assert(agg_section_order_lower(s) < 1) ;
   g_assert(agg_section_order_upper(s) < 1) ;
   
-  if ( x < -1.0 || x > 1.0 ) 
-    g_error("%s: input parameter x (%lg) out of range (-1,1)",
-	    __FUNCTION__, x) ;
+  if ( v < -1.0 || v > 1.0 ) 
+    g_error("%s: input parameter v (%lg) out of range (-1,1)",
+	    __FUNCTION__, v) ;
 
-  if ( x < 0.0 ) {
+  if ( v < 0.0 ) {
     order = agg_section_order_lower(s) ;
     c = &(agg_section_coefficient_lower(s,0)) ;
     yte = agg_section_trailing_edge_lower(s) ;
-    x = fabs(x) ;
+    v = fabs(v) ;
     sgn = -1 ;
   } else {
     order = agg_section_order_upper(s) ;
@@ -415,19 +423,19 @@ gdouble agg_section_diff(agg_section_t *s, gdouble x)
   dy = sgn*yte ;
   n1 = agg_section_eta_left(s) ;
   n2 = agg_section_eta_right(s) ;
-  C  = pow(x, n1)*pow(1.0-x, n2) ;
-  dC = n1*pow(x, n1-1)*pow(1.0-x, n2) - n2*pow(x, n1)*pow(1.0-x, n2-1) ;
+  C  = pow(v, n1)*pow(1.0-v, n2) ;
+  dC = n1*pow(v, n1-1)*pow(1.0-v, n2) - n2*pow(v, n1)*pow(1.0-v, n2-1) ;
   for ( i = 0 ; i <= order ; i ++ ) {
-    dy += sgn*c[i]*(agg_bernstein_derivative_eval(order, i, x)*C +
-		    agg_bernstein_basis_eval(order, i, x)*dC) ;
+    dy += sgn*c[i]*(agg_bernstein_derivative_eval(order, i, v)*C +
+		    agg_bernstein_basis_eval(order, i, v)*dC) ;
   }
 
   return dy ;
 }
 
 /** 
- * Write a section to file as a list of points \f$(|x|, y(x))\f$,
- * \f$-\leq x\leq 1\f$.
+ * Write a section to file as a list of points \f$(|v|, y(v))\f$,
+ * \f$-\leq v\leq 1\f$.
  * 
  * @param f output file stream;
  * @param s the section to write;
@@ -456,8 +464,8 @@ gint agg_section_write(FILE *f, agg_section_t *s, agg_transform_t *T,
 }
 
 /** 
- * Write a section to file as a list of points \f$(|x|, y(x))\f$,
- * \f$-\leq x\leq 1\f$, using a C printf format string
+ * Write a section to file as a list of points \f$(|v|, y(v))\f$,
+ * \f$-\leq v\leq 1\f$, using a C printf format string
  * 
  * @param f output file stream;
  * @param s the section to write;

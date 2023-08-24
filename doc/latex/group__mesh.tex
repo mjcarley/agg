@@ -67,10 +67,6 @@ Generate a mesh for surfaces and surface blends on a body
 \begin{DoxyReturn}{Returns}
 0 on success. 
 \end{DoxyReturn}
-
-
-References \textbf{ agg\+\_\+intersection\+\_\+t}.
-
 \mbox{\label{group__mesh_ga20d87d3624863ead8a734367418954e6}} 
 \index{Surface meshes@{Surface meshes}!agg\_mesh\_element\_add@{agg\_mesh\_element\_add}}
 \index{agg\_mesh\_element\_add@{agg\_mesh\_element\_add}!Surface meshes@{Surface meshes}}
@@ -267,17 +263,13 @@ Add surface elements to a mesh, on a square grid in the parametric space
 \begin{DoxyReturn}{Returns}
 0 on success. 
 \end{DoxyReturn}
-
-
-References \textbf{ agg\+\_\+patch\+\_\+t}.
-
 \mbox{\label{group__mesh_gaa10f723a8402928eba53b86324595927}} 
 \index{Surface meshes@{Surface meshes}!agg\_mesh\_surface\_add\_triangle@{agg\_mesh\_surface\_add\_triangle}}
 \index{agg\_mesh\_surface\_add\_triangle@{agg\_mesh\_surface\_add\_triangle}!Surface meshes@{Surface meshes}}
 \doxysubsubsection{agg\_mesh\_surface\_add\_triangle()}
 {\footnotesize\ttfamily gint agg\+\_\+mesh\+\_\+surface\+\_\+add\+\_\+triangle (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+mesh\+\_\+t} $\ast$}]{msh,  }\item[{gint}]{isurf,  }\item[{gchar $\ast$}]{args,  }\item[{gint}]{pps,  }\item[{agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$}]{w }\end{DoxyParamCaption})}
 
-Add a parametric surface to a mesh, working round clipped parts of patch, using Christian Woltering\textquotesingle{}s library version of Jonathan Shewchuk\textquotesingle{}s Triangle code\+:
+Add a parametric surface to a mesh, working round holes in the patch, using Christian Woltering\textquotesingle{}s library version of Jonathan Shewchuk\textquotesingle{}s Triangle code\+:
 
 {\texttt{ https\+://github.\+com/wo80/\+Triangle/}} {\texttt{ https\+://www.\+cs.\+cmu.\+edu/$\sim$quake/triangle.\+html}}
 
@@ -299,7 +291,7 @@ Add a parametric surface to a mesh, working round clipped parts of patch, using 
 \end{DoxyReturn}
 
 
-References \textbf{ agg\+\_\+patch\+\_\+t}.
+References \textbf{ agg\+\_\+patch\+\_\+t}, \textbf{ agg\+\_\+surface\+\_\+blend\+\_\+t}, and \textbf{ agg\+\_\+surface\+\_\+t}.
 
 \mbox{\label{group__mesh_ga250d4886d65fe77f453968ad29051acf}} 
 \index{Surface meshes@{Surface meshes}!agg\_mesh\_surface\_blend\_add@{agg\_mesh\_surface\_blend\_add}}
@@ -325,6 +317,10 @@ Add elements from a surface blend to a mesh
 \begin{DoxyReturn}{Returns}
 0 on success. 
 \end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+surface\+\_\+blend\+\_\+t}.
+
 \mbox{\label{group__mesh_gaa12f273e26b0ba1447e7656ad5c3560b}} 
 \index{Surface meshes@{Surface meshes}!agg\_mesh\_surface\_point\_add@{agg\_mesh\_surface\_point\_add}}
 \index{agg\_mesh\_surface\_point\_add@{agg\_mesh\_surface\_point\_add}!Surface meshes@{Surface meshes}}

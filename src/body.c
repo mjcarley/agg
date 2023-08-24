@@ -46,6 +46,8 @@ void _agg_axes_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
 		     gpointer data[]) ;
 void _agg_grid_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
 		     gpointer data[]) ;
+void _agg_invert_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
+		       gpointer data[]) ;
 
 typedef void (*block_read_func_t)(GScanner *scanner, agg_body_t *b,
 				  gboolean echo, gpointer data[]) ;
@@ -62,6 +64,7 @@ static const struct {
   {"patch",     _agg_patch_parse     },
   {"axes",      _agg_axes_parse      },
   {"grid",      _agg_grid_parse      },
+  {"invert",    _agg_invert_parse    },
   {NULL, NULL}
 } ;
 
@@ -432,6 +435,29 @@ void _agg_axes_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
   return ;
 }
 
+void _agg_invert_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
+		       gpointer data[])
+
+{
+  gint nparams ;
+  agg_variable_t params[64] ;
+  agg_patch_t *P ;
+  
+  token_read_and_check(scanner, G_TOKEN_LEFT_PAREN, "missing left bracket") ;
+
+  P = agg_body_patch_last(b) ;
+  
+  parameter_list_parse(scanner, params, &nparams) ;
+
+  if ( nparams > 0 )
+    g_error("%s: invert takes no parameters, line %u",
+	    __FUNCTION__, g_scanner_cur_line(scanner)) ;
+
+  agg_patch_invert(P) = TRUE ;
+  
+  return ;
+}
+
 void _agg_grid_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
 		     gpointer data[])
 
@@ -519,6 +545,26 @@ void _agg_grid_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
     return ;
   }
 
+  if ( grid == AGG_GRID_SPHERE_UV ) {
+    if ( nparams != 3 ) {
+      g_error("%s: spherical UV grid requires two further parameters, line %u",
+	      __FUNCTION__, g_scanner_cur_line(scanner)) ;
+    }
+    
+    if ( agg_variable_definition(&(params[1])) != NULL )
+      g_error("%s: number of grid sections must be constant, line %u",
+	      __FUNCTION__, g_scanner_cur_line(scanner)) ;
+    
+    if ( agg_variable_definition(&(params[2])) != NULL )
+      g_error("%s: number of grid section splines must be constant, line %u",
+	      __FUNCTION__, g_scanner_cur_line(scanner)) ;
+    
+    agg_surface_grid_section_number(S) = (gint)(params[1].val) ;
+    agg_surface_grid_spline_number(S) = (gint)(params[2].val) ;
+  
+    return ;
+  }
+
   if ( grid == AGG_GRID_HEMISPHERE_ICO ) {
     if ( nparams != 2 ) {
       g_error("%s: icosahedron grid requires one further parameter, line %u",
@@ -535,6 +581,27 @@ void _agg_grid_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
       g_error("%s: invalid surface subdivision (%lg), line %u",
 	      __FUNCTION__, params[1].val, g_scanner_cur_line(scanner)) ;
     
+    return ;
+  }
+
+  if ( grid == AGG_GRID_HEMISPHERE_UV ) {
+    if ( nparams != 3 ) {
+      g_error("%s: hemispherical UV grid requires two further "
+	      "parameters, line %u",
+	      __FUNCTION__, g_scanner_cur_line(scanner)) ;
+    }
+    
+    if ( agg_variable_definition(&(params[1])) != NULL )
+      g_error("%s: number of grid sections must be constant, line %u",
+	      __FUNCTION__, g_scanner_cur_line(scanner)) ;
+    
+    if ( agg_variable_definition(&(params[2])) != NULL )
+      g_error("%s: number of grid section splines must be constant, line %u",
+	      __FUNCTION__, g_scanner_cur_line(scanner)) ;
+    
+    agg_surface_grid_section_number(S) = (gint)(params[1].val) ;
+    agg_surface_grid_spline_number(S) = (gint)(params[2].val) ;
+  
     return ;
   }
   
@@ -606,7 +673,7 @@ void _agg_surface_read(GScanner *scanner, agg_body_t *b, gboolean echo,
   token = g_scanner_get_next_token(scanner) ;
 
   S = agg_surface_new(64) ;
-  P = agg_patch_new(1024) ;
+  P = agg_patch_new() ;
   agg_body_surface_add(b, S, P) ;
 
   T = agg_surface_transform(S) ;
@@ -667,7 +734,6 @@ void _agg_surface_read(GScanner *scanner, agg_body_t *b, gboolean echo,
  * 
  * @return newly allocated ::agg_body_t
  */
-
 
 agg_body_t *agg_body_new(gint ngmax, gint nsmax)
 
@@ -885,7 +951,6 @@ gint agg_body_read(agg_body_t *b, gchar *file, gboolean echo)
       }
     }
   }
-
   
   close(fd) ;
   
@@ -893,6 +958,16 @@ gint agg_body_read(agg_body_t *b, gchar *file, gboolean echo)
   
   return 0 ;
 }
+
+/** 
+ * Add a surface to a body
+ * 
+ * @param b ::agg_body_t to which surface is to be added;
+ * @param S an ::agg_surface_t;
+ * @param P ::agg_patch_t for mapping of surface parameters.
+ * 
+ * @return 0 on success.
+ */
 
 gint agg_body_surface_add(agg_body_t *b, agg_surface_t *S, agg_patch_t *P)
 

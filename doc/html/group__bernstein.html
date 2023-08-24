@@ -39,8 +39,6 @@ $(function() {
 <div id="main-nav"></div>
 </div><!-- top -->
 <div class="header">
-  <div class="summary">
-<a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">Bernstein polynomials</div></div>
 </div><!--header-->
 <div class="contents">
@@ -48,14 +46,69 @@ $(function() {
 <p>Evaluation of Bernstein polynomials.  
 <a href="#details">More...</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
-Functions</h2></td></tr>
 <tr class="memitem:gaae616a79a473be6365e365bc2a17b02a"><td class="memItemLeft" align="right" valign="top">gdouble&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__bernstein.html#gaae616a79a473be6365e365bc2a17b02a">agg_bernstein_basis_eval</a> (gint n, gint r, gdouble x)</td></tr>
 <tr class="separator:gaae616a79a473be6365e365bc2a17b02a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga00d187f1aee34649ae6853274ffcbc05"><td class="memItemLeft" align="right" valign="top">gdouble&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__bernstein.html#ga00d187f1aee34649ae6853274ffcbc05">agg_bernstein_derivative_eval</a> (gint n, gint r, gdouble x)</td></tr>
+<tr class="separator:ga00d187f1aee34649ae6853274ffcbc05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga93f118b57d68787a8c7aad192408464d"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__bernstein.html#ga93f118b57d68787a8c7aad192408464d">agg_bernstein_basis</a> (gint n, gdouble x, gdouble *S, gdouble *dS)</td></tr>
+<tr class="separator:ga93f118b57d68787a8c7aad192408464d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p >Evaluation of Bernstein polynomials. </p>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="ga93f118b57d68787a8c7aad192408464d" name="ga93f118b57d68787a8c7aad192408464d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga93f118b57d68787a8c7aad192408464d">&#9670;&nbsp;</a></span>agg_bernstein_basis()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gint agg_bernstein_basis </td>
+          <td>(</td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gdouble&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gdouble *&#160;</td>
+          <td class="paramname"><em>S</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gdouble *&#160;</td>
+          <td class="paramname"><em>dS</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Evaluate all monomials of a Bernstein basis of specified degree and, optionally, their derivatives.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>degree of Bernstein basis; </td></tr>
+    <tr><td class="paramname">x</td><td>argument of monomials; </td></tr>
+    <tr><td class="paramname">S</td><td>on exit contains <img class="formulaInl" alt="$B_{r}^{(n)}(x)$" src="form_8.png" width="40" height="18"/>, <img class="formulaInl" alt="$0\leq r\leq n$" src="form_52.png" width="54" height="11"/>; </td></tr>
+    <tr><td class="paramname">dS</td><td>if not NULL, on exit contains <img class="formulaInl" alt="$\mathrm{d}B_{r}^{(n)}(x)/\mathrm{d}x$" src="form_51.png" width="70" height="18"/>, <img class="formulaInl" alt="$0\leq r\leq n$" src="form_52.png" width="54" height="11"/>.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="agg_8h.html#a647f4fab190b42a358c4b2ba44495716">agg_section_fit()</a>.</p>
+
+</div>
+</div>
 <a id="gaae616a79a473be6365e365bc2a17b02a" name="gaae616a79a473be6365e365bc2a17b02a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gaae616a79a473be6365e365bc2a17b02a">&#9670;&nbsp;</a></span>agg_bernstein_basis_eval()</h2>
 
@@ -98,14 +151,60 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><img class="formulaInl" alt="$B_{r}^{(n)}(x)$" src="form_8.png" width="40" height="18"/> </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="agg_8h.html#aa057ef58299424703a8cc0d8a16ebf03">agg_section_eval()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="agg_8h.html#a13063b70d41d180a3386185f458a89ce">agg_section_diff()</a>, and <a class="el" href="agg_8h.html#aa057ef58299424703a8cc0d8a16ebf03">agg_section_eval()</a>.</p>
+
+</div>
+</div>
+<a id="ga00d187f1aee34649ae6853274ffcbc05" name="ga00d187f1aee34649ae6853274ffcbc05"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga00d187f1aee34649ae6853274ffcbc05">&#9670;&nbsp;</a></span>agg_bernstein_derivative_eval()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gdouble agg_bernstein_derivative_eval </td>
+          <td>(</td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>r</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gdouble&#160;</td>
+          <td class="paramname"><em>x</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Evaluate the derivative of a Bernstein monomial <img class="formulaInl" alt="$\mathrm{d}B_{r}^{(n)}(x)/\mathrm{d}x$" src="form_51.png" width="70" height="18"/></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>degree of Bernstein basis; </td></tr>
+    <tr><td class="paramname">r</td><td>mononomial from basis to evaluate; </td></tr>
+    <tr><td class="paramname">x</td><td>argument of monomial</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><img class="formulaInl" alt="$\mathrm{d}B_{r}^{(n)}(x)/\mathrm{d}x$" src="form_51.png" width="70" height="18"/> </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="agg_8h.html#a13063b70d41d180a3386185f458a89ce">agg_section_diff()</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jul 26 2023 16:24:50 for AGG by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Thu Aug 24 2023 11:48:54 for AGG by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

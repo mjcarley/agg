@@ -5,10 +5,13 @@
 Evaluation of Bernstein polynomials.  
 
 
-\doxysubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
 gdouble \textbf{ agg\+\_\+bernstein\+\_\+basis\+\_\+eval} (gint n, gint r, gdouble x)
+\item 
+gdouble \textbf{ agg\+\_\+bernstein\+\_\+derivative\+\_\+eval} (gint n, gint r, gdouble x)
+\item 
+gint \textbf{ agg\+\_\+bernstein\+\_\+basis} (gint n, gdouble x, gdouble $\ast$S, gdouble $\ast$dS)
 \end{DoxyCompactItemize}
 
 
@@ -18,6 +21,32 @@ Evaluation of Bernstein polynomials.
 
 
 \doxysubsection{Function Documentation}
+\mbox{\label{group__bernstein_ga93f118b57d68787a8c7aad192408464d}} 
+\index{Bernstein polynomials@{Bernstein polynomials}!agg\_bernstein\_basis@{agg\_bernstein\_basis}}
+\index{agg\_bernstein\_basis@{agg\_bernstein\_basis}!Bernstein polynomials@{Bernstein polynomials}}
+\doxysubsubsection{agg\_bernstein\_basis()}
+{\footnotesize\ttfamily gint agg\+\_\+bernstein\+\_\+basis (\begin{DoxyParamCaption}\item[{gint}]{n,  }\item[{gdouble}]{x,  }\item[{gdouble $\ast$}]{S,  }\item[{gdouble $\ast$}]{dS }\end{DoxyParamCaption})}
+
+Evaluate all monomials of a Bernstein basis of specified degree and, optionally, their derivatives.
+
+
+\begin{DoxyParams}{Parameters}
+{\em n} & degree of Bernstein basis; \\
+\hline
+{\em x} & argument of monomials; \\
+\hline
+{\em S} & on exit contains $B_{r}^{(n)}(x)$, $0\leq r\leq n$; \\
+\hline
+{\em dS} & if not NULL, on exit contains $\mathrm{d}B_{r}^{(n)}(x)/\mathrm{d}x$, $0\leq r\leq n$.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success 
+\end{DoxyReturn}
+
+
+Referenced by \textbf{ agg\+\_\+section\+\_\+fit()}.
+
 \mbox{\label{group__bernstein_gaae616a79a473be6365e365bc2a17b02a}} 
 \index{Bernstein polynomials@{Bernstein polynomials}!agg\_bernstein\_basis\_eval@{agg\_bernstein\_basis\_eval}}
 \index{agg\_bernstein\_basis\_eval@{agg\_bernstein\_basis\_eval}!Bernstein polynomials@{Bernstein polynomials}}
@@ -40,5 +69,29 @@ $B_{r}^{(n)}(x)$
 \end{DoxyReturn}
 
 
-Referenced by \textbf{ agg\+\_\+section\+\_\+eval()}.
+Referenced by \textbf{ agg\+\_\+section\+\_\+diff()}, and \textbf{ agg\+\_\+section\+\_\+eval()}.
+
+\mbox{\label{group__bernstein_ga00d187f1aee34649ae6853274ffcbc05}} 
+\index{Bernstein polynomials@{Bernstein polynomials}!agg\_bernstein\_derivative\_eval@{agg\_bernstein\_derivative\_eval}}
+\index{agg\_bernstein\_derivative\_eval@{agg\_bernstein\_derivative\_eval}!Bernstein polynomials@{Bernstein polynomials}}
+\doxysubsubsection{agg\_bernstein\_derivative\_eval()}
+{\footnotesize\ttfamily gdouble agg\+\_\+bernstein\+\_\+derivative\+\_\+eval (\begin{DoxyParamCaption}\item[{gint}]{n,  }\item[{gint}]{r,  }\item[{gdouble}]{x }\end{DoxyParamCaption})}
+
+Evaluate the derivative of a Bernstein monomial $\mathrm{d}B_{r}^{(n)}(x)/\mathrm{d}x$
+
+
+\begin{DoxyParams}{Parameters}
+{\em n} & degree of Bernstein basis; \\
+\hline
+{\em r} & mononomial from basis to evaluate; \\
+\hline
+{\em x} & argument of monomial\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+$\mathrm{d}B_{r}^{(n)}(x)/\mathrm{d}x$ 
+\end{DoxyReturn}
+
+
+Referenced by \textbf{ agg\+\_\+section\+\_\+diff()}.
 

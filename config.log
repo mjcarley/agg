@@ -512,8 +512,8 @@ conftest.c:39:1: warning: function declaration isn't a prototype [-Wstrict-proto
       | ^~~~
 configure:14283: $? = 0
 configure:14292: result: yes
-configure:14315: checking for gcc option to support OpenMP
-configure:14330: gcc -o conftest -O0 -g -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -D_GNU_SOURCE  -L/home/michael/Codes/lib conftest.c -ltriangle-api -lm  >&5
+configure:14329: checking for gcc option to support OpenMP
+configure:14344: gcc -o conftest -O0 -g -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -D_GNU_SOURCE  -L/home/michael/Codes/lib conftest.c -ltriangle-api -lm  >&5
 conftest.c:33:2: error: unknown type name 'choke'
    33 |  choke me
       |  ^~~~~
@@ -524,7 +524,7 @@ conftest.c:33:10: error: expected ';' before 'typedef'
 conftest.c:36:5: warning: function declaration isn't a prototype [-Wstrict-prototypes]
    36 | int main () { return omp_get_num_threads (); }
       |     ^~~~
-configure:14330: $? = 1
+configure:14344: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME "agg"
@@ -563,24 +563,24 @@ configure: failed program was:
 | #include <omp.h>
 | int main () { return omp_get_num_threads (); }
 | 
-configure:14348: gcc -o conftest -O0 -g -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -D_GNU_SOURCE -fopenmp  -L/home/michael/Codes/lib conftest.c -ltriangle-api -lm  >&5
+configure:14362: gcc -o conftest -O0 -g -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -D_GNU_SOURCE -fopenmp  -L/home/michael/Codes/lib conftest.c -ltriangle-api -lm  >&5
 conftest.c:36:5: warning: function declaration isn't a prototype [-Wstrict-prototypes]
    36 | int main () { return omp_get_num_threads (); }
       |     ^~~~
-configure:14348: $? = 0
-configure:14362: result: -fopenmp
-configure:14426: checking for g77
-configure:14442: found /usr/bin/g77
-configure:14453: result: g77
-configure:14479: checking for Fortran 77 compiler version
-configure:14488: g77 --version >&5
+configure:14362: $? = 0
+configure:14376: result: -fopenmp
+configure:14440: checking for g77
+configure:14456: found /usr/bin/g77
+configure:14467: result: g77
+configure:14493: checking for Fortran 77 compiler version
+configure:14502: g77 --version >&5
 GNU Fortran (GCC) 11.2.0
 Copyright (C) 2021 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-configure:14499: $? = 0
-configure:14488: g77 -v >&5
+configure:14513: $? = 0
+configure:14502: g77 -v >&5
 Reading specs from /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/specs
 COLLECT_GCC=g77
 COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-slackware-linux/11.2.0/lto-wrapper
@@ -589,61 +589,61 @@ Configured with: ../configure --prefix=/usr --libdir=/usr/lib64 --mandir=/usr/ma
 Thread model: posix
 Supported LTO compression algorithms: zlib zstd
 gcc version 11.2.0 (GCC) 
-configure:14499: $? = 0
-configure:14488: g77 -V >&5
+configure:14513: $? = 0
+configure:14502: g77 -V >&5
 g77: error: unrecognized command-line option '-V'
 g77: fatal error: no input files
 compilation terminated.
-configure:14499: $? = 1
-configure:14488: g77 -qversion >&5
+configure:14513: $? = 1
+configure:14502: g77 -qversion >&5
 g77: error: unrecognized command-line option '-qversion'; did you mean '--version'?
 g77: fatal error: no input files
 compilation terminated.
-configure:14499: $? = 1
-configure:14508: checking whether we are using the GNU Fortran 77 compiler
-configure:14521: g77 -c  conftest.F >&5
-configure:14521: $? = 0
-configure:14530: result: yes
-configure:14536: checking whether g77 accepts -g
-configure:14547: g77 -c -g conftest.f >&5
-configure:14547: $? = 0
-configure:14555: result: yes
-configure:14684: checking if libtool supports shared libraries
-configure:14686: result: yes
-configure:14689: checking whether to build shared libraries
-configure:14713: result: yes
-configure:14716: checking whether to build static libraries
-configure:14720: result: yes
-configure:15072: checking for g77 option to produce PIC
-configure:15079: result: -fPIC
-configure:15087: checking if g77 PIC flag -fPIC works
-configure:15105: g77 -c -g -O2 -fPIC conftest.f >&5
-configure:15109: $? = 0
-configure:15122: result: yes
-configure:15145: checking if g77 static flag -static works
-configure:15173: result: no
-configure:15185: checking if g77 supports -c -o file.o
-configure:15206: g77 -c -g -O2 -o out/conftest2.o conftest.f >&5
-configure:15210: $? = 0
-configure:15232: result: yes
-configure:15237: checking if g77 supports -c -o file.o
-configure:15284: result: yes
-configure:15314: checking whether the g77 linker (/usr/bin/ld -m elf_x86_64) supports shared libraries
-configure:16523: result: yes
-configure:16664: checking dynamic linker characteristics
-configure:17403: result: GNU/Linux ld.so
-configure:17468: checking how to hardcode library paths into programs
-configure:17493: result: immediate
-configure:17530: checking how to get verbose linking output from g77
-configure:17540: g77 -c -g -O2 conftest.f >&5
-configure:17540: $? = 0
-configure:17558: g77 -o conftest -g -O2 -v -L/home/michael/Codes/lib conftest.f -ltriangle-api -lm
+configure:14513: $? = 1
+configure:14522: checking whether we are using the GNU Fortran 77 compiler
+configure:14535: g77 -c  conftest.F >&5
+configure:14535: $? = 0
+configure:14544: result: yes
+configure:14550: checking whether g77 accepts -g
+configure:14561: g77 -c -g conftest.f >&5
+configure:14561: $? = 0
+configure:14569: result: yes
+configure:14698: checking if libtool supports shared libraries
+configure:14700: result: yes
+configure:14703: checking whether to build shared libraries
+configure:14727: result: yes
+configure:14730: checking whether to build static libraries
+configure:14734: result: yes
+configure:15086: checking for g77 option to produce PIC
+configure:15093: result: -fPIC
+configure:15101: checking if g77 PIC flag -fPIC works
+configure:15119: g77 -c -g -O2 -fPIC conftest.f >&5
+configure:15123: $? = 0
+configure:15136: result: yes
+configure:15159: checking if g77 static flag -static works
+configure:15187: result: no
+configure:15199: checking if g77 supports -c -o file.o
+configure:15220: g77 -c -g -O2 -o out/conftest2.o conftest.f >&5
+configure:15224: $? = 0
+configure:15246: result: yes
+configure:15251: checking if g77 supports -c -o file.o
+configure:15298: result: yes
+configure:15328: checking whether the g77 linker (/usr/bin/ld -m elf_x86_64) supports shared libraries
+configure:16537: result: yes
+configure:16678: checking dynamic linker characteristics
+configure:17417: result: GNU/Linux ld.so
+configure:17482: checking how to hardcode library paths into programs
+configure:17507: result: immediate
+configure:17544: checking how to get verbose linking output from g77
+configure:17554: g77 -c -g -O2 conftest.f >&5
+configure:17554: $? = 0
+configure:17572: g77 -o conftest -g -O2 -v -L/home/michael/Codes/lib conftest.f -ltriangle-api -lm
 Reading specs from /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/specs
 Target: x86_64-slackware-linux
 Thread model: posix
 Supported LTO compression algorithms: zlib zstd
 gcc version 11.2.0 (GCC) 
- /usr/libexec/gcc/x86_64-slackware-linux/11.2.0/f951 conftest.f -ffixed-form -quiet -dumpbase conftest.f -dumpbase-ext .f -mtune=generic -march=x86-64 -g -O2 -version -fintrinsic-modules-path /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/finclude -fpre-include=/usr/include/finclude/math-vector-fortran.h -o /tmp/ccCqcktq.s
+ /usr/libexec/gcc/x86_64-slackware-linux/11.2.0/f951 conftest.f -ffixed-form -quiet -dumpbase conftest.f -dumpbase-ext .f -mtune=generic -march=x86-64 -g -O2 -version -fintrinsic-modules-path /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/finclude -fpre-include=/usr/include/finclude/math-vector-fortran.h -o /tmp/ccvibWcL.s
 GNU Fortran (GCC) version 11.2.0 (x86_64-slackware-linux)
 	compiled by GNU C version 11.2.0, GMP version 6.2.1, MPFR version 4.1.0, MPC version 1.2.1, isl version isl-0.24-GMP
 
@@ -652,20 +652,20 @@ GNU Fortran2008 (GCC) version 11.2.0 (x86_64-slackware-linux)
 	compiled by GNU C version 11.2.0, GMP version 6.2.1, MPFR version 4.1.0, MPC version 1.2.1, isl version isl-0.24-GMP
 
 GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
- as -v --gdwarf-5 --64 -o /tmp/cc1vdF8e.o /tmp/ccCqcktq.s
+ as -v --gdwarf-5 --64 -o /tmp/cc5lG7BF.o /tmp/ccvibWcL.s
 GNU assembler version 2.37 (x86_64-slackware-linux) using BFD version version 2.37-slack15
 Reading specs from /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64/libgfortran.spec
 rename spec lib to liborig
- /usr/libexec/gcc/x86_64-slackware-linux/11.2.0/collect2 -plugin /usr/libexec/gcc/x86_64-slackware-linux/11.2.0/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-slackware-linux/11.2.0/lto-wrapper -plugin-opt=-fresolution=/tmp/cctcqL3P.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lquadmath -plugin-opt=-pass-through=-lm -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o conftest /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64/crt1.o /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64/crti.o /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/crtbegin.o -L/home/michael/Codes/lib -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../.. /tmp/cc1vdF8e.o -ltriangle-api -lgfortran -lm -lgfortran -lm -lgcc_s -lgcc -lquadmath -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/crtend.o /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64/crtn.o
-configure:17641: result: -v
-configure:17643: checking for Fortran 77 libraries of g77
-configure:17666: g77 -o conftest -g -O2 -v -L/home/michael/Codes/lib conftest.f -ltriangle-api -lm
+ /usr/libexec/gcc/x86_64-slackware-linux/11.2.0/collect2 -plugin /usr/libexec/gcc/x86_64-slackware-linux/11.2.0/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-slackware-linux/11.2.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccYJdpeL.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lquadmath -plugin-opt=-pass-through=-lm -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o conftest /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64/crt1.o /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64/crti.o /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/crtbegin.o -L/home/michael/Codes/lib -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../.. /tmp/cc5lG7BF.o -ltriangle-api -lgfortran -lm -lgfortran -lm -lgcc_s -lgcc -lquadmath -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/crtend.o /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64/crtn.o
+configure:17655: result: -v
+configure:17657: checking for Fortran 77 libraries of g77
+configure:17680: g77 -o conftest -g -O2 -v -L/home/michael/Codes/lib conftest.f -ltriangle-api -lm
 Reading specs from /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/specs
 Target: x86_64-slackware-linux
 Thread model: posix
 Supported LTO compression algorithms: zlib zstd
 gcc version 11.2.0 (GCC) 
- /usr/libexec/gcc/x86_64-slackware-linux/11.2.0/f951 conftest.f -ffixed-form -quiet -dumpbase conftest.f -dumpbase-ext .f -mtune=generic -march=x86-64 -g -O2 -version -fintrinsic-modules-path /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/finclude -fpre-include=/usr/include/finclude/math-vector-fortran.h -o /tmp/ccoOxpwu.s
+ /usr/libexec/gcc/x86_64-slackware-linux/11.2.0/f951 conftest.f -ffixed-form -quiet -dumpbase conftest.f -dumpbase-ext .f -mtune=generic -march=x86-64 -g -O2 -version -fintrinsic-modules-path /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/finclude -fpre-include=/usr/include/finclude/math-vector-fortran.h -o /tmp/ccSO4TYL.s
 GNU Fortran (GCC) version 11.2.0 (x86_64-slackware-linux)
 	compiled by GNU C version 11.2.0, GMP version 6.2.1, MPFR version 4.1.0, MPC version 1.2.1, isl version isl-0.24-GMP
 
@@ -674,33 +674,33 @@ GNU Fortran2008 (GCC) version 11.2.0 (x86_64-slackware-linux)
 	compiled by GNU C version 11.2.0, GMP version 6.2.1, MPFR version 4.1.0, MPC version 1.2.1, isl version isl-0.24-GMP
 
 GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
- as -v --gdwarf-5 --64 -o /tmp/ccGJJElI.o /tmp/ccoOxpwu.s
+ as -v --gdwarf-5 --64 -o /tmp/ccdHONz5.o /tmp/ccSO4TYL.s
 GNU assembler version 2.37 (x86_64-slackware-linux) using BFD version version 2.37-slack15
 Reading specs from /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64/libgfortran.spec
 rename spec lib to liborig
- /usr/libexec/gcc/x86_64-slackware-linux/11.2.0/collect2 -plugin /usr/libexec/gcc/x86_64-slackware-linux/11.2.0/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-slackware-linux/11.2.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccWrhPxr.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lquadmath -plugin-opt=-pass-through=-lm -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o conftest /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64/crt1.o /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64/crti.o /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/crtbegin.o -L/home/michael/Codes/lib -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../.. /tmp/ccGJJElI.o -ltriangle-api -lgfortran -lm -lgfortran -lm -lgcc_s -lgcc -lquadmath -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/crtend.o /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64/crtn.o
-configure:17862: result:  -L/home/michael/Codes/lib -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../.. -ltriangle-api -lgfortran -lm -lquadmath
-configure:17878: checking for dummy main to link with Fortran 77 libraries
-configure:17912: gcc -o conftest -O0 -g -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -D_GNU_SOURCE  -L/home/michael/Codes/lib conftest.c -ltriangle-api -lm   -L/home/michael/Codes/lib -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../.. -ltriangle-api -lgfortran -lm -lquadmath >&5
+ /usr/libexec/gcc/x86_64-slackware-linux/11.2.0/collect2 -plugin /usr/libexec/gcc/x86_64-slackware-linux/11.2.0/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-slackware-linux/11.2.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccpaeN50.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lquadmath -plugin-opt=-pass-through=-lm -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o conftest /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64/crt1.o /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64/crti.o /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/crtbegin.o -L/home/michael/Codes/lib -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../.. /tmp/ccdHONz5.o -ltriangle-api -lgfortran -lm -lgfortran -lm -lgcc_s -lgcc -lquadmath -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/crtend.o /usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64/crtn.o
+configure:17876: result:  -L/home/michael/Codes/lib -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../.. -ltriangle-api -lgfortran -lm -lquadmath
+configure:17892: checking for dummy main to link with Fortran 77 libraries
+configure:17926: gcc -o conftest -O0 -g -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -D_GNU_SOURCE  -L/home/michael/Codes/lib conftest.c -ltriangle-api -lm   -L/home/michael/Codes/lib -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../.. -ltriangle-api -lgfortran -lm -lquadmath >&5
 conftest.c:41:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
    41 | main ()
       | ^~~~
-configure:17912: $? = 0
-configure:17957: result: none
-configure:17990: checking for Fortran 77 name-mangling scheme
-configure:18003: g77 -c -g -O2 conftest.f >&5
-configure:18003: $? = 0
-configure:18044: gcc -o conftest -O0 -g -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -D_GNU_SOURCE  -L/home/michael/Codes/lib conftest.c cfortran_test.o -ltriangle-api -lm   -L/home/michael/Codes/lib -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../.. -ltriangle-api -lgfortran -lm -lquadmath >&5
+configure:17926: $? = 0
+configure:17971: result: none
+configure:18004: checking for Fortran 77 name-mangling scheme
+configure:18017: g77 -c -g -O2 conftest.f >&5
+configure:18017: $? = 0
+configure:18058: gcc -o conftest -O0 -g -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -D_GNU_SOURCE  -L/home/michael/Codes/lib conftest.c cfortran_test.o -ltriangle-api -lm   -L/home/michael/Codes/lib -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../.. -ltriangle-api -lgfortran -lm -lquadmath >&5
 conftest.c:38:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
    38 | char foobar ();
       | ^~~~
 conftest.c:48:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
    48 | main ()
       | ^~~~
-/usr/bin/ld: /tmp/ccBRO4EL.o: in function `main':
+/usr/bin/ld: /tmp/ccyNwLho.o: in function `main':
 /home/michael/Codes/Libraries/agg/conftest.c:50: undefined reference to `foobar'
 collect2: error: ld returned 1 exit status
-configure:18044: $? = 1
+configure:18058: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME "agg"
@@ -755,26 +755,26 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:18044: gcc -o conftest -O0 -g -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -D_GNU_SOURCE  -L/home/michael/Codes/lib conftest.c cfortran_test.o -ltriangle-api -lm   -L/home/michael/Codes/lib -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../.. -ltriangle-api -lgfortran -lm -lquadmath >&5
+configure:18058: gcc -o conftest -O0 -g -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -D_GNU_SOURCE  -L/home/michael/Codes/lib conftest.c cfortran_test.o -ltriangle-api -lm   -L/home/michael/Codes/lib -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../.. -ltriangle-api -lgfortran -lm -lquadmath >&5
 conftest.c:38:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
    38 | char foobar_ ();
       | ^~~~
 conftest.c:48:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
    48 | main ()
       | ^~~~
-configure:18044: $? = 0
-configure:18102: gcc -o conftest -O0 -g -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -D_GNU_SOURCE  -L/home/michael/Codes/lib conftest.c cfortran_test.o -ltriangle-api -lm   -L/home/michael/Codes/lib -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../.. -ltriangle-api -lgfortran -lm -lquadmath >&5
+configure:18058: $? = 0
+configure:18116: gcc -o conftest -O0 -g -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -D_GNU_SOURCE  -L/home/michael/Codes/lib conftest.c cfortran_test.o -ltriangle-api -lm   -L/home/michael/Codes/lib -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/11.2.0/../../.. -ltriangle-api -lgfortran -lm -lquadmath >&5
 conftest.c:38:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
    38 | char foo_bar_ ();
       | ^~~~
 conftest.c:48:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
    48 | main ()
       | ^~~~
-configure:18102: $? = 0
-configure:18144: result: lower case, underscore, no extra underscore
-configure:18323: checking that generated files are newer than configure
-configure:18329: result: done
-configure:18356: creating ./config.status
+configure:18116: $? = 0
+configure:18158: result: lower case, underscore, no extra underscore
+configure:18337: checking that generated files are newer than configure
+configure:18343: result: done
+configure:18370: creating ./config.status
 
 ## ---------------------- ##
 ## Running config.status. ##
@@ -796,10 +796,8 @@ config.status:1176: creating src/Makefile
 config.status:1176: creating src/agg-config
 config.status:1176: creating tools/Makefile
 config.status:1176: creating config.h
-config.status:1357: config.h is unchanged
 config.status:1405: executing depfiles commands
 config.status:1482: cd src       && sed -e '/# am--include-marker/d' Makefile         | make -f - am--depfiles
-make: Nothing to be done for 'am--depfiles'.
 config.status:1487: $? = 0
 config.status:1482: cd tools       && sed -e '/# am--include-marker/d' Makefile         | make -f - am--depfiles
 make: Nothing to be done for 'am--depfiles'.
@@ -1130,6 +1128,57 @@ target_alias=''
 #define F77_FUNC_(name,NAME) name ## _
 
 configure: exit 0
+
+## ---------------------- ##
+## Running config.status. ##
+## ---------------------- ##
+
+This file was extended by agg config.status 0.1.0, which was
+generated by GNU Autoconf 2.69.  Invocation command line was
+
+  CONFIG_FILES    = 
+  CONFIG_HEADERS  = 
+  CONFIG_LINKS    = 
+  CONFIG_COMMANDS = 
+  $ ./config.status config.h
+
+on michael.paraffinalia.co.uk
+
+config.status:1176: creating config.h
+
+## ---------------------- ##
+## Running config.status. ##
+## ---------------------- ##
+
+This file was extended by agg config.status 0.1.0, which was
+generated by GNU Autoconf 2.69.  Invocation command line was
+
+  CONFIG_FILES    = 
+  CONFIG_HEADERS  = 
+  CONFIG_LINKS    = 
+  CONFIG_COMMANDS = 
+  $ ./config.status src/agg-config
+
+on michael.paraffinalia.co.uk
+
+config.status:1176: creating src/agg-config
+
+## ---------------------- ##
+## Running config.status. ##
+## ---------------------- ##
+
+This file was extended by agg config.status 0.1.0, which was
+generated by GNU Autoconf 2.69.  Invocation command line was
+
+  CONFIG_FILES    = 
+  CONFIG_HEADERS  = 
+  CONFIG_LINKS    = 
+  CONFIG_COMMANDS = 
+  $ ./config.status src/agg-config
+
+on michael.paraffinalia.co.uk
+
+config.status:1176: creating src/agg-config
 
 ## ---------------------- ##
 ## Running config.status. ##

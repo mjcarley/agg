@@ -156,7 +156,19 @@ if test x$hasfma = xyes; then
 fi
 
 AC_CHECK_LIB(m, cos)
-AC_CHECK_LIB(triangle-api, triangle_mesh_create)
+AC_CHECK_LIB(triangle-api, triangle_mesh_create, [], [
+  echo \#################################################################
+  echo \#
+  echo \# triangle-api library not installed or not in library path
+  echo \# You can get it from
+  echo \#
+  echo \# https://github.com/wo80/Triangle/
+  echo \#
+  echo \#################################################################
+  exit
+         ])
+
+##AC_CHECK_LIB(triangle-api, triangle_mesh_create)
 
 AC_CONFIG_MACRO_DIR([m4])
 

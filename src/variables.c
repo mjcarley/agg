@@ -32,6 +32,14 @@
  * @ingroup variables
  */
 
+/** 
+ * Allocate a new ::agg_expression_data_t to contain lists of
+ * variables and definitions for parsing and evaluation.
+ * 
+ * @param nemax maximum number of expressions in ::agg_expression_data_t.
+ * 
+ * @return newly allocated ::agg_expression_data_t.
+ */
 
 agg_expression_data_t *agg_expression_data_new(gint nemax)
 

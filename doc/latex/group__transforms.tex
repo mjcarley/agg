@@ -21,7 +21,7 @@ gint \textbf{ agg\+\_\+transform\+\_\+variables\+\_\+eval} (\textbf{ agg\+\_\+tr
 \item 
 gint \textbf{ agg\+\_\+transform\+\_\+variables\+\_\+write} (FILE $\ast$f, \textbf{ agg\+\_\+transform\+\_\+t} $\ast$T, gboolean write\+\_\+defs)
 \item 
-gint \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+add} (\textbf{ agg\+\_\+transform\+\_\+t} $\ast$T, \textbf{ agg\+\_\+operation\+\_\+t} op, gdouble $\ast$p, gchar $\ast$$\ast$expr, gint np)
+gint \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+add} (\textbf{ agg\+\_\+transform\+\_\+t} $\ast$T, \textbf{ agg\+\_\+operation\+\_\+t} op, gdouble umin, gdouble umax, gdouble $\ast$p, gchar $\ast$$\ast$expr, gint np)
 \item 
 gint \textbf{ agg\+\_\+transform\+\_\+operators\+\_\+write} (FILE $\ast$f, \textbf{ agg\+\_\+transform\+\_\+t} $\ast$T)
 \item 
@@ -33,7 +33,9 @@ gint \textbf{ agg\+\_\+transform\+\_\+axes} (\textbf{ agg\+\_\+axes\+\_\+t} axes
 \item 
 \textbf{ agg\+\_\+axes\+\_\+t} \textbf{ agg\+\_\+axes\+\_\+parse} (gchar $\ast$str)
 \item 
-gint \textbf{ agg\+\_\+transform\+\_\+parse} (\textbf{ agg\+\_\+transform\+\_\+t} $\ast$T, gchar $\ast$name, \textbf{ agg\+\_\+variable\+\_\+t} $\ast$p, gint np)
+gint \textbf{ agg\+\_\+transform\+\_\+parse} (\textbf{ agg\+\_\+transform\+\_\+t} $\ast$T, \textbf{ agg\+\_\+variable\+\_\+t} $\ast$p, gint np)
+\item 
+gint \textbf{ agg\+\_\+transforms\+\_\+list} (FILE $\ast$f)
 \end{DoxyCompactItemize}
 \begin{DoxyCompactItemize}
 \item 
@@ -157,7 +159,7 @@ Apply a transform to a point
 \end{DoxyReturn}
 
 
-References \textbf{ agg\+\_\+transform\+\_\+operator}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+apply()}, and \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+number}.
+References \textbf{ agg\+\_\+transform\+\_\+operator}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+number}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, \textbf{ agg\+\_\+transform\+\_\+variable}, \textbf{ agg\+\_\+variable\+\_\+name}, \textbf{ agg\+\_\+variable\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+value}.
 
 
 
@@ -225,13 +227,13 @@ newly allocated \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9
 \end{DoxyReturn}
 
 
-References \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+number}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+number\+\_\+max}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, \textbf{ agg\+\_\+transform\+\_\+t}, and \textbf{ agg\+\_\+transform\+\_\+variable\+\_\+number}.
+References \textbf{ agg\+\_\+expression\+\_\+data\+\_\+new()}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+number}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+number\+\_\+max}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, \textbf{ agg\+\_\+transform\+\_\+t}, and \textbf{ agg\+\_\+transform\+\_\+variable\+\_\+number}.
 
-\mbox{\label{group__transforms_ga3469482e2c22920b5accefdc004297c4}} 
+\mbox{\label{group__transforms_gadd18fb4fb5cffd83f7827ac3aa432191}} 
 \index{Transformations@{Transformations}!agg\_transform\_operator\_add@{agg\_transform\_operator\_add}}
 \index{agg\_transform\_operator\_add@{agg\_transform\_operator\_add}!Transformations@{Transformations}}
 \doxysubsubsection{agg\_transform\_operator\_add()}
-{\footnotesize\ttfamily gint agg\+\_\+transform\+\_\+operator\+\_\+add (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+transform\+\_\+t} $\ast$}]{T,  }\item[{\textbf{ agg\+\_\+operation\+\_\+t}}]{op,  }\item[{gdouble $\ast$}]{p,  }\item[{gchar $\ast$$\ast$}]{expr,  }\item[{gint}]{np }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily gint agg\+\_\+transform\+\_\+operator\+\_\+add (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+transform\+\_\+t} $\ast$}]{T,  }\item[{\textbf{ agg\+\_\+operation\+\_\+t}}]{op,  }\item[{gdouble}]{umin,  }\item[{gdouble}]{umax,  }\item[{gdouble $\ast$}]{p,  }\item[{gchar $\ast$$\ast$}]{expr,  }\item[{gint}]{np }\end{DoxyParamCaption})}
 
 Add an operation to a transform
 
@@ -240,6 +242,10 @@ Add an operation to a transform
 {\em T} & an \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} allocated with \doxyref{agg\+\_\+transform\+\_\+new}{p.}{group__transforms_gaf8e2e52219b0108f7df70bc4dd39031f}; \\
 \hline
 {\em op} & a basic transform operation of type \doxyref{agg\+\_\+operation\+\_\+t}{p.}{group__transforms_gae287f33d9a1988a16e6e8bfbcf8498f7}; \\
+\hline
+{\em umin} & lower parameter limit for applying transform operation; \\
+\hline
+{\em umax} & upper parameter limit for applying transform operation; \\
 \hline
 {\em p} & array of parameter values to pass to transform calculation; \\
 \hline
@@ -253,7 +259,7 @@ Add an operation to a transform
 \end{DoxyReturn}
 
 
-References \textbf{ agg\+\_\+transform\+\_\+operator}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+func}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+new()}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+number}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+operation}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+parameter}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+parameter\+\_\+number}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, \textbf{ agg\+\_\+variable\+\_\+definition}, \textbf{ agg\+\_\+variable\+\_\+name}, \textbf{ agg\+\_\+variable\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+value}.
+References \textbf{ agg\+\_\+transform\+\_\+operator}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+func}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+new()}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+number}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+operation}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+parameter}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+parameter\+\_\+number}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+umax}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+umin}, \textbf{ agg\+\_\+variable\+\_\+definition}, \textbf{ agg\+\_\+variable\+\_\+name}, \textbf{ agg\+\_\+variable\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+value}.
 
 
 
@@ -279,10 +285,6 @@ Apply a transform operation to a point.
 \begin{DoxyReturn}{Returns}
 0 on success. 
 \end{DoxyReturn}
-
-
-Referenced by \textbf{ agg\+\_\+transform\+\_\+apply()}.
-
 \mbox{\label{group__transforms_ga57e762424be00dc262795556c254934b}} 
 \index{Transformations@{Transformations}!agg\_transform\_operator\_new@{agg\_transform\_operator\_new}}
 \index{agg\_transform\_operator\_new@{agg\_transform\_operator\_new}!Transformations@{Transformations}}
@@ -291,7 +293,7 @@ Referenced by \textbf{ agg\+\_\+transform\+\_\+apply()}.
 
 Allocate a new \doxyref{agg\+\_\+transform\+\_\+operator\+\_\+t}{p.}{agg_8h_a9b3c7b4a183fc43a646fdc5cb1673993}
 
-This function is mainly called as part of setting up a new transform, via \doxyref{agg\+\_\+transform\+\_\+operator\+\_\+add}{p.}{group__transforms_ga3469482e2c22920b5accefdc004297c4}
+This function is mainly called as part of setting up a new transform, via \doxyref{agg\+\_\+transform\+\_\+operator\+\_\+add}{p.}{group__transforms_gadd18fb4fb5cffd83f7827ac3aa432191}
 
 \begin{DoxyReturn}{Returns}
 a newly allocaed \doxyref{agg\+\_\+transform\+\_\+operator\+\_\+t}{p.}{agg_8h_a9b3c7b4a183fc43a646fdc5cb1673993} 
@@ -326,11 +328,11 @@ Write a list of operators and parameters in a transform to file
 
 References \textbf{ agg\+\_\+transform\+\_\+operator}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+number}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+operation}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+parameter}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+parameter\+\_\+number}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+t}.
 
-\mbox{\label{group__transforms_ga77479169572fa74999fded7d30af2453}} 
+\mbox{\label{group__transforms_gacd07db6e06b5aefc72affe4f9bb3e7b3}} 
 \index{Transformations@{Transformations}!agg\_transform\_parse@{agg\_transform\_parse}}
 \index{agg\_transform\_parse@{agg\_transform\_parse}!Transformations@{Transformations}}
 \doxysubsubsection{agg\_transform\_parse()}
-{\footnotesize\ttfamily gint agg\+\_\+transform\+\_\+parse (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+transform\+\_\+t} $\ast$}]{T,  }\item[{gchar $\ast$}]{name,  }\item[{\textbf{ agg\+\_\+variable\+\_\+t} $\ast$}]{p,  }\item[{gint}]{np }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily gint agg\+\_\+transform\+\_\+parse (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+transform\+\_\+t} $\ast$}]{T,  }\item[{\textbf{ agg\+\_\+variable\+\_\+t} $\ast$}]{p,  }\item[{gint}]{np }\end{DoxyParamCaption})}
 
 Parse a transform operation described by a string and add it to an \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da}
 
@@ -338,9 +340,7 @@ Parse a transform operation described by a string and add it to an \doxyref{agg\
 \begin{DoxyParams}{Parameters}
 {\em T} & \doxyref{agg\+\_\+transform\+\_\+t}{p.}{agg_8h_ab26de2509de1b8f9b7bc6523852dc6da} to have an operation added; \\
 \hline
-{\em name} & name of transform operation (see \doxyref{agg\+\_\+transform\+\_\+operators\+\_\+write}{p.}{group__transforms_ga9647f98c5477495e98aa83eaed70c171}); \\
-\hline
-{\em p} & array of \doxyref{agg\+\_\+variable\+\_\+t}{p.}{group__variables_gaf99a18818caf06b7a2cdc10dde859f47} holding parameters of transform; \\
+{\em p} & array of \doxyref{agg\+\_\+variable\+\_\+t}{p.}{group__variables_gaf99a18818caf06b7a2cdc10dde859f47} holding parameters of transform, including transform name; \\
 \hline
 {\em np} & number of entries in {\itshape p}.\\
 \hline
@@ -422,3 +422,19 @@ Write list of variables and values for a transform to output
 
 References \textbf{ agg\+\_\+transform\+\_\+variable}, \textbf{ agg\+\_\+transform\+\_\+variable\+\_\+number}, \textbf{ agg\+\_\+variable\+\_\+definition}, \textbf{ agg\+\_\+variable\+\_\+name}, \textbf{ agg\+\_\+variable\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+value}.
 
+\mbox{\label{group__transforms_ga47d8bc86154517da32e6dbce5b28fb03}} 
+\index{Transformations@{Transformations}!agg\_transforms\_list@{agg\_transforms\_list}}
+\index{agg\_transforms\_list@{agg\_transforms\_list}!Transformations@{Transformations}}
+\doxysubsubsection{agg\_transforms\_list()}
+{\footnotesize\ttfamily gint agg\+\_\+transforms\+\_\+list (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f }\end{DoxyParamCaption})}
+
+Write a list of available transforms to file
+
+
+\begin{DoxyParams}{Parameters}
+{\em f} & file stream for output.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}

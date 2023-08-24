@@ -7,6 +7,8 @@ Symbolically defined variables and expressions.
 
 \begin{DoxyCompactItemize}
 \item 
+\textbf{ agg\+\_\+expression\+\_\+data\+\_\+t} $\ast$ \textbf{ agg\+\_\+expression\+\_\+data\+\_\+new} (gint nemax)
+\item 
 gint \textbf{ agg\+\_\+expression\+\_\+data\+\_\+variable\+\_\+add} (\textbf{ agg\+\_\+expression\+\_\+data\+\_\+t} $\ast$d, \textbf{ agg\+\_\+variable\+\_\+t} $\ast$v)
 \item 
 gpointer \textbf{ agg\+\_\+expression\+\_\+compile} (gchar $\ast$e, \textbf{ agg\+\_\+expression\+\_\+data\+\_\+t} $\ast$d)
@@ -89,6 +91,30 @@ Evaluate expressions in an expression data structure, making the values availabl
 
 Referenced by \textbf{ agg\+\_\+body\+\_\+globals\+\_\+eval()}, and \textbf{ agg\+\_\+transform\+\_\+variables\+\_\+eval()}.
 
+\mbox{\label{group__variables_ga995aee06af1d6b134b2d3de219fa9a62}} 
+\index{Variables and expressions@{Variables and expressions}!agg\_expression\_data\_new@{agg\_expression\_data\_new}}
+\index{agg\_expression\_data\_new@{agg\_expression\_data\_new}!Variables and expressions@{Variables and expressions}}
+\doxysubsubsection{agg\_expression\_data\_new()}
+{\footnotesize\ttfamily \textbf{ agg\+\_\+expression\+\_\+data\+\_\+t} $\ast$ agg\+\_\+expression\+\_\+data\+\_\+new (\begin{DoxyParamCaption}\item[{gint}]{nemax }\end{DoxyParamCaption})}
+
+Allocate a new \doxyref{agg\+\_\+expression\+\_\+data\+\_\+t}{p.}{agg_8h_a99192fd2067443a234e213a421f6f643} to contain lists of variables and definitions for parsing and evaluation.
+
+
+\begin{DoxyParams}{Parameters}
+{\em nemax} & maximum number of expressions in \doxyref{agg\+\_\+expression\+\_\+data\+\_\+t}{p.}{agg_8h_a99192fd2067443a234e213a421f6f643}.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+newly allocated \doxyref{agg\+\_\+expression\+\_\+data\+\_\+t}{p.}{agg_8h_a99192fd2067443a234e213a421f6f643}. 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+expression\+\_\+data\+\_\+t}.
+
+
+
+Referenced by \textbf{ agg\+\_\+body\+\_\+new()}, and \textbf{ agg\+\_\+transform\+\_\+new()}.
+
 \mbox{\label{group__variables_gadb65910d9a68ec640fb31a05ead4b6dd}} 
 \index{Variables and expressions@{Variables and expressions}!agg\_expression\_data\_variable\_add@{agg\_expression\_data\_variable\_add}}
 \index{agg\_expression\_data\_variable\_add@{agg\_expression\_data\_variable\_add}!Variables and expressions@{Variables and expressions}}
@@ -168,5 +194,5 @@ References \textbf{ agg\+\_\+variable\+\_\+definition}, \textbf{ agg\+\_\+variab
 
 Data structure holding variable names, values, and symbolic definitions 
 
-Referenced by \textbf{ agg\+\_\+body\+\_\+global\+\_\+add()}, \textbf{ agg\+\_\+body\+\_\+globals\+\_\+compile()}, \textbf{ agg\+\_\+body\+\_\+globals\+\_\+eval()}, \textbf{ agg\+\_\+body\+\_\+globals\+\_\+write()}, \textbf{ agg\+\_\+body\+\_\+new()}, \textbf{ agg\+\_\+surface\+\_\+point\+\_\+diff()}, \textbf{ agg\+\_\+surface\+\_\+point\+\_\+eval()}, \textbf{ agg\+\_\+transform\+\_\+expressions\+\_\+compile()}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+add()}, \textbf{ agg\+\_\+transform\+\_\+operators\+\_\+write()}, \textbf{ agg\+\_\+transform\+\_\+variable\+\_\+add()}, \textbf{ agg\+\_\+transform\+\_\+variables\+\_\+eval()}, and \textbf{ agg\+\_\+transform\+\_\+variables\+\_\+write()}.
+Referenced by \textbf{ agg\+\_\+body\+\_\+global\+\_\+add()}, \textbf{ agg\+\_\+body\+\_\+globals\+\_\+compile()}, \textbf{ agg\+\_\+body\+\_\+globals\+\_\+eval()}, \textbf{ agg\+\_\+body\+\_\+globals\+\_\+write()}, \textbf{ agg\+\_\+body\+\_\+new()}, \textbf{ agg\+\_\+surface\+\_\+point\+\_\+diff()}, \textbf{ agg\+\_\+surface\+\_\+point\+\_\+eval()}, \textbf{ agg\+\_\+transform\+\_\+apply()}, \textbf{ agg\+\_\+transform\+\_\+expressions\+\_\+compile()}, \textbf{ agg\+\_\+transform\+\_\+operator\+\_\+add()}, \textbf{ agg\+\_\+transform\+\_\+operators\+\_\+write()}, \textbf{ agg\+\_\+transform\+\_\+variable\+\_\+add()}, \textbf{ agg\+\_\+transform\+\_\+variables\+\_\+eval()}, and \textbf{ agg\+\_\+transform\+\_\+variables\+\_\+write()}.
 

@@ -27,6 +27,12 @@
 
 #include "agg-private.h"
 
+/** 
+ * @{ 
+ *
+ * @ingroup curves
+ */
+
 static gint fourier_eval(gdouble *C, gint nc, gdouble x,
 			 gdouble *s, gdouble *t)
 
@@ -35,7 +41,7 @@ static gint fourier_eval(gdouble *C, gint nc, gdouble x,
 
   *s = C[0] ;
   for ( i = 1 ; i <= nc ; i ++ ) {
-    (*s) += C[2*i-1]*cos(2.0*M_PI*i*x) + C[2*i+0]*sin(2.0*M_PI*i*x) ;
+    (*s) += C[2*i-1]*cos(-2.0*M_PI*i*x) + C[2*i+0]*sin(-2.0*M_PI*i*x) ;
   }
   *t = x ;
   
@@ -75,6 +81,17 @@ static gint ellipse_eval(gdouble *C, gdouble x,
     
   return 0 ;
 }
+
+/** 
+ * Evaluate coordinates on a parameterized curve
+ * 
+ * @param c ::agg_curve_t to be evaluated;
+ * @param x parameter on \a c;
+ * @param s on exit, set to \f$s\f$ in parametric plane;
+ * @param t on exit, set to \f$t\f$ in parametric plane.
+ * 
+ * @return 0 on success.
+ */
 
 gint agg_curve_eval(agg_curve_t *c, gdouble x, gdouble *s, gdouble *t)
 
@@ -123,3 +140,46 @@ gboolean agg_curve_point_orientation(agg_curve_t *c, gdouble del,
   
   return FALSE ;
 }
+
+/** 
+ * Estimate a normal to the plane approximately containing a curve on
+ * a surface. This is a rough estimate intended to be used in checking
+ * curve orientations. 
+ * 
+ * @param c an ::agg_curve_t;
+ * @param S surface on which curve is defined;
+ * @param P patch for mapping \a c onto \a S;
+ * @param n on exit contains estimated normal;
+ * @param w workspace for surface evaluation.
+ * 
+ * @return 0 on success.
+ */
+
+gint agg_curve_plane_normal(agg_curve_t *c, agg_surface_t *S, agg_patch_t *P,
+			    gdouble *n, agg_surface_workspace_t *w)
+
+{
+  gdouble x[9], s, t, u, v ;
+  gint i ;
+  const gdouble tn[] = {0.25, 0.5, 0.75} ;
+  const gint nt = 3 ;
+
+  for ( i = 0 ; i < nt ; i ++ ) {
+    agg_curve_eval(c, tn[i], &s, &t) ;
+    agg_patch_map(P, s, t, &u, &v) ;
+    agg_surface_point_eval(S, u, v, &(x[3*i]), w) ;
+  }
+
+  agg_vector_diff(&(x[3*0]), &(x[3*0]), &(x[3*2])) ;
+  agg_vector_diff(&(x[3*1]), &(x[3*1]), &(x[3*2])) ;
+  agg_vector_cross(n, &(x[3*0]), &(x[3*1])) ;
+
+  u = agg_vector_length(n) ;
+  n[0] /= u ; n[1] /= u ; n[2] /= u ; 
+  
+  return 0 ;
+}
+
+/**
+ * @}
+ */

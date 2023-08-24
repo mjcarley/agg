@@ -32,7 +32,8 @@ libagg_la_SOURCES = \
 	body.c \
 	blend.c \
 	library.c \
-	curve.c
+	curve.c \
+	chebyshev.c
 
 include_HEADERS = \
 	agg.h

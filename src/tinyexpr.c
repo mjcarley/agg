@@ -226,8 +226,8 @@ static double divide(double a, double b) {return a / b;}
 static double negate(double a) {return -a;}
 static double comma(double a, double b) {(void)a; return b;}
 
-
-void next_token(state *s) {
+/*set static by Michael Carley, to avoid compiler warnings*/
+static void next_token(state *s) {
     s->type = TOK_NULL;
 
     do {

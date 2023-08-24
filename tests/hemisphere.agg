@@ -22,5 +22,5 @@ surface
   transform("translate", -0.5, 0, 0)
   transform("scale", "2*radius*sqrt(1-u^2)")
   transform("translate", 0, 0, "radius*u")
-  grid("hemisphere-ico", 3)
+  grid("hemisphere-uv", 8, 17)
 }

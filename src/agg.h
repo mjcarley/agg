@@ -26,6 +26,13 @@
 #else /*DOXYGEN*/
 #endif /*DOXYGEN*/
 
+#ifdef DOXYGEN
+/** @typedef agg_curve_type_t
+ *
+ * Enumerated data type for various curve definitions
+ */
+#endif /*DOXYGEN*/
+
 typedef enum {
   AGG_CURVE_POLYNOMIAL = 0, /**< polynomial */
   AGG_CURVE_ELLIPSE    = 1, /**< axis-aligned ellipse with arbitrary centre */
@@ -34,6 +41,28 @@ typedef enum {
 
 #define AGG_CURVE_DATA_SIZE 35
   
+#ifdef DOXYGEN
+/** @typedef agg_curve_t
+ *
+ * Data structure for evaluation of one-dimensional parametric curves
+ */
+
+typedef agg_curve_t agg_curve_t ;
+
+/**
+ *  @brief ::agg_curve_type_t of an ::agg_curve_t
+ */
+#define agg_curve_order(c)
+/**
+ *  @brief order (number of parameters) of an ::agg_curve_t
+ */
+#define agg_curve_data(c)
+/**
+ *  @brief data (coefficients, etc) of an ::agg_curve_t
+ */
+#define agg_curve_data(c)
+
+#else  /*DOXYGEN*/
 typedef struct _agg_curve_t agg_curve_t ;
 struct _agg_curve_t {
   agg_curve_type_t type ;
@@ -44,6 +73,7 @@ struct _agg_curve_t {
 #define agg_curve_type(_c)        ((_c)->type)
 #define agg_curve_order(_c)       ((_c)->n)
 #define agg_curve_data(_c)        ((_c)->data)
+#endif  /*DOXYGEN*/
 
 /**
  * @{
@@ -93,7 +123,6 @@ struct _agg_variable_t {
 #define agg_variable_evaluator(_v)  ((_v)->eval)
 #define agg_variable_value(_v)      ((_v)->val)
 #endif /*DOXYGEN*/
-
 
 /**
  *  @}
@@ -181,6 +210,38 @@ struct _agg_section_t {
 #define agg_section_order_lower_max(_s)      ((_s)->olmax)
 #define agg_section_trailing_edge_upper(_s)  ((_s)->ytu)
 #define agg_section_trailing_edge_lower(_s)  ((_s)->ytl)
+#endif /*DOXYGEN*/
+
+#define AGG_CHEBYSHEV_INTERVAL_NUMBER_MAX 512
+
+#ifdef DOXYGEN
+
+typedef agg_chebyshev_t ;
+
+#else /*DOXYGEN*/
+
+typedef struct _agg_chebyshev_t agg_chebyshev_t ;
+struct _agg_chebyshev_t {
+  gint Nmax, nc, ninter, inter[AGG_CHEBYSHEV_INTERVAL_NUMBER_MAX+1] ;
+  gdouble xinter[AGG_CHEBYSHEV_INTERVAL_NUMBER_MAX+1], *f ;
+  gdouble x0[3] ;
+} ;
+
+#define agg_chebyshev_order(_C)              ((_C)->N)
+#define agg_chebyshev_component_number(_C)   ((_C)->nc)
+/* #define agg_chebyshev_data(_C,_i,_j)				\ */
+/*   ((_C)->f[(_i)*agg_chebyshev_component_number((_C))+(_j)]) */
+#define agg_chebyshev_interval_number(_C)    ((_C)->ninter)
+#define agg_chebyshev_interval_start(_C,_i)  ((_C)->inter[(_i)])
+#define agg_chebyshev_interval_xmin(_C,_i)   ((_C)->xinter[(_i)])
+#define agg_chebyshev_interval_order(_C,_i)		\
+  (((_C)->inter[(_i)+1]) - ((_C)->inter[(_i)])-1)
+#define agg_chebyshev_interval_coordinate(_C,_i,_x)			\
+  (2.0*((_x)-((_C)->xinter[(_i)]))/((_C)->xinter[(_i)+1]-((_C)->xmin[(_i)]))\
+   - 1.0)
+  
+#define agg_chebyshev_
+
 #endif /*DOXYGEN*/
 
 /** @typedef agg_expression_data_t
@@ -371,8 +432,11 @@ typedef enum {
   AGG_GRID_TRIANGLE   = 2,    /**< mesh generated using Triangle code */
   AGG_GRID_SPHERE_ICO = 3,    /**< spherical mesh generated using icosahedron 
 				 subdivision */
-  AGG_GRID_HEMISPHERE_ICO = 4  /**< hemispherical mesh generated using 
+  AGG_GRID_SPHERE_UV =  4,    /**< spherical mesh generated using regular grid*/
+  AGG_GRID_HEMISPHERE_ICO = 5,  /**< hemispherical mesh generated using 
 				  icosahedron subdivision */
+  AGG_GRID_HEMISPHERE_UV = 6  /**< hemispherical mesh generated using 
+				 regular grid */
 } agg_grid_t ;
 
 /** @typedef agg_surface_t
@@ -464,6 +528,7 @@ typedef struct _agg_patch_t agg_patch_t ;
 struct _agg_patch_t {
   agg_patch_mapping_t map ;
   agg_curve_t curves[AGG_PATCH_HOLE_NUMBER_MAX+2] ;
+  gpointer B[AGG_PATCH_HOLE_NUMBER_MAX+2] ;
   gint nholes ;
   gboolean swrap, twrap,  /*dealing with s and t out of range*/
     invert ; /*invert triangles to maintain correct normal*/
@@ -475,29 +540,62 @@ struct _agg_patch_t {
 #define agg_patch_wrap_s(_P)            ((_P)->swrap)
 #define agg_patch_wrap_t(_P)            ((_P)->twrap)
 #define agg_patch_invert(_P)            ((_P)->invert)
-#define agg_patch_clipping(_P,_i)       (&((_P)->clip[(_i)]))
-#define agg_patch_clipping_number(_P)   ((_P)->nclip)
 #define agg_patch_hole_number(_P)       ((_P)->nholes)
 #define agg_patch_curve_smin(_P)        (&((_P)->curves[0]))
 #define agg_patch_curve_smax(_P)        (&((_P)->curves[1]))
-#define agg_patch_hole(_P,_i)           (&((_P)->curves[(_i)+2]))
+#define agg_patch_hole(_P,_i)           (&((_P)->curves[(_i)]))
+#define agg_patch_blend(_P,_i)          ((_P)->B[(_i)])
 
 #endif /*DOXYGEN*/
 
+#ifdef DOXYGEN
+/**
+ * @typedef agg_surface_blend_t
+ * 
+ * Data type for evaluation of blended surfaces for bridging surface
+ * intersections smoothly
+ * 
+ */
+
+typedef agg_surface_blend_t ;
+
+/**
+ * @brief \f$i\f$th surface (i=0,1) joined by surface blend
+ */
+#define agg_surface_blend_surface(B,i)       
+/**
+ * @brief patch used to map \f$i\f$th (i=0,1) surface joined by blend
+ */
+#define agg_surface_blend_patch(B,i)         
+/**
+ * @brief if TRUE, invert blend to correct orientation of surface elements
+ */
+#define agg_surface_blend_invert(B)           
+/**
+ * @brief rail curve for blend on \f$i\f$th surface (i=0,1) joined by blend
+ */
+#define agg_surface_blend_hole(B,i)          
+/**
+ * @brief if TRUE, traverse \f$i\f$th (i=0,1) rail curve in opposite direction
+ */
+#define agg_surface_blend_curve_reverse(B,i) 
+
+#else /*DOXYGEN*/
 typedef struct _agg_surface_blend_t agg_surface_blend_t ;
 
 struct _agg_surface_blend_t {
   agg_surface_t *S[2] ;
   agg_patch_t *P[2] ;
-  gboolean invert ;
-  gint nsp, /*number of splines on curve*/
-    ic[2] ; /*index of clipping on each patch*/
+  gboolean invert, reverse[2] ;
+  gint hole[2] ; /*index of hole or cut on surfaces to be blended*/
 } ;
 
-#define agg_surface_blend_surface(_B,_i)    ((_B)->S[(_i)])
-#define agg_surface_blend_patch(_B,_i)      ((_B)->P[(_i)])
-#define agg_surface_blend_spline_number(_B) ((_B)->nsp)
-#define agg_surface_blend_invert(_B)        ((_B)->invert)
+#define agg_surface_blend_surface(_B,_i)       ((_B)->S[(_i)])
+#define agg_surface_blend_patch(_B,_i)         ((_B)->P[(_i)])
+#define agg_surface_blend_invert(_B)           ((_B)->invert)
+#define agg_surface_blend_hole(_B,_i)          ((_B)->hole[(_i)])
+#define agg_surface_blend_curve_reverse(_B,_i) ((_B)->reverse[(_i)])
+#endif /*DOXYGEN*/
 
 /**
  * @}
@@ -773,7 +871,7 @@ agg_surface_workspace_t *agg_surface_workspace_new(void) ;
 
 gdouble agg_naca_four(gdouble t, gdouble p, gdouble m, gdouble x) ;
 
-agg_patch_t *agg_patch_new(gint nstmax) ;
+agg_patch_t *agg_patch_new(void) ;
 gint agg_patch_map(agg_patch_t *p, gdouble s, gdouble t,
 		   gdouble *u, gdouble *v) ;
 gint agg_patch_st_correct(agg_patch_t *P, gdouble *st) ;
@@ -797,11 +895,10 @@ gint agg_patch_triangle_interp(agg_patch_t *P,
 			       gdouble *s, gdouble *t) ;
 
 agg_intersection_t *agg_intersection_new(gint nstmax) ;
-gint agg_surface_patch_trim(agg_intersection_t *inter,
-			    agg_surface_t *S1, agg_patch_t *P1, gdouble d1,
-			    agg_surface_t *S2, agg_patch_t *P2, gdouble d2,
-			    agg_surface_blend_t *B,
-			    agg_surface_workspace_t *w) ;
+gboolean agg_surface_patch_trim(agg_surface_t *S1, agg_patch_t *P1, gdouble d1,
+				agg_surface_t *S2, agg_patch_t *P2, gdouble d2,
+				agg_surface_blend_t *B,
+				agg_surface_workspace_t *w) ;
 gint agg_intersection_curve_write(FILE *f, agg_intersection_t *inter,
 				  agg_surface_workspace_t *w) ;
 gint agg_intersection_bbox_set(agg_intersection_t *inter) ;
@@ -852,7 +949,6 @@ gint agg_mesh_body(agg_mesh_t *m, agg_body_t *b, gint pps,
 		   agg_surface_workspace_t *w) ;
 gint agg_mesh_element_nodes(agg_mesh_t *m, gint e,
 			    gint *nodes, gint *nnodes, gint *s) ;
-gint agg_mesh_refine_loop(agg_mesh_t *m, agg_surface_workspace_t *w) ;
 
 agg_body_t *agg_body_new(gint ngmax, gint nsmax) ;
 gint agg_body_global_add(agg_body_t *b, gchar *var, gchar *def, gdouble val) ;
@@ -883,6 +979,19 @@ gint agg_library_write(FILE *f) ;
 gint agg_curve_eval(agg_curve_t *c, gdouble x, gdouble *s, gdouble *t) ;
 gboolean agg_curve_point_orientation(agg_curve_t *c, gdouble del,
 				     gdouble s, gdouble t) ;
+gint agg_curve_plane_normal(agg_curve_t *c, agg_surface_t *S, agg_patch_t *P,
+			    gdouble *n, agg_surface_workspace_t *w) ;
+
+agg_chebyshev_t *agg_chebyshev_new(gint Nmax, gint nc) ;
+gint agg_chebyshev_eval(agg_chebyshev_t *C, gdouble x, gdouble *f) ;
+gint agg_chebyshev_surface_section(agg_chebyshev_t *C,
+				   agg_surface_t *S, gdouble u,
+				   gint N, agg_surface_workspace_t *w) ;
+gint agg_chebyshev_surface_section_adaptive(agg_chebyshev_t *C,
+					    agg_surface_t *S, gdouble u,
+					    gint N, gdouble tol, gdouble dmin,
+					    agg_surface_workspace_t *w) ;
+gdouble agg_chebyshev_interval_shortest(agg_chebyshev_t *C) ;
 
 #endif /*__AGG_H_INCLUDED__*/
 

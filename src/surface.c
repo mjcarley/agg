@@ -252,7 +252,6 @@ gint agg_surface_section_interp(agg_surface_t *S, gdouble u, agg_section_t *s)
 /** 
  * Allocate a workspace for evaluation of surfaces
  * 
- * 
  * @return newly allocated workspace.
  */
 
@@ -422,7 +421,9 @@ agg_grid_t agg_grid_parse(gchar *str)
     {"regular",    AGG_GRID_REGULAR},
     {"triangle",   AGG_GRID_TRIANGLE},
     {"sphere-ico", AGG_GRID_SPHERE_ICO},
+    {"sphere-uv", AGG_GRID_SPHERE_UV},
     {"hemisphere-ico", AGG_GRID_HEMISPHERE_ICO},
+    {"hemisphere-uv", AGG_GRID_HEMISPHERE_UV},
     {NULL,       AGG_GRID_UNDEFINED}
   } ;
 

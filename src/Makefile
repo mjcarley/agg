@@ -139,7 +139,7 @@ libagg_la_LIBADD =
 am_libagg_la_OBJECTS = bernstein.lo binomials.lo tinyexpr.lo \
 	section.lo transform.lo variables.lo surface.lo naca.lo \
 	intersection.lo hefsi.lo patch.lo moller-tri.lo mesh.lo \
-	body.lo blend.lo library.lo curve.lo
+	body.lo blend.lo library.lo curve.lo chebyshev.lo
 libagg_la_OBJECTS = $(am_libagg_la_OBJECTS)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
@@ -166,13 +166,14 @@ depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/bernstein.Plo \
 	./$(DEPDIR)/binomials.Plo ./$(DEPDIR)/blend.Plo \
-	./$(DEPDIR)/body.Plo ./$(DEPDIR)/curve.Plo \
-	./$(DEPDIR)/hefsi.Plo ./$(DEPDIR)/intersection.Plo \
-	./$(DEPDIR)/library.Plo ./$(DEPDIR)/mesh.Plo \
-	./$(DEPDIR)/moller-tri.Plo ./$(DEPDIR)/naca.Plo \
-	./$(DEPDIR)/patch.Plo ./$(DEPDIR)/section.Plo \
-	./$(DEPDIR)/surface.Plo ./$(DEPDIR)/tinyexpr.Plo \
-	./$(DEPDIR)/transform.Plo ./$(DEPDIR)/variables.Plo
+	./$(DEPDIR)/body.Plo ./$(DEPDIR)/chebyshev.Plo \
+	./$(DEPDIR)/curve.Plo ./$(DEPDIR)/hefsi.Plo \
+	./$(DEPDIR)/intersection.Plo ./$(DEPDIR)/library.Plo \
+	./$(DEPDIR)/mesh.Plo ./$(DEPDIR)/moller-tri.Plo \
+	./$(DEPDIR)/naca.Plo ./$(DEPDIR)/patch.Plo \
+	./$(DEPDIR)/section.Plo ./$(DEPDIR)/surface.Plo \
+	./$(DEPDIR)/tinyexpr.Plo ./$(DEPDIR)/transform.Plo \
+	./$(DEPDIR)/variables.Plo
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -390,7 +391,8 @@ libagg_la_SOURCES = \
 	body.c \
 	blend.c \
 	library.c \
-	curve.c
+	curve.c \
+	chebyshev.c
 
 include_HEADERS = \
 	agg.h
@@ -516,6 +518,7 @@ include ./$(DEPDIR)/bernstein.Plo # am--include-marker
 include ./$(DEPDIR)/binomials.Plo # am--include-marker
 include ./$(DEPDIR)/blend.Plo # am--include-marker
 include ./$(DEPDIR)/body.Plo # am--include-marker
+include ./$(DEPDIR)/chebyshev.Plo # am--include-marker
 include ./$(DEPDIR)/curve.Plo # am--include-marker
 include ./$(DEPDIR)/hefsi.Plo # am--include-marker
 include ./$(DEPDIR)/intersection.Plo # am--include-marker
@@ -720,6 +723,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/binomials.Plo
 	-rm -f ./$(DEPDIR)/blend.Plo
 	-rm -f ./$(DEPDIR)/body.Plo
+	-rm -f ./$(DEPDIR)/chebyshev.Plo
 	-rm -f ./$(DEPDIR)/curve.Plo
 	-rm -f ./$(DEPDIR)/hefsi.Plo
 	-rm -f ./$(DEPDIR)/intersection.Plo
@@ -782,6 +786,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/binomials.Plo
 	-rm -f ./$(DEPDIR)/blend.Plo
 	-rm -f ./$(DEPDIR)/body.Plo
+	-rm -f ./$(DEPDIR)/chebyshev.Plo
 	-rm -f ./$(DEPDIR)/curve.Plo
 	-rm -f ./$(DEPDIR)/hefsi.Plo
 	-rm -f ./$(DEPDIR)/intersection.Plo

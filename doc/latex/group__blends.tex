@@ -7,9 +7,11 @@ Intersecting bodies are joined using smooth surface blends.
 
 \begin{DoxyCompactItemize}
 \item 
+\textbf{ agg\+\_\+surface\+\_\+blend\+\_\+t} $\ast$ \textbf{ agg\+\_\+surface\+\_\+blend\+\_\+new} (void)
+\item 
 gint \textbf{ agg\+\_\+hermite\+\_\+eval} (gdouble s, gdouble $\ast$H)
 \item 
-gint \textbf{ agg\+\_\+surface\+\_\+blend\+\_\+evaluate} (agg\+\_\+surface\+\_\+blend\+\_\+t $\ast$B, gdouble s, gdouble t, gdouble $\ast$x, agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$w)
+gint \textbf{ agg\+\_\+surface\+\_\+blend\+\_\+evaluate} (\textbf{ agg\+\_\+surface\+\_\+blend\+\_\+t} $\ast$B, gdouble s, gdouble t, gdouble $\ast$x, agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$w)
 \end{DoxyCompactItemize}
 
 
@@ -37,11 +39,15 @@ Evaluate Hermite smoothing polynomials
 \begin{DoxyReturn}{Returns}
 0 on success. 
 \end{DoxyReturn}
+
+
+Referenced by \textbf{ agg\+\_\+surface\+\_\+blend\+\_\+evaluate()}.
+
 \mbox{\label{group__blends_gaf2bdad79399f4137a466a8d0b02b79fa}} 
 \index{Surface blends@{Surface blends}!agg\_surface\_blend\_evaluate@{agg\_surface\_blend\_evaluate}}
 \index{agg\_surface\_blend\_evaluate@{agg\_surface\_blend\_evaluate}!Surface blends@{Surface blends}}
 \doxysubsubsection{agg\_surface\_blend\_evaluate()}
-{\footnotesize\ttfamily gint agg\+\_\+surface\+\_\+blend\+\_\+evaluate (\begin{DoxyParamCaption}\item[{agg\+\_\+surface\+\_\+blend\+\_\+t $\ast$}]{B,  }\item[{gdouble}]{s,  }\item[{gdouble}]{t,  }\item[{gdouble $\ast$}]{x,  }\item[{agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$}]{w }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily gint agg\+\_\+surface\+\_\+blend\+\_\+evaluate (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+surface\+\_\+blend\+\_\+t} $\ast$}]{B,  }\item[{gdouble}]{s,  }\item[{gdouble}]{t,  }\item[{gdouble $\ast$}]{x,  }\item[{agg\+\_\+surface\+\_\+workspace\+\_\+t $\ast$}]{w }\end{DoxyParamCaption})}
 
 Evaluate a surface blend, using method of Blending parametric surfaces Daniel J. Filip, ACM Transactions on Graphics, Volume 8, Issue 301, July 1989, pp164-\/173 {\texttt{ https\+://doi.\+org/10.\+1145/77055.\+77057}}
 
@@ -63,5 +69,20 @@ Evaluate a surface blend, using method of Blending parametric surfaces Daniel J.
 \end{DoxyReturn}
 
 
-References \textbf{ agg\+\_\+patch\+\_\+t}, and \textbf{ agg\+\_\+surface\+\_\+t}.
+References \textbf{ agg\+\_\+curve\+\_\+eval()}, \textbf{ agg\+\_\+hermite\+\_\+eval()}, \textbf{ agg\+\_\+patch\+\_\+point\+\_\+diff()}, \textbf{ agg\+\_\+patch\+\_\+t}, \textbf{ agg\+\_\+surface\+\_\+blend\+\_\+curve\+\_\+reverse}, \textbf{ agg\+\_\+surface\+\_\+blend\+\_\+hole}, \textbf{ agg\+\_\+surface\+\_\+blend\+\_\+patch}, \textbf{ agg\+\_\+surface\+\_\+blend\+\_\+surface}, and \textbf{ agg\+\_\+surface\+\_\+t}.
+
+\mbox{\label{group__blends_ga5c6f2fc865ba1f132705be5d696ef972}} 
+\index{Surface blends@{Surface blends}!agg\_surface\_blend\_new@{agg\_surface\_blend\_new}}
+\index{agg\_surface\_blend\_new@{agg\_surface\_blend\_new}!Surface blends@{Surface blends}}
+\doxysubsubsection{agg\_surface\_blend\_new()}
+{\footnotesize\ttfamily \textbf{ agg\+\_\+surface\+\_\+blend\+\_\+t} $\ast$ agg\+\_\+surface\+\_\+blend\+\_\+new (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Allocate a new blended surface
+
+\begin{DoxyReturn}{Returns}
+newly allocated \doxyref{agg\+\_\+surface\+\_\+blend\+\_\+t}{p.}{agg_8h_a8cf0532c5f25926621f6d109a7a3084c} 
+\end{DoxyReturn}
+
+
+References \textbf{ agg\+\_\+surface\+\_\+blend\+\_\+t}.
 

@@ -83,3 +83,10 @@
  * @brief Intersecting bodies are joined using smooth surface blends
  *
  */
+
+/**
+ * @defgroup curves One-dimensional curves
+ * 
+ * @brief Single-parameter curves used to cut surfaces or define boundaries
+ *
+ */

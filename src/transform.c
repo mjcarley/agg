@@ -689,8 +689,6 @@ agg_axes_t agg_axes_parse(gchar *str)
  * @return 0 on success.
  */
 
-/* gint agg_transform_parse(agg_transform_t *T, gchar *name, */
-/* 			 agg_variable_t *p, gint np) */
 gint agg_transform_parse(agg_transform_t *T, agg_variable_t *p, gint np)
 
 {
@@ -732,6 +730,14 @@ gint agg_transform_parse(agg_transform_t *T, agg_variable_t *p, gint np)
   
   return 0 ;
 }
+
+/** 
+ * Write a list of available transforms to file
+ * 
+ * @param f file stream for output.
+ * 
+ * @return 0 on success.
+ */
 
 gint agg_transforms_list(FILE *f)
 

@@ -35,6 +35,7 @@ const gchar *tests[] = {"bernstein",
 			"parser",
 			"ico",
 			"fit",
+			"section_fit",
 			""} ;
 
 static void surface_sphere(agg_surface_t *S, gdouble x, gdouble y, gdouble z,
@@ -370,7 +371,6 @@ static void surface_test(void)
 
 {
   gint nu, nv, i, j ;
-  /* agg_transform_t *T ; */
   agg_surface_t *S ;
   agg_surface_workspace_t *w ;
   agg_section_t *s ;
@@ -378,7 +378,7 @@ static void surface_test(void)
   gdouble u, v, x[3] ;
   
   S = agg_surface_new(64) ;
-  P = agg_patch_new(1024) ;
+  P = agg_patch_new() ;
   w = agg_surface_workspace_new() ;
   s = agg_section_new(32, 32) ;
   agg_section_set_circle(s) ;
@@ -461,7 +461,7 @@ static void body_test(void)
 
   for ( i = 0 ; i < nsurf ; i ++ ) {
     S[i] = agg_surface_new(64) ;
-    P[i] = agg_patch_new(1024) ;
+    P[i] = agg_patch_new() ;
   }
   
   rfuse = 0.4 ;
@@ -561,7 +561,7 @@ static void ico_test(void)
   FILE *output ;
   
   S = agg_surface_new(64) ;
-  P = agg_patch_new(1024) ;
+  P = agg_patch_new() ;
   agg_patch_mapping(P) = AGG_PATCH_SPHERICAL ;
   agg_patch_wrap_t(P) = TRUE ;
   w = agg_surface_workspace_new() ;
@@ -659,6 +659,80 @@ static void fit_test(void)
   return ;
 }
 
+static void section_fit_test(void)
+
+{
+  gint nsec, nsp, pps, offp, offsp, offs, i, j ;
+  gdouble rfuse, yw, zw, u, v, x[3], y[3], emax ;
+  agg_surface_t *S ; 
+  agg_surface_workspace_t *w ;
+  agg_mesh_t *wf ;
+  agg_body_t *b ;
+  agg_section_t *sc, *sw ;
+  agg_patch_t *P ;
+  agg_chebyshev_t *C ;
+  FILE *output ;
+
+  b = agg_body_new(32, 32) ;
+  
+  agg_body_global_add(b, "radius", NULL, 0.4) ;
+  agg_body_global_add(b, "len", NULL, 5) ;
+  agg_body_global_add(b, "root", NULL, 1.5) ;
+  agg_body_global_add(b, "span", "len*0.7", 5) ;
+  agg_body_global_add(b, "dihedral", "5*pi/180", 0) ;
+  agg_body_global_add(b, "sweep", "25*pi/180", 0) ;
+  agg_body_global_add(b, "taper", NULL, 0.5) ;
+  agg_body_global_add(b, "del", "span*0", 0) ;
+
+  agg_body_globals_compile(b) ;
+  
+  agg_body_globals_eval(b) ;
+  agg_body_globals_write(stderr, b) ;
+  
+  w = agg_surface_workspace_new() ;
+  sc = agg_section_new(32, 32) ;
+  agg_section_set_circle(sc) ;
+  sw = agg_section_new(32, 32) ;
+  /* agg_section_set_ellipse(sw, 0.25) ; */
+  agg_section_set_aerofoil(sw, 0.5, 0.25, 0) ;
+
+  S = agg_surface_new(64) ;
+  P = agg_patch_new() ;
+  
+  rfuse = 0.4 ;
+  yw = -rfuse/4 ; zw = -1 ;
+  
+  agg_patch_mapping(P) = AGG_PATCH_SPHERICAL ;
+  agg_patch_wrap_t(P) = TRUE ;
+  surface_wing(S, zw, yw, 0.0,
+	       agg_body_globals(b), agg_body_global_number(b),
+	       sw) ;
+
+  C = agg_chebyshev_new(16384, 3) ;
+  u = 0.5 ;
+  /* agg_chebyshev_surface_section_adaptive(C, S, u, 8, 1e-9, 1e-1, w) ; */
+  agg_chebyshev_surface_section(C, S, u, 32, w) ;
+
+  fprintf(stderr, "%d intervals on Chebyshev interpolator\n",
+	  agg_chebyshev_interval_number(C)) ;
+  fprintf(stderr, "shortest interval: %lg\n",
+	  agg_chebyshev_interval_shortest(C)) ;
+  emax = 0 ;
+  for ( i = 0 ; i <= 313 ; i ++ ) {
+    v = -1.0 + 2.0*(gdouble)i/313 ;
+    agg_surface_point_eval(S, u, v, x, w) ;
+    agg_chebyshev_eval(C, v, y) ;
+    fprintf(stdout, "%1.16e %1.16e %1.16e %1.16e %1.16e %1.16e %1.16e\n",
+	    v, x[0], x[1], x[2], y[0], y[1], y[2]) ;
+    emax = MAX(emax, fabs(x[0] - y[0])) ;
+    emax = MAX(emax, fabs(x[1] - y[1])) ;
+    emax = MAX(emax, fabs(x[2] - y[2])) ;
+  }
+
+  fprintf(stderr, "maximum geometric error: %lg\n", emax) ;
+  
+  return ;
+}
 
 gint main(gint argc, gchar **argv)
 
@@ -732,6 +806,12 @@ gint main(gint argc, gchar **argv)
 
   if ( test == 8 ) {
     fit_test() ;
+    
+    return 0 ;
+  }
+
+  if ( test == 9 ) {
+    section_fit_test() ;
     
     return 0 ;
   }

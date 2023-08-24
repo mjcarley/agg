@@ -46,6 +46,8 @@ $(function() {
 <p>Symbolically defined variables and expressions.  
 <a href="#details">More...</a></p>
 <table class="memberdecls">
+<tr class="memitem:ga995aee06af1d6b134b2d3de219fa9a62"><td class="memItemLeft" align="right" valign="top"><a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__variables.html#ga995aee06af1d6b134b2d3de219fa9a62">agg_expression_data_new</a> (gint nemax)</td></tr>
+<tr class="separator:ga995aee06af1d6b134b2d3de219fa9a62"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gadb65910d9a68ec640fb31a05ead4b6dd"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__variables.html#gadb65910d9a68ec640fb31a05ead4b6dd">agg_expression_data_variable_add</a> (<a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a> *d, <a class="el" href="group__variables.html#gaf99a18818caf06b7a2cdc10dde859f47">agg_variable_t</a> *v)</td></tr>
 <tr class="separator:gadb65910d9a68ec640fb31a05ead4b6dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga80416f24e969b55310b8a47b9f0100e9"><td class="memItemLeft" align="right" valign="top">gpointer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__variables.html#ga80416f24e969b55310b8a47b9f0100e9">agg_expression_compile</a> (gchar *e, <a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a> *d)</td></tr>
@@ -154,6 +156,36 @@ $(function() {
 <dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
 
 <p class="reference">Referenced by <a class="el" href="agg_8h.html#a8a64862bcc9c834e015451285e8812db">agg_body_globals_eval()</a>, and <a class="el" href="agg_8h.html#a521307ad04c43f7912a72942271cb8e0">agg_transform_variables_eval()</a>.</p>
+
+</div>
+</div>
+<a id="ga995aee06af1d6b134b2d3de219fa9a62" name="ga995aee06af1d6b134b2d3de219fa9a62"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga995aee06af1d6b134b2d3de219fa9a62">&#9670;&nbsp;</a></span>agg_expression_data_new()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a> * agg_expression_data_new </td>
+          <td>(</td>
+          <td class="paramtype">gint&#160;</td>
+          <td class="paramname"><em>nemax</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Allocate a new <a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a> to contain lists of variables and definitions for parsing and evaluation.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nemax</td><td>maximum number of expressions in <a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a>.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>newly allocated <a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a>. </dd></dl>
+
+<p class="reference">References <a class="el" href="agg_8h.html#a99192fd2067443a234e213a421f6f643">agg_expression_data_t</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="group__body.html#ga04a251df56d2d37e276d047231bdda35">agg_body_new()</a>, and <a class="el" href="agg_8h.html#af8e2e52219b0108f7df70bc4dd39031f">agg_transform_new()</a>.</p>
 
 </div>
 </div>
@@ -279,14 +311,14 @@ $(function() {
 </div><div class="memdoc">
 <p >Data structure holding variable names, values, and symbolic definitions </p>
 
-<p class="reference">Referenced by <a class="el" href="agg_8h.html#a480c67842eb4dd8b22463f41d29ad6e2">agg_body_global_add()</a>, <a class="el" href="agg_8h.html#a12809abb981ee0379ad7f887bdce9222">agg_body_globals_compile()</a>, <a class="el" href="agg_8h.html#a8a64862bcc9c834e015451285e8812db">agg_body_globals_eval()</a>, <a class="el" href="agg_8h.html#ad1fd42e298c7ef34b4dc521af8a3094a">agg_body_globals_write()</a>, <a class="el" href="group__body.html#ga04a251df56d2d37e276d047231bdda35">agg_body_new()</a>, <a class="el" href="agg_8h.html#a3d2c413e37bf8e334d5e8860753556ab">agg_surface_point_diff()</a>, <a class="el" href="agg_8h.html#ac7fd1a95c34d4b227e46b64fe642efae">agg_surface_point_eval()</a>, <a class="el" href="agg_8h.html#a015c632cb62cafdc579df29f44d8eab9">agg_transform_expressions_compile()</a>, <a class="el" href="agg_8h.html#a3469482e2c22920b5accefdc004297c4">agg_transform_operator_add()</a>, <a class="el" href="agg_8h.html#a9647f98c5477495e98aa83eaed70c171">agg_transform_operators_write()</a>, <a class="el" href="agg_8h.html#aa9932f923e53ba6651b417913a88bd62">agg_transform_variable_add()</a>, <a class="el" href="agg_8h.html#a521307ad04c43f7912a72942271cb8e0">agg_transform_variables_eval()</a>, and <a class="el" href="agg_8h.html#a81f96f54e93e7d88b8bf40f446ac3341">agg_transform_variables_write()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="agg_8h.html#a480c67842eb4dd8b22463f41d29ad6e2">agg_body_global_add()</a>, <a class="el" href="agg_8h.html#a12809abb981ee0379ad7f887bdce9222">agg_body_globals_compile()</a>, <a class="el" href="agg_8h.html#a8a64862bcc9c834e015451285e8812db">agg_body_globals_eval()</a>, <a class="el" href="agg_8h.html#ad1fd42e298c7ef34b4dc521af8a3094a">agg_body_globals_write()</a>, <a class="el" href="group__body.html#ga04a251df56d2d37e276d047231bdda35">agg_body_new()</a>, <a class="el" href="agg_8h.html#a3d2c413e37bf8e334d5e8860753556ab">agg_surface_point_diff()</a>, <a class="el" href="agg_8h.html#ac7fd1a95c34d4b227e46b64fe642efae">agg_surface_point_eval()</a>, <a class="el" href="agg_8h.html#a1d94218842c8aca6203ddba991b32a5f">agg_transform_apply()</a>, <a class="el" href="agg_8h.html#a015c632cb62cafdc579df29f44d8eab9">agg_transform_expressions_compile()</a>, <a class="el" href="agg_8h.html#add18fb4fb5cffd83f7827ac3aa432191">agg_transform_operator_add()</a>, <a class="el" href="agg_8h.html#a9647f98c5477495e98aa83eaed70c171">agg_transform_operators_write()</a>, <a class="el" href="agg_8h.html#aa9932f923e53ba6651b417913a88bd62">agg_transform_variable_add()</a>, <a class="el" href="agg_8h.html#a521307ad04c43f7912a72942271cb8e0">agg_transform_variables_eval()</a>, and <a class="el" href="agg_8h.html#a81f96f54e93e7d88b8bf40f446ac3341">agg_transform_variables_write()</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jul 26 2023 16:24:50 for AGG by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Thu Aug 24 2023 11:48:54 for AGG by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

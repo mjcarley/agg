@@ -75,78 +75,6 @@ agg_intersection_t *agg_intersection_new(gint nstmax)
   return inter ;
 }
 
-static gboolean boundary_crossed(agg_patch_t *P1, agg_patch_t *P2, 
-				 hefsi_segment_t *s1, hefsi_segment_t *s2,
-				 gdouble *st, gdouble *sn)
-
-{
-  gdouble wtol, t, a ;
-  gboolean crossed ;
-  
-  wtol = 2e-1 ;
-  crossed = FALSE ;
-  if ( agg_patch_wrap_t(P1) ) {
-    if ( s1->x1[4] > 1.0-wtol && s2->x1[4] < wtol ) {
-      /* fprintf(stderr, "HELLO1\n") ; */
-      t = s1->x1[4] - 1.0 ;
-      a = (0.0 - t)/(s2->x1[4] - t) ;
-      
-      st[0] = s1->x1[3] + (s2->x1[3] - s1->x1[3])*a ;
-      st[1] = 1.0 ;
-      st[2] = 0.5*(s1->x1[5] + s2->x1[5]) ;
-      st[3] = 0.5*(s1->x1[6] + s2->x1[6]) ;
-
-      sn[0] = st[0] ; sn[1] = 0.0 ; sn[2] = st[2] ; sn[3] = st[3] ;
-      crossed = TRUE ;
-    }
-
-    if ( s2->x1[4] > 1.0-wtol && s1->x1[4] < wtol ) {
-      /* fprintf(stderr, "HELLO3\n") ; */
-
-      t = s1->x1[4] ;
-      a = t/(t - (s2->x1[4]-1)) ;
-      
-      st[0] = s1->x1[3] + (s2->x1[3] - s2->x1[3])*a ;
-      st[1] = 0.0 ;
-      st[2] = 0.5*(s1->x1[5] + s2->x1[5]) ;
-      st[3] = 0.5*(s1->x1[6] + s2->x1[6]) ;
-
-      sn[0] = st[0] ; sn[1] = 1.0 ; sn[2] = st[2] ; sn[3] = st[3] ;
-      crossed = TRUE ;
-    }
-  }
-
-  if ( agg_patch_wrap_t(P2) ) {
-    if ( s1->x1[6] > 1.0-wtol && s2->x1[6] < wtol ) {
-      /* fprintf(stderr, "HELLO2\n") ; */
-      t = s1->x1[6] - 1.0 ;
-      a = (0.0 - t)/(s2->x1[6] - t) ;
-      
-      st[2] = s1->x1[5] + (s2->x1[5] - s1->x1[5])*a ;
-      st[3] = 1.0 ;
-      st[0] = 0.5*(s1->x1[3] + s2->x1[3]) ;
-      st[1] = 0.5*(s1->x1[4] + s2->x1[4]) ;
-      sn[2] = st[2] ; sn[3] = 0.0 ; sn[0] = st[0] ; sn[1] = st[1] ;
-      crossed = TRUE ;
-    }
-    if ( s2->x1[6] > 1.0-wtol && s1->x1[6] < wtol ) {
-      /* fprintf(stderr, "HELLO4\n") ; */
-      t = s1->x1[6] ;
-      a = t/(t - (s2->x1[6]-1)) ;
-      
-      st[2] = s1->x1[5] + (s2->x1[5] - s2->x1[5])*a ;
-      st[3] = 0.0 ;
-      st[0] = 0.5*(s1->x1[3] + s2->x1[3]) ;
-      st[1] = 0.5*(s1->x1[4] + s2->x1[4]) ;
-
-      sn[2] = st[2] ; sn[3] = 1.0 ; sn[0] = st[0] ; sn[1] = st[1] ;
-      crossed = TRUE ;
-    }
-  }
-  
-  return crossed ;
-}
-
 
 static void fit_patch_end_cut(hefsi_workspace_t *wh, gint idx,
 			      gdouble del, gint N, gdouble *C)
@@ -238,7 +166,7 @@ static void fit_patch_hole(hefsi_workspace_t *wh, gint idx,
   return ;
 }
 
-static void fit_patch_trim(agg_patch_t *P, hefsi_workspace_t *wh, gint idx,
+static gint fit_patch_trim(agg_patch_t *P, hefsi_workspace_t *wh, gint idx,
 			   gdouble del, gint N)
 
 /*
@@ -250,13 +178,18 @@ static void fit_patch_trim(agg_patch_t *P, hefsi_workspace_t *wh, gint idx,
   agg_curve_t *c ;
   
   if ( agg_patch_mapping(P) == AGG_PATCH_HEMISPHERICAL ) {
-    c = agg_patch_curve_smin(P) ;
+    /*
+     * this should really be a check to see if a whole end is cut off
+     * 0 <= t <= 1, and which end (this assumes min)
+     */
+    c = agg_patch_curve_smin(P) ; nh = 0 ;
     g_assert(2*N+1 < AGG_CURVE_DATA_SIZE) ;
     fit_patch_end_cut(wh, idx, del, N, c->data) ;
 
     agg_curve_type(c) = AGG_CURVE_FOURIER ;
     agg_curve_order(c) = N ;
-    return ;
+
+    return nh ;
   }
 
   nh = agg_patch_hole_number(P) ;
@@ -264,15 +197,15 @@ static void fit_patch_trim(agg_patch_t *P, hefsi_workspace_t *wh, gint idx,
   fit_patch_hole(wh, idx, del, c->data) ;
   agg_curve_type(c) = AGG_CURVE_ELLIPSE ;
   agg_patch_hole_number(P) ++ ;
-  
-  return ;
+
+  /*index of hole on patch, for use in blended surface*/
+  return nh ;
 }
 
-gint agg_surface_patch_trim(agg_intersection_t *inter,
-			    agg_surface_t *S1, agg_patch_t *P1, gdouble d1,
-			    agg_surface_t *S2, agg_patch_t *P2, gdouble d2,
-			    agg_surface_blend_t *B,
-			    agg_surface_workspace_t *w)
+gboolean agg_surface_patch_trim(agg_surface_t *S1, agg_patch_t *P1, gdouble d1,
+				agg_surface_t *S2, agg_patch_t *P2, gdouble d2,
+				agg_surface_blend_t *B,
+				agg_surface_workspace_t *w)
 
 {
   hefsi_surface_t *h1, *h2 ;
@@ -280,18 +213,14 @@ gint agg_surface_patch_trim(agg_intersection_t *inter,
   gpointer data2[] = {S2, P2, w} ;
   hefsi_workspace_t *wh ;
   hefsi_segment_t *seg1 ;
-  gint dmin, dmax, i, j, nsp ;
-  gdouble scale, tol ;
+  gint dmin, dmax, i, j ;
+  gdouble scale, tol, n1[3], n2[3] ;
+  agg_curve_t *c1, *c2 ;
   GSList *il ;
   
   dmin = 6 ; dmax = 10 ; scale = 18/16.0 ; tol = 1e-6 ;
   
   wh = hefsi_workspace_new() ;
-
-  agg_intersection_surface1(inter) = S1 ; 
-  agg_intersection_patch1(inter) = P1 ; 
-  agg_intersection_surface2(inter) = S2 ; 
-  agg_intersection_patch2(inter) = P2 ; 
 
   h1 = hefsi_surface_new(hefsi_func, data1, FALSE, 0, 1, 0, 1) ;
   h2 = hefsi_surface_new(hefsi_func, data2, FALSE, 0, 1, 0, 1) ;
@@ -303,7 +232,7 @@ gint agg_surface_patch_trim(agg_intersection_t *inter,
   
   hefsi_surface_intersections(h1, h2, tol, wh) ;
 
-  if ( wh->c->len == 0 ) return 0 ;
+  if ( wh->c->len == 0 ) return FALSE ;
   for ( i = 0 ; i < wh->c->len ; i ++ ) {
     for ( il = hefsi_workspace_curve(wh,i) ; il != NULL ;
 	  il = il->next ) {
@@ -317,10 +246,38 @@ gint agg_surface_patch_trim(agg_intersection_t *inter,
     }
   }
 
-  fit_patch_trim(P1, wh, 0, d1, 8) ;
-  fit_patch_trim(P2, wh, 1, d2, 16) ;
+  agg_surface_blend_hole(B,0) = fit_patch_trim(P1, wh, 0, d1, 8) ;
+  agg_surface_blend_hole(B,1) = fit_patch_trim(P2, wh, 1, d2, 16) ;
+  agg_patch_blend(P1,agg_surface_blend_hole(B,0)) = B ;
+  agg_patch_blend(P2,agg_surface_blend_hole(B,1)) = B ;
+  agg_surface_blend_surface(B,0) = S1 ; 
+  agg_surface_blend_surface(B,1) = S2 ; 
+  agg_surface_blend_patch(B,0) = P1 ; 
+  agg_surface_blend_patch(B,1) = P2 ; 
+  agg_surface_blend_curve_reverse(B,0) = FALSE ;
+  agg_surface_blend_curve_reverse(B,1) = FALSE ;
 
-  return 0 ;
+  /*check orientation of patch curves and reverse one if necessary*/
+  c1 = &(P1->curves[agg_surface_blend_hole(B,0)]) ;
+  c2 = &(P2->curves[agg_surface_blend_hole(B,1)]) ;
+  agg_curve_plane_normal(c1, S1, P1, n1, w) ;
+  agg_curve_plane_normal(c2, S2, P2, n2, w) ;
+
+  /* fprintf(stderr, "(%lg,%lg,%lg).(%lg,%lg,%lg) = %lg\n", */
+  /* 	  n1[0], n1[1], n1[2], n2[0], n2[1], n2[2], */
+  /* 	  agg_vector_scalar(n1,n2)) ; */
+
+  if ( agg_vector_scalar(n1,n2) < 0 ) {
+    /*reverse one rail curve*/
+    if ( agg_surface_blend_hole(B,0) == 0 ||
+	 agg_surface_blend_hole(B,0) == 1 ) {
+      agg_surface_blend_curve_reverse(B,1) = TRUE ;
+    } else {
+      agg_surface_blend_curve_reverse(B,0) = TRUE ;
+    }
+  }
+  
+  return TRUE ;
 }
 
 /** 

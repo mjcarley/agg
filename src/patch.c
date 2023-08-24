@@ -53,7 +53,13 @@ static void shapefunc(gdouble s, gdouble t, gdouble L[])
  * @ingroup patches
  */
 
-agg_patch_t *agg_patch_new(gint nstmax)
+/** 
+ * Allocate a new patch for mapping of surface parameters
+ * 
+ * @return newly allocated ::agg_patch_t
+ */
+
+agg_patch_t *agg_patch_new(void)
 
 {
   agg_patch_t *P ;
@@ -65,7 +71,7 @@ agg_patch_t *agg_patch_new(gint nstmax)
   agg_patch_wrap_t(P) = FALSE ;
   agg_patch_invert(P) = FALSE ;
 
-  agg_patch_hole_number(P) = 0 ;
+  agg_patch_hole_number(P) = 2 ;
   agg_curve_type(agg_patch_curve_smin(P))  = AGG_CURVE_POLYNOMIAL ;
   agg_curve_order(agg_patch_curve_smin(P)) = 0 ;
   (agg_curve_data(agg_patch_curve_smin(P)))[0] = 0 ;
@@ -128,7 +134,6 @@ static gint agg_spherical_map(agg_patch_t *P, gdouble s, gdouble t,
   return 0 ;
 }
 
-
 static gint agg_hemispherical_map(agg_patch_t *P, gdouble s, gdouble t,
 				  gdouble *u, gdouble *v)
 
@@ -145,6 +150,8 @@ static gint agg_hemispherical_map(agg_patch_t *P, gdouble s, gdouble t,
   agg_curve_eval(cmin, t, &smin, &tmp) ;
   agg_curve_eval(cmax, t, &smax, &tmp) ;
 
+  /* smin = 0.0 ; smax = 1.0 ; */
+  
   *u = sin(0.5*M_PI*(smin + s*(smax-smin))) ;
 
   if ( t < 0.5 ) {
@@ -288,51 +295,6 @@ gint agg_patch_parse(agg_patch_t *P, agg_variable_t *p, gint np)
   return 0 ;
 }
 
-#if 0
-/** 
- * Evaluate patch coordinates on a clipping curve
- * 
- * @param c contains patch clipping;
- * @param u parameter on \a c;
- * @param s on exit contains \f$s(u)\f$ on patch;
- * @param t on exit contains \f$t(u)\f$ on patch.
- * 
- * @return 0 on success.
- */
-
-gint agg_patch_clip_eval(agg_patch_clipping_t *c, gdouble u,
-			 gdouble *s, gdouble *t)
-
-{
-  g_assert(agg_patch_clipping_orientation(c) ==  1 ||
-	   agg_patch_clipping_orientation(c) == -1) ;
-  
-  if ( agg_patch_clipping_type(c) == AGG_CLIP_CONSTANT_S ) {
-    *t = u ; *s = agg_patch_clipping_data(c,0) ;
-
-    return 0 ;
-  }
-
-  if ( agg_patch_clipping_type(c) == AGG_CLIP_CONSTANT_T ) {
-    *t = agg_patch_clipping_data(c,0) ; *s = u ;
-
-    return 0 ;
-  }
-
-  if ( agg_patch_clipping_type(c) == AGG_CLIP_ELLIPSE ) {
-    gdouble th = agg_patch_clipping_orientation(c)*2.0*M_PI*u ;
-
-    *s = agg_patch_clipping_data(c,0) + agg_patch_clipping_data(c,2)*cos(th) ;
-    *t = agg_patch_clipping_data(c,1) + agg_patch_clipping_data(c,3)*sin(th) ;
-      
-    return 0 ;
-  }
-
-  g_assert_not_reached() ;
-  
-  return 0 ;
-}
-#endif
 
 /** 
  * Convert derivatives with respect to surface coordinates \f$(u,v)\f$
@@ -393,77 +355,23 @@ gint agg_patch_surface_diff(agg_patch_t *P,
   return 0 ;
 }
 
-#if 0
 /** 
- * Set orientation of two clipping curves so that they are traversed
- * in the same sense in physical space. The test is performed by
- * evaluating approximate normals to the curve planes (this assumes
- * that the curves are not too far from planar) and checking the
- * normals are approximately parallel, using the sign of the scalar
- * product. If necessary, the orientation of one curve is switched,
- * with priority given to changing the orientation of a closed curve,
- * corresponding to a hole in a surface, over a cut on constant
- * \f$s\f$ or \f$t\f$. If curves are not mutually oriented and are
- * both constant parameter cuts, execution stops with an error (until
- * I can decide how best to handle this case).
+ * Estimate the derivatives on a surface with respect to parametric
+ * coordinates \f$(s,t)\f$.
  * 
- * @param c1 first patch clipping;
- * @param P1 first parametric patch;
- * @param S1 first physical surface;
- * @param c2 second patch clipping;  
- * @param P2 second parametric patch;
- * @param S2 second physical surface;
- * @param w workspace for surface point evaluation.
+ * @param S surface to differentiate;
+ * @param P mapping patch;
+ * @param s coordinate on \a P;
+ * @param t coordinate on \a P;
+ * @param x on exit, contains point \f$\mathbf{x}(u(s,t),v(s,t))\f$;
+ * @param xs on exit, contains 
+ * \f$\partial\mathbf{x}(u(s,t),v(s,t))/\partial s\f$;
+ * @param xt on exit, contains 
+ * \f$\partial\mathbf{x}(u(s,t),v(s,t))/\partial t\f$;
+ * @param w workspace for surface evaluation.
  * 
  * @return 0 on success.
  */
-
-gint agg_clipping_orient(agg_patch_clipping_t *c1, agg_patch_t *P1,
-			 agg_surface_t *S1,
-			 agg_patch_clipping_t *c2, agg_patch_t *P2,
-			 agg_surface_t *S2,
-			 agg_surface_workspace_t *w)
-
-{
-  gdouble u, v, s, t, t0[] = {0.25, 0.5, 0.75}, x1[9], x2[9], N1[3], N2[3] ;
-  gint i ;
-
-  for ( i = 0 ; i < 3 ; i ++ ) {
-    agg_patch_clip_eval(c1, t0[i], &s, &t) ;
-    agg_patch_map(P1, s, t, &u, &v) ;
-    agg_surface_point_eval(S1, u, v, &(x1[3*i]), w) ;
-
-    agg_patch_clip_eval(c2, t0[i], &s, &t) ;
-    agg_patch_map(P2, s, t, &u, &v) ;
-    agg_surface_point_eval(S2, u, v, &(x2[3*i]), w) ;
-  }
-
-  agg_vector_diff(&(x1[3*0]), &(x1[3*0]), &(x1[3*2])) ;
-  agg_vector_diff(&(x1[3*1]), &(x1[3*1]), &(x1[3*2])) ;
-  agg_vector_diff(&(x2[3*0]), &(x2[3*0]), &(x2[3*2])) ;
-  agg_vector_diff(&(x2[3*1]), &(x2[3*1]), &(x2[3*2])) ;
-
-  agg_vector_cross(N1, &(x1[3*0]), &(x1[3*1])) ;
-  agg_vector_cross(N2, &(x2[3*0]), &(x2[3*1])) ;
-
-  /*normals are (about) the same direction*/
-  if ( agg_vector_scalar(N1, N2) > 0 ) return 0 ;
-  
-  if ( agg_patch_clipping_type(c1) == AGG_CLIP_ELLIPSE ) {
-    c1->ornt = -(c1->ornt) ;
-    return 0 ;
-  }
-
-  if ( agg_patch_clipping_type(c2) == AGG_CLIP_ELLIPSE ) {
-    c2->ornt = -(c2->ornt) ;
-    return 0 ;
-  }
-
-  g_assert_not_reached() ;
-  
-  return 0 ;
-}
-#endif
 
 gint agg_patch_point_diff(agg_surface_t *S, agg_patch_t *P,
 			  gdouble s, gdouble t,
@@ -473,7 +381,7 @@ gint agg_patch_point_diff(agg_surface_t *S, agg_patch_t *P,
 {
   gdouble ee, u, v ;
 
-  ee = 1e-6 ;
+  ee = 1e-3 ;
 
   agg_patch_map(P, s, t, &u, &v) ;
   agg_surface_point_eval(S, u, v, x, w) ;
@@ -561,6 +469,26 @@ static void hemispherical_x_to_st(gdouble *x, gdouble *s, gdouble *t)
   return ;
 }
 
+/** 
+ * Split an edge, the line segment joining two points in \f$(s,t)\f$
+ * parametric plane, remapping as required to respect the underlying
+ * mapping of the patch. For a linear patch
+ * \f$s=s_{0}+a(s_{1}-s_{0})\f$, \f$t=t_{0}+a(t_{1}-t_{0})\f$; for
+ * other mappings, such as spherical or hemispherical, the
+ * interpolation is different.
+ * 
+ * @param P surface mapping patch;
+ * @param s0 coordinate of first point on segment;
+ * @param t0 coordinate of first point on segment;
+ * @param s1 coordinate of second point on segment;
+ * @param t1 coordinate of second point on segment;
+ * @param a parametric distance on segment;
+ * @param s on output, coordinate of interpolated point on segment;
+ * @param t on output, coordinate of interpolated point on segment.
+ * 
+ * @return 0 on success.
+ */
+
 gint agg_patch_edge_split(agg_patch_t *P,
 			  gdouble s0, gdouble t0, gdouble s1, gdouble t1, 
 			  gdouble a, gdouble *s, gdouble *t)
@@ -605,6 +533,25 @@ gint agg_patch_edge_split(agg_patch_t *P,
   return 0 ;
 }
 
+/** 
+ * Split a triangle in the parametric plane, remapping as required to
+ * respect the underlying mapping of the patch.
+ * 
+ * @param P surface mapping patch;
+ * @param s0 coordinate of first point on triangle;
+ * @param t0 coordinate of first point on triangle;
+ * @param s1 coordinate of second point on triangle;
+ * @param t1 coordinate of second point on triangle;
+ * @param s2 coordinate of third point on triangle;
+ * @param t2 coordinate of third point on triangle;
+ * @param u coordinate on triangle;
+ * @param v coordinate on triangle;
+ * @param s on output, coordinate of interpolated point on triangle;
+ * @param t on output, coordinate of interpolated point on triangle.
+ * 
+ * @return 0 on success.
+ */
+
 gint agg_patch_triangle_interp(agg_patch_t *P,
 			       gdouble s0, gdouble t0,
 			       gdouble s1, gdouble t1, 
@@ -613,11 +560,11 @@ gint agg_patch_triangle_interp(agg_patch_t *P,
 			       gdouble *s, gdouble *t)
 
 {
+  gdouble x0[3], x1[3], x2[3], x[3], L[3] ;
+
   switch ( agg_patch_mapping(P) ) {
   default: g_assert_not_reached() ; break ;
   case AGG_PATCH_SPHERICAL:
-    gdouble x0[3], x1[3], x2[3], x[3], L[3] ;
-
     spherical_st_to_x(s0, t0, x0) ;
     spherical_st_to_x(s1, t1, x1) ;
     spherical_st_to_x(s2, t2, x2) ;
@@ -630,11 +577,23 @@ gint agg_patch_triangle_interp(agg_patch_t *P,
     spherical_x_to_st(x, s, t) ;
 
     break ;
+  case AGG_PATCH_HEMISPHERICAL:
+    hemispherical_st_to_x(s0, t0, x0) ;
+    hemispherical_st_to_x(s1, t1, x1) ;
+    hemispherical_st_to_x(s2, t2, x2) ;
+
+    shapefunc(u, v, L) ;
+    x[0] = L[0]*x0[0] + L[1]*x1[0] + L[2]*x2[0] ; 
+    x[1] = L[0]*x0[1] + L[1]*x1[1] + L[2]*x2[1] ; 
+    x[2] = L[0]*x0[2] + L[1]*x1[2] + L[2]*x2[2] ; 
+
+    hemispherical_x_to_st(x, s, t) ;
+
+    break ;
   }
   
   return 0 ;
 }
-
 
 /**
  * @}

@@ -78,6 +78,8 @@ void te_print(const te_expr *n);
 /* This is safe to call on NULL pointers. */
 void te_free(te_expr *n);
 
+  /*added by Michael Carley to avoid compiler warnings*/
+void te_free_parameters(te_expr *n) ;
 
 #ifdef __cplusplus
 }

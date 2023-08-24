@@ -48,8 +48,6 @@ $(function() {
 <table class="memberdecls">
 <tr class="memitem:gaf036658709a83e5b51edace0ff5343e4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__intersections.html#gaf036658709a83e5b51edace0ff5343e4">agg_intersection_new</a> (gint nstmax)</td></tr>
 <tr class="separator:gaf036658709a83e5b51edace0ff5343e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gadf8d1f571a281e326c1e391a59a6f33a"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__intersections.html#gadf8d1f571a281e326c1e391a59a6f33a">agg_surface_patch_intersection</a> (<a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a> *inter, <a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *S1, <a class="el" href="agg_8h.html#abdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *P1, <a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *S2, <a class="el" href="agg_8h.html#abdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *P2, agg_surface_blend_t *B, agg_surface_workspace_t *w)</td></tr>
-<tr class="separator:gadf8d1f571a281e326c1e391a59a6f33a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaef5bb8411ab89014c772d4b30de27fb3"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__intersections.html#gaef5bb8411ab89014c772d4b30de27fb3">agg_intersection_curve_write</a> (FILE *f, <a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a> *inter, agg_surface_workspace_t *w)</td></tr>
 <tr class="separator:gaef5bb8411ab89014c772d4b30de27fb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga6e0ed58f3d6f8f9e1bbf89706966b282"><td class="memItemLeft" align="right" valign="top">gint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__intersections.html#ga6e0ed58f3d6f8f9e1bbf89706966b282">agg_patch_st_correct</a> (<a class="el" href="agg_8h.html#abdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *P, gdouble *st)</td></tr>
@@ -259,78 +257,6 @@ $(function() {
 
 </div>
 </div>
-<a id="gadf8d1f571a281e326c1e391a59a6f33a" name="gadf8d1f571a281e326c1e391a59a6f33a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gadf8d1f571a281e326c1e391a59a6f33a">&#9670;&nbsp;</a></span>agg_surface_patch_intersection()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">gint agg_surface_patch_intersection </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="group__intersections.html#ga1c54fee67bb03551fa5e663cbc61e3be">agg_intersection_t</a> *&#160;</td>
-          <td class="paramname"><em>inter</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *&#160;</td>
-          <td class="paramname"><em>S1</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="agg_8h.html#abdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *&#160;</td>
-          <td class="paramname"><em>P1</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="agg_8h.html#a1c502e562486827063a7169cd79b5cc0">agg_surface_t</a> *&#160;</td>
-          <td class="paramname"><em>S2</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="agg_8h.html#abdb5fa64575d1f09fb1e68a13a103777">agg_patch_t</a> *&#160;</td>
-          <td class="paramname"><em>P2</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">agg_surface_blend_t *&#160;</td>
-          <td class="paramname"><em>B</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">agg_surface_workspace_t *&#160;</td>
-          <td class="paramname"><em>w</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p >Calculate the intersection of two parametric surfaces.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">inter</td><td>on exit contains the intersection curve data; </td></tr>
-    <tr><td class="paramname">S1</td><td>first surface; </td></tr>
-    <tr><td class="paramname">P1</td><td>mapping patch for first surface; </td></tr>
-    <tr><td class="paramname">S2</td><td>second surface; </td></tr>
-    <tr><td class="paramname">P2</td><td>mapping patch for second surface; </td></tr>
-    <tr><td class="paramname">B</td><td>if not NULL, initialized with data for blending <em>S1</em> into <em>S2</em> across the intersection curve; </td></tr>
-    <tr><td class="paramname">w</td><td>workspace for surface evaluation.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>0 on success. </dd></dl>
-
-</div>
-</div>
 <h2 class="groupheader">Variable Documentation</h2>
 <a id="ga1c54fee67bb03551fa5e663cbc61e3be" name="ga1c54fee67bb03551fa5e663cbc61e3be"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga1c54fee67bb03551fa5e663cbc61e3be">&#9670;&nbsp;</a></span>agg_intersection_t</h2>
@@ -345,14 +271,14 @@ $(function() {
 </div><div class="memdoc">
 <p >Data structure to hold intersections of surfaces </p>
 
-<p class="reference">Referenced by <a class="el" href="agg_8h.html#af036658709a83e5b51edace0ff5343e4">agg_intersection_new()</a>, and <a class="el" href="agg_8h.html#a08744125eecfd040352a07a05bfd7e2a">agg_mesh_body()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="agg_8h.html#af036658709a83e5b51edace0ff5343e4">agg_intersection_new()</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jul 26 2023 16:24:50 for AGG by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Thu Aug 24 2023 11:48:54 for AGG by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

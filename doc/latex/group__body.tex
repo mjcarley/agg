@@ -19,6 +19,8 @@ gint \textbf{ agg\+\_\+body\+\_\+globals\+\_\+eval} (\textbf{ agg\+\_\+body\+\_\
 \item 
 gint \textbf{ agg\+\_\+body\+\_\+read} (\textbf{ agg\+\_\+body\+\_\+t} $\ast$b, gchar $\ast$file, gboolean echo)
 \item 
+gint \textbf{ agg\+\_\+body\+\_\+surface\+\_\+add} (\textbf{ agg\+\_\+body\+\_\+t} $\ast$b, \textbf{ agg\+\_\+surface\+\_\+t} $\ast$S, \textbf{ agg\+\_\+patch\+\_\+t} $\ast$P)
+\item 
 gint \textbf{ agg\+\_\+body\+\_\+surfaces\+\_\+list} (FILE $\ast$f, \textbf{ agg\+\_\+body\+\_\+t} $\ast$b)
 \end{DoxyCompactItemize}
 \begin{DoxyCompactItemize}
@@ -141,7 +143,7 @@ newly allocated \doxyref{agg\+\_\+body\+\_\+t}{p.}{group__body_gab1ba060d2b8a159
 \end{DoxyReturn}
 
 
-References \textbf{ agg\+\_\+body\+\_\+t}, \textbf{ agg\+\_\+patch\+\_\+t}, \textbf{ agg\+\_\+surface\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+t}.
+References \textbf{ agg\+\_\+body\+\_\+t}, \textbf{ agg\+\_\+expression\+\_\+data\+\_\+new()}, \textbf{ agg\+\_\+patch\+\_\+t}, \textbf{ agg\+\_\+surface\+\_\+t}, and \textbf{ agg\+\_\+variable\+\_\+t}.
 
 \mbox{\label{group__body_ga672b47160f046ee778113a960bf50354}} 
 \index{General bodies@{General bodies}!agg\_body\_read@{agg\_body\_read}}
@@ -167,6 +169,26 @@ Read an \doxyref{agg\+\_\+body\+\_\+t}{p.}{group__body_gab1ba060d2b8a159e268a27c
 
 References \textbf{ agg\+\_\+section\+\_\+new()}.
 
+\mbox{\label{group__body_ga2d2d701dab2fc3198343432ef2aa4c1d}} 
+\index{General bodies@{General bodies}!agg\_body\_surface\_add@{agg\_body\_surface\_add}}
+\index{agg\_body\_surface\_add@{agg\_body\_surface\_add}!General bodies@{General bodies}}
+\doxysubsubsection{agg\_body\_surface\_add()}
+{\footnotesize\ttfamily gint agg\+\_\+body\+\_\+surface\+\_\+add (\begin{DoxyParamCaption}\item[{\textbf{ agg\+\_\+body\+\_\+t} $\ast$}]{b,  }\item[{\textbf{ agg\+\_\+surface\+\_\+t} $\ast$}]{S,  }\item[{\textbf{ agg\+\_\+patch\+\_\+t} $\ast$}]{P }\end{DoxyParamCaption})}
+
+Add a surface to a body
+
+
+\begin{DoxyParams}{Parameters}
+{\em b} & \doxyref{agg\+\_\+body\+\_\+t}{p.}{group__body_gab1ba060d2b8a159e268a27c8d01b0a44} to which surface is to be added; \\
+\hline
+{\em S} & an \doxyref{agg\+\_\+surface\+\_\+t}{p.}{agg_8h_a1c502e562486827063a7169cd79b5cc0}; \\
+\hline
+{\em P} & \doxyref{agg\+\_\+patch\+\_\+t}{p.}{agg_8h_abdb5fa64575d1f09fb1e68a13a103777} for mapping of surface parameters.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
 \mbox{\label{group__body_ga23e541d03af5bc371eef1321a2746d6d}} 
 \index{General bodies@{General bodies}!agg\_body\_surfaces\_list@{agg\_body\_surfaces\_list}}
 \index{agg\_body\_surfaces\_list@{agg\_body\_surfaces\_list}!General bodies@{General bodies}}
