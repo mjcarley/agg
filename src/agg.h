@@ -776,7 +776,6 @@ struct _agg_body_t {
  * @}
  */
 
-
 typedef struct _agg_surface_workspace_t agg_surface_workspace_t ;
 struct _agg_surface_workspace_t {
   agg_section_t *s ;
