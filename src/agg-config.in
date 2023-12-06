@@ -4,7 +4,7 @@
 agg_cflags="@CFLAGS@"
 agg_cppflags="@CPPFLAGS@"
 openmp_cflags="@OPENMP_CFLAGS@"
-glib_libs="@glib_libs@"
+##glib_libs="@glib_libs@"
 
 prefix=@prefix@
 exec_prefix=@exec_prefix@
@@ -96,16 +96,16 @@ if test "$echo_exec_prefix" = "yes"; then
 	echo $exec_prefix
 fi
 if test "$echo_cflags" = "yes"; then
-    glib_cflags="$glib_cflags -I${prefix}/include"
-    glib_cflags=`uniquify "$glib_cflags"`
+    ##glib_cflags="$glib_cflags -I${prefix}/include"
+    ##glib_cflags=`uniquify "$glib_cflags"`
 
     agg_cflags="-I${prefix}/include"
     agg_cflags=`uniquify "$agg_cflags"`
-    echo $agg_cppflags $agg_cflags $glib_cflags
+    echo $agg_cppflags $agg_cflags
 fi
 if test "$echo_libs" = "yes"; then
-    glib_libs="-L${exec_prefix}/lib $lib_wmpi @LDFLAGS@  $glib_libs -lm"
-    glib_libs=`uniquify "$glib_libs"`
+    ##glib_libs="-L${exec_prefix}/lib $lib_wmpi @LDFLAGS@  $glib_libs -lm"
+    ##glib_libs=`uniquify "$glib_libs"`
 
     #agg_libs="-L${exec_prefix}/lib -lagg @LDFLAGS@ -lm $agg_libs"
     agg_libs="-L${exec_prefix}/lib -lagg @LIBS@"
