@@ -14,6 +14,10 @@
  * along with HEFSI.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif /*HAVE_CONFIG_H*/
+
 #include <stdio.h>
 #include <math.h>
 

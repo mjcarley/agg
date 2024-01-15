@@ -14,6 +14,10 @@
  * along with AGG.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif /*HAVE_CONFIG_H*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -63,6 +67,55 @@ static const struct {
     {NULL,  -1}
   } ;
 
+/*generating derivatives of operator parameter variables*/
+#ifdef HAVE_LIBMATHEVAL
+#include <matheval.h>
+static void parameter_set_derivative(agg_transform_operator_t *tr,
+				     agg_variable_t *v,
+				     gchar **expr, gchar **de, gint i,
+				     gchar *var)
+{
+  gpointer eval, diff ;
+
+  if ( de != NULL ) {
+    if ( de[i] != NULL )
+      g_error("%s: overriding derivative evaluation not implemented",
+	      __FUNCTION__) ;
+  }
+  
+  if ( expr[i] == NULL ) {
+    /*expression is a constant*/
+    agg_variable_definition(v) = NULL ;
+    agg_variable_value(v) = 0.0 ;
+    return ;
+  }
+
+  /*find the derivative*/
+  eval = evaluator_create(expr[i]) ;
+  diff = evaluator_derivative(eval, var) ;
+  agg_variable_definition(v) = g_strdup(evaluator_get_string(diff)) ;
+  agg_variable_value(v) = 0.0 ;
+  evaluator_destroy(eval) ;
+  evaluator_destroy(diff) ;
+  
+  return ;
+}
+#else  /*HAVE_LIBMATHEVAL*/
+static void parameter_set_derivative(agg_transform_operator_t *tr,
+				     agg_variable_t *v,
+				     gchar **expr, gchar **de, gint i,
+				     gchar *var)
+
+{
+  /*if analytical differentiation is not available, set derivatives to
+    zero*/
+  agg_variable_definition(v) = NULL ;
+  agg_variable_value(v) = 0.0 ;
+
+  return ;
+}
+#endif /*HAVE_LIBMATHEVAL*/
+
 /** 
  * @{ 
  *
@@ -75,7 +128,7 @@ static const struct {
  * This function is mainly called as part of setting up a new
  * transform, via ::agg_transform_operator_add
  * 
- * @return a newly allocaed ::agg_transform_operator_t
+ * @return a newly allocated ::agg_transform_operator_t
  */
 
 agg_transform_operator_t *agg_transform_operator_new(void)
@@ -87,6 +140,8 @@ agg_transform_operator_t *agg_transform_operator_new(void)
   op = (agg_transform_operator_t *)g_malloc0(sizeof(agg_transform_operator_t)) ;
   for ( i = 0 ; i < AGG_OPERATOR_PARAMETER_SIZE ; i ++ ) {
     agg_transform_operator_parameter(op,i)->eval = NULL ;
+    agg_transform_operator_parameter_u(op,i)->eval = NULL ;
+    agg_transform_operator_parameter_v(op,i)->eval = NULL ;
   }
   agg_transform_operator_umin(op) =  G_MAXDOUBLE ;
   agg_transform_operator_umax(op) = -G_MAXDOUBLE ;
@@ -228,6 +283,22 @@ gint agg_transform_expressions_compile(agg_transform_t *T)
 	agg_variable_evaluator(v) =
 	  agg_expression_compile(agg_variable_definition(v), e) ;
       } 
+
+      v = agg_transform_operator_parameter_u(tr, j) ;
+      if ( agg_variable_definition(v) == NULL ) {
+	agg_variable_evaluator(v) = NULL ;
+      } else {	
+	agg_variable_evaluator(v) =
+	  agg_expression_compile(agg_variable_definition(v), e) ;
+      }
+
+      v = agg_transform_operator_parameter_v(tr, j) ;
+      if ( agg_variable_definition(v) == NULL ) {
+	agg_variable_evaluator(v) = NULL ;
+      } else {	
+	agg_variable_evaluator(v) =
+	  agg_expression_compile(agg_variable_definition(v), e) ;
+      }      
     }
   }
   
@@ -262,6 +333,16 @@ gint agg_transform_variables_eval(agg_transform_t *T)
     tr = agg_transform_operator(T, i) ;
     for ( j = 0 ; j < agg_transform_operator_parameter_number(tr) ; j ++ ) {
       v = agg_transform_operator_parameter(tr, j) ;
+      if ( agg_variable_evaluator(v) != NULL ) {
+	agg_variable_value(v) =
+	  agg_expression_eval(agg_variable_evaluator(v)) ;
+      }
+      v = agg_transform_operator_parameter_u(tr, j) ;
+      if ( agg_variable_evaluator(v) != NULL ) {
+	agg_variable_value(v) =
+	  agg_expression_eval(agg_variable_evaluator(v)) ;
+      }
+      v = agg_transform_operator_parameter_v(tr, j) ;
       if ( agg_variable_evaluator(v) != NULL ) {
 	agg_variable_value(v) =
 	  agg_expression_eval(agg_variable_evaluator(v)) ;
@@ -320,6 +401,8 @@ gint agg_transform_variables_write(FILE *f, agg_transform_t *T,
  * @param umax upper parameter limit for applying transform operation;
  * @param p array of parameter values to pass to transform calculation;
  * @param expr expressions to be used in evaluating transform parameters;
+ * @param dedu derivatives of expressions with respect to \f$u\f$;
+ * @param dedv derivatives of expressions with respect to \f$v\f$;
  * @param np number of parameters to pass to transform.
  * 
  * @return 0 on success
@@ -327,7 +410,9 @@ gint agg_transform_variables_write(FILE *f, agg_transform_t *T,
 
 gint agg_transform_operator_add(agg_transform_t *T, agg_operation_t op,
 				gdouble umin, gdouble umax,
-				gdouble *p, gchar **expr, gint np)
+				gdouble *p,
+				gchar **expr, gchar **dedu, gchar **dedv,
+				gint np)
 
 {
   gint i ;
@@ -365,6 +450,11 @@ gint agg_transform_operator_add(agg_transform_t *T, agg_operation_t op,
       agg_variable_definition(v) = NULL ;
     }
     agg_variable_value(v) = p[i] ;
+
+    v = agg_transform_operator_parameter_u(tr,i) ;
+    parameter_set_derivative(tr, v, expr, dedu, i, "u") ;
+    v = agg_transform_operator_parameter_v(tr,i) ;
+    parameter_set_derivative(tr, v, expr, dedv, i, "v") ;
   }
 
   agg_transform_operator(T,agg_transform_operator_number(T)) = tr ;
@@ -424,7 +514,8 @@ gint agg_transform_operators_write(FILE *f, agg_transform_t *T)
 
 gint agg_transform_operator_rotate(agg_operation_t op,
 				   agg_variable_t *p, gint np,
-				   gdouble *xin, gdouble *xout)
+				   gdouble *xin, gdouble *xout,
+				   gdouble *dxdu, gdouble *dxdv)
 
 {
   gdouble x0, y0, th, C, S, xt[2] ;
@@ -447,7 +538,8 @@ gint agg_transform_operator_rotate(agg_operation_t op,
 
 gint agg_transform_operator_shrink(agg_operation_t op,
 				   agg_variable_t *p, gint np,
-				   gdouble *xin, gdouble *xout)
+				   gdouble *xin, gdouble *xout,
+				   gdouble *dxdu, gdouble *dxdv)
 
 {
   gdouble x0, y0, sc ;
@@ -466,7 +558,8 @@ gint agg_transform_operator_shrink(agg_operation_t op,
 
 gint agg_transform_operator_translate(agg_operation_t op,
 				      agg_variable_t *p, gint np,
-				      gdouble *xin, gdouble *xout)
+				      gdouble *xin, gdouble *xout,
+				      gdouble *dxdu, gdouble *dxdv)
 
 {
   gdouble dx, dy, dz ;
@@ -485,7 +578,8 @@ gint agg_transform_operator_translate(agg_operation_t op,
 
 gint agg_transform_operator_scale(agg_operation_t op,
 				  agg_variable_t *p, gint np,
-				  gdouble *xin, gdouble *xout)
+				  gdouble *xin, gdouble *xout,
+				  gdouble *dxdu, gdouble *dxdv)
 
 {
   gdouble sc ;
@@ -504,7 +598,8 @@ gint agg_transform_operator_scale(agg_operation_t op,
 
 gint agg_transform_operator_xscale(agg_operation_t op,
 				   agg_variable_t *p, gint np,
-				   gdouble *xin, gdouble *xout)
+				   gdouble *xin, gdouble *xout,
+				   gdouble *dxdu, gdouble *dxdv)
 
 {
   gdouble sc ;
@@ -523,7 +618,8 @@ gint agg_transform_operator_xscale(agg_operation_t op,
 
 gint agg_transform_operator_yscale(agg_operation_t op,
 				   agg_variable_t *p, gint np,
-				   gdouble *xin, gdouble *xout)
+				   gdouble *xin, gdouble *xout,
+				   gdouble *dxdu, gdouble *dxdv)
 
 {
   gdouble sc ;
@@ -562,7 +658,7 @@ gint agg_transform_operator_apply(agg_transform_operator_t *op,
   func(agg_transform_operator_operation(op),
        agg_transform_operator_parameters(op),
        agg_transform_operator_parameter_number(op),
-       xin, xout) ;
+       xin, xout, NULL, NULL) ;
   
   return 0 ;
 }
@@ -576,6 +672,44 @@ static gboolean parameter_in_range(gdouble umin, gdouble umax, gdouble u)
   if ( umin <= u && u < umax ) return TRUE ;
 
   return FALSE ;
+}
+
+
+/** 
+ * Apply an axis transform (swap) to a point
+ * 
+ * @param axes an ::agg_axes_t for the required axis transformation;
+ * @param xin input point (can be equal to \a xout);
+ * @param xout on exit contains transformed point data.
+ * 
+ * @return 0 on success.
+ */
+
+gint agg_transform_axes(agg_axes_t axes, gdouble *xin, gdouble *xout)
+
+{
+  gdouble xt[3] = {xin[0], xin[1], xin[2]} ;
+  
+  switch ( axes ) {
+  case AGG_AXES_PX_PY_PZ:
+    xout[0] = xt[0] ; xout[1] = xt[1] ; xout[2] = xt[2] ;
+    break ;
+  case AGG_AXES_PY_PZ_PX:
+    xout[0] = xt[1] ; xout[2] = xt[2] ; xout[2] = xt[0] ;
+    break ;
+  case AGG_AXES_PZ_PX_PY:
+    xout[0] = xt[2] ; xout[1] = xt[0] ; xout[2] = xt[1] ;
+    break ;
+  case AGG_AXES_PZ_PY_PX:
+    xout[0] = xt[2] ; xout[1] = xt[1] ; xout[2] = xt[0] ;
+    break ;
+  case AGG_AXES_PX_PY_MZ:
+    xout[0] = xt[0] ; xout[1] = xt[1] ; xout[2] = -xt[2] ;
+    break ;
+  default: g_assert_not_reached() ;
+  }
+  
+  return 0 ;
 }
 
 /** 
@@ -616,43 +750,6 @@ gint agg_transform_apply(agg_transform_t *T, gdouble *xin, gdouble *xout)
     }
   }
 
-  return 0 ;
-}
-
-/** 
- * Apply an axis transform (swap) to a point
- * 
- * @param axes an ::agg_axes_t for the required axis transformation;
- * @param xin input point (can be equal to \a xout);
- * @param xout on exit contains transformed point data.
- * 
- * @return 0 on success.
- */
-
-gint agg_transform_axes(agg_axes_t axes, gdouble *xin, gdouble *xout)
-
-{
-  gdouble xt[3] = {xin[0], xin[1], xin[2]} ;
-  
-  switch ( axes ) {
-  case AGG_AXES_PX_PY_PZ:
-    xout[0] = xt[0] ; xout[1] = xt[1] ; xout[2] = xt[2] ;
-    break ;
-  case AGG_AXES_PY_PZ_PX:
-    xout[0] = xt[1] ; xout[2] = xt[2] ; xout[2] = xt[0] ;
-    break ;
-  case AGG_AXES_PZ_PX_PY:
-    xout[0] = xt[2] ; xout[1] = xt[0] ; xout[2] = xt[1] ;
-    break ;
-  case AGG_AXES_PZ_PY_PX:
-    xout[0] = xt[2] ; xout[1] = xt[1] ; xout[2] = xt[0] ;
-    break ;
-  case AGG_AXES_PX_PY_MZ:
-    xout[0] = xt[0] ; xout[1] = xt[1] ; xout[2] = -xt[2] ;
-    break ;
-  default: g_assert_not_reached() ;
-  }
-  
   return 0 ;
 }
 
@@ -721,7 +818,7 @@ gint agg_transform_parse(agg_transform_t *T, agg_variable_t *p, gint np)
   for ( i = 0 ;	(transform_list[i].name != NULL) ; i ++ ) {
     if ( strcmp(transform_list[i].name, name) == 0 ) {
       agg_transform_operator_add(T, transform_list[i].op, umin, umax,
-				 args, expr, np) ;
+				 args, expr, NULL, NULL, np) ;
       return 0 ;
     }
   }

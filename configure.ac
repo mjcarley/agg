@@ -85,6 +85,7 @@ if test x$hasfma = xyes; then
 fi
 
 AC_CHECK_LIB(m, cos)
+AC_CHECK_LIB(matheval, evaluator_create)
 AC_CHECK_LIB(triangle-api, triangle_mesh_create, [], [
   echo \#################################################################
   echo \#
@@ -95,7 +96,7 @@ AC_CHECK_LIB(triangle-api, triangle_mesh_create, [], [
   echo \#
   echo \#################################################################
   exit
-         ])
+])
 
 AC_CONFIG_MACRO_DIR([m4])
 
@@ -107,7 +108,7 @@ AC_F77_DUMMY_MAIN
 AC_F77_WRAPPERS
 
 CFLAGS="$CFLAGS $OPENMP_CFLAGS $SIMD_FLAGS $GLIB_CFLAGS $blaswrap_cflags"
-LIBS="-ltriangle-api $blaswrap_libs $GLIB_LIBS -lstdc++"
+LIBS="$LIBS -ltriangle-api $blaswrap_libs $GLIB_LIBS -lstdc++"
 ##LDFLAGS="$LDFLAGS $blaswrap_libs $glib_libs -lstdc++"
 
 AC_SUBST(CFLAGS)

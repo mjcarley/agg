@@ -289,7 +289,8 @@ typedef enum {
 
 typedef gint (*agg_transform_operator_func_t)(agg_operation_t op,
 					      agg_variable_t *p, gint np,
-					      gdouble *xin, gdouble *xout) ;
+					      gdouble *xin, gdouble *xout,
+					      gdouble *dxdu, gdouble *dxdv) ;
 
 /** @typedef agg_transform_operator_t
  *
@@ -302,7 +303,10 @@ typedef agg_transform_operator_t ;
 typedef struct _agg_transform_operator_t agg_transform_operator_t ;
 struct _agg_transform_operator_t {
   agg_operation_t op ;
-  agg_variable_t p[AGG_OPERATOR_PARAMETER_SIZE] ;
+  agg_variable_t
+  p[AGG_OPERATOR_PARAMETER_SIZE],
+    pu[AGG_OPERATOR_PARAMETER_SIZE],
+    pv[AGG_OPERATOR_PARAMETER_SIZE] ;
   gint np ;
   agg_transform_operator_func_t func ;
   gdouble umin, umax ;
@@ -342,6 +346,8 @@ struct _agg_transform_operator_t {
 #define agg_transform_operator_operation(_op)        ((_op)->op)
 #define agg_transform_operator_parameters(_op)       ((_op)->p)
 #define agg_transform_operator_parameter(_op,_i)     (&((_op)->p[(_i)]))
+#define agg_transform_operator_parameter_u(_op,_i)   (&((_op)->pu[(_i)]))
+#define agg_transform_operator_parameter_v(_op,_i)   (&((_op)->pv[(_i)]))
 #define agg_transform_operator_parameter_number(_op) ((_op)->np)
 #define agg_transform_operator_func(_op)             ((_op)->func)
 #define agg_transform_operator_umin(_op)             ((_op)->umin)
@@ -818,7 +824,9 @@ gint agg_transform_variables_write(FILE *f, agg_transform_t *T,
 				   gboolean write_defs) ;
 gint agg_transform_operator_add(agg_transform_t *T, agg_operation_t op,
 				gdouble umin, gdouble umax,
-				gdouble *p, gchar **expr, gint np) ;
+				gdouble *p,
+				gchar **expr, gchar **dedu, gchar **dedv,
+				gint np) ;
 gint agg_transform_operators_write(FILE *f, agg_transform_t *T) ;
 gint agg_transform_apply(agg_transform_t *T, gdouble *xin, gdouble *xout) ;
 gint agg_transforms_list(FILE *f) ;
@@ -827,22 +835,29 @@ gint agg_transform_operator_apply(agg_transform_operator_t *op,
 				  gdouble *xin, gdouble *xout) ;
 gint agg_transform_operator_rotate(agg_operation_t op,
 				   agg_variable_t *p, gint np,
-				   gdouble *xin, gdouble *xout) ;
+				   gdouble *xin, gdouble *xout,
+				   gdouble *dxdu, gdouble *dxdv) ;
 gint agg_transform_operator_translate(agg_operation_t op,
 				      agg_variable_t *p, gint np,
-				      gdouble *xin, gdouble *xout) ;
+				      gdouble *xin, gdouble *xout,
+				      gdouble *dxdu, gdouble *dxdv) ;
 gint agg_transform_operator_shrink(agg_operation_t op,
 				   agg_variable_t *p, gint np,
-				   gdouble *xin, gdouble *xout) ;
+				   gdouble *xin, gdouble *xout,
+				   gdouble *dxdu, gdouble *dxdv) ;
 gint agg_transform_operator_scale(agg_operation_t op,
 				  agg_variable_t *p, gint np,
-				  gdouble *xin, gdouble *xout) ;
+				  gdouble *xin, gdouble *xout,
+				  gdouble *dxdu, gdouble *dxdv) ;
 gint agg_transform_operator_xscale(agg_operation_t op,
 				   agg_variable_t *p, gint np,
-				   gdouble *xin, gdouble *xout) ;
+				   gdouble *xin, gdouble *xout,
+				   gdouble *dxdu, gdouble *dxdv) ;
 gint agg_transform_operator_yscale(agg_operation_t op,
 				   agg_variable_t *p, gint np,
-				   gdouble *xin, gdouble *xout) ;
+				   gdouble *xin, gdouble *xout,
+				   gdouble *dxdu, gdouble *dxdv) ;
+				   
 gint agg_transform_axes(agg_axes_t axes, gdouble *xin, gdouble *xout) ;
 gint agg_transform_parse(agg_transform_t *T, agg_variable_t *p, gint np) ;
 agg_axes_t agg_axes_parse(gchar *str) ;

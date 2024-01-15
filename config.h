@@ -36,6 +36,9 @@
 /* Define to 1 if you have the `m' library (-lm). */
 #define HAVE_LIBM 1
 
+/* Define to 1 if you have the `matheval' library (-lmatheval). */
+#define HAVE_LIBMATHEVAL 1
+
 /* Define to 1 if you have the `triangle-api' library (-ltriangle-api). */
 #define HAVE_LIBTRIANGLE_API 1
 
