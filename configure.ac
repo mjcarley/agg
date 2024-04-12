@@ -45,7 +45,7 @@ fi
   
 AC_PROG_AWK
 AC_SEARCH_LIBS([strerror],[cposix])
-AC_HEADER_STDC
+##AC_HEADER_STDC
 
 PKG_CHECK_MODULES([GLIB], [glib-2.0], [],
 [
