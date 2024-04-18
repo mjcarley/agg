@@ -1684,8 +1684,12 @@ gint agg_mesh_body(agg_mesh_t *m, agg_body_t *b, gint pps,
     agg_mesh_patch(m,i) = agg_body_patch(b,i) ;
     agg_mesh_surface_number(m) ++ ;
   }
+
+  fprintf(stderr, "%s: added %d surfaces\n", __FUNCTION__,
+	  agg_mesh_surface_number(m)) ;
   
   for ( i = 0 ; i < agg_body_surface_number(b); i ++ ) {
+    fprintf(stderr, "%s: adding surface %d\n", __FUNCTION__, i) ;
     for ( j = i+1 ; j < agg_body_surface_number(b); j ++ ) {
       if ( agg_surface_patch_trim(agg_body_surface(b,i), agg_body_patch(b,i),
 				  0.05,
@@ -1701,10 +1705,12 @@ gint agg_mesh_body(agg_mesh_t *m, agg_body_t *b, gint pps,
     area = agg_surface_grid_element_area(agg_body_surface(b,i)) ;
     area = 0.01 ;
     sprintf(args, "pza%lg", area) ;
+    fprintf(stderr, "%s: triangulating surface %d\n", __FUNCTION__, i) ;    
     agg_mesh_surface_add_triangle(m, i, args, pps, w) ;
   }
 
   for ( i = 0 ; i < agg_mesh_surface_blend_number(m) ; i ++ ) {
+    fprintf(stderr, "%s: building blend %d\n", __FUNCTION__, i) ;
     agg_mesh_surface_blend_add(m, i, 4, pps, w) ;
   }
 
