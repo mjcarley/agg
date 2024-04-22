@@ -1704,7 +1704,7 @@ gint agg_mesh_body(agg_mesh_t *m, agg_body_t *b, gint pps,
     g_assert(agg_surface_grid(agg_body_surface(b,i)) != AGG_GRID_UNDEFINED) ;
     area = agg_surface_grid_element_area(agg_body_surface(b,i)) ;
     area = 0.01 ;
-    sprintf(args, "pza%lg", area) ;
+    sprintf(args, "VVVpza%lg", area) ;
     fprintf(stderr, "%s: triangulating surface %d\n", __FUNCTION__, i) ;    
     agg_mesh_surface_add_triangle(m, i, args, pps, w) ;
   }
