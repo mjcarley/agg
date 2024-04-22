@@ -1155,6 +1155,7 @@ gint agg_mesh_surface_add_triangle(agg_mesh_t *msh, gint isurf,
   subseg sptr;
   gdouble s0, t0, t[1024] ;
   gint nseg = 64 ;
+  gint tristatus ;
   agg_curve_t *c ;
   agg_patch_t *P ;
   agg_surface_t *S ;
@@ -1172,7 +1173,11 @@ gint agg_mesh_surface_add_triangle(agg_mesh_t *msh, gint isurf,
   nbpts = MAX(nbpts, 16384) ;
   
   ctx = triangle_context_create() ;
-  triangle_context_options(ctx, args) ;
+  tristatus = triangle_context_options(ctx, args) ;
+  if ( tristatus != TRI_OK ) {
+    g_error("%s: triangle contex failure (error: %d)",
+	    __FUNCTION__, tristatus) ;
+  }
   reset_triangleio(&in);
 
   in.pointlist = (gdouble *)g_malloc0(nbpts*2*sizeof(gdouble)) ;
