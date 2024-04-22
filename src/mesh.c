@@ -1185,6 +1185,7 @@ gint agg_mesh_surface_add_triangle(agg_mesh_t *msh, gint isurf,
   in.numberofholes = 0 ;
 
   if ( agg_surface_grid(S) == AGG_GRID_REGULAR ) {
+    fprintf(stderr, "%s: AGG_GRID_REGULAR\n", __FUNCTION__) ;
     insert_grid_segments(in.pointlist, &(in.numberofpoints),
 			 in.segmentlist, &(in.numberofsegments),
 			 agg_surface_grid_section_number(S),
@@ -1192,12 +1193,14 @@ gint agg_mesh_surface_add_triangle(agg_mesh_t *msh, gint isurf,
   }
   
   if ( agg_surface_grid(S) == AGG_GRID_SPHERE_ICO ) {
+    fprintf(stderr, "%s: AGG_GRID_SPHERE_ICO\n", __FUNCTION__) ;
     insert_sphere_ico_segments(P, in.pointlist, &(in.numberofpoints),
 			       in.segmentlist, &(in.numberofsegments),
 			       agg_surface_grid_subdivision(S)) ;
   }
 
   if ( agg_surface_grid(S) == AGG_GRID_SPHERE_UV ) {
+    fprintf(stderr, "%s: AGG_GRID_SPHERE_UV\n", __FUNCTION__) ;
     insert_sphere_uv_segments(P, in.pointlist, &(in.numberofpoints),
 			      in.segmentlist, &(in.numberofsegments),
 			      agg_surface_grid_section_number(S),
@@ -1205,18 +1208,21 @@ gint agg_mesh_surface_add_triangle(agg_mesh_t *msh, gint isurf,
   }
 
   if ( agg_surface_grid(S) == AGG_GRID_HEMISPHERE_ICO ) {
+    fprintf(stderr, "%s: AGG_GRID_HEMISPHERE_ICO\n", __FUNCTION__) ;
     insert_hemisphere_ico_segments(P, in.pointlist, &(in.numberofpoints),
 				   in.segmentlist, &(in.numberofsegments),
 				   agg_surface_grid_subdivision(S)) ;
   }
   
   if ( agg_surface_grid(S) == AGG_GRID_HEMISPHERE_UV ) {
+    fprintf(stderr, "%s: AGG_GRID_HEMISPHERE_UV\n", __FUNCTION__) ;
     insert_hemisphere_uv_segments(P, in.pointlist, &(in.numberofpoints),
 				  in.segmentlist, &(in.numberofsegments),
 				  agg_surface_grid_section_number(S),
 				  agg_surface_grid_spline_number(S)) ;
   }
-  
+
+  fprintf(stderr, "%s: trimming to holes\n", __FUNCTION__) ;
   trim_to_holes(in.pointlist, &(in.numberofpoints),
 		in.segmentlist, &(in.numberofsegments),
 		0.01, P) ;
@@ -1245,7 +1251,9 @@ gint agg_mesh_surface_add_triangle(agg_mesh_t *msh, gint isurf,
   }
   
   np0 = in.numberofpoints ;
+  fprintf(stderr, "%s: creating mesh\n", __FUNCTION__) ;
   triangle_mesh_create(ctx, &in) ;
+  fprintf(stderr, "%s: mesh created\n", __FUNCTION__) ;
   m = ctx->m ;
   b = ctx->b ;
   
