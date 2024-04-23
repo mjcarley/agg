@@ -1175,7 +1175,7 @@ gint agg_mesh_surface_add_triangle(agg_mesh_t *msh, gint isurf,
   ctx = triangle_context_create() ;
   tristatus = triangle_context_options(ctx, args) ;
   if ( tristatus != TRI_OK ) {
-    g_error("%s: triangle contex failure (error: %d)",
+    g_error("%s: triangle context failure (error: %d)",
 	    __FUNCTION__, tristatus) ;
   }
   reset_triangleio(&in);
@@ -1190,7 +1190,7 @@ gint agg_mesh_surface_add_triangle(agg_mesh_t *msh, gint isurf,
   in.numberofholes = 0 ;
 
   if ( agg_surface_grid(S) == AGG_GRID_REGULAR ) {
-    fprintf(stderr, "%s: AGG_GRID_REGULAR\n", __FUNCTION__) ;
+    /* fprintf(stderr, "%s: AGG_GRID_REGULAR\n", __FUNCTION__) ; */
     insert_grid_segments(in.pointlist, &(in.numberofpoints),
 			 in.segmentlist, &(in.numberofsegments),
 			 agg_surface_grid_section_number(S),
@@ -1198,14 +1198,14 @@ gint agg_mesh_surface_add_triangle(agg_mesh_t *msh, gint isurf,
   }
   
   if ( agg_surface_grid(S) == AGG_GRID_SPHERE_ICO ) {
-    fprintf(stderr, "%s: AGG_GRID_SPHERE_ICO\n", __FUNCTION__) ;
+    /* fprintf(stderr, "%s: AGG_GRID_SPHERE_ICO\n", __FUNCTION__) ; */
     insert_sphere_ico_segments(P, in.pointlist, &(in.numberofpoints),
 			       in.segmentlist, &(in.numberofsegments),
 			       agg_surface_grid_subdivision(S)) ;
   }
 
   if ( agg_surface_grid(S) == AGG_GRID_SPHERE_UV ) {
-    fprintf(stderr, "%s: AGG_GRID_SPHERE_UV\n", __FUNCTION__) ;
+    /* fprintf(stderr, "%s: AGG_GRID_SPHERE_UV\n", __FUNCTION__) ; */
     insert_sphere_uv_segments(P, in.pointlist, &(in.numberofpoints),
 			      in.segmentlist, &(in.numberofsegments),
 			      agg_surface_grid_section_number(S),
@@ -1213,21 +1213,21 @@ gint agg_mesh_surface_add_triangle(agg_mesh_t *msh, gint isurf,
   }
 
   if ( agg_surface_grid(S) == AGG_GRID_HEMISPHERE_ICO ) {
-    fprintf(stderr, "%s: AGG_GRID_HEMISPHERE_ICO\n", __FUNCTION__) ;
+    /* fprintf(stderr, "%s: AGG_GRID_HEMISPHERE_ICO\n", __FUNCTION__) ; */
     insert_hemisphere_ico_segments(P, in.pointlist, &(in.numberofpoints),
 				   in.segmentlist, &(in.numberofsegments),
 				   agg_surface_grid_subdivision(S)) ;
   }
   
   if ( agg_surface_grid(S) == AGG_GRID_HEMISPHERE_UV ) {
-    fprintf(stderr, "%s: AGG_GRID_HEMISPHERE_UV\n", __FUNCTION__) ;
+    /* fprintf(stderr, "%s: AGG_GRID_HEMISPHERE_UV\n", __FUNCTION__) ; */
     insert_hemisphere_uv_segments(P, in.pointlist, &(in.numberofpoints),
 				  in.segmentlist, &(in.numberofsegments),
 				  agg_surface_grid_section_number(S),
 				  agg_surface_grid_spline_number(S)) ;
   }
 
-  fprintf(stderr, "%s: trimming to holes\n", __FUNCTION__) ;
+  /* fprintf(stderr, "%s: trimming to holes\n", __FUNCTION__) ; */
   trim_to_holes(in.pointlist, &(in.numberofpoints),
 		in.segmentlist, &(in.numberofsegments),
 		0.01, P) ;
@@ -1256,9 +1256,9 @@ gint agg_mesh_surface_add_triangle(agg_mesh_t *msh, gint isurf,
   }
   
   np0 = in.numberofpoints ;
-  fprintf(stderr, "%s: creating mesh\n", __FUNCTION__) ;
+  /* fprintf(stderr, "%s: creating mesh\n", __FUNCTION__) ; */
   triangle_mesh_create(ctx, &in) ;
-  fprintf(stderr, "%s: mesh created\n", __FUNCTION__) ;
+  /* fprintf(stderr, "%s: mesh created\n", __FUNCTION__) ; */
   m = ctx->m ;
   b = ctx->b ;
   
@@ -1698,11 +1698,11 @@ gint agg_mesh_body(agg_mesh_t *m, agg_body_t *b, gint pps,
     agg_mesh_surface_number(m) ++ ;
   }
 
-  fprintf(stderr, "%s: added %d surfaces\n", __FUNCTION__,
-	  agg_mesh_surface_number(m)) ;
+  /* fprintf(stderr, "%s: added %d surfaces\n", __FUNCTION__, */
+  /* 	  agg_mesh_surface_number(m)) ; */
   
   for ( i = 0 ; i < agg_body_surface_number(b); i ++ ) {
-    fprintf(stderr, "%s: adding surface %d\n", __FUNCTION__, i) ;
+    /* fprintf(stderr, "%s: adding surface %d\n", __FUNCTION__, i) ; */
     for ( j = i+1 ; j < agg_body_surface_number(b); j ++ ) {
       if ( agg_surface_patch_trim(agg_body_surface(b,i), agg_body_patch(b,i),
 				  0.05,
@@ -1717,14 +1717,14 @@ gint agg_mesh_body(agg_mesh_t *m, agg_body_t *b, gint pps,
     g_assert(agg_surface_grid(agg_body_surface(b,i)) != AGG_GRID_UNDEFINED) ;
     area = agg_surface_grid_element_area(agg_body_surface(b,i)) ;
     area = 0.01 ;
-    sprintf(args, "VVVpza%lg", area) ;
-    fprintf(stderr, "%s: triangulating surface %d with \"%s\"\n",
-	    __FUNCTION__, i, args) ;    
+    sprintf(args, "pza%lg", area) ;
+    /* fprintf(stderr, "%s: triangulating surface %d with \"%s\"\n", */
+    /* 	    __FUNCTION__, i, args) ;     */
     agg_mesh_surface_add_triangle(m, i, args, pps, w) ;
   }
 
   for ( i = 0 ; i < agg_mesh_surface_blend_number(m) ; i ++ ) {
-    fprintf(stderr, "%s: building blend %d\n", __FUNCTION__, i) ;
+    /* fprintf(stderr, "%s: building blend %d\n", __FUNCTION__, i) ; */
     agg_mesh_surface_blend_add(m, i, 4, pps, w) ;
   }
 
