@@ -26,7 +26,7 @@
 
 #include "hefsi.h"
 
-const gchar *tests[] = {"bernstein",
+const char *tests[] = {"bernstein",
 			"circle",
 			"aerofoil",
 			"transform",
@@ -45,7 +45,7 @@ static void surface_sphere(agg_surface_t *S, gdouble x, gdouble y, gdouble z,
 {
   gdouble u, p[3] ;
   agg_transform_t *T ;
-  gchar *expr[8] = {NULL} ;
+  char *expr[8] = {NULL} ;
 
   u = 0.0 ;
   agg_section_set_circle(s) ;
@@ -93,7 +93,7 @@ static void surface_tube(agg_surface_t *S, gdouble x, gdouble y, gdouble z,
 {
   gdouble u, p[3] ;
   agg_transform_t *T ;
-  gchar *expr[8] = {NULL}, etmp[1024] ;
+  char *expr[8] = {NULL}, etmp[1024] ;
 
   u = 0.0 ;
   agg_section_set_circle(s) ;
@@ -145,7 +145,7 @@ static void surface_wing(agg_surface_t *S, gdouble x, gdouble y, gdouble z,
 {
   gdouble u, p[3] ;
   agg_transform_t *T ;
-  gchar etmp[3][1024], *expr[8] = {NULL} ;
+  char etmp[3][1024], *expr[8] = {NULL} ;
 
   u = 0.0 ;
   T = agg_surface_transform(S) ;
@@ -203,7 +203,7 @@ static void surface_wing(agg_surface_t *S, gdouble x, gdouble y, gdouble z,
   return ;
 }
 
-static gint parse_test(gchar *s)
+static gint parse_test(char *s)
 
 {
   gint i ;
@@ -324,7 +324,7 @@ static void transform_test(void)
   agg_section_t *s ;
   agg_transform_t *T ;
   agg_variable_t global[4] ;
-  gchar *args[32] ;
+  char *args[32] ;
 
   s = agg_section_new(8, 8) ;
   agg_section_set_aerofoil(s, 0.5, 0.1, 0.0) ;
@@ -524,7 +524,7 @@ static void body_test(void)
   return ;
 }
 
-static void parser_test(gchar *file)
+static void parser_test(char *file)
 
 {
   agg_body_t *b ;
@@ -562,7 +562,7 @@ static void parser_test(gchar *file)
   return ;
 }
 
-static void derivative_test(gchar *file)
+static void derivative_test(char *file)
 
 {
   agg_body_t *b ;
@@ -605,7 +605,7 @@ static void ico_test(void)
   agg_surface_t *S ;
   agg_transform_t *T ;
   agg_section_t *s ;
-  gchar *expr[8] = {NULL} ;
+  char *expr[8] = {NULL} ;
   agg_surface_workspace_t *w ;
   gboolean physical_points ;
   FILE *output ;
@@ -787,10 +787,10 @@ static void section_fit_test(void)
   return ;
 }
 
-gint main(gint argc, gchar **argv)
+gint main(gint argc, char **argv)
 
 {
-  gchar ch, *progname, *file = "test.agg" ;
+  char ch, *progname, *file = "test.agg" ;
   gint test ;
 
   progname = g_strdup(g_path_get_basename(argv[0])) ;

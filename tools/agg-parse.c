@@ -24,7 +24,7 @@
 
 #include <agg.h>
 
-gchar *progname ;
+char *progname ;
 
 static void print_help_message(FILE *f, gint pps)
 
@@ -45,11 +45,11 @@ static void print_help_message(FILE *f, gint pps)
   return ;
 }  
 
-static agg_transform_t *transform_parse(gchar *str)
+static agg_transform_t *transform_parse(char *str)
 
 {
   agg_transform_t *T ;
-  gchar **tokens, *name ;
+  char **tokens, *name ;
   agg_variable_t p[32] = {0} ;
   gint i, np ;
 
@@ -76,12 +76,12 @@ static agg_transform_t *transform_parse(gchar *str)
   return T ;
 }
 
-static void section_write(FILE *f, gchar *str, agg_transform_t *T,
-			  gint npts, gchar *opfmt)
+static void section_write(FILE *f, char *str, agg_transform_t *T,
+			  gint npts, char *opfmt)
 
 {
   agg_section_t *s ;
-  gchar **tokens, *name ;
+  char **tokens, *name ;
   agg_variable_t p[32] = {0} ;
   gint i, np ;
   
@@ -122,12 +122,12 @@ static void section_write(FILE *f, gchar *str, agg_transform_t *T,
   return ;
 }
 
-gint main(gint argc, gchar **argv)
+gint main(gint argc, char **argv)
 
 {
   agg_body_t *b ;
   agg_mesh_t *m ;
-  gchar *file, *gfile, ch, *section, *transform, *opfmt ;
+  char *file, *gfile, ch, *section, *transform, *opfmt ;
   gint pps, offp, offsp, offs ;
   agg_surface_workspace_t *w ;
   agg_transform_t *T ;

@@ -39,7 +39,7 @@ void _agg_circle_parse(agg_section_t *s, agg_variable_t *p, gint np) ;
 void _agg_ellipse_parse(agg_section_t *s, agg_variable_t *p, gint np) ;
 
 static const struct {
-  gchar *name ;
+  char *name ;
   gint np ;
   section_parse_func_t func ;
 } parse_data[] = {
@@ -337,7 +337,7 @@ void _agg_ellipse_parse(agg_section_t *s, agg_variable_t *p, gint np)
  * @return 0 on success.
  */
 
-gint agg_section_parse(agg_section_t *s, gchar *name,
+gint agg_section_parse(agg_section_t *s, char *name,
 		       agg_variable_t *p, gint np)
 
 {
@@ -482,7 +482,7 @@ gint agg_section_write(FILE *f, agg_section_t *s, agg_transform_t *T,
  */
 
 gint agg_section_format_write(FILE *f, agg_section_t *s, agg_transform_t *T,
-			      gchar *fstr, gchar *estr, gint npts)
+			      char *fstr, char *estr, gint npts)
 
 {
   gint i ;

@@ -28,7 +28,7 @@
 #include <agg.h>
 
 static const struct {
-  gchar *name ;
+  char *name ;
   agg_transform_operator_func_t func ;
   agg_operation_t op ;
   gint np ;
@@ -45,7 +45,7 @@ static const struct {
   } ;
 
 static const struct {
-  gchar *name ;
+  char *name ;
   agg_axes_t axes ;
 } axes_list[] =
   {
@@ -72,8 +72,8 @@ static const struct {
 #include <matheval.h>
 static void parameter_set_derivative(agg_transform_operator_t *tr,
 				     agg_variable_t *v,
-				     gchar **expr, gchar **de, gint i,
-				     gchar *var)
+				     char **expr, char **de, gint i,
+				     char *var)
 {
   gpointer eval, diff ;
 
@@ -103,8 +103,8 @@ static void parameter_set_derivative(agg_transform_operator_t *tr,
 #else  /*HAVE_LIBMATHEVAL*/
 static void parameter_set_derivative(agg_transform_operator_t *tr,
 				     agg_variable_t *v,
-				     gchar **expr, gchar **de, gint i,
-				     gchar *var)
+				     char **expr, char **de, gint i,
+				     char *var)
 
 {
   /*if analytical differentiation is not available, set derivatives to
@@ -187,7 +187,7 @@ agg_transform_t *agg_transform_new(gint nopmax)
  */
 
 gint agg_transform_variable_add(agg_transform_t *T,
-				gchar *var, gchar *def, gdouble val)
+				char *var, char *def, gdouble val)
 
 {
   agg_variable_t *v ;
@@ -411,7 +411,7 @@ gint agg_transform_variables_write(FILE *f, agg_transform_t *T,
 gint agg_transform_operator_add(agg_transform_t *T, agg_operation_t op,
 				gdouble umin, gdouble umax,
 				gdouble *p,
-				gchar **expr, gchar **dedu, gchar **dedv,
+				char **expr, char **dedu, char **dedv,
 				gint np)
 
 {
@@ -761,7 +761,7 @@ gint agg_transform_apply(agg_transform_t *T, gdouble *xin, gdouble *xout)
  * @return ::agg_axes_t corresponding to \a str, or AGG_AXES_UNDEFINED. 
  */
 
-agg_axes_t agg_axes_parse(gchar *str)
+agg_axes_t agg_axes_parse(char *str)
 
 {
   gint i ;
@@ -789,7 +789,7 @@ agg_axes_t agg_axes_parse(gchar *str)
 gint agg_transform_parse(agg_transform_t *T, agg_variable_t *p, gint np)
 
 {
-  gchar *expr[32], *name ;
+  char *expr[32], *name ;
   gdouble args[32], umin, umax ;
   gint i, i0 ;
 

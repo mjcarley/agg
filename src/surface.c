@@ -414,12 +414,12 @@ gint agg_surface_point_diff(agg_surface_t *S, gdouble u, gdouble v,
  * @return ::agg_grid_t corresponding to \a str, or AGG_GRID_UNDEFINED. 
  */
 
-agg_grid_t agg_grid_parse(gchar *str)
+agg_grid_t agg_grid_parse(char *str)
 
 {
   gint i ;
   static const struct {
-    gchar *name ;
+    char *name ;
     agg_grid_t grid ;
   } grid_list[] = {
     {"regular",    AGG_GRID_REGULAR},

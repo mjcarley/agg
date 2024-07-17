@@ -34,12 +34,12 @@
 #endif /*HAVE_CONFIG_H*/
 
 static struct {
-  gchar *description, *name ;
+  char *description, *name ;
   agg_section_t *s ;
 } section_list[1024] ;
 static gint section_number = 0 ;
 
-agg_section_t *agg_library_section_lookup(gchar *name, gchar **description)
+agg_section_t *agg_library_section_lookup(char *name, char **description)
 
 {
   gint i ;
@@ -56,7 +56,7 @@ agg_section_t *agg_library_section_lookup(gchar *name, gchar **description)
   return NULL ;
 }
 
-gint agg_library_section_add(gchar *name, gchar *description,
+gint agg_library_section_add(char *name, char *description,
 			     agg_section_t *s)
 
 {
@@ -103,7 +103,7 @@ gint agg_library_sections_list(FILE *f, gboolean write_description)
   return 0 ;
 }
 
-gint agg_library_section_write(FILE *f, gchar *name, gchar *description,
+gint agg_library_section_write(FILE *f, char *name, char *description,
 			       agg_section_t *s)
 
 {

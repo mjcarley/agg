@@ -53,7 +53,7 @@ typedef void (*block_read_func_t)(GScanner *scanner, agg_body_t *b,
 				  gboolean echo, gpointer data[]) ;
 
 static const struct {
-  gchar *id ;
+  char *id ;
   block_read_func_t func ;
 } block_data[] = {
   {"global",    _agg_global_read     },
@@ -121,7 +121,7 @@ static const struct {
 /* (_str) = g_strdup((_s)->value.v_string)		\ */
 #if 0
 /*useful for debugging parser*/
-static gchar *token_string(GTokenType token)
+static char *token_string(GTokenType token)
 
 {
   switch (token) {
@@ -155,7 +155,7 @@ static gchar *token_string(GTokenType token)
 }  
 #endif
 
-static void echo_variable(FILE *f, gchar *name, gchar *def, gdouble val)
+static void echo_variable(FILE *f, char *name, char *def, gdouble val)
 
 {
   if ( def != NULL ) {
@@ -187,10 +187,10 @@ static gdouble scan_numeric(GScanner *scanner)
 
 }
 
-static gchar *scan_string(GScanner *scanner)
+static char *scan_string(GScanner *scanner)
 
 {
-  gchar *s ;
+  char *s ;
   GTokenType token ;
   
   token = g_scanner_get_next_token(scanner) ;
@@ -200,7 +200,7 @@ static gchar *scan_string(GScanner *scanner)
   return s ;
 }
 
-static block_read_func_t block_read_func(gchar *id)
+static block_read_func_t block_read_func(char *id)
 
 {
   gint i ;
@@ -251,7 +251,7 @@ static void parameter_list_parse(GScanner *scanner,
 				 agg_variable_t *params, gint *nparams)
 
 {
-  gchar *def ;
+  char *def ;
   gdouble val ;
 
   (*nparams) = 0 ;
@@ -615,7 +615,7 @@ void _agg_global_read(GScanner *scanner, agg_body_t *b, gboolean echo,
 
 {
   GTokenType token ;
-  gchar *name, *def ;
+  char *name, *def ;
   gdouble val ;
   
   if ( echo )
@@ -746,7 +746,7 @@ agg_body_t *agg_body_new(gint ngmax, gint nsmax)
 
   b->S = (agg_surface_t **)g_malloc(nsmax*sizeof(agg_surface_t *)) ;
   b->P = (agg_patch_t **)g_malloc(nsmax*sizeof(agg_patch_t *)) ;
-  b->names = (gchar **)g_malloc(nsmax*sizeof(gchar *)) ;
+  b->names = (char **)g_malloc(nsmax*sizeof(char *)) ;
 
   b->e = agg_expression_data_new(ngmax) ;
   b->e->ne = 0 ;
@@ -770,7 +770,7 @@ agg_body_t *agg_body_new(gint ngmax, gint nsmax)
  * @return 0 on success.
  */
 
-gint agg_body_global_add(agg_body_t *b, gchar *var, gchar *def, gdouble val)
+gint agg_body_global_add(agg_body_t *b, char *var, char *def, gdouble val)
 
 {
   gint i ;
@@ -903,7 +903,7 @@ gint agg_body_globals_eval(agg_body_t *b)
  * @return 0 on success.
  */
 
-gint agg_body_read(agg_body_t *b, gchar *file, gboolean echo)
+gint agg_body_read(agg_body_t *b, char *file, gboolean echo)
 
 {
   GScanner *scanner ;

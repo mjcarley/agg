@@ -167,7 +167,7 @@ static void write_element_gmsh_occ(FILE *f, gint *e, gint i,
  */
 
 gint agg_mesh_write_gmsh(FILE *f, agg_mesh_t *m,
-			      gchar *len, gint offp, gint offsp, gint offs,
+			      char *len, gint offp, gint offsp, gint offs,
 			      gboolean opencascade)
 
 {
@@ -1131,7 +1131,7 @@ static gint rail_curve_points(agg_surface_blend_t *B, gint n, gdouble *t)
  */
 
 gint agg_mesh_surface_add_triangle(agg_mesh_t *msh, gint isurf,
-				   gchar *args, gint pps,
+				   char *args, gint pps,
 				   agg_surface_workspace_t *w)
 
 {
@@ -1689,7 +1689,7 @@ gint agg_mesh_body(agg_mesh_t *m, agg_body_t *b, gint pps,
 {
   gint i, j ;
   gdouble area ;
-  gchar args[64] ;
+  char args[64] ;
 
   agg_mesh_surface_number(m) = 0 ;
   for ( i = 0 ; i < agg_body_surface_number(b); i ++ ) {

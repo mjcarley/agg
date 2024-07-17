@@ -30,7 +30,7 @@
 #include "agg-private.h"
 
 static const struct {
-  gchar *name ;
+  char *name ;
   agg_patch_mapping_t map ;
 } mapping_list[] =
   {
@@ -233,7 +233,7 @@ gint agg_patch_map(agg_patch_t *P, gdouble s, gdouble t,
   return 0 ;
 }
 
-static gint wrapping_parse(gchar *str, gboolean *wrap)
+static gint wrapping_parse(char *str, gboolean *wrap)
 
 {
   if ( strcmp("wrap", str) == 0 ) { *wrap = TRUE ; return 0 ; }

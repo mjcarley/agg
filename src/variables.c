@@ -54,7 +54,7 @@ agg_expression_data_t *agg_expression_data_new(gint nemax)
   d->nemax = nemax ; d->ne = 0 ;
   d->data = g_malloc0(nemax*sizeof(te_variable)) ;
   d->expr = g_malloc0(nemax*sizeof(gpointer)) ;
-  d->defs = (gchar **)g_malloc0(nemax*sizeof(gchar *)) ;
+  d->defs = (char **)g_malloc0(nemax*sizeof(char *)) ;
   
   return d ;
 }
@@ -106,7 +106,7 @@ gint agg_expression_data_variable_add(agg_expression_data_t *d,
  * @return pointer to compiled expression.
  */
 
-gpointer agg_expression_compile(gchar *e, agg_expression_data_t *d)
+gpointer agg_expression_compile(char *e, agg_expression_data_t *d)
 
 {
   te_expr *expr ;

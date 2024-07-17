@@ -25,7 +25,7 @@ Options:
 Libraries:
 	agg
 EOF
-	exit $1
+	exit 1
 }
 
 uniquify()

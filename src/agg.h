@@ -91,7 +91,7 @@ typedef agg_variable_t ;
 #else /*DOXYGEN*/
 typedef struct _agg_variable_t agg_variable_t ;
 struct _agg_variable_t {
-  gchar *name, *def ; /*variable name and its symbolic definition*/
+  char *name, *def ; /*variable name and its symbolic definition*/
   gpointer eval ;     /*compiled form of definition*/
   gdouble val ;       /*numerical value*/
 } ;
@@ -256,7 +256,7 @@ typedef struct _agg_expression_data_t agg_expression_data_t ;
 struct _agg_expression_data_t {
   gint ne, nemax ;
   gpointer data, *expr ; /*wrappers for access to tinyexpr variable data type*/
-  gchar **defs ;
+  char **defs ;
 } ;
 #endif /*DOXYGEN*/
 
@@ -758,7 +758,7 @@ struct _agg_body_t {
   agg_expression_data_t *e ;
   agg_surface_t **S ;
   agg_patch_t **P ;
-  gchar **names ;
+  char **names ;
   gint ng, ngmax, ns, nsmax ;
 } ;
 
@@ -800,12 +800,12 @@ gint agg_section_set_circle(agg_section_t *s) ;
 gint agg_section_set_ellipse(agg_section_t *s, gdouble th) ;
 gint agg_section_set_aerofoil(agg_section_t *s, gdouble eta,
 			      gdouble th, gdouble yte) ;
-gint agg_section_parse(agg_section_t *s, gchar *name,
+gint agg_section_parse(agg_section_t *s, char *name,
 		       agg_variable_t *p, gint np) ;
 gint agg_section_write(FILE *f, agg_section_t *s, agg_transform_t *T,
 		       gint npts) ;
 gint agg_section_format_write(FILE *f, agg_section_t *s, agg_transform_t *T,
-			      gchar *fstr, gchar *estr, gint npts) ;
+			      char *fstr, char *estr, gint npts) ;
 gint agg_sections_list(FILE *f) ;
 gint agg_section_fit(agg_section_t *s,
 		     gdouble *xu, gint xustr, gdouble *yu, gint yustr, gint npu,
@@ -815,7 +815,7 @@ gint agg_section_fit(agg_section_t *s,
 agg_transform_operator_t *agg_transform_operator_new(void) ;
 agg_transform_t *agg_transform_new(gint nopmax) ;
 gint agg_transform_variable_add(agg_transform_t *T,
-				gchar *var, gchar *def, gdouble val) ;
+				char *var, char *def, gdouble val) ;
 gint agg_transform_add_global_variables(agg_transform_t *T,
 					agg_variable_t *global, gint nglobal) ;
 gint agg_transform_expressions_compile(agg_transform_t *T) ;
@@ -825,7 +825,7 @@ gint agg_transform_variables_write(FILE *f, agg_transform_t *T,
 gint agg_transform_operator_add(agg_transform_t *T, agg_operation_t op,
 				gdouble umin, gdouble umax,
 				gdouble *p,
-				gchar **expr, gchar **dedu, gchar **dedv,
+				char **expr, char **dedu, char **dedv,
 				gint np) ;
 gint agg_transform_operators_write(FILE *f, agg_transform_t *T) ;
 gint agg_transform_apply(agg_transform_t *T, gdouble *xin, gdouble *xout) ;
@@ -860,13 +860,13 @@ gint agg_transform_operator_yscale(agg_operation_t op,
 				   
 gint agg_transform_axes(agg_axes_t axes, gdouble *xin, gdouble *xout) ;
 gint agg_transform_parse(agg_transform_t *T, agg_variable_t *p, gint np) ;
-agg_axes_t agg_axes_parse(gchar *str) ;
+agg_axes_t agg_axes_parse(char *str) ;
 
 gint agg_variable_write(FILE *f, agg_variable_t *v) ;
 agg_expression_data_t *agg_expression_data_new(gint nemax) ;
 gint agg_expression_data_variable_add(agg_expression_data_t *d,
 				      agg_variable_t *v) ;
-gpointer agg_expression_compile(gchar *e, agg_expression_data_t *d) ;
+gpointer agg_expression_compile(char *e, agg_expression_data_t *d) ;
 gdouble agg_expression_eval(gpointer e) ;
 gint agg_expression_data_compile(agg_expression_data_t *d) ;
 gint agg_expression_data_eval(agg_expression_data_t *d) ;
@@ -938,7 +938,7 @@ gint agg_mesh_surface_make(agg_mesh_t *w,
 			   gint nsec, gint nseg, gint pps,
 			   agg_surface_workspace_t *ws) ;
 gint agg_mesh_write_gmsh(FILE *f, agg_mesh_t *w,
-			 gchar *len, gint offp, gint offsp, gint offs,
+			 char *len, gint offp, gint offsp, gint offs,
 			 gboolean opencascade) ;
 gint agg_mesh_spline_ends(agg_mesh_t *w, gint s, gint *p0, gint *p1) ;
 gint agg_mesh_spline_interp_points(agg_mesh_t *w, gint s,
@@ -948,7 +948,7 @@ gboolean agg_mesh_splines_connected(agg_mesh_t *w,
 				    gint i0, gint i1, gint *p) ;
 gint agg_mesh_element_add(agg_mesh_t *w, gint s0, gint s1, gint s2, gint s3) ;
 gint agg_mesh_surface_add_triangle(agg_mesh_t *msh, gint isurf,
-				   gchar *args, gint pps,
+				   char *args, gint pps,
 				   agg_surface_workspace_t *w) ;
 gint agg_mesh_surface_blend_add(agg_mesh_t *m, gint iB, gint nsec, gint pps,
 				agg_surface_workspace_t *w) ;
@@ -965,15 +965,15 @@ gint agg_mesh_element_nodes(agg_mesh_t *m, gint e,
 			    gint *nodes, gint *nnodes, gint *s) ;
 
 agg_body_t *agg_body_new(gint ngmax, gint nsmax) ;
-gint agg_body_global_add(agg_body_t *b, gchar *var, gchar *def, gdouble val) ;
+gint agg_body_global_add(agg_body_t *b, char *var, char *def, gdouble val) ;
 gint agg_body_globals_write(FILE *f, agg_body_t *b) ;
 gint agg_body_globals_compile(agg_body_t *b) ;
 gint agg_body_globals_eval(agg_body_t *b) ;
-gint agg_body_read(agg_body_t *b, gchar *file, gboolean echo) ;
+gint agg_body_read(agg_body_t *b, char *file, gboolean echo) ;
 gint agg_body_surface_add(agg_body_t *b, agg_surface_t *S, agg_patch_t *P) ;
 gint agg_body_surfaces_list(FILE *f, agg_body_t *b) ;
 
-agg_grid_t agg_grid_parse(gchar *str) ;
+agg_grid_t agg_grid_parse(char *str) ;
 
 agg_surface_blend_t *agg_surface_blend_new(void) ;
 gint agg_surface_blend_evaluate(agg_surface_blend_t *B,
@@ -981,11 +981,11 @@ gint agg_surface_blend_evaluate(agg_surface_blend_t *B,
 				agg_surface_workspace_t *w) ;
 gint agg_hermite_eval(gdouble s, gdouble *H) ;
 
-gint agg_library_section_add(gchar *name, gchar *description,
+gint agg_library_section_add(char *name, char *description,
 			     agg_section_t *s) ;
-agg_section_t *agg_library_section_lookup(gchar *name, gchar **description) ;
+agg_section_t *agg_library_section_lookup(char *name, char **description) ;
 gint agg_library_sections_list(FILE *f, gboolean write_description) ;
-gint agg_library_section_write(FILE *f, gchar *name, gchar *description,
+gint agg_library_section_write(FILE *f, char *name, char *description,
 			       agg_section_t *s) ;
 gint agg_library_read(FILE *f) ;
 gint agg_library_write(FILE *f) ;
