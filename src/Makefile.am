@@ -23,19 +23,17 @@ libagg_la_SOURCES = \
 	variables.c \
 	surface.c \
 	naca.c \
+	intersection.c \
+	hefsi.c \
+	hefsi.h \
+	patch.c \
 	moller-tri.c \
+	mesh.c \
 	body.c \
+	blend.c \
 	library.c \
-	affine.c \
-	triangulate.c
-
-##	chebyshev.c \
-##	intersection.c \
-##	hefsi.c \
-##	hefsi.h \
-##	blend.c \
-## 	curve.c \
-
+	curve.c \
+	chebyshev.c
 
 include_HEADERS = \
 	agg.h

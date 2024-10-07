@@ -110,11 +110,9 @@ gpointer agg_expression_compile(char *e, agg_expression_data_t *d)
 
 {
   te_expr *expr ;
-  te_variable *data ;
   gint error ;
-
-  data = d->data ;
-  expr = te_compile(e, data, d->ne, &error) ;
+  
+  expr = te_compile(e, (te_variable *)(d->data), d->ne, &error) ;
   if ( expr == NULL ) {
     g_error("\n  %s: error at character %d, parsing \"%s\"",
 	    __FUNCTION__, error, e) ;

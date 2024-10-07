@@ -58,26 +58,26 @@ extern int minus1mod3[] ;
 #endif /*HAVE_TRIANGLE_API_H*/
 
 static gdouble point_sample(agg_sampling_t sample,
-			    gdouble tmin, gdouble tmax, gint nt, gint i)
+			    gdouble tmin, gdouble tmax, gdouble u)
 
 {
   gdouble t, tc ;
   
   if ( sample == AGG_SAMPLING_LINEAR ) {
-    t = tmin + (tmax - tmin)*i/nt ;
+    t = tmin + (tmax - tmin)*u ;
     return t ;
   }
   
   if ( sample == AGG_SAMPLING_COSINE ) {
-    t = tmax - (tmax - tmin)*(1+cos(M_PI*i/nt))*0.5 ;
-    /* t = tmin + 0.5*(tmax - tmin)*(1 - cos(M_PI*i/nt)) ; */
-    /* t = cos(M_PI*((gdouble)i/nt-1)) ; */
+    t = tmax - (tmax - tmin)*(1+cos(M_PI*u))*0.5 ;
+    /* t = tmin + 0.5*(tmax - tmin)*(1 - cos(M_PI*u)) ; */
+    /* t = cos(M_PI*((gdouble)u-1)) ; */
 
     return t ;
   }
 
   if ( sample == AGG_SAMPLING_COSINE_DOUBLE ) {
-    tc = (gdouble)i/nt ;
+    tc = (gdouble)u ;
     if ( tc < 0.5 ) {
       t = -0.5*(1.0 + cos(2.0*M_PI*tc)) ;
     } else {
@@ -87,6 +87,48 @@ static gdouble point_sample(agg_sampling_t sample,
     t = tmin + (tmax - tmin)*(1+t)*0.5 ;
 
     return t ;
+  }
+
+  g_assert_not_reached() ;
+  
+  return 0.0 ;
+}
+
+static gdouble point_sample_inverse(agg_sampling_t sample,
+				    gdouble tmin, gdouble tmax, gdouble t)
+
+{
+  gdouble u, tc ;
+  gdouble uc ;
+  
+  if ( sample == AGG_SAMPLING_LINEAR ) {
+    u = (t - tmin)/(tmax - tmin) ;
+
+    /* uc = point_sample(sample, tmin, tmax, u) ; */
+    
+    return u ;
+  }
+  
+  if ( sample == AGG_SAMPLING_COSINE ) {
+    g_assert_not_reached() ;
+    /* t = tmax - (tmax - tmin)*(1+cos(M_PI*i/nt))*0.5 ; */
+
+    /* return t ; */
+  }
+
+  if ( sample == AGG_SAMPLING_COSINE_DOUBLE ) {
+    tc = 2.0*(t - tmin)/(tmax - tmin) - 1.0 ;
+
+    if ( tc < 0 ) {
+      u = acos(-2.0*tc - 1.0)/2.0/M_PI ;
+    } else {
+      u = 1.0 - acos( 2.0*tc - 1.0)/2.0/M_PI ;
+    }
+
+    g_assert(!isnan(u)) ;
+    
+    /* uc = point_sample(sample, tmin, tmax, u) ; */
+    return u ;
   }
 
   g_assert_not_reached() ;
@@ -154,10 +196,10 @@ static void triangulate_regular(agg_mesh_t *m,
   nsp0 = agg_mesh_spline_number(m) ;
   for ( i = 0 ; i <= ns ; i ++ ) {
     s = point_sample(agg_triangulation_sampling_s(settings), smin, smax,
-		     ns, i) ;
+		     (gdouble)i/ns) ;
     for ( j = 0 ; j <= nt ; j ++ ) {
       t = point_sample(agg_triangulation_sampling_t(settings), tmin, tmax,
-		       nt, j) ;
+		       (gdouble)j/nt) ;
       agg_mesh_surface_point_add(m, iS, s, t, w) ;
     }
   }
@@ -730,5 +772,48 @@ gint agg_mesh_body(agg_mesh_t *m, agg_body_t *b, gint pps,
   /*   agg_mesh_surface_blend_add(m, i, 4, pps, w) ; */
   /* } */
 
+  return 0 ;
+}
+
+static void shapefunc(gdouble s, gdouble t, gdouble L[])
+
+{
+  L[0] = 1.0 - s - t ;
+  L[1] =       s     ;
+  L[2] =           t ;
+    
+  return ;
+}
+
+gint agg_surface_point_interp(agg_surface_t *S,
+			      agg_triangulation_settings_t *s,
+			      gdouble s0, gdouble t0, 
+			      gdouble s1, gdouble t1, 
+			      gdouble s2, gdouble t2, 
+			      gdouble u, gdouble v,
+			      gdouble *si, gdouble *ti)
+
+{
+  gdouble u0, v0, u1, v1, u2, v2, ui, vi, L[6] ;
+
+  u0 = point_sample_inverse(agg_triangulation_sampling_s(s),
+			    agg_surface_umin(S), agg_surface_umax(S), s0) ;
+  u1 = point_sample_inverse(agg_triangulation_sampling_s(s),
+			    agg_surface_umin(S), agg_surface_umax(S), s1) ;
+  u2 = point_sample_inverse(agg_triangulation_sampling_s(s),
+			    agg_surface_umin(S), agg_surface_umax(S), s2) ;
+  v0 = point_sample_inverse(agg_triangulation_sampling_t(s), -1, 1, t0) ;
+  v1 = point_sample_inverse(agg_triangulation_sampling_t(s), -1, 1, t1) ;
+  v2 = point_sample_inverse(agg_triangulation_sampling_t(s), -1, 1, t2) ;
+
+  shapefunc(u, v, L) ;
+
+  ui = L[0]*u0 + L[1]*u1 + L[2]*u2 ;
+  vi = L[0]*v0 + L[1]*v1 + L[2]*v2 ;
+
+  *si = point_sample(agg_triangulation_sampling_s(s), 
+		     agg_surface_umin(S), agg_surface_umax(S), ui) ;
+  *ti = point_sample(agg_triangulation_sampling_t(s), -1, 1, vi) ;  
+  
   return 0 ;
 }

@@ -137,7 +137,8 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 libagg_la_LIBADD =
 am_libagg_la_OBJECTS = bernstein.lo binomials.lo tinyexpr.lo \
 	section.lo transform.lo variables.lo surface.lo naca.lo \
-	moller-tri.lo body.lo library.lo affine.lo triangulate.lo
+	intersection.lo hefsi.lo patch.lo moller-tri.lo mesh.lo \
+	body.lo blend.lo library.lo curve.lo chebyshev.lo
 libagg_la_OBJECTS = $(am_libagg_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -162,12 +163,15 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/affine.Plo ./$(DEPDIR)/bernstein.Plo \
-	./$(DEPDIR)/binomials.Plo ./$(DEPDIR)/body.Plo \
-	./$(DEPDIR)/library.Plo ./$(DEPDIR)/moller-tri.Plo \
-	./$(DEPDIR)/naca.Plo ./$(DEPDIR)/section.Plo \
-	./$(DEPDIR)/surface.Plo ./$(DEPDIR)/tinyexpr.Plo \
-	./$(DEPDIR)/transform.Plo ./$(DEPDIR)/triangulate.Plo \
+am__depfiles_remade = ./$(DEPDIR)/bernstein.Plo \
+	./$(DEPDIR)/binomials.Plo ./$(DEPDIR)/blend.Plo \
+	./$(DEPDIR)/body.Plo ./$(DEPDIR)/chebyshev.Plo \
+	./$(DEPDIR)/curve.Plo ./$(DEPDIR)/hefsi.Plo \
+	./$(DEPDIR)/intersection.Plo ./$(DEPDIR)/library.Plo \
+	./$(DEPDIR)/mesh.Plo ./$(DEPDIR)/moller-tri.Plo \
+	./$(DEPDIR)/naca.Plo ./$(DEPDIR)/patch.Plo \
+	./$(DEPDIR)/section.Plo ./$(DEPDIR)/surface.Plo \
+	./$(DEPDIR)/tinyexpr.Plo ./$(DEPDIR)/transform.Plo \
 	./$(DEPDIR)/variables.Plo
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
@@ -372,11 +376,17 @@ libagg_la_SOURCES = \
 	variables.c \
 	surface.c \
 	naca.c \
+	intersection.c \
+	hefsi.c \
+	hefsi.h \
+	patch.c \
 	moller-tri.c \
+	mesh.c \
 	body.c \
+	blend.c \
 	library.c \
-	affine.c \
-	triangulate.c
+	curve.c \
+	chebyshev.c
 
 include_HEADERS = \
 	agg.h
@@ -498,18 +508,23 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/affine.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/bernstein.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/binomials.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/blend.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/body.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chebyshev.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/curve.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hefsi.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/intersection.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/library.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mesh.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moller-tri.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/naca.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/patch.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/section.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/surface.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tinyexpr.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/transform.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/triangulate.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/variables.Plo@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
@@ -698,18 +713,23 @@ clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
 	mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ./$(DEPDIR)/affine.Plo
-	-rm -f ./$(DEPDIR)/bernstein.Plo
+		-rm -f ./$(DEPDIR)/bernstein.Plo
 	-rm -f ./$(DEPDIR)/binomials.Plo
+	-rm -f ./$(DEPDIR)/blend.Plo
 	-rm -f ./$(DEPDIR)/body.Plo
+	-rm -f ./$(DEPDIR)/chebyshev.Plo
+	-rm -f ./$(DEPDIR)/curve.Plo
+	-rm -f ./$(DEPDIR)/hefsi.Plo
+	-rm -f ./$(DEPDIR)/intersection.Plo
 	-rm -f ./$(DEPDIR)/library.Plo
+	-rm -f ./$(DEPDIR)/mesh.Plo
 	-rm -f ./$(DEPDIR)/moller-tri.Plo
 	-rm -f ./$(DEPDIR)/naca.Plo
+	-rm -f ./$(DEPDIR)/patch.Plo
 	-rm -f ./$(DEPDIR)/section.Plo
 	-rm -f ./$(DEPDIR)/surface.Plo
 	-rm -f ./$(DEPDIR)/tinyexpr.Plo
 	-rm -f ./$(DEPDIR)/transform.Plo
-	-rm -f ./$(DEPDIR)/triangulate.Plo
 	-rm -f ./$(DEPDIR)/variables.Plo
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
@@ -756,18 +776,23 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ./$(DEPDIR)/affine.Plo
-	-rm -f ./$(DEPDIR)/bernstein.Plo
+		-rm -f ./$(DEPDIR)/bernstein.Plo
 	-rm -f ./$(DEPDIR)/binomials.Plo
+	-rm -f ./$(DEPDIR)/blend.Plo
 	-rm -f ./$(DEPDIR)/body.Plo
+	-rm -f ./$(DEPDIR)/chebyshev.Plo
+	-rm -f ./$(DEPDIR)/curve.Plo
+	-rm -f ./$(DEPDIR)/hefsi.Plo
+	-rm -f ./$(DEPDIR)/intersection.Plo
 	-rm -f ./$(DEPDIR)/library.Plo
+	-rm -f ./$(DEPDIR)/mesh.Plo
 	-rm -f ./$(DEPDIR)/moller-tri.Plo
 	-rm -f ./$(DEPDIR)/naca.Plo
+	-rm -f ./$(DEPDIR)/patch.Plo
 	-rm -f ./$(DEPDIR)/section.Plo
 	-rm -f ./$(DEPDIR)/surface.Plo
 	-rm -f ./$(DEPDIR)/tinyexpr.Plo
 	-rm -f ./$(DEPDIR)/transform.Plo
-	-rm -f ./$(DEPDIR)/triangulate.Plo
 	-rm -f ./$(DEPDIR)/variables.Plo
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
