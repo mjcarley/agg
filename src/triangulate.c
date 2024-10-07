@@ -672,3 +672,63 @@ gint agg_mesh_spline_from_endpoints(agg_mesh_t *m, gint p0, gint p1)
   
   return 0 ;
 }
+
+/** 
+ * Generate a mesh for surfaces and surface blends on a body
+ * 
+ * @param m mesh to generate;
+ * @param b body containing surface data;
+ * @param pps points per spline on element edges;
+ * @param w workspace for point evaluation.
+ * 
+ * @return 0 on success.
+ */
+
+gint agg_mesh_body(agg_mesh_t *m, agg_body_t *b, gint pps,
+		   agg_surface_workspace_t *w)
+
+{
+  gint i, j ;
+  gdouble area ;
+  char args[64] ;
+
+  agg_mesh_surface_number(m) = 0 ;
+  for ( i = 0 ; i < agg_body_surface_number(b); i ++ ) {
+    agg_mesh_surface(m,i) = agg_body_surface(b,i) ;
+    agg_mesh_surface_number(m) ++ ;
+    agg_mesh_surface_triangulate(m, i,
+				 agg_body_triangulation_settings(b,i), w) ;
+  }
+  
+  /* fprintf(stderr, "%s: added %d surfaces\n", __FUNCTION__, */
+  /* 	  agg_mesh_surface_number(m)) ; */
+  
+  /* for ( i = 0 ; i < agg_body_surface_number(b); i ++ ) { */
+  /*   /\* fprintf(stderr, "%s: adding surface %d\n", __FUNCTION__, i) ; *\/ */
+  /*   for ( j = i+1 ; j < agg_body_surface_number(b); j ++ ) { */
+  /*     if ( agg_surface_patch_trim(agg_body_surface(b,i), agg_body_patch(b,i), */
+  /* 				  0.05, */
+  /* 				  agg_body_surface(b,j), agg_body_patch(b,j), */
+  /* 				  0.05, &(m->B[m->nb]), w) ) { */
+  /* 	m->nb ++ ; */
+  /*     } */
+  /*   } */
+  /* } */
+  
+  /* for ( i = 0 ; i < agg_mesh_surface_number(m) ; i ++ ) { */
+  /*   g_assert(agg_surface_grid(agg_body_surface(b,i)) != AGG_GRID_UNDEFINED) ; */
+  /*   area = agg_surface_grid_element_area(agg_body_surface(b,i)) ; */
+  /*   area = 0.01 ; */
+  /*   sprintf(args, "pza%lg", area) ; */
+  /*   /\* fprintf(stderr, "%s: triangulating surface %d with \"%s\"\n", *\/ */
+  /*   /\* 	    __FUNCTION__, i, args) ;     *\/ */
+  /*   agg_mesh_surface_add_triangle(m, i, args, pps, w) ; */
+  /* } */
+
+  /* for ( i = 0 ; i < agg_mesh_surface_blend_number(m) ; i ++ ) { */
+  /*   /\* fprintf(stderr, "%s: building blend %d\n", __FUNCTION__, i) ; *\/ */
+  /*   agg_mesh_surface_blend_add(m, i, 4, pps, w) ; */
+  /* } */
+
+  return 0 ;
+}
