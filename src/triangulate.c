@@ -597,3 +597,78 @@ gboolean agg_mesh_spline_zero_length(agg_mesh_t *m, gint s)
   
   return FALSE ;
 }
+
+/** 
+ * Find the oriented nodes of an element in an ::agg_mesh_t
+ * 
+ * @param m mesh containing elements to be queried;
+ * @param e element index;
+ * @param nodes on exit contains nodes of element \e in cyclic order;
+ * @param nnodes on exit contains number of nodes in \a nodes;
+ * @param s index in \a m of surface containing nodes.
+ * 
+ * @return 0 on success.
+ */
+
+gint agg_mesh_element_nodes(agg_mesh_t *m, gint e,
+			    gint *nodes, gint *nnodes, gint *s)
+
+{
+  gint i, *el, *sp, len, tag ;
+
+  el = agg_mesh_element(m, e) ;
+  *nnodes = agg_mesh_element_size(el) ;
+
+  for ( i = 0 ; i < (*nnodes) ; i ++ ) {
+    sp = agg_mesh_spline(m, ABS(el[i])) ;
+    len = agg_mesh_spline_length(m, ABS(el[i])) ;
+    if ( el[i] > 0 ) {
+      nodes[i] = sp[0] ;
+    } else {
+      nodes[i] = sp[len-1] ;
+    }
+    tag = agg_mesh_point_tag(m, nodes[i]) ;
+    if ( i > 0 ) {
+      if ( (*s) != tag )
+	g_error("%s: element nodes not all from same surface",
+		__FUNCTION__) ;
+    }
+    *s = tag ;
+  }
+
+  for ( i = 0 ; i < (*nnodes)-1 ; i ++ ) {
+    gint sc ;
+    sc = agg_mesh_spline_from_endpoints(m, nodes[i], nodes[i+1]) ;
+    if ( ABS(sc) != ABS(el[i]) ) {
+      g_error("%s: nodes do not match spline endpoints", __FUNCTION__) ;
+    }
+  }
+  
+  return 0 ;
+}
+
+/** 
+ * Find a spline from its endpoints
+ * 
+ * @param m a mesh containing a set of splines;
+ * @param p0 index of a point of \a m;
+ * @param p1 index of a point of \a m.
+ * 
+ * @return index of a spline which has endpoints \a p0 and \a p1, or 0
+ * if there is no such spline.
+ */
+
+gint agg_mesh_spline_from_endpoints(agg_mesh_t *m, gint p0, gint p1)
+
+{
+  gint i, *sp, len ;
+
+  for ( i = 1 ; i < agg_mesh_spline_number(m) ; i ++ ) {
+    sp = agg_mesh_spline(m, i) ;
+    len = agg_mesh_spline_length(m, i) ;
+    if ( sp[0] == p0 && sp[len-1] == p1 ) return  i ;
+    if ( sp[0] == p1 && sp[len-1] == p0 ) return -i ;
+  }
+  
+  return 0 ;
+}
