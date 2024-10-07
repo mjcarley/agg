@@ -9,29 +9,36 @@ global {
  taper = 0.25
  twist = "5*pi/180"
  xle = "0.35*len"
- yle = "-0.0*radius"
+ yle = "-0.4*radius"
  del = "span/100"
 }
 
+sample("SAMPLING_COSINE", "SAMPLING_COSINE_DOUBLE")
+triangulation("TRIANGULATION_GRID_REGULAR", 17, 33)
+
 surface {
+  name("fuselage")
+  section(0, "circle")
+  transform("translate", -0.5, 0, 0)
+  transform("scale", "radius")
+  transform("scale", "2*u^(0.5)*(1-u)^0.5")
+  transform("translate", 0, 0, "len*u")
+  axes("zxy")
+}
+
+surface {
+  limits(0.3, 0.8)
   name("wing:right")
-  #section(0.0, "aerofoil", 0.5, 0.2, 0.0)
-  #section(0.3, "aerofoil", 0.5, 0.12, 0.0)
-  #section(0.9, "aerofoil", 0.5, 0.08, 0.0)
-  section(0, "ellipse", 0.2)
-  section(0.3, "ellipse", 0.12)
-  section(0.9, "ellipse", 0.08)
-  transform("shrink", 0, 0, "1+u*(taper-1)")
-  transform(0.0,0.9,"scale", "root")
-  transform(0.9, 1, "xscale", "root*sqrt((1-u)/0.1)^2")
-  transform(0.9, 1, "yscale", "root*sqrt((1-u)/0.1)")
-  ##transform("yscale", "(1-u)^(1/8)")  
-  ##transform("rotate", 0, 0, "twist*u")
+  section(0.0, "aerofoil", 0.5, 0.2, 0.0)
+  section(0.3, "aerofoil", 0.5, 0.12, 0.0)
+  section(0.9, "aerofoil", 0.5, 0.08, 0.0)
+  #section(0, "ellipse", 0.2)
+  transform("scale", "1+u*(taper-1)")
+  transform("scale", "root")
+  transform("rotate_z", "twist*u")
   transform("translate", "xle + span*sin(sweep)*u",
   			 "yle+span*sin(dihedral)*u",
 			 "-del - span*u")
-  patch("hemispherical", "nowrap", "wrap")
-  grid("hemisphere-uv", 16, 16)
   invert()
 }
  
@@ -41,30 +48,11 @@ surface {
   section(0.3, "aerofoil", 0.5, 0.12, 0.0)
   section(0.9, "aerofoil", 0.5, 0.08, 0.0)
   #section(0, "ellipse", 0.2)
-  #section(0.3, "ellipse", 0.12)
-  #section(0.9, "ellipse", 0.08)
-  transform("shrink", 0, 0, "1+u*(taper-1)")
-  transform(0.0,0.9,"scale", "root")
-  transform(0.9, 1, "xscale", "root*sqrt((1-u)/0.1)")
-  transform(0.9, 1, "yscale", "root*sqrt((1-u)/0.1)")
-  transform("rotate", 0, 0, "twist*u")
+  transform("scale", "1+u*(taper-1)")
+  transform("scale", "root")
+  transform("rotate_z", "twist*u")
   transform("translate", "xle + span*sin(sweep)*u",
   			 "yle+span*sin(dihedral)*u",
 			 "del + span*u")
-  patch("hemispherical", "nowrap", "wrap")
-  grid("hemisphere-uv", 16, 16)
 }
 
-
-surface {
-  name("fuselage")
-  section(0, "circle")
-  transform("translate", -0.5, 0, 0)
-  transform("scale", "radius")
-  transform("scale", "2*u^(0.5)*(1-u)^0.5")
-  transform("translate", 0, 0, "len*u")
-  patch("spherical", "nowrap", "wrap")
-  axes("zxy")
-  ##grid("triangle", 0.001)
-  grid("sphere-uv", 32, 64)
-}

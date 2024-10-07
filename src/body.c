@@ -40,14 +40,18 @@ void _agg_section_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
 			gpointer data[]) ;
 void _agg_transform_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
 			  gpointer data[]) ;
-void _agg_patch_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
-		      gpointer data[]) ;
 void _agg_axes_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
 		     gpointer data[]) ;
 void _agg_grid_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
 		     gpointer data[]) ;
 void _agg_invert_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
 		       gpointer data[]) ;
+void _agg_limits_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
+		       gpointer data[]) ;
+void _agg_sample_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
+		       gpointer data[]) ;
+void _agg_triangulation_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
+			      gpointer data[]) ;
 
 typedef void (*block_read_func_t)(GScanner *scanner, agg_body_t *b,
 				  gboolean echo, gpointer data[]) ;
@@ -61,10 +65,12 @@ static const struct {
   {"name",      _agg_name_parse      },
   {"section",   _agg_section_parse   },
   {"transform", _agg_transform_parse },
-  {"patch",     _agg_patch_parse     },
   {"axes",      _agg_axes_parse      },
   {"grid",      _agg_grid_parse      },
   {"invert",    _agg_invert_parse    },
+  {"limits",    _agg_limits_parse    },
+  {"sample",    _agg_sample_parse    },
+  {"triangulation",    _agg_triangulation_parse    },
   {NULL, NULL}
 } ;
 
@@ -75,7 +81,7 @@ static const struct {
   (((_t)== G_TOKEN_RIGHT_PAREN) || ((_t)== G_TOKEN_RIGHT_CURLY) ||	\
    ((_t)== G_TOKEN_RIGHT_BRACE))
 #define token_is_bracket(_t)						\
-  ((token_is_left_bracket((_t))) ||(token_is_right_bracket((_t))))
+  ((token_is_left_bracket((_t))) || (token_is_right_bracket((_t))))
 #define token_is_numeric(_t)						\
   ((_t) == '-' || (_t) == G_TOKEN_INT || (_t) == G_TOKEN_FLOAT )
 
@@ -340,9 +346,10 @@ void _agg_transform_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
 
 {
   agg_surface_t *S ;
-  gint srf, nparams, i ;
+  gint srf, nparams ;
   agg_variable_t params[64] ;
   agg_transform_t *T ;
+  agg_affine_t *A ;
   
   srf = agg_body_surface_number(b) - 1 ;
   S = agg_body_surface_last(b) ;
@@ -370,41 +377,78 @@ void _agg_transform_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
 	    __FUNCTION__, g_scanner_cur_line(scanner)) ;
   }
 
-  agg_transform_parse(T, params, nparams) ;
-  
-  if ( echo ) {
-    fprintf(stderr, "line %u: transform \"%s\" added to surface %d\n",
-	    g_scanner_cur_line(scanner),
-	    agg_variable_definition(&(params[0])), srf) ;
-    fprintf(stderr, "parameters: ") ;
-    for ( i = 0 ; i < nparams-1 ; i ++ ) {
-      agg_variable_write(stderr, &(params[i])) ;
-      fprintf(stderr, ", ") ;
-    }      
-    agg_variable_write(stderr, &(params[nparams-1])) ;
-    fprintf(stderr, "\n") ;
-  }
+  A = agg_affine_new(1) ;
+  agg_affine_parse(A, params, nparams) ;
+  agg_affine_differentiate(A, "u") ;
+  agg_transform_affine_add(T, A) ;
 
-  return ;
-}
-
-void _agg_patch_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
-		      gpointer data[])
-
-{
-  gint nparams ;
-  agg_variable_t params[64] ;
-
-  token_read_and_check(scanner, G_TOKEN_LEFT_PAREN, "missing left bracket") ;
-
-  parameter_list_parse(scanner, params, &nparams) ;
-  agg_patch_parse(agg_body_patch_last(b), params, nparams) ;
-  
   return ;
 }
 
 void _agg_axes_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
 		     gpointer data[])
+
+{
+  gint nparams ;
+  agg_variable_t params[64] ;
+  agg_axes_t axes ;
+  agg_affine_t *A ;
+  agg_surface_t *S ;
+  agg_transform_t *T ;
+  
+  token_read_and_check(scanner, G_TOKEN_LEFT_PAREN, "missing left bracket") ;
+
+  S = agg_body_surface_last(b) ;
+  T = agg_surface_transform(S) ;
+  parameter_list_parse(scanner, params, &nparams) ;
+
+  if ( nparams > 1 )
+    g_error("%s: axes takes one parameter, line %u",
+	    __FUNCTION__, g_scanner_cur_line(scanner)) ;
+
+  if ( agg_variable_definition(&(params[0])) == NULL )
+    g_error("%s: axes must be specified by string, line %u",
+	    __FUNCTION__, g_scanner_cur_line(scanner)) ;
+  
+  axes = agg_axes_parse(agg_variable_definition(&(params[0]))) ;
+
+  if ( S == AGG_AXES_UNDEFINED )
+    g_error("%s: unrecognized axes \"%s\" on line %u",
+	    __FUNCTION__, agg_variable_definition(&(params[0])),
+	    g_scanner_cur_line(scanner)) ;
+
+  A = agg_affine_new(1) ;
+  agg_affine_axes(A, axes) ;
+  agg_affine_differentiate(A, "u") ;
+  agg_transform_affine_add(T, A) ;
+  
+  return ;
+}
+
+void _agg_invert_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
+		       gpointer data[])
+
+{
+  gint nparams ;
+  agg_variable_t params[64] ;
+  agg_triangulation_settings_t *settings ;
+  
+  token_read_and_check(scanner, G_TOKEN_LEFT_PAREN, "missing left bracket") ;
+
+  settings = agg_body_triangulation_settings(b,agg_body_surface_number(b)-1) ;
+  parameter_list_parse(scanner, params, &nparams) ;
+
+  if ( nparams > 0 )
+    g_error("%s: invert takes no parameters, line %u",
+	    __FUNCTION__, g_scanner_cur_line(scanner)) ;
+
+  agg_triangulation_invert(settings) = TRUE ;
+  
+  return ;
+}
+
+void _agg_limits_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
+		       gpointer data[])
 
 {
   gint nparams ;
@@ -417,43 +461,155 @@ void _agg_axes_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
   
   parameter_list_parse(scanner, params, &nparams) ;
 
-  if ( nparams > 1 )
-    g_error("%s: axes takes one parameter, line %u",
+  if ( nparams != 2 ) {
+    g_error("%s: limits requires two parameters, line %u",
 	    __FUNCTION__, g_scanner_cur_line(scanner)) ;
-
-  if ( agg_variable_definition(&(params[0])) == NULL )
-    g_error("%s: axes must be specified by string, line %u",
+  }
+    
+  if ( agg_variable_definition(&(params[0])) != NULL )
+    g_error("%s: lower u limit must be constant, line %u",
 	    __FUNCTION__, g_scanner_cur_line(scanner)) ;
   
-  agg_surface_axes(S) = agg_axes_parse(agg_variable_definition(&(params[0]))) ;
+  if ( agg_variable_definition(&(params[1])) != NULL )
+    g_error("%s: upper u limit must be constant, line %u",
+	    __FUNCTION__, g_scanner_cur_line(scanner)) ;
 
-  if ( agg_surface_axes(S) == AGG_AXES_UNDEFINED )
-    g_error("%s: unrecognized axes \"%s\" on line %u",
-	    __FUNCTION__, agg_variable_definition(&(params[0])),
-	    g_scanner_cur_line(scanner)) ;
+  agg_surface_umin(S) = agg_variable_value(&(params[0])) ;
+  agg_surface_umax(S) = agg_variable_value(&(params[1])) ;
   
   return ;
 }
 
-void _agg_invert_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
+static agg_sampling_t sample_parse(char *str)
+
+{
+  if ( strcmp(str, "SAMPLING_LINEAR") == 0 ) return AGG_SAMPLING_LINEAR ;
+  if ( strcmp(str, "SAMPLING_COSINE") == 0 ) return AGG_SAMPLING_COSINE ;
+  if ( strcmp(str, "SAMPLING_COSINE_DOUBLE") == 0 )
+    return AGG_SAMPLING_COSINE_DOUBLE ;
+    
+  return AGG_SAMPLING_UNDEFINED ;
+}
+
+void _agg_sample_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
 		       gpointer data[])
 
 {
   gint nparams ;
   agg_variable_t params[64] ;
-  agg_patch_t *P ;
+  agg_triangulation_settings_t *s ;
   
   token_read_and_check(scanner, G_TOKEN_LEFT_PAREN, "missing left bracket") ;
 
-  P = agg_body_patch_last(b) ;
+  if ( agg_body_surface_number(b) == 0 ) {
+    s = agg_body_triangulation_settings_default(b) ;
+  } else {
+    s = agg_body_triangulation_settings(b,agg_body_surface_number(b)-1) ;
+  }
   
   parameter_list_parse(scanner, params, &nparams) ;
 
-  if ( nparams > 0 )
-    g_error("%s: invert takes no parameters, line %u",
+  if ( nparams != 2 ) {
+    g_error("%s: sampling requires two parameters, line %u",
 	    __FUNCTION__, g_scanner_cur_line(scanner)) ;
+  }
 
-  agg_patch_invert(P) = TRUE ;
+  if ( agg_variable_definition(&(params[0])) == NULL ) {
+    g_error("%s: u sampling mode must be a string", __FUNCTION__) ;
+  }
+  if ( agg_variable_definition(&(params[1])) == NULL ) {
+    g_error("%s: v sampling mode must be a string", __FUNCTION__) ;
+  }
+
+  if ( (agg_triangulation_sampling_s(s) =
+	sample_parse(agg_variable_definition(&(params[0])))) ==
+       AGG_SAMPLING_UNDEFINED ) {
+    g_error("%s: unrecognised sampling mode \"%s\"",
+	    __FUNCTION__, agg_variable_definition(&(params[0]))) ;
+  }
+  if ( (agg_triangulation_sampling_t(s) =
+	sample_parse(agg_variable_definition(&(params[1])))) ==
+       AGG_SAMPLING_UNDEFINED ) {
+    g_error("%s: unrecognised sampling mode \"%s\"",
+	    __FUNCTION__, agg_variable_definition(&(params[1]))) ;
+  }
+  
+  return ;
+}
+
+static agg_triangulation_t triangulation_parse(char *str)
+
+{
+  if ( strcmp(str, "TRIANGULATION_GRID_REGULAR") == 0 )
+    return AGG_TRIANGULATION_GRID_REGULAR ;
+  
+  return AGG_TRIANGULATION_UNDEFINED ;
+}
+
+void _agg_triangulation_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
+			      gpointer data[])
+
+{
+  gint nparams ;
+  agg_variable_t params[64] ;
+  agg_triangulation_settings_t *s ;
+  
+  token_read_and_check(scanner, G_TOKEN_LEFT_PAREN, "missing left bracket") ;
+
+  if ( agg_body_surface_number(b) == 0 ) {
+    s = agg_body_triangulation_settings_default(b) ;
+  } else {
+    s = agg_body_triangulation_settings(b,agg_body_surface_number(b)-1) ;
+  }
+  
+  parameter_list_parse(scanner, params, &nparams) ;
+
+  if ( nparams < 1) {
+    g_error("%s: triangulation requires at least one parameter, line %u",
+	    __FUNCTION__, g_scanner_cur_line(scanner)) ;
+  }
+
+  if ( agg_variable_definition(&(params[0])) == NULL ) {
+    g_error("%s: triangulation mode must be a string", __FUNCTION__) ;
+  }
+
+  if ( (agg_triangulation_type(s) =
+	triangulation_parse(agg_variable_definition(&(params[0])))) ==
+       AGG_TRIANGULATION_UNDEFINED ) {
+    g_error("%s: unrecognised triangulation mode \"%s\"",
+	    __FUNCTION__, agg_variable_definition(&(params[0]))) ;
+  }
+
+  switch ( agg_triangulation_type(s) ) {
+  default: g_assert_not_reached() ; break ;
+  case AGG_TRIANGULATION_GRID_REGULAR:
+    if ( nparams < 3 ) {
+      g_error("%s: regular grid takes at least two more arguments",
+	      __FUNCTION__) ;
+    }
+    if ( agg_variable_definition(&(params[1])) != NULL ||
+	 agg_variable_definition(&(params[2])) != NULL ) {
+      g_error("%s: regular grid arguments must be numerical constants", 
+	      __FUNCTION__) ;
+    }
+    agg_triangulation_section_number(s) =
+      (gint)agg_variable_value(&(params[1])) ;
+    agg_triangulation_section_point_number(s) =
+      (gint)agg_variable_value(&(params[2])) ;
+    if ( nparams < 4 ) {
+      agg_triangulation_points_per_spline(s) = 2 ;
+      break ;
+    }
+    if ( agg_variable_definition(&(params[3])) != NULL ) {
+      g_error("%s: number of points per spline must be numerical constant", 
+	      __FUNCTION__) ;
+    }
+    agg_triangulation_points_per_spline(s) =
+      (gint)agg_variable_value(&(params[3])) ;
+    break ;
+  }
+
+  /*catch simple errors*/
   
   return ;
 }
@@ -664,7 +820,6 @@ void _agg_surface_read(GScanner *scanner, agg_body_t *b, gboolean echo,
 {
   GTokenType token ;
   agg_surface_t *S ;
-  agg_patch_t *P ;
   block_read_func_t func ;
   agg_transform_t *T ;
   
@@ -673,8 +828,16 @@ void _agg_surface_read(GScanner *scanner, agg_body_t *b, gboolean echo,
   token = g_scanner_get_next_token(scanner) ;
 
   S = agg_surface_new(64) ;
-  P = agg_patch_new() ;
-  agg_body_surface_add(b, S, P) ;
+  /*default values, which may be overriden limits*/
+  agg_surface_umin(S) = 0.0 ; 
+  agg_surface_umax(S) = 1.0 ; 
+
+  /*inherit any default triangulation settings from the body*/
+  memcpy(agg_body_triangulation_settings(b,agg_body_surface_number(b)),
+	 agg_body_triangulation_settings_default(b),
+	 sizeof(agg_triangulation_settings_t)) ;
+  
+  agg_body_surface_add(b, S) ;
 
   T = agg_surface_transform(S) ;
   agg_transform_add_global_variables(T,
@@ -709,10 +872,6 @@ void _agg_surface_read(GScanner *scanner, agg_body_t *b, gboolean echo,
     fprintf(stderr, "line %u: surface read\n", g_scanner_cur_line(scanner)) ;
   g_scanner_get_next_token(scanner) ;
 
-  /*initialize anything that needs doing*/
-  agg_surface_umin(S) = 0.0 ; 
-  agg_surface_umax(S) = 1.0 ; 
-
   agg_expression_data_compile(T->e) ;
   agg_transform_expressions_compile(T) ;
 
@@ -739,14 +898,15 @@ agg_body_t *agg_body_new(gint ngmax, gint nsmax)
 
 {
   agg_body_t *b ;
-  
+
   b = (agg_body_t *)g_malloc0(sizeof(agg_body_t)) ;
 
   b->g = (agg_variable_t *)g_malloc0(ngmax*sizeof(agg_variable_t)) ;
 
   b->S = (agg_surface_t **)g_malloc(nsmax*sizeof(agg_surface_t *)) ;
-  b->P = (agg_patch_t **)g_malloc(nsmax*sizeof(agg_patch_t *)) ;
   b->names = (char **)g_malloc(nsmax*sizeof(char *)) ;
+  b->settings = (agg_triangulation_settings_t *)
+    g_malloc(nsmax*sizeof(agg_triangulation_settings_t)) ;
 
   b->e = agg_expression_data_new(ngmax) ;
   b->e->ne = 0 ;
@@ -964,16 +1124,15 @@ gint agg_body_read(agg_body_t *b, char *file, gboolean echo)
  * 
  * @param b ::agg_body_t to which surface is to be added;
  * @param S an ::agg_surface_t;
- * @param P ::agg_patch_t for mapping of surface parameters.
  * 
  * @return 0 on success.
  */
 
-gint agg_body_surface_add(agg_body_t *b, agg_surface_t *S, agg_patch_t *P)
+gint agg_body_surface_add(agg_body_t *b, agg_surface_t *S)
 
 {
   gint ns ;
-
+  
   ns = agg_body_surface_number(b) ;
   if ( ns >= agg_body_surface_number_max(b) ) {
     g_error("%s: not enough space for surface (%d allocated)",
@@ -981,7 +1140,6 @@ gint agg_body_surface_add(agg_body_t *b, agg_surface_t *S, agg_patch_t *P)
   }
 
   agg_body_surface(b,ns) = S ;
-  agg_body_patch(b,ns) = P ;
 
   agg_body_surface_number(b) ++ ;
   

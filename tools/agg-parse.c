@@ -34,6 +34,7 @@ static void print_help_message(FILE *f, gint pps)
   fprintf(f,
 	  "Options:\n\n"
 	  "  -h print this message and exit;\n"
+	  "  -e echo processing of file to stderr\n"
 	  "  -G # GMSH .geo output file name\n"
 	  "  -p # number of points per spline in parsed geometry mesh (%d)\n"
 	  "  -S list available sections\n"
@@ -53,6 +54,8 @@ static agg_transform_t *transform_parse(char *str)
   agg_variable_t p[32] = {0} ;
   gint i, np ;
 
+  g_assert_not_reached() ;
+  
   T = agg_transform_new(8) ;
 
   g_strdelimit (str, "(),", ' ') ;
@@ -122,21 +125,48 @@ static void section_write(FILE *f, char *str, agg_transform_t *T,
   return ;
 }
 
+static void body_write_points(FILE *f, agg_body_t *b,
+			      agg_surface_workspace_t *w)
+
+{
+  gint i, j, k, nu, nv ;
+  gdouble u, v, x[3] ;
+  agg_surface_t *S ;
+
+  nu = 32 ; nv = 128 ;
+  for ( i = 0 ; i < agg_body_surface_number(b) ; i ++ ) {
+    S = agg_body_surface(b, i) ;
+
+    for ( j = 0 ; j <= nu ; j ++ ) {
+      u = agg_surface_umin(S) +
+	(agg_surface_umax(S) - agg_surface_umin(S))*j/nu ;
+      for ( k = 0 ; k <= nv ; k ++ ) {
+	v = -1 + 2.0*k/nv ;
+	agg_surface_point_eval(S, u, v, x, w) ;
+	fprintf(f, "%e %e %e\n", x[0], x[1], x[2]) ;
+      }
+    }
+    
+  }
+	  
+  return ;
+}
+
 gint main(gint argc, char **argv)
 
 {
   agg_body_t *b ;
   agg_mesh_t *m ;
   char *file, *gfile, ch, *section, *transform, *opfmt ;
-  gint pps, offp, offsp, offs ;
+  gint pps, offp, offsp, offs, i ;
   agg_surface_workspace_t *w ;
   agg_transform_t *T ;
   FILE *output ;
-  gboolean echo ;
+  gboolean echo, write_points ;
   
   progname = g_strdup(g_path_get_basename(argv[0])) ;
 
-  echo = FALSE ;
+  echo = FALSE ; write_points = FALSE ;
 
   pps = 2 ;
   offp = offsp = offs = 1 ;
@@ -146,12 +176,14 @@ gint main(gint argc, char **argv)
   opfmt = NULL ;
   T = NULL ;
   
-  while ( (ch = getopt(argc, argv, "hG:o:p:Ss:Tt:")) != EOF ) {
+  while ( (ch = getopt(argc, argv, "heG:o:Pp:Ss:Tt:")) != EOF ) {
     switch (ch) {
     default: g_assert_not_reached() ; break ;
     case 'h': print_help_message(stderr, pps) ; return 0 ; break ;
+    case 'e': echo = TRUE ; break ;
     case 'G': gfile = g_strdup(optarg) ; break ;
     case 'o': opfmt = g_strdup(optarg) ; break ;
+    case 'P': write_points = TRUE ; break ;
     case 'p': pps = atoi(optarg) ; break ;
     case 's': section = g_strdup(optarg) ; break ;
     case 'S':
@@ -160,7 +192,7 @@ gint main(gint argc, char **argv)
       return 0 ;
     case 'T':
       fprintf(stderr, "%s: available transforms\n\n", progname) ;
-      agg_transforms_list(stderr) ;
+      agg_affine_list(stderr, "  ", "\n") ;
       return 0 ;
       break ;
     case 't': transform = g_strdup(optarg) ; break ;
@@ -198,8 +230,20 @@ gint main(gint argc, char **argv)
     agg_body_surfaces_list(stderr, b) ;
   }
 
+  if ( write_points ) {
+    body_write_points(stdout, b, w) ;
+    
+    return 0 ;
+  }
+  
   m = agg_mesh_new(65536, 65536, 65536) ;
-  agg_mesh_body(m, b, pps, w) ;
+  /* agg_mesh_body(m, b, pps, w) ; */
+  for ( i = 0 ; i < agg_body_surface_number(b) ; i ++ ) {
+    agg_mesh_surface(m,i) = agg_body_surface(b,i) ;
+    agg_mesh_surface_number(m) ++ ;
+    agg_mesh_surface_triangulate(m, i,
+				 agg_body_triangulation_settings(b,i), w) ;
+  }
 
   if ( gfile != NULL ) {
     output = fopen(gfile, "w") ;

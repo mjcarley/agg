@@ -24,7 +24,9 @@
 
 #include <agg.h>
 
-#include "hefsi.h"
+#include "agg-private.h"
+
+/* #include "hefsi.h" */
 
 const char *tests[] = {"bernstein",
 			"circle",
@@ -37,6 +39,10 @@ const char *tests[] = {"bernstein",
 			"fit",
 			"section_fit",
 			"derivatives",
+			"affine",
+			"intersection",
+			"section_interp",
+			"surface_diff",
 			""} ;
 
 static void surface_sphere(agg_surface_t *S, gdouble x, gdouble y, gdouble z,
@@ -44,7 +50,9 @@ static void surface_sphere(agg_surface_t *S, gdouble x, gdouble y, gdouble z,
 
 {
   gdouble u, p[3] ;
+  gint i ;
   agg_transform_t *T ;
+  agg_affine_t *A ;
   char *expr[8] = {NULL} ;
 
   u = 0.0 ;
@@ -52,28 +60,38 @@ static void surface_sphere(agg_surface_t *S, gdouble x, gdouble y, gdouble z,
   T = agg_surface_transform(S) ;
   agg_surface_section_add(S, s, u) ;
   /*centre on (0,0): circle of radius 1/2*/
+  A = agg_affine_new(0) ;
   p[0] = -0.5 ; p[1] = 0 ; p[2] = 0 ;
-  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, 0, 1, p, expr,
-			     NULL, NULL, 3) ;
+  expr[0] = NULL ; expr[1] = NULL ; expr[2] = NULL ;
+  agg_affine_translation(A, p, expr, 3) ;
+  agg_transform_affine_add(T, A) ;
   /*scale circle radius along z axis: circle of radius 1/2 at u=1/2 */
-  p[0] =  0.0 ; p[1] = 0.0 ;
-  expr[2] = "2*sqrt(u*(1-u))" ;
-  agg_transform_operator_add(T, AGG_TRANSFORM_SHRINK, 0, 1, p, expr,
-			     NULL, NULL, 3) ;
-  /*shift centre to z=0*/
-  p[0] =  0.0 ; p[1] = 0 ; p[2] = 0 ;
-  expr[2] = "-1+u" ;
-  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, 0, 1, p, expr,
-			     NULL, NULL, 3) ;
-  /*scale to required radius: sphere of radius r*/
-  p[0] = 2*r ;
-  /*shift to required centre*/
-  agg_transform_operator_add(T, AGG_TRANSFORM_SCALE, 0, 1, p, expr,
-			     NULL, NULL, 1) ;
-  p[0] = x ; p[1] = y ; p[2] = z ;
+  A = agg_affine_new(0) ;
+  p[0] =  1.0 ; p[1] = 1.0 ;
+  expr[0] = NULL ; expr[1] = NULL ;
+  expr[0] = "2*sqrt(u*(1-u))" ;
+  expr[1] = "2*sqrt(u*(1-u))" ;
   expr[2] = NULL ;
-  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, 0, 1, p, expr,
-			     NULL, NULL, 3) ;
+  
+  agg_affine_scale(A, p, expr, 3) ;
+  agg_transform_affine_add(T, A) ;
+  /*shift centre to z=0*/
+  A = agg_affine_new(0) ;
+  p[0] =  0.0 ; p[1] = 0 ; p[2] = 0 ;
+  expr[0] = NULL ; expr[1] = NULL ; expr[2] = "(-0.5+u)" ;
+  agg_affine_translation(A, p, expr, 3) ;
+  agg_transform_affine_add(T, A) ;
+  /*scale to required radius: sphere of radius r*/
+  A = agg_affine_new(0) ;
+  p[0] = 2*r ; expr[0] = NULL ;
+  agg_affine_scale(A, p, expr, 1) ;
+  agg_transform_affine_add(T, A) ;
+  /*shift to required centre*/
+  A = agg_affine_new(0) ;
+  p[0] = x ; p[1] = y ; p[2] = z ;
+  expr[0] = NULL ; expr[1] = NULL ; expr[2] = NULL ;
+  agg_affine_translation(A, p, expr, 3) ;
+  agg_transform_affine_add(T, A) ;
 
   agg_surface_umin(S) = 0.0 ; 
   agg_surface_umax(S) = 1.0 ; 
@@ -81,6 +99,11 @@ static void surface_sphere(agg_surface_t *S, gdouble x, gdouble y, gdouble z,
   agg_expression_data_compile(T->e) ;
   agg_transform_expressions_compile(T) ;
 
+  for ( i = 0 ; i < agg_transform_affine_number(T) ; i ++ ) {
+    A = agg_transform_affine(T,i) ;
+    agg_affine_expressions_compile(A, T->e) ;
+  }
+  
   agg_surface_weights_make(S) ;
   
   return ;
@@ -95,45 +118,47 @@ static void surface_tube(agg_surface_t *S, gdouble x, gdouble y, gdouble z,
   agg_transform_t *T ;
   char *expr[8] = {NULL}, etmp[1024] ;
 
-  u = 0.0 ;
-  agg_section_set_circle(s) ;
-  T = agg_surface_transform(S) ;
-  agg_transform_add_global_variables(T, global, nglobal) ;  
-
-  agg_surface_section_add(S, s, u) ;
-  /*centre on (0,0): circle of radius 1/2*/
-  p[0] = -0.5 ; p[1] = 0 ; p[2] = 0 ;
-  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, 0, 1, p, expr,
-			     NULL, NULL, 3) ;
-  /*scale on radius*/
-  expr[0] = "2*radius" ;
-  agg_transform_operator_add(T, AGG_TRANSFORM_SCALE, 0, 1, p, expr,
-			     NULL, NULL, 1) ;
-  expr[0] = NULL ;
-  /*translate in space to form cylinder*/
-  p[0] = 0 ; p[1] = 0 ; p[2] = 0 ;
-  /* sprintf(etmp, "-%lg/2 + %lg*u", len, len) ; */
-  sprintf(etmp, "-len/2 + len*u") ;
-  expr[2] = etmp ;
-  /* expr[2] = "-len/2 + len*u" ; */
-  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, 0, 1, p, expr,
-			     NULL, NULL, 3) ;
-
-  /*translate to appropriate centre*/
-  p[0] = x ; p[1] = y ; p[2] = z ;
-  expr[2] = NULL ;
-  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, 0, 1, p, expr,
-			     NULL, NULL, 3) ;
-
-  agg_surface_axes(S) = AGG_AXES_PZ_PX_PY ;
+  g_assert_not_reached() ;
   
-  agg_surface_umin(S) = 0.0 ; 
-  agg_surface_umax(S) = 1.0 ; 
+  /* u = 0.0 ; */
+  /* agg_section_set_circle(s) ; */
+  /* T = agg_surface_transform(S) ; */
+  /* agg_transform_add_global_variables(T, global, nglobal) ;   */
 
-  agg_expression_data_compile(T->e) ;
-  agg_transform_expressions_compile(T) ;
+  /* agg_surface_section_add(S, s, u) ; */
+  /* /\*centre on (0,0): circle of radius 1/2*\/ */
+  /* p[0] = -0.5 ; p[1] = 0 ; p[2] = 0 ; */
+  /* agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, 0, 1, p, expr, */
+  /* 			     NULL, NULL, 3) ; */
+  /* /\*scale on radius*\/ */
+  /* expr[0] = "2*radius" ; */
+  /* agg_transform_operator_add(T, AGG_TRANSFORM_SCALE, 0, 1, p, expr, */
+  /* 			     NULL, NULL, 1) ; */
+  /* expr[0] = NULL ; */
+  /* /\*translate in space to form cylinder*\/ */
+  /* p[0] = 0 ; p[1] = 0 ; p[2] = 0 ; */
+  /* /\* sprintf(etmp, "-%lg/2 + %lg*u", len, len) ; *\/ */
+  /* sprintf(etmp, "-len/2 + len*u") ; */
+  /* expr[2] = etmp ; */
+  /* /\* expr[2] = "-len/2 + len*u" ; *\/ */
+  /* agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, 0, 1, p, expr, */
+  /* 			     NULL, NULL, 3) ; */
 
-  agg_surface_weights_make(S) ;
+  /* /\*translate to appropriate centre*\/ */
+  /* p[0] = x ; p[1] = y ; p[2] = z ; */
+  /* expr[2] = NULL ; */
+  /* agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, 0, 1, p, expr, */
+  /* 			     NULL, NULL, 3) ; */
+
+  /* agg_surface_axes(S) = AGG_AXES_PZ_PX_PY ; */
+  
+  /* agg_surface_umin(S) = 0.0 ;  */
+  /* agg_surface_umax(S) = 1.0 ;  */
+
+  /* agg_expression_data_compile(T->e) ; */
+  /* agg_transform_expressions_compile(T) ; */
+
+  /* agg_surface_weights_make(S) ; */
   
   return ;
 }
@@ -147,58 +172,60 @@ static void surface_wing(agg_surface_t *S, gdouble x, gdouble y, gdouble z,
   agg_transform_t *T ;
   char etmp[3][1024], *expr[8] = {NULL} ;
 
-  u = 0.0 ;
-  T = agg_surface_transform(S) ;
-  agg_surface_section_add(S, s, u) ;
-
-  agg_transform_add_global_variables(T, global, nglobal) ;  
+  g_assert_not_reached() ;
   
-  expr[0] = expr[1] = expr[2] = NULL ; 
-  /*scale on taper ratio, shrinking about leading edge*/
-  p[0] = 0.0 ; p[1] = 0 ; p[2] = 0 ;
-  sprintf(etmp[2], "1 + u*(taper-1)") ;
-  expr[2] = etmp[2] ;
-  agg_transform_operator_add(T, AGG_TRANSFORM_SHRINK, 0, 1, p, expr,
-			     NULL, NULL, 3) ;
-  expr[0] = expr[1] = expr[2] = NULL ; 
-  /*scale on root chord*/
-  p[0] = 0 ;
-  sprintf(etmp[0], "root") ;
-  expr[0] = etmp[0] ;
-  agg_transform_operator_add(T, AGG_TRANSFORM_SCALE, 0, 1, p, expr,
-			     NULL, NULL, 1) ;
-  expr[0] = expr[1] = expr[2] = NULL ; 
+  /* u = 0.0 ; */
+  /* T = agg_surface_transform(S) ; */
+  /* agg_surface_section_add(S, s, u) ; */
 
-  sprintf(etmp[0], "(1-u)^(1/8)") ;
-  expr[0] = etmp[0] ;
-  agg_transform_operator_add(T, AGG_TRANSFORM_SCALE_Y, 0, 1, p, expr,
-			     NULL, NULL, 1) ;
-  expr[0] = expr[1] = expr[2] = NULL ; 
+  /* agg_transform_add_global_variables(T, global, nglobal) ;   */
   
-  /*translate along span and sweep; add del to stop wings
-    meeting in the middle and confusing the intersection calculation*/
-  p[0] = 0 ; p[1] = 0 ; p[2] = 0 ;
-  sprintf(etmp[0], "span*sin(sweep)*u") ;
-  expr[0] = etmp[0] ;
-  sprintf(etmp[1], "span*sin(dihedral)*u") ;
-  expr[1] = etmp[1] ;
-  sprintf(etmp[2], "del + span*u") ;
-  expr[2] = etmp[2] ;
-  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, 0, 1, p, expr,
-			     NULL, NULL, 3) ;
-  expr[0] = expr[1] = expr[2] = NULL ; 
-  p[0] = x ; p[1] = y ; p[2] = z ;
-  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, 0, 1, p, expr,
-			     NULL, NULL, 3) ;
-  expr[0] = expr[1] = expr[2] = NULL ; 
+  /* expr[0] = expr[1] = expr[2] = NULL ;  */
+  /* /\*scale on taper ratio, shrinking about leading edge*\/ */
+  /* p[0] = 0.0 ; p[1] = 0 ; p[2] = 0 ; */
+  /* sprintf(etmp[2], "1 + u*(taper-1)") ; */
+  /* expr[2] = etmp[2] ; */
+  /* agg_transform_operator_add(T, AGG_TRANSFORM_SHRINK, 0, 1, p, expr, */
+  /* 			     NULL, NULL, 3) ; */
+  /* expr[0] = expr[1] = expr[2] = NULL ;  */
+  /* /\*scale on root chord*\/ */
+  /* p[0] = 0 ; */
+  /* sprintf(etmp[0], "root") ; */
+  /* expr[0] = etmp[0] ; */
+  /* agg_transform_operator_add(T, AGG_TRANSFORM_SCALE, 0, 1, p, expr, */
+  /* 			     NULL, NULL, 1) ; */
+  /* expr[0] = expr[1] = expr[2] = NULL ;  */
 
-  agg_surface_umin(S) = 0.0 ; 
-  agg_surface_umax(S) = 1.0 ; 
+  /* sprintf(etmp[0], "(1-u)^(1/8)") ; */
+  /* expr[0] = etmp[0] ; */
+  /* agg_transform_operator_add(T, AGG_TRANSFORM_SCALE_Y, 0, 1, p, expr, */
+  /* 			     NULL, NULL, 1) ; */
+  /* expr[0] = expr[1] = expr[2] = NULL ;  */
+  
+  /* /\*translate along span and sweep; add del to stop wings */
+  /*   meeting in the middle and confusing the intersection calculation*\/ */
+  /* p[0] = 0 ; p[1] = 0 ; p[2] = 0 ; */
+  /* sprintf(etmp[0], "span*sin(sweep)*u") ; */
+  /* expr[0] = etmp[0] ; */
+  /* sprintf(etmp[1], "span*sin(dihedral)*u") ; */
+  /* expr[1] = etmp[1] ; */
+  /* sprintf(etmp[2], "del + span*u") ; */
+  /* expr[2] = etmp[2] ; */
+  /* agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, 0, 1, p, expr, */
+  /* 			     NULL, NULL, 3) ; */
+  /* expr[0] = expr[1] = expr[2] = NULL ;  */
+  /* p[0] = x ; p[1] = y ; p[2] = z ; */
+  /* agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, 0, 1, p, expr, */
+  /* 			     NULL, NULL, 3) ; */
+  /* expr[0] = expr[1] = expr[2] = NULL ;  */
 
-  agg_expression_data_compile(T->e) ;
-  agg_transform_expressions_compile(T) ;
+  /* agg_surface_umin(S) = 0.0 ;  */
+  /* agg_surface_umax(S) = 1.0 ;  */
 
-  agg_surface_weights_make(S) ;
+  /* agg_expression_data_compile(T->e) ; */
+  /* agg_transform_expressions_compile(T) ; */
+
+  /* agg_surface_weights_make(S) ; */
   
   return ;
 }
@@ -316,74 +343,74 @@ static void aerofoil_test(void)
   return ;
 }
 
-static void transform_test(void)
+/* static void transform_test(void) */
 
-{
-  gint i, j, nx, nu, nglobal ;
-  gdouble x, y, xin[3], xout[3], p[32] ;
-  agg_section_t *s ;
-  agg_transform_t *T ;
-  agg_variable_t global[4] ;
-  char *args[32] ;
+/* { */
+/*   gint i, j, nx, nu, nglobal ; */
+/*   gdouble x, y, xin[3], xout[3], p[32] ; */
+/*   agg_section_t *s ; */
+/*   agg_transform_t *T ; */
+/*   agg_variable_t global[4] ; */
+/*   char *args[32] ; */
 
-  s = agg_section_new(8, 8) ;
-  agg_section_set_aerofoil(s, 0.5, 0.1, 0.0) ;
+/*   s = agg_section_new(8, 8) ; */
+/*   agg_section_set_aerofoil(s, 0.5, 0.1, 0.0) ; */
 
-  T = agg_transform_new(64) ;
+/*   T = agg_transform_new(64) ; */
 
-  /*
-   * set up global variables: 
-   * u is surface parameter for distribution
-   * twist is total twist at wingtip
-   */
-  nglobal = 2 ;
-  global[0].name = g_strdup("u") ;
-  global[0].def =  NULL ;
-  global[0].val = 0.0 ;
-  global[1].name = g_strdup("twist") ;
-  global[1].def =  g_strdup("15.0*pi/180.0") ;
-  global[1].val = 0.4 ;
+/*   /\* */
+/*    * set up global variables:  */
+/*    * u is surface parameter for distribution */
+/*    * twist is total twist at wingtip */
+/*    *\/ */
+/*   nglobal = 2 ; */
+/*   global[0].name = g_strdup("u") ; */
+/*   global[0].def =  NULL ; */
+/*   global[0].val = 0.0 ; */
+/*   global[1].name = g_strdup("twist") ; */
+/*   global[1].def =  g_strdup("15.0*pi/180.0") ; */
+/*   global[1].val = 0.4 ; */
 
-  /*non-linear scaling, shrinking about mid-chord*/
-  args[0] = NULL ; args[1] = "0" ; args[2] = "0.5*u+(1-u)^2" ;
-  p[0] = 0.5 ; p[1] = 0 ; p[2] = 0 ;
-  /*linear twist*/
-  agg_transform_operator_add(T, AGG_TRANSFORM_SHRINK, 0, 1, p, args,
-			     NULL, NULL, 3) ;
-  args[0] = NULL ; args[1] = "0" ; args[2] = "twist*u" ;
-  p[0] = 0.5 ; p[1] = 0 ; p[2] = 0 ;
-  /*translate in z to generate "wing"*/
-  agg_transform_operator_add(T, AGG_TRANSFORM_ROTATE, 0, 1, p, args,
-			     NULL, NULL, 3) ;
-  args[0] = NULL ; args[1] = NULL ; args[2] = "u*3.0" ;
-  p[0] = 0.0 ; p[1] = 0 ; p[2] = 0 ;
-  agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, 0, 1, p, args,
-			     NULL, NULL, 3) ;
+/*   /\*non-linear scaling, shrinking about mid-chord*\/ */
+/*   args[0] = NULL ; args[1] = "0" ; args[2] = "0.5*u+(1-u)^2" ; */
+/*   p[0] = 0.5 ; p[1] = 0 ; p[2] = 0 ; */
+/*   /\*linear twist*\/ */
+/*   agg_transform_operator_add(T, AGG_TRANSFORM_SHRINK, 0, 1, p, args, */
+/* 			     NULL, NULL, 3) ; */
+/*   args[0] = NULL ; args[1] = "0" ; args[2] = "twist*u" ; */
+/*   p[0] = 0.5 ; p[1] = 0 ; p[2] = 0 ; */
+/*   /\*translate in z to generate "wing"*\/ */
+/*   agg_transform_operator_add(T, AGG_TRANSFORM_ROTATE, 0, 1, p, args, */
+/* 			     NULL, NULL, 3) ; */
+/*   args[0] = NULL ; args[1] = NULL ; args[2] = "u*3.0" ; */
+/*   p[0] = 0.0 ; p[1] = 0 ; p[2] = 0 ; */
+/*   agg_transform_operator_add(T, AGG_TRANSFORM_TRANSLATE, 0, 1, p, args, */
+/* 			     NULL, NULL, 3) ; */
 
-  /* agg_transform_operators_write(stderr, T) ; */
+/*   /\* agg_transform_operators_write(stderr, T) ; *\/ */
   
-  agg_transform_add_global_variables(T, global, nglobal) ;
-  agg_expression_data_compile(T->e) ;
-  agg_transform_expressions_compile(T) ;
-  agg_transform_variables_eval(T) ;
+/*   agg_transform_add_global_variables(T, global, nglobal) ; */
+/*   agg_expression_data_compile(T->e) ; */
+/*   agg_transform_expressions_compile(T) ; */
+/*   agg_transform_variables_eval(T) ; */
 
-  nx = 65 ; nu = 17 ;
-  for ( j = 0 ; j < nu ; j ++ ) {
-    global[0].val = (gdouble)j/(nu-1) ;
-    /*reevaluate all variables after changing the parameters*/
-    agg_transform_variables_eval(T) ;
-    for ( i = 0 ; i <= nx ; i ++ ) {
-      x = -1.0 + 2.0*i/nx ;
-      y = agg_section_eval(s, x) ;
-      /* fprintf(stdout, "%e %e\n", fabs(x), y) ; */
-      xin[0] = fabs(x) ; xin[1] = y ; xin[2] = xout[2] = 0 ;
-      agg_transform_apply(T, xin, xout) ;
-      fprintf(stdout, "%e %e %e\n", xout[0], xout[1], xout[2]) ;
-    }
-  }
+/*   nx = 65 ; nu = 17 ; */
+/*   for ( j = 0 ; j < nu ; j ++ ) { */
+/*     global[0].val = (gdouble)j/(nu-1) ; */
+/*     /\*reevaluate all variables after changing the parameters*\/ */
+/*     agg_transform_variables_eval(T) ; */
+/*     for ( i = 0 ; i <= nx ; i ++ ) { */
+/*       x = -1.0 + 2.0*i/nx ; */
+/*       y = agg_section_eval(s, x) ; */
+/*       /\* fprintf(stdout, "%e %e\n", fabs(x), y) ; *\/ */
+/*       xin[0] = fabs(x) ; xin[1] = y ; xin[2] = xout[2] = 0 ; */
+/*       agg_transform_apply(T, xin, xout) ; */
+/*       fprintf(stdout, "%e %e %e\n", xout[0], xout[1], xout[2]) ; */
+/*     } */
+/*   } */
   
-  return ;
-}
+/*   return ; */
+/* } */
 
 static void surface_test(void)
 
@@ -392,11 +419,11 @@ static void surface_test(void)
   agg_surface_t *S ;
   agg_surface_workspace_t *w ;
   agg_section_t *s ;
-  agg_patch_t *P ;
+  /* agg_patch_t *P ; */
   gdouble u, v, x[3] ;
   
   S = agg_surface_new(64) ;
-  P = agg_patch_new() ;
+  /* P = agg_patch_new() ; */
   w = agg_surface_workspace_new() ;
   s = agg_section_new(32, 32) ;
   agg_section_set_circle(s) ;
@@ -421,18 +448,18 @@ static void surface_test(void)
   /* } */
 
   /*sphere*/
-  surface_sphere(S, 0.3, -0.1, 0.3, 1.3, s) ;
-  agg_patch_mapping(P) = AGG_PATCH_SPHERICAL ;
-  agg_patch_wrap_t(P) = TRUE ;
+  /* surface_sphere(S, 0.3, -0.1, 0.3, 1.3, s) ; */
+  /* agg_patch_mapping(P) = AGG_PATCH_SPHERICAL ; */
+  /* agg_patch_wrap_t(P) = TRUE ; */
   
-  nu = 16 ; nv = 33 ;
-  for ( i = 0 ; i < nu ; i ++ ) {
-    for ( j = 0 ; j < nv ; j ++ ) {
-      agg_patch_map(P, (gdouble)i/(nu-1), (gdouble)j/(nv-1), &u, &v) ;
-      agg_surface_point_eval(S, u, v, x, w) ;
-      fprintf(stdout, "%e %e %e\n", x[0], x[1], x[2]) ;
-    }
-  }
+  /* nu = 16 ; nv = 33 ; */
+  /* for ( i = 0 ; i < nu ; i ++ ) { */
+  /*   for ( j = 0 ; j < nv ; j ++ ) { */
+  /*     agg_patch_map(P, (gdouble)i/(nu-1), (gdouble)j/(nv-1), &u, &v) ; */
+  /*     agg_surface_point_eval(S, u, v, x, w) ; */
+  /*     fprintf(stdout, "%e %e %e\n", x[0], x[1], x[2]) ; */
+  /*   } */
+  /* } */
   
   return ;
 }
@@ -440,6 +467,7 @@ static void surface_test(void)
 static void body_test(void)
 
 {
+#if 0
   gint nsec, nsp, pps, offp, offsp, offs, nsurf, i, j ;
   gdouble rfuse, yw, zw ;
   agg_surface_t **S ; 
@@ -520,7 +548,7 @@ static void body_test(void)
   fprintf(output, "lc = 0.1 ;\n") ;
   agg_mesh_write_gmsh(output, wf, "lc", offp, offsp, offs, FALSE) ;
   fclose(output) ;
-
+#endif
   return ;
 }
 
@@ -529,8 +557,9 @@ static void parser_test(char *file)
 {
   agg_body_t *b ;
   agg_mesh_t *m ;
-  gint nsec, nsp, pps, offp, offsp, offs ;
+  gint nsec, nsp, pps, offp, offsp, offs, i ;
   agg_surface_workspace_t *w ;
+  agg_triangulation_settings_t settings ;
   FILE *output ;
   
   b = agg_body_new(32, 32) ;
@@ -552,44 +581,27 @@ static void parser_test(char *file)
   /* m->B[0].invert = TRUE ; */
   /* m->B[1].invert = TRUE ; */
   
-  agg_mesh_body(m, b, pps, w) ;
+  /* agg_mesh_body(m, b, pps, w) ; */
 
+  agg_triangulation_type(&settings) = AGG_TRIANGULATION_GRID_REGULAR ;
+  agg_triangulation_section_number(&settings) = 7 ;  
+  agg_triangulation_section_point_number(&settings) = 38 ;
+  agg_triangulation_points_per_spline(&settings) = 5 ;
+  agg_triangulation_invert(&settings) = FALSE ;
+  agg_triangulation_sampling_s(&settings) = AGG_SAMPLING_LINEAR ;
+  agg_triangulation_sampling_t(&settings) = AGG_SAMPLING_COSINE ;
+  
+  for ( i = 0 ; i < agg_body_surface_number(b) ; i ++ ) {
+    agg_mesh_surface(m,i) = agg_body_surface(b,i) ;
+    agg_mesh_surface_number(m) ++ ;
+    agg_mesh_surface_triangulate(m, i,
+				 agg_body_triangulation_settings(b,i), w) ;
+  }
+  
   output = fopen("surface.geo", "w") ;
   fprintf(output, "lc = 0.1 ;\n") ;
   agg_mesh_write_gmsh(output, m, "lc", offp, offsp, offs, FALSE) ;
   fclose(output) ;
-  
-  return ;
-}
-
-static void derivative_test(char *file)
-
-{
-  agg_body_t *b ;
-  gdouble u, v, de, x[3] ;
-  gint nu, nv, i, j ;
-  agg_surface_workspace_t *w ;
-  FILE *output ;
-  
-  b = agg_body_new(32, 32) ;
-  w = agg_surface_workspace_new() ;
-
-  agg_body_read(b, file, TRUE) ;
-
-  agg_body_globals_compile(b) ;
-  agg_body_globals_eval(b) ;
-  agg_body_globals_write(stderr, b) ;
-  agg_body_surfaces_list(stderr, b) ;
-
-  nu = 8 ; nv = 16 ;
-  for ( i = 1 ; i < nu ; i ++ ) {
-    u = (gdouble)i/nu ;
-    for ( j = 1 ; j < nv ; j ++ ) {
-      v = -1 + (gdouble)j*2.0/nv ;
-      agg_surface_point_eval(agg_body_surface(b,0), u, v, x, w) ;
-      fprintf(stdout, "%lg %lg %lg\n", x[0], x[1], x[2]) ;
-    }
-  }
   
   return ;
 }
@@ -715,6 +727,7 @@ static void fit_test(void)
 static void section_fit_test(void)
 
 {
+#if 0
   gint nsec, nsp, pps, offp, offsp, offs, i, j ;
   gdouble rfuse, yw, zw, u, v, x[3], y[3], emax ;
   agg_surface_t *S ; 
@@ -783,6 +796,410 @@ static void section_fit_test(void)
   }
 
   fprintf(stderr, "maximum geometric error: %lg\n", emax) ;
+#endif  
+  return ;
+}
+
+static void affine_test(void)
+
+{
+  gint i, j, nx, nu, nglobal ;
+  gdouble x, y, xin[3], xout[3], p[32] ;
+  agg_section_t *s ;
+  agg_transform_t *T ;
+  agg_variable_t global[4], params[32] ;
+  agg_affine_t *A ;
+  char *args[32] ;
+
+  s = agg_section_new(8, 8) ;
+  agg_section_set_aerofoil(s, 0.5, 0.1, 0.0) ;
+
+  T = agg_transform_new(64) ;
+
+  /*
+   * set up global variables: 
+   * u is surface parameter for distribution
+   * twist is total twist at wingtip
+   */
+  nglobal = 2 ;
+  global[0].name = g_strdup("u") ;
+  global[0].def =  NULL ;
+  global[0].val = 0.0 ;
+  global[1].name = g_strdup("twist") ;
+  global[1].def =  g_strdup("15.0*pi/180.0") ;
+  global[1].val = 0.4 ;
+
+  agg_transform_add_global_variables(T, global, nglobal) ;
+  agg_expression_data_compile(T->e) ;
+  agg_transform_expressions_compile(T) ;
+  agg_transform_variables_eval(T) ;
+
+  A = agg_affine_new(0) ;
+  agg_variable_definition(&(params[0])) = "translate" ;
+  agg_variable_definition(&(params[1])) = NULL ;
+  agg_variable_value(&(params[1]))      = 0.0 ;
+  
+  agg_variable_definition(&(params[2])) = NULL ;
+  agg_variable_value(&(params[2]))      = 0.5 ;
+  agg_variable_definition(&(params[3])) = NULL ;
+  agg_variable_value(&(params[3]))      = 0.0 ;
+  agg_affine_parse(A, params, 4) ;
+  
+  agg_affine_expressions_compile(A, T->e) ;
+  agg_transform_affine_add(T, A) ;
+  A = agg_affine_new(0) ;
+  args[0] = "2*pi*u" ; p[0] = 0 ;
+  agg_affine_rotation_x(A, p, args, 1) ;
+  agg_affine_expressions_compile(A, T->e) ;
+  agg_transform_affine_add(T, A) ;
+
+  nx = 65 ; nu = 17 ;
+  for ( j = 0 ; j < nu ; j ++ ) {
+    gdouble tform[16] = {
+      1, 0, 0, 0,
+      0, 1, 0, 0,
+      0, 0, 1, 0,
+      0, 0, 0, 1} ;
+    global[0].val = (gdouble)j/(nu-1) ;
+    /*reevaluate all variables after changing the parameters*/
+    agg_transform_variables_eval(T) ;
+    for ( i = 0 ; i < agg_transform_affine_number(T) ; i ++ ) {
+      A = agg_transform_affine(T,i) ;
+      agg_affine_matrices_evaluate(A) ;
+    }
+    for ( i = 0 ; i < agg_transform_affine_number(T) ; i ++ ) {
+      A = agg_transform_affine(T,i) ;
+      agg_mat_mat_mul_4(tform, agg_affine_matrix(A,0), tform) ;
+      /* matmat_mul_4(tform, agg_affine_matrix(A,0), tform) ; */
+    }
+    for ( i = 0 ; i <= nx ; i ++ ) {
+      x = -1.0 + 2.0*i/nx ;
+      y = agg_section_eval(s, x) ;
+      /* fprintf(stdout, "%e %e\n", fabs(x), y) ; */
+      xin[0] = fabs(x) ; xin[1] = y ; xin[2] = 0.0 ;
+      agg_affine_point_transform(xout, tform, xin) ;
+      fprintf(stdout, "%e %e %e\n", xout[0], xout[1], xout[2]) ;
+    }
+  }
+  
+  return ;
+}
+
+/* static gint hefsi_func(gdouble s, gdouble t, gdouble *x, gpointer data) */
+
+/* { */
+/*   gpointer *hdata = data ; */
+/*   agg_surface_t *S = hdata[0] ; */
+/*   agg_surface_workspace_t *w = hdata[2] ; */
+/*   gdouble u, v ; */
+
+/*   agg_surface_point_eval(S, s, t, x, w) ; */
+
+/*   return 0 ; */
+/* } */
+
+/* static void intersection_test(void) */
+
+/* { */
+/*   gint nu, nv, i, j ; */
+/*   agg_surface_t *S1, *S2 ; */
+/*   agg_surface_workspace_t *w ; */
+/*   agg_section_t *s ; */
+/*   gdouble u, v, x[3] ; */
+/*   agg_intersection_t *inter ; */
+/*   hefsi_surface_t *h1, *h2 ; */
+/*   hefsi_workspace_t *wh ; */
+/*   hefsi_segment_t *seg1 ; */
+/*   gpointer data1[3], data2[3] ; */
+/*   gint dmin, dmax ; */
+/*   gdouble scale, tol ; */
+/*   GSList *il ; */
+  
+/*   S1 = agg_surface_new(64) ; */
+/*   S2 = agg_surface_new(64) ; */
+/*   w = agg_surface_workspace_new() ; */
+/*   s = agg_section_new(32, 32) ; */
+/*   agg_section_set_circle(s) ; */
+
+/*   data1[0] = S1 ; data1[2] = w ; */
+/*   data2[0] = S2 ; data2[2] = w ; */
+  
+/*   /\*sphere*\/ */
+/*   surface_sphere(S1, 0.3, -0.1, 0.3, 1.3, s) ; */
+/*   surface_sphere(S2, 0.4,  0.7, 0.9, 1.3, s) ; */
+  
+/*   nu = 16 ; nv = 33 ; */
+/*   for ( i = 0 ; i <= nu ; i ++ ) { */
+/*     u = (gdouble)i/nu ; */
+/*     for ( j = 0 ; j <= nv ; j ++ ) { */
+/*       v = -1 + 2.0*(gdouble)j/nv ; */
+/*       agg_surface_point_eval(S1, u, v, x, w) ; */
+/*       fprintf(stdout, "%e %e %e\n", x[0], x[1], x[2]) ; */
+/*     } */
+/*   } */
+
+/*   for ( i = 0 ; i <= nu ; i ++ ) { */
+/*     u = (gdouble)i/nu ; */
+/*     for ( j = 0 ; j <= nv ; j ++ ) { */
+/*       v = -1 + 2.0*(gdouble)j/nv ; */
+/*       agg_surface_point_eval(S2, u, v, x, w) ; */
+/*       fprintf(stdout, "%e %e %e\n", x[0], x[1], x[2]) ; */
+/*     } */
+/*   } */
+
+/*   inter = agg_intersection_new(8192) ; */
+
+/*   wh = hefsi_workspace_new() ; */
+
+/*   dmin = 6 ; dmax = 10 ; scale = 18/16.0 ; tol = 1e-6 ; */
+/*   h1 = hefsi_surface_new(hefsi_func, data1, FALSE, 0, 1, 0, 1) ; */
+/*   h2 = hefsi_surface_new(hefsi_func, data2, FALSE, 0, 1, 0, 1) ; */
+/*   hefsi_surface_initialize(h1, dmin, dmax) ; */
+/*   hefsi_set_bounding_boxes(h1, scale) ; */
+/*   hefsi_surface_initialize(h2, dmin, dmax) ; */
+/*   hefsi_set_bounding_boxes(h2, scale) ; */
+/*   hefsi_surface_intersections(h1, h2, tol, wh) ; */
+
+/*   for ( i = 0 ; i < wh->c->len ; i ++ ) { */
+/*     for ( il = hefsi_workspace_curve(wh,i) ; il != NULL ; */
+/* 	  il = il->next ) { */
+/*       j = GPOINTER_TO_INT(il->data) ; */
+/*       seg1 = hefsi_workspace_segment(wh,j) ; */
+/*       fprintf(stdout, "%e %e %e\n", seg1->x1[0], seg1->x1[1], seg1->x1[2]) ; */
+/*       /\* for ( j = 0 ; j < 7 ; j ++ ) { *\/ */
+/*       /\* 	seg1->x1[j] = 	0.5*(seg1->x1[j] + seg1->x2[j]) ; *\/ */
+/*       /\* } *\/ */
+/*     } */
+/*   } */
+  
+/*   return ; */
+/* } */
+
+static void affine_derivative_test(void)
+
+{
+  agg_affine_t *A ;
+  agg_transform_t *T ;
+  agg_variable_t global[4], params[32] ;
+  gint nglobal, i, j ;
+  char *args[32] ;
+  gdouble p[32], u, du, T0[16], T1[16], dT[16] ;
+  
+  fprintf(stderr, "differentiation of affine matrices\n") ;
+  fprintf(stderr, "==================================\n") ;
+
+  T = agg_transform_new(64) ;
+
+  nglobal = 2 ;
+  global[0].name = g_strdup("twist") ;
+  global[0].def =  g_strdup("15.0*pi/180.0") ;
+  global[0].val = 0.4 ;
+  global[1].name = g_strdup("span") ;
+  global[1].def =  NULL ;
+  global[1].val = 3.4 ;
+
+  agg_transform_variable_add(T, "u", NULL, 0.0) ;
+  
+  agg_transform_add_global_variables(T, global, nglobal) ;
+  agg_expression_data_compile(T->e) ;
+  agg_transform_expressions_compile(T) ;
+  agg_transform_variables_eval(T) ;
+
+  A = agg_affine_new(3) ;
+
+  args[0] = "twist*u" ; p[0] = 0 ;
+  agg_affine_rotation_x(A, p, args, 1) ;
+  agg_affine_differentiate(A, "u") ;
+  agg_affine_expressions_compile(A, T->e) ;
+  agg_transform_affine_add(T, A) ;
+
+  A = agg_affine_new(3) ;
+
+  args[0] = NULL ; p[0] = 0 ;
+  args[1] = NULL ; p[1] = 0 ;
+  args[2] = "span*u" ; p[2] = 0 ;
+  agg_affine_translation(A, p, args, 3) ;
+  agg_affine_differentiate(A, "u") ;
+  agg_affine_expressions_compile(A, T->e) ;
+  agg_transform_affine_add(T, A) ;
+  
+  u = 0.7 ; du = 1e-3 ;
+
+  agg_transform_evaluate(T, u+0.5*du, 0, T1) ;
+  agg_transform_evaluate(T, u-0.5*du, 0, T0) ;
+  agg_transform_evaluate(T, u       , 1, dT) ;
+
+  for ( i = 0 ; i < 16 ; i ++ ) T1[i] = (T1[i] - T0[i])/du ;
+  
+  for ( i = 0 ; i < 4 ; i ++ ) {
+    for ( j = 0 ; j < 4 ; j ++ ) {
+      fprintf(stderr, "%lg (%lg) ", dT[4*i+j], T1[4*i+j]) ;
+    }
+    fprintf(stderr, "\n") ;
+  }
+  
+  /* agg_affine_write(stderr, A) ; */
+  
+  return ;
+}
+
+static void section_interp_test(void)
+
+{
+  agg_section_t *s, *si, *ds, *s0, *s1 ;
+  agg_surface_t *S ;
+  gdouble u, du, err[32] = {0} ;
+  gint i ;
+
+  fprintf(stderr, "section interpolation test\n") ;
+  fprintf(stderr, "==========================\n") ;
+  
+  S = agg_surface_new(64) ;
+
+  ds = agg_section_new(8, 8) ;
+  si = agg_section_new(8, 8) ;
+  s0 = agg_section_new(8, 8) ;
+  s1 = agg_section_new(8, 8) ;
+  
+  s = agg_section_new(8, 8) ;
+  for ( u = 0 ; u <= 1.0 ; u += 1.0/16 ) {
+    agg_section_set_aerofoil(s, 0.25 + 0.3*u, 0.2-0.1*u, 0.013*u) ;
+    agg_surface_section_add(S, s, u) ;
+  }
+
+  agg_surface_weights_make(S) ;
+
+  u = 5.0/16 ; du = 1e-6 ;
+  agg_surface_section_diff(S, u, si, ds) ;
+  agg_surface_section_interp(S, u+du/2, s1) ;
+  agg_surface_section_interp(S, u-du/2, s0) ;
+
+  for ( i = 0 ; i <= agg_section_order_upper(s1) ; i ++ ) {
+    agg_section_coefficient_upper(s1,i) =
+      (agg_section_coefficient_upper(s1,i) -
+       agg_section_coefficient_upper(s0,i))/du ;
+  }
+  for ( i = 0 ; i <= agg_section_order_lower(s1) ; i ++ ) {
+    agg_section_coefficient_lower(s1,i) =
+      (agg_section_coefficient_lower(s1,i) -
+       agg_section_coefficient_lower(s0,i))/du ;
+  }
+  agg_section_eta_left(s1)  = (agg_section_eta_left(s1) -
+			       agg_section_eta_left(s0))/du ;
+  agg_section_eta_right(s1) = (agg_section_eta_right(s1) -
+			       agg_section_eta_right(s0))/du ;
+  agg_section_trailing_edge_upper(s1) =
+    (agg_section_trailing_edge_upper(s1) -
+     agg_section_trailing_edge_upper(s0))/du ;
+  agg_section_trailing_edge_lower(s1) =
+    (agg_section_trailing_edge_lower(s1) -
+     agg_section_trailing_edge_lower(s0))/du ;
+  
+  agg_surface_section_interp(S, u, s0) ;
+  
+  for ( i = 0 ; i <= agg_section_order_upper(si) ; i ++ ) {
+    fprintf(stderr, "%lg %lg %lg %lg\n",
+	    agg_section_coefficient_upper(si,i), 
+	    agg_section_coefficient_upper(s0,i), 
+	    agg_section_coefficient_upper(ds,i),
+	    agg_section_coefficient_upper(s1,i)) ;
+    err[0] = MAX(err[0],ABS(agg_section_coefficient_upper(si,i)-
+			    agg_section_coefficient_upper(s0,i))) ;
+    err[1] = MAX(err[1],ABS(agg_section_coefficient_upper(ds,i)-
+			    agg_section_coefficient_upper(s1,i))) ;
+  }
+  for ( i = 0 ; i <= agg_section_order_lower(si) ; i ++ ) {
+    fprintf(stderr, "%lg %lg %lg %lg\n",
+	    agg_section_coefficient_lower(si,i), 
+	    agg_section_coefficient_lower(s0,i), 
+	    agg_section_coefficient_lower(ds,i),
+	    agg_section_coefficient_lower(s1,i)) ; 
+    err[2] = MAX(err[2],ABS(agg_section_coefficient_lower(si,i)-
+			    agg_section_coefficient_lower(s0,i))) ;
+    err[3] = MAX(err[3],ABS(agg_section_coefficient_lower(ds,i)-
+			    agg_section_coefficient_lower(s1,i))) ;
+  }
+
+  fprintf(stderr, "%lg %lg %lg %lg\n",
+	  agg_section_eta_left(si), agg_section_eta_left(s0), 
+	  agg_section_eta_left(ds), agg_section_eta_left(s1)) ; 
+  err[4] = MAX(err[4],ABS(agg_section_eta_left(si)-
+			  agg_section_eta_left(s0))) ;
+  err[5] = MAX(err[5],ABS(agg_section_eta_left(ds)-
+			  agg_section_eta_left(s1))) ;
+  fprintf(stderr, "%lg %lg %lg %lg\n",
+	  agg_section_eta_right(si), agg_section_eta_right(s0), 
+	  agg_section_eta_right(ds), agg_section_eta_right(s1)) ; 
+  err[6] = MAX(err[6],ABS(agg_section_eta_right(si)-
+			  agg_section_eta_right(s0))) ;
+  err[7] = MAX(err[7],ABS(agg_section_eta_right(ds)-
+			  agg_section_eta_right(s1))) ;
+
+  fprintf(stderr, "%lg %lg %lg %lg\n",
+	  agg_section_trailing_edge_upper(si), agg_section_trailing_edge_upper(s0), 
+	  agg_section_trailing_edge_upper(ds), agg_section_trailing_edge_upper(s1)) ; 
+  err[8] = MAX(err[8],ABS(agg_section_trailing_edge_upper(si)-
+			  agg_section_trailing_edge_upper(s0))) ;
+  err[9] = MAX(err[9],ABS(agg_section_trailing_edge_upper(ds)-
+			  agg_section_trailing_edge_upper(s1))) ;
+  fprintf(stderr, "%lg %lg %lg %lg\n",
+	  agg_section_trailing_edge_lower(si), agg_section_trailing_edge_lower(s0), 
+	  agg_section_trailing_edge_lower(ds), agg_section_trailing_edge_lower(s1)) ; 
+  err[10] = MAX(err[10],ABS(agg_section_trailing_edge_lower(si)-
+			  agg_section_trailing_edge_lower(s0))) ;
+  err[11] = MAX(err[11],ABS(agg_section_trailing_edge_lower(ds)-
+			  agg_section_trailing_edge_lower(s1))) ;
+  
+  fprintf(stderr, "errors:") ;
+  for ( i = 0 ; i < 12 ; i ++ ) {
+    fprintf(stderr, " %lg", err[i]) ;
+  }
+  fprintf(stderr, "\n") ;
+  
+  return ;
+}
+
+static void surface_diff_test(char *file)
+
+{
+  agg_body_t *b ;
+  agg_surface_workspace_t *w ;
+  agg_surface_t *S ;
+  gint i ;
+  gdouble u, v, del, x[3], dx[3], xu[3], xv[3], yu[3], yv[3] ;
+  
+  fprintf(stderr, "surface_differentiation test\n") ;
+  fprintf(stderr, "============================\n") ;
+
+  b = agg_body_new(32, 32) ;
+  w = agg_surface_workspace_new() ;
+
+  agg_body_read(b, file, FALSE) ;
+
+  agg_body_globals_compile(b) ;
+  agg_body_globals_eval(b) ;
+  agg_body_globals_write(stderr, b) ;
+  fprintf(stderr, "%d surface%s\n", agg_body_surface_number(b),
+	  (agg_body_surface_number(b) > 1 ? "s" : "")) ;
+  agg_body_surfaces_list(stderr, b) ;
+
+  S = agg_body_surface(b, 1) ;
+
+  u = 0.3 ; v = 0.0 ;
+
+  agg_surface_point_diff(S, u, v, x, xu, xv, w) ;
+
+  fprintf(stderr, "analytical\n") ;
+  fprintf(stderr, "%lg %lg %lg\n", x[0], x[1], x[2]) ;
+  fprintf(stderr, "%lg %lg %lg\n", xu[0], xu[1], xu[2]) ;
+  fprintf(stderr, "%lg %lg %lg\n", xv[0], xv[1], xv[2]) ;
+
+  agg_surface_point_diff_numerical(S, u, v, x, xu, xv, w) ;
+
+  fprintf(stderr, "numerical\n") ;
+  fprintf(stderr, "%lg %lg %lg\n", x[0], x[1], x[2]) ;
+  fprintf(stderr, "%lg %lg %lg\n", xu[0], xu[1], xu[2]) ;
+  fprintf(stderr, "%lg %lg %lg\n", xv[0], xv[1], xv[2]) ;
   
   return ;
 }
@@ -796,11 +1213,11 @@ gint main(gint argc, char **argv)
   progname = g_strdup(g_path_get_basename(argv[0])) ;
   test = -1 ;
   
-  while ( (ch = getopt(argc, argv, "i:T:")) != EOF ) {
+  while ( (ch = getopt(argc, argv, "i:t:")) != EOF ) {
     switch (ch) {
     default: g_assert_not_reached() ; break ;
     case 'i': file = g_strdup(optarg) ; break ;
-    case 'T': test = parse_test(optarg) ; break ;
+    case 't': test = parse_test(optarg) ; break ;
     }
   }
 
@@ -827,11 +1244,11 @@ gint main(gint argc, char **argv)
     return 0 ;
   }
 
-  if ( test == 3 ) {
-    transform_test() ;
+  /* if ( test == 3 ) { */
+  /*   transform_test() ; */
 
-    return 0 ;
-  }
+  /*   return 0 ; */
+  /* } */
 
   if ( test == 4 ) {
     surface_test() ;
@@ -869,12 +1286,36 @@ gint main(gint argc, char **argv)
     return 0 ;
   }
   
-  if ( test == 10 ) {
-    derivative_test(file) ;
+  if ( test == 11 ) {
+    affine_test() ;
     
     return 0 ;
   }
 
+  /* if ( test == 12 ) { */
+  /*   intersection_test() ; */
+    
+  /*   return 0 ; */
+  /* } */
+
+  if ( test == 10 ) {
+    affine_derivative_test() ;
+
+    return 0 ;
+  }
+
+  if ( test == 13 ) {
+    section_interp_test() ;
+
+    return 0 ;
+  }
+
+  if ( test == 14 ) {
+    surface_diff_test(file) ;
+    
+    return 0 ;
+  }
+  
   return 0 ;
 }
 

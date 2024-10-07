@@ -1,4 +1,4 @@
-patch.lo: patch.c /usr/include/stdc-predef.h ../config.h \
+affine.lo: affine.c /usr/include/stdc-predef.h ../config.h \
  /usr/include/stdio.h /usr/include/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/sys/cdefs.h \
  /usr/include/bits/wordsize.h /usr/include/bits/long-double.h \
@@ -134,7 +134,8 @@ patch.lo: patch.c /usr/include/stdc-predef.h ../config.h \
  /usr/include/bits/types/struct_sched_param.h /usr/include/bits/cpu-set.h \
  /usr/include/bits/setjmp.h \
  /usr/include/bits/types/struct___jmp_buf_tag.h \
- /usr/include/glib-2.0/glib/glib-autocleanups.h agg.h agg-private.h
+ /usr/include/glib-2.0/glib/glib-autocleanups.h agg.h agg-private.h \
+ /home/michael/Codes/include/matheval.h
 /usr/include/stdc-predef.h:
 ../config.h:
 /usr/include/stdio.h:
@@ -342,3 +343,4 @@ patch.lo: patch.c /usr/include/stdc-predef.h ../config.h \
 /usr/include/glib-2.0/glib/glib-autocleanups.h:
 agg.h:
 agg-private.h:
+/home/michael/Codes/include/matheval.h:

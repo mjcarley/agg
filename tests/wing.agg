@@ -11,19 +11,43 @@ global {
   root = "span/6"
 }
 
+sample("SAMPLING_LINEAR", "SAMPLING_COSINE_DOUBLE")
+triangulation("TRIANGULATION_GRID_REGULAR", 9, 17, 4)
+
 surface {
   name("wing")
-  patch("spherical", "nowrap", "wrap")
-  section(0, "aerofoil", 0.5, 0.2, 0.0)
+  limits(0.1, 0.9)
+  section(0, "aerofoil", 0.5, 0.2, 0.01)
   transform("translate", -0.5, 0, 0)
-  ##transform("xscale", "root*sqrt(u*(1-u))")
-  ##transform("xscale", "root")
-  transform(0.1, 0.9, "scale", "root")
-  transform(0, 0.1, "xscale", "root*sqrt(u/0.1)")
-  transform(0, 0.1, "yscale", "root*sqrt(u/0.1)")
-  transform(0.9, 1, "xscale", "root*sqrt((1-u)/0.1)")
-  transform(0.9, 1, "yscale", "root*sqrt((1-u)/0.1)")
-  ##transform("yscale", "2*root*sqrt(u*(1-u))")
+  transform("scale", "root")
   transform("translate", 0, 0, "span*(u-1/2)")
-  grid("sphere-uv", 16, 32)
+}
+
+surface {
+  name("tip:right")
+  limits(0.0, 0.1)
+  section(0, "aerofoil", 0.5, 0.2, 0.01)
+  transform("translate", -0.5, 0, 0)
+  transform("scale", 1,
+  #"sqrt(u)*(1/sqrt(0.1) +0.5/(0.1)^1.5*(0.1-u))",
+  		     "sqrt(u)*(1/sqrt(0.1) +0.5/(0.1)^1.5*(0.1-u))", 1.0)
+                     
+  transform("scale", "root")
+
+  transform("translate", 0, 0, "span*(u-1/2)")
+}
+
+surface {
+  sample("SAMPLING_LINEAR", "SAMPLING_COSINE_DOUBLE")
+  triangulation("TRIANGULATION_GRID_REGULAR", 7, 33, 4)
+  name("tip:left")
+  limits(0.9, 1.0)
+  section(0, "aerofoil", 0.5, 0.2, 0.01)
+  transform("translate", -0.5, 0, 0)
+  transform("scale", 1,
+  		     "sqrt(1-u)*(1/sqrt(0.1) +0.5/(0.1)^1.5*(u-0.9))",
+                     1.0)		
+  transform("scale", "root")
+
+  transform("translate", 0, 0, "span*(u-1/2)")
 }

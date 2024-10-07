@@ -1,0 +1,13 @@
+* derivatives of surfaces (this needs differentiation of transforms,
+  and of sections including derivatives of coefficients from Lagrange
+  interpolants)
+  
+* (loadable) database of sections
+
+* evaluation of vmin(u), vmax(u) on sections in surfaces
+
+* use triangle to mesh surfaces
+
+* intersection evaluation without intermediate patches
+
+* listing of available affine transforms
