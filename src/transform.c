@@ -70,53 +70,53 @@ static const struct {
   } ;
 
 /*generating derivatives of operator parameter variables*/
-#ifdef HAVE_LIBMATHEVAL
-#include <matheval.h>
-static void parameter_set_derivative(agg_transform_operator_t *tr,
-				     agg_variable_t *v,
-				     char **expr, char **de, gint i,
-				     char *var)
-{
-  gpointer eval, diff ;
+/* #ifdef HAVE_LIBMATHEVAL */
+/* #include <matheval.h> */
+/* static void parameter_set_derivative(agg_transform_operator_t *tr, */
+/* 				     agg_variable_t *v, */
+/* 				     char **expr, char **de, gint i, */
+/* 				     char *var) */
+/* { */
+/*   gpointer eval, diff ; */
 
-  if ( de != NULL ) {
-    if ( de[i] != NULL )
-      g_error("%s: overriding derivative evaluation not implemented",
-	      __FUNCTION__) ;
-  }
+/*   if ( de != NULL ) { */
+/*     if ( de[i] != NULL ) */
+/*       g_error("%s: overriding derivative evaluation not implemented", */
+/* 	      __FUNCTION__) ; */
+/*   } */
   
-  if ( expr[i] == NULL ) {
-    /*expression is a constant*/
-    agg_variable_definition(v) = NULL ;
-    agg_variable_value(v) = 0.0 ;
-    return ;
-  }
+/*   if ( expr[i] == NULL ) { */
+/*     /\*expression is a constant*\/ */
+/*     agg_variable_definition(v) = NULL ; */
+/*     agg_variable_value(v) = 0.0 ; */
+/*     return ; */
+/*   } */
 
-  /*find the derivative*/
-  eval = evaluator_create(expr[i]) ;
-  diff = evaluator_derivative(eval, var) ;
-  agg_variable_definition(v) = g_strdup(evaluator_get_string(diff)) ;
-  agg_variable_value(v) = 0.0 ;
-  evaluator_destroy(eval) ;
-  evaluator_destroy(diff) ;
+/*   /\*find the derivative*\/ */
+/*   eval = evaluator_create(expr[i]) ; */
+/*   diff = evaluator_derivative(eval, var) ; */
+/*   agg_variable_definition(v) = g_strdup(evaluator_get_string(diff)) ; */
+/*   agg_variable_value(v) = 0.0 ; */
+/*   evaluator_destroy(eval) ; */
+/*   evaluator_destroy(diff) ; */
   
-  return ;
-}
-#else  /*HAVE_LIBMATHEVAL*/
-static void parameter_set_derivative(agg_transform_operator_t *tr,
-				     agg_variable_t *v,
-				     char **expr, char **de, gint i,
-				     char *var)
+/*   return ; */
+/* } */
+/* #else  /\*HAVE_LIBMATHEVAL*\/ */
+/* static void parameter_set_derivative(agg_transform_operator_t *tr, */
+/* 				     agg_variable_t *v, */
+/* 				     char **expr, char **de, gint i, */
+/* 				     char *var) */
 
-{
-  /*if analytical differentiation is not available, set derivatives to
-    zero*/
-  agg_variable_definition(v) = NULL ;
-  agg_variable_value(v) = 0.0 ;
+/* { */
+/*   /\*if analytical differentiation is not available, set derivatives to */
+/*     zero*\/ */
+/*   agg_variable_definition(v) = NULL ; */
+/*   agg_variable_value(v) = 0.0 ; */
 
-  return ;
-}
-#endif /*HAVE_LIBMATHEVAL*/
+/*   return ; */
+/* } */
+/* #endif /\*HAVE_LIBMATHEVAL*\/ */
 
 /** 
  * @{ 
@@ -260,9 +260,8 @@ gint agg_transform_expressions_compile(agg_transform_t *T)
 {
   agg_expression_data_t *e ;
   agg_variable_t *v ;
-  agg_transform_operator_t *tr ;
   agg_affine_t *A ;
-  gint i, j ;
+  gint i ;
   
   e = T->e ;
   
@@ -331,9 +330,8 @@ gint agg_transform_variables_eval(agg_transform_t *T)
 
 {
   agg_variable_t *v ;
-  agg_transform_operator_t *tr ;
   agg_affine_t *A ;
-  gint i, j ;
+  gint i ;
 
   agg_expression_data_eval(T->e) ;
   for ( i = 0 ; i < agg_transform_variable_number(T) ; i ++ ) {
@@ -489,18 +487,18 @@ gint agg_transform_variables_write(FILE *f, agg_transform_t *T,
 /*   return 0 ; */
 /* } */
 
-static void write_variable(FILE *f, agg_variable_t *v)
+/* static void write_variable(FILE *f, agg_variable_t *v) */
 
-{
-  if ( agg_variable_definition(v) != NULL ) {
-    fprintf(f, "%s", agg_variable_definition(v)) ;
-    return ;
-  }
+/* { */
+/*   if ( agg_variable_definition(v) != NULL ) { */
+/*     fprintf(f, "%s", agg_variable_definition(v)) ; */
+/*     return ; */
+/*   } */
 
-  fprintf(f, "%lg", agg_variable_value(v)) ;
+/*   fprintf(f, "%lg", agg_variable_value(v)) ; */
   
-  return ;
-}
+/*   return ; */
+/* } */
 
 /* /\**  */
 /*  * Write a list of operators and parameters in a transform to file */
@@ -689,17 +687,16 @@ static void write_variable(FILE *f, agg_variable_t *v)
 /*   return 0 ; */
 /* } */
 
-static gboolean parameter_in_range(gdouble umin, gdouble umax, gdouble u)
+/* static gboolean parameter_in_range(gdouble umin, gdouble umax, gdouble u) */
 
-{
-  g_assert(umin < umax) ;
-  if ( umax == 1 && u == 1 ) return TRUE ;
+/* { */
+/*   g_assert(umin < umax) ; */
+/*   if ( umax == 1 && u == 1 ) return TRUE ; */
 
-  if ( umin <= u && u < umax ) return TRUE ;
+/*   if ( umin <= u && u < umax ) return TRUE ; */
 
-  return FALSE ;
-}
-
+/*   return FALSE ; */
+/* } */
 
 /* /\**  */
 /*  * Apply an axis transform (swap) to a point */
@@ -751,10 +748,8 @@ static gboolean parameter_in_range(gdouble umin, gdouble umax, gdouble u)
 gint agg_transform_apply(agg_transform_t *T, gdouble *xin, gdouble *xout)
 
 {
-  gint i ;
-  gdouble xt[4], yt[4], u ;
-  agg_variable_t *var ;
-  agg_transform_operator_t *op ;
+  /* gint i ; */
+  /* gdouble xt[4], yt[4] ; */
   
   /*empty transform: pass input to output*/
   if ( agg_transform_affine_number(T) == 0 ) {

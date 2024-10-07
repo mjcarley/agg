@@ -131,8 +131,8 @@ static void triangulate_regular(agg_mesh_t *m,
 				agg_surface_workspace_t *w)
 
 {
-  gint i0, i1, np, pps, *sp ;
-  gdouble u, v, s, t, smin, smax, tmin, tmax ;
+  gint pps ;
+  gdouble s, t, smin, smax, tmin, tmax ;
   agg_surface_t *S ;
   gint ns, nt ;
   gint i, j, np0, nsp0, nspc, nspt, s0, s1, s2, s3 ;
@@ -688,9 +688,9 @@ gint agg_mesh_body(agg_mesh_t *m, agg_body_t *b, gint pps,
 		   agg_surface_workspace_t *w)
 
 {
-  gint i, j ;
-  gdouble area ;
-  char args[64] ;
+  gint i ;
+  /* gdouble area ; */
+  /* char args[64] ; */
 
   agg_mesh_surface_number(m) = 0 ;
   for ( i = 0 ; i < agg_body_surface_number(b); i ++ ) {
