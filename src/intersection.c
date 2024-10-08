@@ -48,7 +48,7 @@ static gint hefsi_func(gdouble s, gdouble t, gdouble *x, gpointer data)
   agg_surface_workspace_t *w = hdata[2] ;
   gdouble u, v ;
 
-  agg_patch_map(P, s, t, &u, &v) ;  
+  agg_patch_map(S, P, s, t, &u, &v) ;  
   
   agg_surface_point_eval(S, u, v, x, w) ;
 
@@ -308,7 +308,8 @@ gint agg_intersection_curve_write(FILE *f, agg_intersection_t *inter,
   gint i ;
 
   for ( i = 0 ; i < agg_intersection_point_number(inter) ; i ++ ) {
-    agg_patch_map(agg_intersection_patch1(inter),
+    agg_patch_map(agg_intersection_surface1(inter),
+		  agg_intersection_patch1(inter),
 		  agg_intersection_point_s1(inter,i),
 		  agg_intersection_point_t1(inter,i),
 		  &u, &v) ;
@@ -548,7 +549,8 @@ gint agg_intersection_resample(agg_intersection_t *inter,
     interp_st(inter->st, agg_intersection_point_number(inter), c,
 	      &(st[i*AGG_INTERSECTION_DATA_SIZE]), t) ;
 
-    agg_patch_map(agg_intersection_patch1(resample),
+    agg_patch_map(agg_intersection_surface1(resample),
+		  agg_intersection_patch1(resample),
 		  agg_intersection_point_s1(resample,i),
 		  agg_intersection_point_t1(resample,i),
 		  &u, &v) ;

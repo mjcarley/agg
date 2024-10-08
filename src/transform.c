@@ -316,43 +316,6 @@ gint agg_transform_variables_write(FILE *f, agg_transform_t *T,
 /* } */
 
 /** 
- * Apply an axis transform (swap) to a point
- * 
- * @param axes an ::agg_axes_t for the required axis transformation;
- * @param xin input point (can be equal to \a xout);
- * @param xout on exit contains transformed point data.
- * 
- * @return 0 on success.
- */
-
-gint agg_transform_axes(agg_axes_t axes, gdouble *xin, gdouble *xout)
-
-{
-  gdouble xt[3] = {xin[0], xin[1], xin[2]} ;
-  
-  switch ( axes ) {
-  case AGG_AXES_PX_PY_PZ:
-    xout[0] = xt[0] ; xout[1] = xt[1] ; xout[2] = xt[2] ;
-    break ;
-  case AGG_AXES_PY_PZ_PX:
-    xout[0] = xt[1] ; xout[2] = xt[2] ; xout[2] = xt[0] ;
-    break ;
-  case AGG_AXES_PZ_PX_PY:
-    xout[0] = xt[2] ; xout[1] = xt[0] ; xout[2] = xt[1] ;
-    break ;
-  case AGG_AXES_PZ_PY_PX:
-    xout[0] = xt[2] ; xout[1] = xt[1] ; xout[2] = xt[0] ;
-    break ;
-  case AGG_AXES_PX_PY_MZ:
-    xout[0] = xt[0] ; xout[1] = xt[1] ; xout[2] = -xt[2] ;
-    break ;
-  default: g_assert_not_reached() ;
-  }
-  
-  return 0 ;
-}
-
-/** 
  * Apply a transform to a point
  * 
  * @param T an ::agg_transform_t containing the sequence of operations;

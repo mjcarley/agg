@@ -392,7 +392,6 @@ typedef agg_surface_t ;
 typedef struct _agg_surface_t agg_surface_t ;
 struct _agg_surface_t {
   agg_section_t *s ;
-  agg_axes_t axes ;
   agg_grid_t grid ;
   gint ns, nsmax, nsec, nsp, sub ;
   gdouble umin, umax, *u, *w, area ;
@@ -408,7 +407,6 @@ struct _agg_surface_t {
 #define agg_surface_umin(_s)                ((_s)->umin)
 #define agg_surface_umax(_s)                ((_s)->umax)
 #define agg_surface_transform(_s)           ((_s)->T)
-#define agg_surface_axes(_s)                ((_s)->axes)
 #define agg_surface_grid(_s)                ((_s)->grid)
 #define agg_surface_grid_section_number(_s) ((_s)->nsec)
 #define agg_surface_grid_spline_number(_s)  ((_s)->nsp)
@@ -740,7 +738,6 @@ gint agg_transform_variables_write(FILE *f, agg_transform_t *T,
 gint agg_transform_apply(agg_transform_t *T, gdouble *xin, gdouble *xout) ;
 gint agg_transforms_list(FILE *f) ;
 				   
-gint agg_transform_axes(agg_axes_t axes, gdouble *xin, gdouble *xout) ;
 gint agg_transform_parse(agg_transform_t *T, agg_variable_t *p, gint np) ;
 agg_axes_t agg_axes_parse(char *str) ;
 
@@ -771,7 +768,8 @@ agg_surface_workspace_t *agg_surface_workspace_new(void) ;
 gdouble agg_naca_four(gdouble t, gdouble p, gdouble m, gdouble x) ;
 
 agg_patch_t *agg_patch_new(void) ;
-gint agg_patch_map(agg_patch_t *p, gdouble s, gdouble t,
+gint agg_patch_map(agg_surface_t *S, agg_patch_t *p,
+		   gdouble s, gdouble t,
 		   gdouble *u, gdouble *v) ;
 gint agg_patch_st_correct(agg_patch_t *P, gdouble *st) ;
 gint agg_patch_parse(agg_patch_t *P, agg_variable_t *p, gint np) ;

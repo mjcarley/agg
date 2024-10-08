@@ -48,6 +48,8 @@ void _agg_grid_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
 		     gpointer data[]) ;
 void _agg_invert_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
 		       gpointer data[]) ;
+void _agg_limits_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
+		       gpointer data[]) ;
 
 typedef void (*block_read_func_t)(GScanner *scanner, agg_body_t *b,
 				  gboolean echo, gpointer data[]) ;
@@ -65,6 +67,7 @@ static const struct {
   {"axes",      _agg_axes_parse      },
   {"grid",      _agg_grid_parse      },
   {"invert",    _agg_invert_parse    },
+  {"limits",    _agg_limits_parse    },
   {NULL, NULL}
 } ;
 
@@ -416,10 +419,14 @@ void _agg_axes_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
   gint nparams ;
   agg_variable_t params[64] ;
   agg_surface_t *S ;
+  agg_transform_t *T ;
+  agg_affine_t *A ;
+  agg_axes_t axes ;
   
   token_read_and_check(scanner, G_TOKEN_LEFT_PAREN, "missing left bracket") ;
 
   S = agg_body_surface_last(b) ;
+  T = agg_surface_transform(S) ;
   
   parameter_list_parse(scanner, params, &nparams) ;
 
@@ -431,13 +438,19 @@ void _agg_axes_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
     g_error("%s: axes must be specified by string, line %u",
 	    __FUNCTION__, g_scanner_cur_line(scanner)) ;
   
-  agg_surface_axes(S) = agg_axes_parse(agg_variable_definition(&(params[0]))) ;
+  /* agg_surface_axes(S) = agg_axes_parse(agg_variable_definition(&(params[0]))) ; */
+  axes = agg_axes_parse(agg_variable_definition(&(params[0]))) ;
 
-  if ( agg_surface_axes(S) == AGG_AXES_UNDEFINED )
+  if ( axes == AGG_AXES_UNDEFINED )
     g_error("%s: unrecognized axes \"%s\" on line %u",
 	    __FUNCTION__, agg_variable_definition(&(params[0])),
 	    g_scanner_cur_line(scanner)) ;
   
+  A = agg_affine_new(1) ;
+  agg_affine_axes(A, axes) ;
+  agg_affine_differentiate(A, "u") ;
+  agg_transform_affine_add(T, A) ;
+
   return ;
 }
 
@@ -460,6 +473,39 @@ void _agg_invert_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
 	    __FUNCTION__, g_scanner_cur_line(scanner)) ;
 
   agg_patch_invert(P) = TRUE ;
+  
+  return ;
+}
+
+void _agg_limits_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
+		       gpointer data[])
+
+{
+  gint nparams ;
+  agg_variable_t params[64] ;
+  agg_surface_t *S ;
+  
+  token_read_and_check(scanner, G_TOKEN_LEFT_PAREN, "missing left bracket") ;
+
+  S = agg_body_surface_last(b) ;
+  
+  parameter_list_parse(scanner, params, &nparams) ;
+
+  if ( nparams != 2 ) {
+    g_error("%s: limits requires two parameters, line %u",
+	    __FUNCTION__, g_scanner_cur_line(scanner)) ;
+  }
+    
+  if ( agg_variable_definition(&(params[0])) != NULL )
+    g_error("%s: lower u limit must be constant, line %u",
+	    __FUNCTION__, g_scanner_cur_line(scanner)) ;
+  
+  if ( agg_variable_definition(&(params[1])) != NULL )
+    g_error("%s: upper u limit must be constant, line %u",
+	    __FUNCTION__, g_scanner_cur_line(scanner)) ;
+
+  agg_surface_umin(S) = agg_variable_value(&(params[0])) ;
+  agg_surface_umax(S) = agg_variable_value(&(params[1])) ;
   
   return ;
 }
@@ -716,8 +762,8 @@ void _agg_surface_read(GScanner *scanner, agg_body_t *b, gboolean echo,
   g_scanner_get_next_token(scanner) ;
 
   /*initialize anything that needs doing*/
-  agg_surface_umin(S) = 0.0 ; 
-  agg_surface_umax(S) = 1.0 ; 
+  /* agg_surface_umin(S) = 0.0 ;  */
+  /* agg_surface_umax(S) = 1.0 ;  */
 
   agg_expression_data_compile(T->e) ;
   agg_transform_expressions_compile(T) ;

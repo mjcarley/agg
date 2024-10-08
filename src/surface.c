@@ -61,7 +61,6 @@ agg_surface_t *agg_surface_new(gint nsmax)
   agg_surface_section_number_max(S) = nsmax ;
 
   agg_surface_transform(S) = agg_transform_new(32) ;
-  agg_surface_axes(S) = AGG_AXES_PX_PY_PZ ;
   
   /*make sure the u and v parameters are available to the surface
     transform*/
@@ -77,7 +76,11 @@ agg_surface_t *agg_surface_new(gint nsmax)
     S->s[i].oumax = oumax ; 
     S->s[i].olmax = olmax ; 
   }
-  
+
+  /*default values*/
+  agg_surface_umin(S) = 0.0 ;
+  agg_surface_umax(S) = 1.0 ;
+
   return S ;
 }
 

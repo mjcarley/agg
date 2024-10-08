@@ -1542,7 +1542,7 @@ gint agg_mesh_surface_point_add(agg_mesh_t *m, gint surf,
   g_assert((S = agg_mesh_surface(m, surf)) != NULL) ;
   
   if ( P != NULL ) {
-    agg_patch_map(P, s, t, &u, &v) ;    
+    agg_patch_map(S, P, s, t, &u, &v) ;    
   } else {
     u = s ; v = t ;
   }
@@ -1701,17 +1701,17 @@ gint agg_mesh_body(agg_mesh_t *m, agg_body_t *b, gint pps,
   /* fprintf(stderr, "%s: added %d surfaces\n", __FUNCTION__, */
   /* 	  agg_mesh_surface_number(m)) ; */
   
-  for ( i = 0 ; i < agg_body_surface_number(b); i ++ ) {
-    /* fprintf(stderr, "%s: adding surface %d\n", __FUNCTION__, i) ; */
-    for ( j = i+1 ; j < agg_body_surface_number(b); j ++ ) {
-      if ( agg_surface_patch_trim(agg_body_surface(b,i), agg_body_patch(b,i),
-				  0.05,
-				  agg_body_surface(b,j), agg_body_patch(b,j),
-				  0.05, &(m->B[m->nb]), w) ) {
-	m->nb ++ ;
-      }
-    }
-  }
+  /* for ( i = 0 ; i < agg_body_surface_number(b); i ++ ) { */
+  /*   /\* fprintf(stderr, "%s: adding surface %d\n", __FUNCTION__, i) ; *\/ */
+  /*   for ( j = i+1 ; j < agg_body_surface_number(b); j ++ ) { */
+  /*     if ( agg_surface_patch_trim(agg_body_surface(b,i), agg_body_patch(b,i), */
+  /* 				  0.05, */
+  /* 				  agg_body_surface(b,j), agg_body_patch(b,j), */
+  /* 				  0.05, &(m->B[m->nb]), w) ) { */
+  /* 	m->nb ++ ; */
+  /*     } */
+  /*   } */
+  /* } */
   
   for ( i = 0 ; i < agg_mesh_surface_number(m) ; i ++ ) {
     g_assert(agg_surface_grid(agg_body_surface(b,i)) != AGG_GRID_UNDEFINED) ;

@@ -431,7 +431,7 @@ static void surface_test(void)
   nu = 16 ; nv = 33 ;
   for ( i = 0 ; i < nu ; i ++ ) {
     for ( j = 0 ; j < nv ; j ++ ) {
-      agg_patch_map(P, (gdouble)i/(nu-1), (gdouble)j/(nv-1), &u, &v) ;
+      agg_patch_map(S, P, (gdouble)i/(nu-1), (gdouble)j/(nv-1), &u, &v) ;
       agg_surface_point_eval(S, u, v, x, w) ;
       fprintf(stdout, "%e %e %e\n", x[0], x[1], x[2]) ;
     }
@@ -502,7 +502,7 @@ static void body_test(void)
 		 sw) ;
   }
   
-  agg_surface_axes(S[1]) = AGG_AXES_PX_PY_MZ ;  
+  /* agg_surface_axes(S[1]) = AGG_AXES_PX_PY_MZ ;   */
   agg_patch_invert(P[1]) = TRUE ;
   
   wf = agg_mesh_new(65536, 65536, 65536) ;

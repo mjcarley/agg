@@ -86,7 +86,8 @@ agg_patch_t *agg_patch_new(void)
   return P ;
 }
 
-static gint agg_bilinear_map(agg_patch_t *P, gdouble s, gdouble t,
+static gint agg_bilinear_map(agg_surface_t *S,
+			     agg_patch_t *P, gdouble s, gdouble t,
 			     gdouble *u, gdouble *v)
 {
   /* gdouble w0, w1, w2, w3 ; */
@@ -112,13 +113,14 @@ static gint agg_bilinear_map(agg_patch_t *P, gdouble s, gdouble t,
 
   g_assert_not_reached() ; /*untested code*/
   
-  *u = s ;
+  *u = agg_surface_umin(S) + s*(agg_surface_umax(S) - agg_surface_umin(S)) ;
   *v = -1.0 + 2.0*t ;
   
   return 0 ;
 }
 
-static gint agg_spherical_map(agg_patch_t *P, gdouble s, gdouble t,
+static gint agg_spherical_map(agg_surface_t *S,
+			      agg_patch_t *P, gdouble s, gdouble t,
 			      gdouble *u, gdouble *v)
 
 {
@@ -138,12 +140,13 @@ static gint agg_spherical_map(agg_patch_t *P, gdouble s, gdouble t,
   return 0 ;
 }
 
-static gint agg_hemispherical_map(agg_patch_t *P, gdouble s, gdouble t,
+static gint agg_hemispherical_map(agg_surface_t *S,
+				  agg_patch_t *P, gdouble s, gdouble t,
 				  gdouble *u, gdouble *v)
 
 {
   agg_curve_t *cmin, *cmax ;
-  gdouble smin, smax, tmp ;
+  gdouble smin, smax, tmp, ut ;
 
   if ( t > 1.0 ) t -= 1.0 ;
   if ( t < 0.0 ) t += 1.0 ;
@@ -156,8 +159,11 @@ static gint agg_hemispherical_map(agg_patch_t *P, gdouble s, gdouble t,
 
   /* smin = 0.0 ; smax = 1.0 ; */
   
-  *u = sin(0.5*M_PI*(smin + s*(smax-smin))) ;
+  ut = sin(0.5*M_PI*(smin + s*(smax-smin))) ;
 
+  *u = agg_surface_umin(S) + ut*(agg_surface_umax(S) - agg_surface_umin(S)) ;
+
+  
   if ( t < 0.5 ) {
     *v = -0.5*(1.0 + cos(2.0*M_PI*t)) ;
   } else {
@@ -167,7 +173,8 @@ static gint agg_hemispherical_map(agg_patch_t *P, gdouble s, gdouble t,
   return 0 ;
 }
 
-static gint agg_tubular_map(agg_patch_t *P, gdouble s, gdouble t,
+static gint agg_tubular_map(agg_surface_t *S,
+			    agg_patch_t *P, gdouble s, gdouble t,
 			    gdouble *u, gdouble *v)
 
 {
@@ -175,7 +182,8 @@ static gint agg_tubular_map(agg_patch_t *P, gdouble s, gdouble t,
   if ( t < 0.0 ) t += 1.0 ;
   g_assert(0.0 <= t && t <= 1.0) ;
 
-  *u = s ;
+  *u = agg_surface_umin(S) + s*(agg_surface_umax(S) - agg_surface_umin(S)) ;
+  /* *u = s ; */
 
   if ( t < 0.5 ) {
     *v = -0.5*(1.0 + cos(2.0*M_PI*t)) ;
@@ -189,16 +197,19 @@ static gint agg_tubular_map(agg_patch_t *P, gdouble s, gdouble t,
 /** 
  * Apply mapping in a patch to find parametric variables on surface.
  * 
+ * @param S surface to which P is applied;
  * @param P patch whose mapping is to be applied;
  * @param s variable on \a P, \f$0\leq s \leq 1\f$;
  * @param t variable on \a P, \f$0\leq t \leq 1\f$;
- * @param u surface parametric variable;
- * @param v surface parametric variable.
+ * @param u surface parametric variable on \a S;
+ * @param v surface parametric variable on \a S.
  * 
  * @return 0 on success.
  */
 
-gint agg_patch_map(agg_patch_t *P, gdouble s, gdouble t,
+gint agg_patch_map(agg_surface_t *S,
+		   agg_patch_t *P,
+		   gdouble s, gdouble t,
 		   gdouble *u, gdouble *v)
 
 {
@@ -213,19 +224,19 @@ gint agg_patch_map(agg_patch_t *P, gdouble s, gdouble t,
     g_error("%s: t (%lg) out of range", __FUNCTION__, t) ;
 
   if ( agg_patch_mapping(P) == AGG_PATCH_BILINEAR ) {
-    return agg_bilinear_map(P, s, t, u, v) ;
+    return agg_bilinear_map(S, P, s, t, u, v) ;
   }
 
   if ( agg_patch_mapping(P) == AGG_PATCH_SPHERICAL ) {
-    return agg_spherical_map(P, s, t, u, v) ;
+    return agg_spherical_map(S, P, s, t, u, v) ;
   }
 
   if ( agg_patch_mapping(P) == AGG_PATCH_HEMISPHERICAL ) {
-    return agg_hemispherical_map(P, s, t, u, v) ;
+    return agg_hemispherical_map(S, P, s, t, u, v) ;
   }
 
   if ( agg_patch_mapping(P) == AGG_PATCH_TUBULAR ) {
-    return agg_tubular_map(P, s, t, u, v) ;
+    return agg_tubular_map(S, P, s, t, u, v) ;
   }
   
   g_error("%s: unrecognized mapping %d", __FUNCTION__, agg_patch_mapping(P)) ;
@@ -387,15 +398,15 @@ gint agg_patch_point_diff(agg_surface_t *S, agg_patch_t *P,
 
   ee = 1e-3 ;
 
-  agg_patch_map(P, s, t, &u, &v) ;
+  agg_patch_map(S, P, s, t, &u, &v) ;
   agg_surface_point_eval(S, u, v, x, w) ;
 
   if ( s > ee ) {
-    agg_patch_map(P, s-ee, t, &u, &v) ;
+    agg_patch_map(S, P, s-ee, t, &u, &v) ;
     agg_surface_point_eval(S, u, v, xs, w) ;
     agg_vector_diff(xs, x, xs) ;
   } else {
-    agg_patch_map(P, s+ee, t, &u, &v) ;
+    agg_patch_map(S, P, s+ee, t, &u, &v) ;
     agg_surface_point_eval(S, u, v, xs, w) ;
     agg_vector_diff(xs, xs, x) ;
   }
@@ -403,11 +414,11 @@ gint agg_patch_point_diff(agg_surface_t *S, agg_patch_t *P,
   xs[0] /= ee ; xs[1] /= ee ; xs[2] /= ee ; 
 
   if ( t > ee ) {
-    agg_patch_map(P, s, t-ee, &u, &v) ;
+    agg_patch_map(S, P, s, t-ee, &u, &v) ;
     agg_surface_point_eval(S, u, v, xt, w) ;
     agg_vector_diff(xt, x, xt) ;
   } else {
-    agg_patch_map(P, s, t+ee, &u, &v) ;
+    agg_patch_map(S, P, s, t+ee, &u, &v) ;
     agg_surface_point_eval(S, u, v, xt, w) ;
     agg_vector_diff(xt, xt, x) ;
   }

@@ -170,7 +170,7 @@ gint agg_curve_plane_normal(agg_curve_t *c, agg_surface_t *S, agg_patch_t *P,
 
   for ( i = 0 ; i < nt ; i ++ ) {
     agg_curve_eval(c, tn[i], &s, &t) ;
-    agg_patch_map(P, s, t, &u, &v) ;
+    agg_patch_map(S, P, s, t, &u, &v) ;
     agg_surface_point_eval(S, u, v, &(x[3*i]), w) ;
   }
 
