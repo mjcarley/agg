@@ -343,6 +343,7 @@ void _agg_transform_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
   gint srf, nparams, i ;
   agg_variable_t params[64] ;
   agg_transform_t *T ;
+  agg_affine_t *A ;
   
   srf = agg_body_surface_number(b) - 1 ;
   S = agg_body_surface_last(b) ;
@@ -370,7 +371,12 @@ void _agg_transform_parse(GScanner *scanner, agg_body_t *b, gboolean echo,
 	    __FUNCTION__, g_scanner_cur_line(scanner)) ;
   }
 
-  agg_transform_parse(T, params, nparams) ;
+  A = agg_affine_new(1) ;
+  agg_affine_parse(A, params, nparams) ;
+  agg_affine_differentiate(A, "u") ;
+  agg_transform_affine_add(T, A) ;
+
+  /* agg_transform_parse(T, params, nparams) ; */
   
   if ( echo ) {
     fprintf(stderr, "line %u: transform \"%s\" added to surface %d\n",

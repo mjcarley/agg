@@ -49,12 +49,14 @@ static agg_transform_t *transform_parse(char *str)
 
 {
   agg_transform_t *T ;
+  agg_affine_t *A ;
   char **tokens, *name ;
   agg_variable_t p[32] = {0} ;
   gint i, np ;
 
   T = agg_transform_new(8) ;
-
+  A = agg_affine_new(1) ;
+  
   g_strdelimit (str, "(),", ' ') ;
 
   tokens = g_strsplit(str, " ", 0) ;
@@ -70,8 +72,8 @@ static agg_transform_t *transform_parse(char *str)
     }
   }
 
-  /* agg_transform_parse(T, name, p, np) ; */
-  agg_transform_parse(T, p, np) ;
+  agg_affine_parse(A, p, np) ;
+  agg_transform_affine_add(T, A) ;  
   
   return T ;
 }
@@ -160,7 +162,7 @@ gint main(gint argc, char **argv)
       return 0 ;
     case 'T':
       fprintf(stderr, "%s: available transforms\n\n", progname) ;
-      agg_transforms_list(stderr) ;
+      agg_affine_list(stderr, "  ", "\n") ;
       return 0 ;
       break ;
     case 't': transform = g_strdup(optarg) ; break ;

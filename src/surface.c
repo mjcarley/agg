@@ -311,12 +311,12 @@ gint agg_surface_point_eval(agg_surface_t *S, gdouble u, gdouble v,
   } else {
     agg_variable_value(var) = u ;
   }
-  var = agg_transform_variable(T, 1) ;
-  if ( strcmp(agg_variable_name(var), "v") != 0 ) {
-    g_error("%s: second variable in transform must be \"v\"", __FUNCTION__) ;
-  } else {
-    agg_variable_value(var) = v ;
-  }
+  /* var = agg_transform_variable(T, 1) ; */
+  /* if ( strcmp(agg_variable_name(var), "v") != 0 ) { */
+  /*   g_error("%s: second variable in transform must be \"v\"", __FUNCTION__) ; */
+  /* } else { */
+  /*   agg_variable_value(var) = v ; */
+  /* } */
 
   agg_transform_variables_eval(T) ;  
 
@@ -328,7 +328,7 @@ gint agg_surface_point_eval(agg_surface_t *S, gdouble u, gdouble v,
 
   agg_transform_apply(T, y, x) ;
 
-  agg_transform_axes(agg_surface_axes(S), x, x) ;
+  /* agg_transform_axes(agg_surface_axes(S), x, x) ; */
   
   return 0 ;
 }

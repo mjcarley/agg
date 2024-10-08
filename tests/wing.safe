@@ -1,0 +1,29 @@
+# test file for parametrically specified generic aircraft
+#
+# syntax:
+#
+# global block contains parameter declarations
+#
+# surface blocks contain sections and transformations
+
+global {
+  span = 8
+  root = "span/6"
+}
+
+surface {
+  name("wing")
+  patch("spherical", "nowrap", "wrap")
+  section(0, "aerofoil", 0.5, 0.2, 0.0)
+  transform("translate", -0.5, 0, 0)
+  ##transform("xscale", "root*sqrt(u*(1-u))")
+  ##transform("xscale", "root")
+  transform(0.1, 0.9, "scale", "root")
+  transform(0, 0.1, "xscale", "root*sqrt(u/0.1)")
+  transform(0, 0.1, "yscale", "root*sqrt(u/0.1)")
+  transform(0.9, 1, "xscale", "root*sqrt((1-u)/0.1)")
+  transform(0.9, 1, "yscale", "root*sqrt((1-u)/0.1)")
+  ##transform("yscale", "2*root*sqrt(u*(1-u))")
+  transform("translate", 0, 0, "span*(u-1/2)")
+  grid("sphere-uv", 16, 32)
+}

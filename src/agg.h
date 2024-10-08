@@ -250,8 +250,6 @@ struct _agg_chebyshev_t {
 
 #define agg_chebyshev_order(_C)              ((_C)->N)
 #define agg_chebyshev_component_number(_C)   ((_C)->nc)
-/* #define agg_chebyshev_data(_C,_i,_j)				\ */
-/*   ((_C)->f[(_i)*agg_chebyshev_component_number((_C))+(_j)]) */
 #define agg_chebyshev_interval_number(_C)    ((_C)->ninter)
 #define agg_chebyshev_interval_start(_C,_i)  ((_C)->inter[(_i)])
 #define agg_chebyshev_interval_xmin(_C,_i)   ((_C)->xinter[(_i)])
@@ -285,95 +283,11 @@ struct _agg_expression_data_t {
  * @}
  */
 
-#define AGG_OPERATOR_PARAMETER_SIZE 8
-
 /**
  * @{
  * @ingroup transforms
  * 
  */
-
-/** @typedef agg_operation_t
- * 
- * Basic transform operations
- */
-
-typedef enum {
-  AGG_TRANSFORM_UNDEFINED = 0, /**< undefined transform */
-  AGG_TRANSFORM_ROTATE    = 1, /**< anti-clockwise rotation about a point */
-  AGG_TRANSFORM_SHRINK    = 2, /**< scaling by contracting towards a point */
-  AGG_TRANSFORM_TRANSLATE = 3, /**< translation in three dimensions */
-  AGG_TRANSFORM_SCALE     = 4, /**< scaling by multiplying a constant factor */
-  AGG_TRANSFORM_SCALE_X   = 5, /**< scaling in x multiplying a constant factor */
-  AGG_TRANSFORM_SCALE_Y   = 6  /**< scaling in y multiplying a constant factor */
-} agg_operation_t ;
-
-typedef gint (*agg_transform_operator_func_t)(agg_operation_t op,
-					      agg_variable_t *p, gint np,
-					      gdouble *xin, gdouble *xout,
-					      gdouble *dxdu, gdouble *dxdv) ;
-
-/** @typedef agg_transform_operator_t
- *
- * Data structure for basic transform operations
- */
-
-#ifdef DOXYGEN
-typedef agg_transform_operator_t ;
-#else /*DOXYGEN*/
-typedef struct _agg_transform_operator_t agg_transform_operator_t ;
-struct _agg_transform_operator_t {
-  agg_operation_t op ;
-  agg_variable_t
-  p[AGG_OPERATOR_PARAMETER_SIZE],
-    pu[AGG_OPERATOR_PARAMETER_SIZE],
-    pv[AGG_OPERATOR_PARAMETER_SIZE] ;
-  gint np ;
-  agg_transform_operator_func_t func ;
-  gdouble umin, umax ;
-} ;
-#endif /*DOXYGEN*/
-
-#ifdef DOXYGEN
-/**
- *  @brief operation performed by an ::agg_transform_operator_t
- */
-#define agg_transform_operator_operation(op)        
-/**
- *  @brief parameters of ::agg_variable_t for an ::agg_transform_operator_t
- */
-#define agg_transform_operator_parameters(op)       
-/**
- *  @brief \f$i\f$th parameter for ::agg_transform_operator_t
- */
-#define agg_transform_operator_parameter(op,i)     
-/**
- *  @brief number of parameters for the ::agg_transform_operator_t
- */
-#define agg_transform_operator_parameter_number(op) 
-/**
- *  @brief function called to execute the transform operation
- */
-#define agg_transform_operator_func(op)             
-/**
- *  @brief lower limit of parameter range for operation
- */
-#define agg_transform_operator_umin(op)
-/**
- *  @brief upper limit of parameter range for operation
- */
-#define agg_transform_operator_umax(op)
-#else /*DOXYGEN*/
-#define agg_transform_operator_operation(_op)        ((_op)->op)
-#define agg_transform_operator_parameters(_op)       ((_op)->p)
-#define agg_transform_operator_parameter(_op,_i)     (&((_op)->p[(_i)]))
-#define agg_transform_operator_parameter_u(_op,_i)   (&((_op)->pu[(_i)]))
-#define agg_transform_operator_parameter_v(_op,_i)   (&((_op)->pv[(_i)]))
-#define agg_transform_operator_parameter_number(_op) ((_op)->np)
-#define agg_transform_operator_func(_op)             ((_op)->func)
-#define agg_transform_operator_umin(_op)             ((_op)->umin)
-#define agg_transform_operator_umax(_op)             ((_op)->umax)
-#endif /*DOXYGEN*/
 
 #define AGG_TRANSFORM_VARIABLE_NUMBER_MAX 128
 
@@ -390,24 +304,24 @@ struct _agg_transform_t {
   agg_variable_t v[AGG_TRANSFORM_VARIABLE_NUMBER_MAX] ;
   agg_expression_data_t *e ;
   agg_affine_t **affine ;
-  agg_transform_operator_t **op ;
-  gint nop, nopmax, nv, n_affine, n_affine_max ;
+  gint nv, n_affine, n_affine_max ;
+  gdouble matrix[16] ;
 } ;
 #endif /*DOXYGEN*/
 
 #ifdef DOXYGEN
 /**
- *  @brief \f$i\f$th operation of an ::agg_transform_t
+ *  @brief \f$i\f$th affine transform of an ::agg_transform_t
  */
-#define agg_transform_operator(T,i)        
+#define agg_transform_affine(T,i)        
 /**
- *  @brief number of operations in an ::agg_transform_t
+ *  @brief number of affine transforms in an ::agg_transform_t
  */
-#define agg_transform_operator_number(T)    
+#define agg_transform_affine_number(T)    
 /**
- *  @brief maximum number of operations in an  ::agg_transform_t
+ *  @brief maximum number of affine transforms in an  ::agg_transform_t
  */
-#define agg_transform_operator_number_max(T)
+#define agg_transform_affine_number_max(T)
 /**
  *  @brief \f$i\f$th variable in an  ::agg_transform_t
  */
@@ -417,9 +331,6 @@ struct _agg_transform_t {
  */
 #define agg_transform_variable_number(T)    
 #else /*DOXYGEN*/
-#define agg_transform_operator(_T,_i)           ((_T)->op[(_i)])
-#define agg_transform_operator_number(_T)       ((_T)->nop)
-#define agg_transform_operator_number_max(_T)   ((_T)->nopmax)
 #define agg_transform_variable(_T,_i)           (&((_T)->v[(_i)]))
 #define agg_transform_variable_number(_T)       ((_T)->nv)
 #define agg_transform_affine(_T,_i)             ((_T)->affine[(_i)])
@@ -513,26 +424,6 @@ struct _agg_surface_t {
  * @ingroup patches
  * 
  */
-
-/* typedef enum { */
-/*   AGG_CLIP_UNDEFINED  = 0, */
-/*   AGG_CLIP_CONSTANT_S = 1, */
-/*   AGG_CLIP_CONSTANT_T = 2, */
-/*   AGG_CLIP_ELLIPSE    = 3 */
-/* } agg_patch_clip_t ; */
-
-/* typedef struct _agg_patch_clipping_t agg_patch_clipping_t ; */
-
-/* struct _agg_patch_clipping_t { */
-/*   agg_patch_clip_t c ; */
-/*   gdouble data[4], ornt ; */
-/* } ; */
-
-/* #define agg_patch_clipping_type(_c)        ((_c)->c) */
-/* #define agg_patch_clipping_data(_c,_i)     ((_c)->data[(_i)]) */
-/* #define agg_patch_clipping_orientation(_c) ((_c)->ornt) */
-
-/* #define AGG_PATCH_POINT_SIZE 3 */
 
 /** @typedef agg_patch_mapping_t
  * 
@@ -837,7 +728,6 @@ gint agg_section_fit(agg_section_t *s,
 		     gdouble *xl, gint xlstr, gdouble *yl, gint ylstr, gint npl,
 		     gdouble n1, gdouble n2, gint nu, gint nl) ;
 
-agg_transform_operator_t *agg_transform_operator_new(void) ;
 agg_transform_t *agg_transform_new(gint nopmax) ;
 gint agg_transform_variable_add(agg_transform_t *T,
 				char *var, char *def, gdouble val) ;
@@ -847,45 +737,15 @@ gint agg_transform_expressions_compile(agg_transform_t *T) ;
 gint agg_transform_variables_eval(agg_transform_t *T) ;
 gint agg_transform_variables_write(FILE *f, agg_transform_t *T,
 				   gboolean write_defs) ;
-gint agg_transform_operator_add(agg_transform_t *T, agg_operation_t op,
-				gdouble umin, gdouble umax,
-				gdouble *p,
-				char **expr, char **dedu, char **dedv,
-				gint np) ;
-gint agg_transform_operators_write(FILE *f, agg_transform_t *T) ;
 gint agg_transform_apply(agg_transform_t *T, gdouble *xin, gdouble *xout) ;
 gint agg_transforms_list(FILE *f) ;
-
-gint agg_transform_operator_apply(agg_transform_operator_t *op,
-				  gdouble *xin, gdouble *xout) ;
-gint agg_transform_operator_rotate(agg_operation_t op,
-				   agg_variable_t *p, gint np,
-				   gdouble *xin, gdouble *xout,
-				   gdouble *dxdu, gdouble *dxdv) ;
-gint agg_transform_operator_translate(agg_operation_t op,
-				      agg_variable_t *p, gint np,
-				      gdouble *xin, gdouble *xout,
-				      gdouble *dxdu, gdouble *dxdv) ;
-gint agg_transform_operator_shrink(agg_operation_t op,
-				   agg_variable_t *p, gint np,
-				   gdouble *xin, gdouble *xout,
-				   gdouble *dxdu, gdouble *dxdv) ;
-gint agg_transform_operator_scale(agg_operation_t op,
-				  agg_variable_t *p, gint np,
-				  gdouble *xin, gdouble *xout,
-				  gdouble *dxdu, gdouble *dxdv) ;
-gint agg_transform_operator_xscale(agg_operation_t op,
-				   agg_variable_t *p, gint np,
-				   gdouble *xin, gdouble *xout,
-				   gdouble *dxdu, gdouble *dxdv) ;
-gint agg_transform_operator_yscale(agg_operation_t op,
-				   agg_variable_t *p, gint np,
-				   gdouble *xin, gdouble *xout,
-				   gdouble *dxdu, gdouble *dxdv) ;
 				   
 gint agg_transform_axes(agg_axes_t axes, gdouble *xin, gdouble *xout) ;
 gint agg_transform_parse(agg_transform_t *T, agg_variable_t *p, gint np) ;
 agg_axes_t agg_axes_parse(char *str) ;
+
+gint agg_transform_evaluate(agg_transform_t *T, gdouble u,
+			    gint order, gdouble *matrix) ;
 
 gint agg_variable_write(FILE *f, agg_variable_t *v) ;
 agg_expression_data_t *agg_expression_data_new(gint nemax) ;
@@ -945,16 +805,6 @@ gint agg_intersection_resample(agg_intersection_t *inter,
 			       gint nsp, gint pps,
 			       agg_intersection_t *resample,
 			       agg_surface_workspace_t *w) ;
-/* gint agg_intersection_clip(agg_intersection_t *inter, */
-/* 			   gint c, agg_patch_clip_t cut, */
-/* 			   agg_patch_clipping_t *clip) ; */
-/* gint agg_patch_clip_eval(agg_patch_clipping_t *c, gdouble u, */
-/* 			 gdouble *s, gdouble *t) ; */
-/* gint agg_clipping_orient(agg_patch_clipping_t *c1, agg_patch_t *P1, */
-/* 			 agg_surface_t *S1, */
-/* 			 agg_patch_clipping_t *c2, agg_patch_t *P2, */
-/* 			 agg_surface_t *S2, */
-/* 			 agg_surface_workspace_t *w) ; */
 
 agg_mesh_t *agg_mesh_new(gint npmax, gint nspmax, gint nemax) ;
 gint agg_mesh_surface_make(agg_mesh_t *w,
