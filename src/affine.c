@@ -41,15 +41,26 @@ static const struct {
   char *name ;
   agg_affine_func_t func ;
   gint npmin, npmax ;
+  char *help ;
 } transform_list[] =
   {
-    {"undefined",  NULL,                    0,  0},
-    {"rotate_x",   agg_affine_rotation_x,   1,  1},
-    {"rotate_y",   agg_affine_rotation_y,   1,  1},
-    {"rotate_z",   agg_affine_rotation_z,   1,  1},
-    {"translate",  agg_affine_translation,  3,  3},
-    {"scale",      agg_affine_scale,        1,  3},
-    {NULL,         NULL,                   -1, -1}
+    {"undefined",  NULL,                    0,  0, ""},
+    {"rotate_x",   agg_affine_rotation_x,   1,  1,
+     "rotation about x axis"
+    },
+    {"rotate_y",   agg_affine_rotation_y,   1,  1,
+     "rotation about y axis"
+    },
+    {"rotate_z",   agg_affine_rotation_z,   1,  1,
+     "rotation about z axis"
+    },
+    {"translate",  agg_affine_translation,  3,  3,
+     "translation in three dimensions"
+    },
+    {"scale",      agg_affine_scale,        1,  3,
+     "scale point in three dimensions"
+    },
+    {NULL,         NULL,                   -1, -1, ""}
   } ;
 
 agg_affine_t *agg_affine_new(gint order_max)
@@ -479,13 +490,22 @@ gint agg_affine_write(FILE *f, agg_affine_t *A)
   return 0 ;
 }
 
-gint agg_affine_list(FILE *f, char *head, char *tail)
+gint agg_affine_list(FILE *f, char *head, char *tail, gboolean help)
 
 {
   gint i ;
-  
+
+  if ( !help ) {
+    for ( i = 1 ; transform_list[i].name != NULL ; i ++ ) {
+      fprintf(f, "%s%s%s", head, transform_list[i].name, tail) ;
+    }
+
+    return 0 ;
+  }
+
   for ( i = 1 ; transform_list[i].name != NULL ; i ++ ) {
     fprintf(f, "%s%s%s", head, transform_list[i].name, tail) ;
+    fprintf(f, "%s\n", transform_list[i].help) ;
   }
   
   return 0 ;

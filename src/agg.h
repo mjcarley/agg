@@ -900,7 +900,7 @@ gint agg_affine_parse(agg_affine_t *A, agg_variable_t *p, gint np) ;
 gint agg_affine_axes(agg_affine_t *A, agg_axes_t axes) ;
 gint agg_affine_differentiate(agg_affine_t *A, char *var) ;
 gint agg_affine_write(FILE *f, agg_affine_t *A) ;
-gint agg_affine_list(FILE *f, char *head, char *tail) ;
+gint agg_affine_list(FILE *f, char *head, char *tail, gboolean help) ;
 
 #endif /*__AGG_H_INCLUDED__*/
 

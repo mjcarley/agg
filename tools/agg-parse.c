@@ -162,7 +162,7 @@ gint main(gint argc, char **argv)
       return 0 ;
     case 'T':
       fprintf(stderr, "%s: available transforms\n\n", progname) ;
-      agg_affine_list(stderr, "  ", "\n") ;
+      agg_affine_list(stderr, "  ", "\n", TRUE) ;
       return 0 ;
       break ;
     case 't': transform = g_strdup(optarg) ; break ;
