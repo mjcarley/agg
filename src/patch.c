@@ -428,6 +428,34 @@ gint agg_patch_point_diff(agg_surface_t *S, agg_patch_t *P,
   return 0 ;
 }
 
+static void tubular_st_to_x(gdouble s, gdouble t, gdouble *x)
+
+{
+  gdouble th ;
+
+  if ( t > 1 ) t -= 1 ;
+  if ( t < 0 ) t += 1 ;
+  
+  th = (1.0 - t)*2.0*M_PI ; 
+  x[0] = s ; x[1] = cos(th) ; x[2] = sin(th) ;
+
+  return ;
+}
+
+static void tubular_x_to_st(gdouble *x, gdouble *s, gdouble *t)
+
+{
+  gdouble th ;
+
+  *s = x[0] ;
+
+  th = atan2(x[2], x[1]) ;
+
+  *t = 1.0 - th/2.0/M_PI ;
+
+  return ;
+}
+
 static void spherical_st_to_x(gdouble s, gdouble t, gdouble *x)
 
 {
@@ -579,6 +607,19 @@ gint agg_patch_triangle_interp(agg_patch_t *P,
 
   switch ( agg_patch_mapping(P) ) {
   default: g_assert_not_reached() ; break ;
+  case AGG_PATCH_TUBULAR:
+    tubular_st_to_x(s0, t0, x0) ;
+    tubular_st_to_x(s1, t1, x1) ;
+    tubular_st_to_x(s2, t2, x2) ;
+
+    shapefunc(u, v, L) ;
+    x[0] = L[0]*x0[0] + L[1]*x1[0] + L[2]*x2[0] ; 
+    x[1] = L[0]*x0[1] + L[1]*x1[1] + L[2]*x2[1] ; 
+    x[2] = L[0]*x0[2] + L[1]*x1[2] + L[2]*x2[2] ; 
+
+    tubular_x_to_st(x, s, t) ;
+
+    break ;
   case AGG_PATCH_SPHERICAL:
     spherical_st_to_x(s0, t0, x0) ;
     spherical_st_to_x(s1, t1, x1) ;
