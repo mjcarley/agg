@@ -26,6 +26,27 @@
 #else /*DOXYGEN*/
 #endif /*DOXYGEN*/
 
+typedef struct _agg_affine_t agg_affine_t ;
+struct _agg_affine_t {
+  gint order, order_max ;
+  gpointer *compiled ;
+  char **expr ;
+  gdouble *matrix ;
+} ;
+
+#define agg_affine_order(_A)     ((_A)->order)
+#define agg_affine_order_max(_A) ((_A)->order_max)
+#define agg_affine_matrix(_A,_order) (&((_A)->matrix[16*(_order)]))
+#define agg_affine_matrix_value(_A,_order,_i,_j)	\
+  ((_A)->matrix[16*(_order)+4*(_i)+(_j)])
+#define agg_affine_expression(_A,_order,_i,_j)	\
+  ((_A)->expr[16*(_order)+4*(_i)+(_j)])
+#define agg_affine_compiled(_A,_order,_i,_j)	\
+  ((_A)->compiled[16*(_order)+4*(_i)+(_j)])
+
+typedef gint (*agg_affine_func_t)(agg_affine_t *A,
+				  gdouble *p, char **expr, gint np) ;
+
 #ifdef DOXYGEN
 /** @typedef agg_curve_type_t
  *
@@ -368,8 +389,9 @@ typedef struct _agg_transform_t agg_transform_t ;
 struct _agg_transform_t {
   agg_variable_t v[AGG_TRANSFORM_VARIABLE_NUMBER_MAX] ;
   agg_expression_data_t *e ;
+  agg_affine_t **affine ;
   agg_transform_operator_t **op ;
-  gint nop, nopmax, nv ;
+  gint nop, nopmax, nv, n_affine, n_affine_max ;
 } ;
 #endif /*DOXYGEN*/
 
@@ -400,6 +422,9 @@ struct _agg_transform_t {
 #define agg_transform_operator_number_max(_T)   ((_T)->nopmax)
 #define agg_transform_variable(_T,_i)           (&((_T)->v[(_i)]))
 #define agg_transform_variable_number(_T)       ((_T)->nv)
+#define agg_transform_affine(_T,_i)             ((_T)->affine[(_i)])
+#define agg_transform_affine_number(_T)         ((_T)->n_affine)
+#define agg_transform_affine_number_max(_T)     ((_T)->n_affine_max)
 #endif /*DOXYGEN*/
 
 /**
@@ -1006,6 +1031,28 @@ gint agg_chebyshev_surface_section_adaptive(agg_chebyshev_t *C,
 					    gint N, gdouble tol, gdouble dmin,
 					    agg_surface_workspace_t *w) ;
 gdouble agg_chebyshev_interval_shortest(agg_chebyshev_t *C) ;
+
+gint agg_transform_affine_add(agg_transform_t *T, agg_affine_t *A) ;
+agg_affine_t *agg_affine_new(gint order_max) ;
+gint agg_affine_point_transform(gdouble *y, gdouble *A, gdouble *x) ;
+
+gint agg_affine_expression_add(agg_affine_t *A, gint order,
+			       gint i, gint j, gdouble val, char *expr) ;
+gint agg_affine_expressions_compile(agg_affine_t *A, agg_expression_data_t *e) ;
+gint agg_affine_matrices_evaluate(agg_affine_t *A) ;
+gint agg_affine_identity(agg_affine_t *A) ;
+gint agg_affine_zero(agg_affine_t *A) ;
+gint agg_affine_translation(agg_affine_t *A,
+			    gdouble *dx, char **expr, gint ns) ;
+gint agg_affine_rotation_x(agg_affine_t *A, gdouble *th, char **expr, gint np) ;
+gint agg_affine_rotation_y(agg_affine_t *A, gdouble *th, char **expr, gint np) ;
+gint agg_affine_rotation_z(agg_affine_t *A, gdouble *th, char **expr, gint np) ;
+gint agg_affine_scale(agg_affine_t *A, gdouble *s, char **expr, gint ns) ;
+gint agg_affine_parse(agg_affine_t *A, agg_variable_t *p, gint np) ;
+gint agg_affine_axes(agg_affine_t *A, agg_axes_t axes) ;
+gint agg_affine_differentiate(agg_affine_t *A, char *var) ;
+gint agg_affine_write(FILE *f, agg_affine_t *A) ;
+gint agg_affine_list(FILE *f, char *head, char *tail) ;
 
 #endif /*__AGG_H_INCLUDED__*/
 

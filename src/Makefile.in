@@ -138,7 +138,7 @@ libagg_la_LIBADD =
 am_libagg_la_OBJECTS = bernstein.lo binomials.lo tinyexpr.lo \
 	section.lo transform.lo variables.lo surface.lo naca.lo \
 	intersection.lo hefsi.lo patch.lo moller-tri.lo mesh.lo \
-	body.lo blend.lo library.lo curve.lo chebyshev.lo
+	body.lo blend.lo library.lo curve.lo chebyshev.lo affine.lo
 libagg_la_OBJECTS = $(am_libagg_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -163,7 +163,7 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/bernstein.Plo \
+am__depfiles_remade = ./$(DEPDIR)/affine.Plo ./$(DEPDIR)/bernstein.Plo \
 	./$(DEPDIR)/binomials.Plo ./$(DEPDIR)/blend.Plo \
 	./$(DEPDIR)/body.Plo ./$(DEPDIR)/chebyshev.Plo \
 	./$(DEPDIR)/curve.Plo ./$(DEPDIR)/hefsi.Plo \
@@ -386,7 +386,8 @@ libagg_la_SOURCES = \
 	blend.c \
 	library.c \
 	curve.c \
-	chebyshev.c
+	chebyshev.c \
+	affine.c
 
 include_HEADERS = \
 	agg.h
@@ -508,6 +509,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/affine.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/bernstein.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/binomials.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/blend.Plo@am__quote@ # am--include-marker
@@ -713,7 +715,8 @@ clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
 	mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ./$(DEPDIR)/bernstein.Plo
+		-rm -f ./$(DEPDIR)/affine.Plo
+	-rm -f ./$(DEPDIR)/bernstein.Plo
 	-rm -f ./$(DEPDIR)/binomials.Plo
 	-rm -f ./$(DEPDIR)/blend.Plo
 	-rm -f ./$(DEPDIR)/body.Plo
@@ -776,7 +779,8 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ./$(DEPDIR)/bernstein.Plo
+		-rm -f ./$(DEPDIR)/affine.Plo
+	-rm -f ./$(DEPDIR)/bernstein.Plo
 	-rm -f ./$(DEPDIR)/binomials.Plo
 	-rm -f ./$(DEPDIR)/blend.Plo
 	-rm -f ./$(DEPDIR)/body.Plo
