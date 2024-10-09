@@ -698,7 +698,7 @@ struct _agg_body_t {
 
 typedef struct _agg_surface_workspace_t agg_surface_workspace_t ;
 struct _agg_surface_workspace_t {
-  agg_section_t *s ;
+  agg_section_t *s, *ds ;
 } ;
 
 gint agg_bernstein_basis(gint n, gdouble x, gdouble *S, gdouble *dS) ;
@@ -748,6 +748,8 @@ gint agg_variable_write(FILE *f, agg_variable_t *v) ;
 agg_expression_data_t *agg_expression_data_new(gint nemax) ;
 gint agg_expression_data_variable_add(agg_expression_data_t *d,
 				      agg_variable_t *v) ;
+gint agg_expression_data_function_add(agg_expression_data_t *d,
+				      char *name, gpointer func, gint nargs) ;
 gpointer agg_expression_compile(char *e, agg_expression_data_t *d) ;
 gdouble agg_expression_eval(gpointer e) ;
 gint agg_expression_data_compile(agg_expression_data_t *d) ;

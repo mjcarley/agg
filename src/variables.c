@@ -98,6 +98,54 @@ gint agg_expression_data_variable_add(agg_expression_data_t *d,
 }
 
 /** 
+ * Add a function to an ::agg_expression_data_t.
+ * 
+ * @param d ::agg_expression_data_t to have variable added;
+ * @param v a variable to be added to \a d; this may depend on variables
+ * already in \a d, but not on variables yet to be added.
+ * 
+ * @return 0 on success.
+ */
+/* double my_sum(double a, double b) { */
+/*     /\* Example C function that adds two numbers together. *\/ */
+/*     return a + b; */
+/* } */
+
+/* te_variable vars[] = { */
+/*     {"mysum", my_sum, TE_FUNCTION2} /\* TE_FUNCTION2 used because my_sum takes two arguments. *\/ */
+/* }; */
+
+/* te_expr *n = te_compile("mysum(5, 6)", vars, 1, 0); */
+
+gint agg_expression_data_function_add(agg_expression_data_t *d,
+				      char *name, gpointer func, gint nargs)
+
+{
+  te_variable *vars ;
+  gint i ;
+  
+  if ( d->ne >= d->nemax )
+    g_error("%s: not enough space for %d variables", __FUNCTION__, d->ne) ;
+
+  vars = d->data ;
+  i = d->ne ;
+
+  vars[i].name = g_strdup(name) ;
+  vars[i].address = func ;
+  vars[i].type = TE_FUNCTION0 + nargs ;
+  vars[i].context = NULL ;
+
+  /* if ( agg_variable_definition(v) == NULL ) */
+  /*   d->defs[i] = NULL ; */
+  /* else */
+  /*   d->defs[i] = g_strdup(agg_variable_definition(v)) ; */
+  
+  d->ne ++ ;
+  
+  return 0 ;
+}
+
+/** 
  * Compile a symbolically defined expression, for future evaluation
  * 
  * @param e the expression to be compiled;

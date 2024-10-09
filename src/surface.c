@@ -62,11 +62,6 @@ agg_surface_t *agg_surface_new(gint nsmax)
 
   agg_surface_transform(S) = agg_transform_new(32) ;
   
-  /*make sure the u and v parameters are available to the surface
-    transform*/
-  agg_transform_variable_add(agg_surface_transform(S), "u", NULL, 0.0) ;
-  agg_transform_variable_add(agg_surface_transform(S), "v", NULL, 0.0) ;
-
   /*allocate memory for the section expansion coefficients*/
   buf = (gdouble *)g_malloc0(nsmax*(oumax+olmax+2)*sizeof(gdouble)) ;
 
@@ -269,7 +264,8 @@ agg_surface_workspace_t *agg_surface_workspace_new(void)
 
   w = (agg_surface_workspace_t *)g_malloc(sizeof(agg_surface_workspace_t)) ;
 
-  w->s = agg_section_new(64, 64) ;
+  w->s  = agg_section_new(64, 64) ;
+  w->ds = agg_section_new(64, 64) ;
   
   return w ;
 }

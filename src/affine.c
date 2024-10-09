@@ -406,7 +406,6 @@ gint agg_affine_axes(agg_affine_t *A, agg_axes_t axes)
     agg_affine_expression_add(A, 0, 2, 0, +1.0, NULL) ;
     break ; 
   case AGG_AXES_PX_PY_MZ:
-    g_assert_not_reached() ;
     agg_affine_expression_add(A, 0, 0, 0, +1.0, NULL) ;
     agg_affine_expression_add(A, 0, 1, 1, +1.0, NULL) ;
     agg_affine_expression_add(A, 0, 2, 2, -1.0, NULL) ;

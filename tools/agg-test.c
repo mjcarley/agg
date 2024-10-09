@@ -538,7 +538,8 @@ static void parser_test(char *file)
   
   b = agg_body_new(32, 32) ;
   w = agg_surface_workspace_new() ;
-
+  /* agg_expression_data_function_add(b->e, "step", step_func, 1) ; */
+  
   agg_body_read(b, file, TRUE) ;
 
   agg_body_globals_compile(b) ;

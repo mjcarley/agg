@@ -58,6 +58,24 @@ static const struct {
  * @ingroup transforms
  */
 
+
+static gdouble step_func(gdouble x)
+
+{
+  if ( x > 0.0 ) return 1.0 ;
+  if ( x < 0.0 ) return 0.0 ;
+  
+  return 0.5 ;
+}
+
+static gdouble delta_func(gdouble x)
+
+{
+  if ( x == 0.0 ) return 1.0 ;
+  
+  return 0.5 ;
+}
+
 /** 
  * Allocate a new ::agg_transform_t for transformation of geometries
  * 
@@ -80,6 +98,15 @@ agg_transform_t *agg_transform_new(gint nopmax)
 
   T->e = agg_expression_data_new(128) ;
   T->e->ne = 0 ;
+
+  /*basic variables required to be available to transform,
+    and convenience functions for evaluation of
+    transform expressions*/
+  agg_transform_variable_add(T, "u", NULL, 0.0) ;
+  agg_transform_variable_add(T, "v", NULL, 0.0) ;
+  /*these names need to match what is in libmatheval*/
+  agg_expression_data_function_add(T->e, "step", step_func, 1) ;
+  agg_expression_data_function_add(T->e, "delta", delta_func, 1) ;
   
   return T ;
 }

@@ -161,8 +161,8 @@ static gint agg_hemispherical_map(agg_surface_t *S,
   
   ut = sin(0.5*M_PI*(smin + s*(smax-smin))) ;
 
+  /* *u = ut ; */
   *u = agg_surface_umin(S) + ut*(agg_surface_umax(S) - agg_surface_umin(S)) ;
-
   
   if ( t < 0.5 ) {
     *v = -0.5*(1.0 + cos(2.0*M_PI*t)) ;
