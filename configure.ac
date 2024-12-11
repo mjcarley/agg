@@ -104,6 +104,10 @@ AC_CHECK_LIB(matheval, evaluator_create, [], [
   echo \#
   echo \# https://www.gnu.org/software/libmatheval/
   echo \#
+  echo \# or from
+  echo \#
+  echo \# https://github.com/mjcarley/libmatheval-no-guile
+  echo \#
   echo \#################################################################
   exit
 ])
