@@ -96,7 +96,17 @@ if test x$hasfma = xyes; then
 fi
 
 AC_CHECK_LIB(m, cos)
-AC_CHECK_LIB(matheval, evaluator_create)
+AC_CHECK_LIB(matheval, evaluator_create, [], [
+  echo \#################################################################
+  echo \#
+  echo \# libmatheval library not installed or not in library path
+  echo \# You can get it from
+  echo \#
+  echo \# https://www.gnu.org/software/libmatheval/
+  echo \#
+  echo \#################################################################
+  exit
+])
 AC_CHECK_LIB(triangle-api, triangle_mesh_create, [], [
   echo \#################################################################
   echo \#
@@ -120,13 +130,10 @@ AC_F77_WRAPPERS
 
 CFLAGS="$CFLAGS $OPENMP_CFLAGS $SIMD_FLAGS $GLIB_CFLAGS $blaswrap_cflags"
 LIBS="$LIBS -ltriangle-api $blaswrap_libs $GLIB_LIBS -lstdc++"
-##LDFLAGS="$LDFLAGS $blaswrap_libs $glib_libs -lstdc++"
 
 AC_SUBST(CFLAGS)
 AC_SUBST(LDFLAGS)
 AC_SUBST(LIBS)
-
-##LIBS="$glib_libs $LIBS $FLIBS"
 
 AC_CONFIG_FILES([Makefile
                  src/Makefile

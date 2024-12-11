@@ -13526,6 +13526,18 @@ _ACEOF
 
   LIBS="-lmatheval $LIBS"
 
+else
+
+  echo \#################################################################
+  echo \#
+  echo \# libmatheval library not installed or not in library path
+  echo \# You can get it from
+  echo \#
+  echo \# https://www.gnu.org/software/libmatheval/
+  echo \#
+  echo \#################################################################
+  exit
+
 fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for triangle_mesh_create in -ltriangle-api" >&5
@@ -17495,13 +17507,10 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 CFLAGS="$CFLAGS $OPENMP_CFLAGS $SIMD_FLAGS $GLIB_CFLAGS $blaswrap_cflags"
 LIBS="$LIBS -ltriangle-api $blaswrap_libs $GLIB_LIBS -lstdc++"
-##LDFLAGS="$LDFLAGS $blaswrap_libs $glib_libs -lstdc++"
 
 
 
 
-
-##LIBS="$glib_libs $LIBS $FLIBS"
 
 ac_config_files="$ac_config_files Makefile src/Makefile src/agg-config tools/Makefile"
 

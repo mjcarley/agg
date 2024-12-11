@@ -23,6 +23,17 @@ You will need to install the following GNU tools:
     autoconf
     automake
 
+AGG now requires the libmatheval library for evaluation and
+differentiation of symbolic expressions. This is available from
+
+https://www.gnu.org/software/libmatheval/
+
+but the test suite for this version requires (an old version of) Guile
+which may not be available on some systems. A fork of the project
+which does not require Guile is available from
+
+https://github.com/mjcarley/libmatheval-no-guile
+
 AGG uses Jonathan Shewchuk's Triangle code for mesh generation,
 through Christian Woltering's API, available from:
 

@@ -1,0 +1,45 @@
+# test file for parametrically specified swept wing
+#
+# syntax:
+#
+# global block contains parameter declarations
+#
+# surface blocks contain sections and transformations
+
+global {
+  span = 8
+  root = "span/6"
+  sweep = "15*pi/180"
+}
+
+surface {
+  name("left")
+  patch("hemispherical", "nowrap", "wrap")
+  grid("hemisphere-uv", 32, 32)
+  section(0, "aerofoil", 0.5, 0.2, 0.0)
+  transform("translate", -0.5, 0, 0)
+  transform("scale", "root")
+  transform("scale",
+  "sqrt((1-u)/0.1)*step(u-0.9) + step(0.9-u)",
+  "sqrt((1-u)/0.1)*step(u-0.9) + step(0.9-u)",
+  1)
+  transform("translate", "u*sin(sweep)*span", 0, "span*u")
+  axes("+x+y-z")
+  ## we need this because the wing is being turned inside out by the axes
+  ## transformation
+  invert() ;
+}
+
+surface {
+  name("right")
+  patch("hemispherical", "nowrap", "wrap")
+  grid("hemisphere-uv", 32, 32)
+  section(0, "aerofoil", 0.5, 0.2, 0.0)
+  transform("translate", -0.5, 0, 0)
+  transform("scale", "root")
+  transform("scale",
+  "sqrt((1-u)/0.1)*step(u-0.9) + step(0.9-u)",
+  "sqrt((1-u)/0.1)*step(u-0.9) + step(0.9-u)",
+  1)
+  transform("translate", "u*sin(sweep)*span", 0, "span*u")
+}
